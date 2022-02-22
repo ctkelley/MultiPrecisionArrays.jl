@@ -1,4 +1,4 @@
-module MPFA
+module MPArrays
 
 using SIAMFANLEquations
 using SIAMFANLEquations.TestProblems
