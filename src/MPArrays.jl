@@ -1,11 +1,8 @@
 module MPArrays
 
-using SIAMFANLEquations
-using SIAMFANLEquations.TestProblems
 using LaTeXStrings
 using LinearAlgebra
 using SparseArrays
-using SuiteSparse
 using Printf
 
 struct MPArray
