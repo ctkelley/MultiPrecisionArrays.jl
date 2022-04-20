@@ -1,9 +1,8 @@
 module MPArrays
 
-using LaTeXStrings
-using LinearAlgebra
+using LinearAlgebra 
 using SparseArrays
-using Printf
+using SIAMFANLEquations
 
 struct MPTest
   AH::Array
@@ -11,57 +10,146 @@ struct MPTest
   AF::Factorization
 end
 
-function MPTest(AD::Array{Float64,2})
-   AL=Float32.(AD);
-   AF=lu!(AL);
-   MPTest(AD, AL, AF)
+struct MPHTest
+  AH::Array
+  AL::Array
+  AS::Array
+  AF::Factorization
 end
 
-function MPTest(AD::Array{Float32,2})
-   AL=Float16.(AD);
-   AF=lu!(AL);
-   MPTest(AD, AL, AF)
+struct MPGArray
+    AH::Array
+    AH2::Array
+    VH::Array
+    AS::Array
 end
 
-function MPTest!(MTF::MPTest, AD::Array{Float64,2})
-   Tin=eltype(AD)
-   Tout=eltype(MTF.AH)
-   Tlow=eltype(MTF.AL)
-#   println(Tin, "  ", Tout,"  ",Tlow)
-   (Tin == Tout) || error("Types of AD and MPArray must agree")
-   MTF.AH .= AD
-   MTF.AL .= Tlow.(AD);
-   ZF = lu!(MTF.AL);
-   MPTest(MTF.AH, MTF.AL, ZF)
+struct MPGTest
+  AH::Array
+  AL::Array
+  VH::Array
+  AS::Array
+  AF::Factorization
 end
+
+MPFact=Union{MPTest, MPHTest, MPGTest}
+
+MPHFact=Union{MPHTest, MPGTest}
+
+function MPhatv(x, MPHF::MPHFact)
+atv=MPHF.AH*x
+return atv
+end
+
+function MPhptv(x, MPHF::MPHFact)
+ptv = MPHF.AF\x
+return ptv
+end
+
 
 struct MPArray
-   AD::Array{Float64,2}
-   AS::Array{Float32,2}
+   AH::Array
+   AL::Array
 end
 
-struct MPFArray
-   AD::Array{Float64,2}
-   AFS::LU{Float32, Matrix{Float32}}
+struct MPHArray
+    AH::Array
+    AH2::Array
+    AS::Array
 end
 
-function MPArray(AD::Array{Float64,2})
-   AS=Float32.(AD)
-   MPB=MPArray(AD,AS)
-   return MPB
+function MPGArray(AH::Array{Float64,2}, TL=Float32, itg=5)
+(ma, na)=size(AH)
+T=eltype(AH)
+AH2=copy(AH)
+AS=TL.(AH)
+VH=zeros(T, na, itg)
+MPG=MPGArray(AH, AH2, VH, AS)
 end
 
-function MPFArray(AD::Array{Float64,2})
-   AS=Float32.(AD)
-   ASF=lu!(AS)
-   MPB=MPFArray(AD,ASF)
-   return MPB
+function MPGArray(AH::Array{Float32,2}, TL=Float16, itg=5)
+(ma, na)=size(AH)
+T=eltype(AH)
+AH2=copy(AH)
+AS=TL.(AH)
+VH=zeros(T, na, itg)
+MPG=MPGArray(AH, AH2, VH, AS)
 end
 
-import Base.\
-function \(AF::MPFArray, b)
-xi = mpgesl(AF,b)
-return xi
+
+function MPHArray(AH::Array{Float64,2}, TL=Float32)
+AH2=copy(AH)
+AS=TL.(AH)
+MPH=MPHArray(AH, AH2, AS)
+end
+
+function MPHArray(AH::Array{Float32,2}, TL=Float16)
+AH2=copy(AH)
+AS=TL.(AH)
+MPH=MPHArray(AH, AH2, AS)
+end
+
+function mphlu!(MPH::MPHArray)
+AH=MPH.AH
+TD=eltype(AH)
+AH2=MPH.AH2
+AS=MPH.AS
+ASF=lu!(AS)
+AH2 .= TD.(AS)
+AF = LU(AH2, ASF.ipiv, ASF.info)
+MPF=MPHTest(AH, AH2, AS, AF)
+end
+
+function mpglu!(MPG::MPGArray)
+AH=MPG.AH
+VH=MPG.VH
+TD=eltype(AH)
+AH2=MPG.AH2
+AS=MPG.AS
+ASF=lu!(AS)
+AH2 .= TD.(AS)
+AF = LU(AH2, ASF.ipiv, ASF.info)
+MPF=MPGTest(AH, AH2, VH, AS, AF)
+end
+
+function MPArray(AH::Array{Float32,2})
+AL=Float16.(AH)
+MPA=MPArray(AH,AL)
+end
+
+function MPArray(AH::Array{Float64,2})
+AL=Float32.(AH)
+MPA=MPArray(AH,AL)
+end
+
+function mplu!(MPA::MPArray)
+AH=MPA.AH
+AL=MPA.AL
+AF=lu!(AL)
+MPF=MPTest(AH, AL, AF)
+return MPF
+end
+
+function mpqr!(MPA::MPArray)
+AH=MPA.AH
+AL=MPA.AL
+AF=qr!(AL)
+MPF=MPTest(AH, AL, AF)
+return MPF
+end
+
+function mpcholesky!(MPA::MPArray)
+AH=MPA.AH
+AL=MPA.AL
+AF=cholesky!(AL)
+MPF=MPTest(AH, AL, AF)
+return MPF
+end
+
+import Base.eltype
+function eltype(MP::MPArray)
+TP=eltype(MP.AH)
+return TP
 end
 
 import Base.\
@@ -70,16 +158,47 @@ xi = mpgesl2(AF,b)
 return xi
 end
 
+function \(AF::MPHTest, b)
+xi = mpgesl2(AF,b)
+return xi
+end
+
+function \(AF::MPGTest, b)
+xi = mpgesl2(AF,b)
+return xi
+end
+
+function promotelu!(AL, AH)
+TH=eltype(AH)
+ALF=lu!(AL)
+AH .= TH.(AL)
+AHF = LU(AH, ALF.ipiv, ALF.info)
+return AHF
+end
+
+function promotelu(A, T=Float32)
+AF=lu!(A)
+AFHigh=LU(T.(A), AF.ipiv, AF.info)
+return AFHigh
+end
+
+export mplu!
+export mphlu!
+export mpglu!
+export mpqr!
+export mpcholesky!
 export MPArray
 export MPFArray
+export MPHArray
+export MPGArray
 export MPTest
-export MPTest!
-export mpgesl
+export MPHTest
+export MPGTest
 export mpgesl2
-export testback
+export promotelu
+export MPhatv
+export MPhptv
 
-include("Solvers/mpgesl.jl")
 include("Solvers/mpgesl2.jl")
-include("testback.jl")
 
 end

@@ -1,0 +1,43 @@
+I'm trying to promote and LU factorization in one precision to a higher
+precision. The permutation vector does not map correctly and I can't
+figure out why. 
+
+Any ideas?
+
+MWE:
+```
+julia> A=rand(Float32,3,3);
+
+julia> AF=lu!(A);
+
+julia> AF.p
+3-element Vector{Int64}:
+ 2
+ 1
+ 3
+
+julia> AF64=LU(Float64.(A), AF.p, AF.info);
+
+julia> norm(AF64.L - AF.L)
+0.00000e+00
+
+julia> norm(AF64.U - AF.U)
+0.00000e+00
+
+julia> # so the factors look good, but
+
+julia> AF.p
+3-element Vector{Int64}:
+ 2
+ 1
+ 3
+
+julia> AF64.p
+3-element Vector{Int64}:
+ 1
+ 2
+ 3
+```
+
+
+
