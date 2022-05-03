@@ -32,6 +32,7 @@ struct MPGTest
   AF::Factorization
 end
 
+
 MPFact=Union{MPTest, MPHTest, MPGTest}
 
 MPHFact=Union{MPHTest, MPGTest}
@@ -57,6 +58,8 @@ struct MPHArray
     AH2::Array
     AS::Array
 end
+
+MPIRArray=Union{MPArray,MPHArray}
 
 function MPGArray(AH::Array{Float64,2}, TL=Float32, itg=5)
 (ma, na)=size(AH)
@@ -153,18 +156,18 @@ return TP
 end
 
 import Base.\
-function \(AF::MPTest, b)
-xi = mpgesl2(AF,b)
+function \(AF::MPTest, b; verbose=false, reporting=false)
+xi = mpgesl2(AF,b; verbose=verbose, reporting=reporting)
 return xi
 end
 
-function \(AF::MPHTest, b)
-xi = mpgesl2(AF,b)
+function \(AF::MPHTest, b; verbose=false, reporting=false)
+xi = mpgesl2(AF,b; verbose=verbose, reporting=reporting)
 return xi
 end
 
-function \(AF::MPGTest, b)
-xi = mpgesl2(AF,b)
+function \(AF::MPGTest, b; verbose=false, reporting=false)
+xi = mpgesl2(AF,b; verbose=verbose, reporting=reporting)
 return xi
 end
 
@@ -199,6 +202,10 @@ export promotelu
 export MPhatv
 export MPhptv
 
+export MPGStats
+export MPIRStats
+
 include("Solvers/mpgesl2.jl")
+include("MPASTats.jl")
 
 end

@@ -1,3 +1,4 @@
+
 function pitch(n)
 AH=rand(n,n); AS=Float32.(AH); AS2=copy(AS);
 bh=rand(n); bs=Float32.(bh); 
@@ -20,7 +21,7 @@ function makemptab(m=4, texok=false)
 AT=zeros(m,6)
 p=collect(0:1:m-1)
 tp = 2 .^ p
-np = 32 .* tp
+np = 512 .* tp
 for idim=1:m
 n=np[idim]
 AT[idim,2:6] = pitch(n);

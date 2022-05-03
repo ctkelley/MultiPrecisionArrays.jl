@@ -1,12 +1,20 @@
-function mpgesl2(AF::MPFact, b)
+function mpgesl2(AF::MPFact, b; reporting=false, verbose=true)
 mpdebug=false
 normtype=Inf
 TB = eltype(b)
-TH = eltype(AF.AH)
+MPStats=getStats(AF)
+TL=MPStats.TL
+TH=MPStats.TH
+TFact=MPStats.TFact
+#TH = eltype(AF.AH); TL=getTL(AF); TFact = eltype(AF.AL); 
 (TH == TB) || error("inconsistent precisions")
 (TH == Float64) ? tolf=1.e-13 : tolf=1.e-6
-TFact = eltype(AF.AL)
-TB = eltype(b)
+MPStats=getStats(AF)
+Meth=MPStats.Meth
+if verbose
+println(Meth, ": High precision = $TH, Low precision = $TL,
+Factorization storage precision = $TFact")
+end
 AD=AF.AH
 bnrm=norm(b,normtype)
 bsc=b
@@ -29,8 +37,6 @@ rhist=Vector{Float64}()
 rnrm=norm(r, normtype)
 rnrmx = rnrm*1.1
 itc=0
-println("High precision = $TH, Factorization precision = $TFact")
-#println("current rnrm($itc) = $rnrm")
 push!(rhist,rnrm)
 while (rnrm > tol) && (rnrm < rnrmx)
 r ./=rnrm
@@ -51,7 +57,10 @@ x0=zeros(size(r))
 eta=1.e-4
 V=AF.VH
 kout=kl_gmres(x0, r, MPhatv, V, eta, MPhptv; pdata=AF, side="left");
-#println(kout.reshist,"  ",kout.idid)
+if verbose
+itcc=itc+1
+println("Krylov stats: Iteration $itcc ",  kout.reshist,"  ",kout.idid)
+end
 r .= kout.sol
 else
 error("missing MP Fact type")
@@ -72,9 +81,54 @@ push!(rhist,rnrm)
 mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol");
 (rnrm >= rnrmx) && println("Norm increased")
 end
+if verbose
 println("Residual history = $rhist")
+end
+if reporting
+return (rhist = rhist, sol = x, TH=TH, TL=TL, TFact=TFact)
+else
 return x
 end
+end
+
+function getTL(AF)
+if (typeof(AF) == MPTest)
+TL = eltype(AF.AL)
+elseif (typeof(AF) == MPHTest)
+TL = eltype(AF.AS)
+elseif (typeof(AF) == MPGTest)
+TL = eltype(AF.AS)
+else
+TX=typeof(AF)
+error("illegal MPTest type $TX")
+end
+return TL
+end
+
+function getMeth(AF)
+if (typeof(AF) == MPTest)
+Meth = "IR";
+elseif (typeof(AF) == MPHTest)
+Meth = "Hungry IR";
+elseif (typeof(AF) == MPGTest)
+Meth = "IRGM";
+else
+TX=typeof(AF)
+error("illegal MPTest type $TX")
+end
+return Meth
+end
+
+function getStats(AF)
+TH = eltype(AF.AH); TL=getTL(AF); TFact = eltype(AF.AL); 
+if (typeof(AF) == MPGTest)
+   MPStats=MPGStats()
+else
+   MPStats=MPIRStats(TH, TL, TFact)
+end
+return MPStats
+end
+
 
 #function mpgesl2(MPGF::xMPGTest, b)
 #TB = eltype(b)

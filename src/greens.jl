@@ -1,4 +1,5 @@
-function ktst(n=1000,kappa=1.0; hungry=false)
+function ktst(n=1000,kappa=1.0; hungry=false, verbose=false, 
+              reporting=false)
 G=Gmat(n);
 AD=I - kappa*G;
 cd = cond(AD);
@@ -10,42 +11,57 @@ jacobipc=false
 if jacobipc
 dd=1.0./diag(AD); D=Diagonal(dd); lmul!(D,b); lmul!(D,AD);
 end
-#b=rand(n);
-#b=sin.(X);
 xd=AD\b;
-println(norm(xd .- xe,Inf)/norm(xe,Inf),
-        "   ", norm(b - AD*xd, Inf)/norm(b,Inf))
+println("Solution error = ",norm(xd .- xe,Inf)/norm(xe,Inf),
+        " Residual norm = ", norm(b - AD*xd, Inf)/norm(b,Inf))
+println("cond(A) = $cd")
 AS=Float32.(AD);
 bs=Float32.(b);
 halfok=true
 xs=AS\bs;
 nsd=norm(xs-xd,Inf)/norm(xd,Inf);
+println("Single precision Solution error = $nsd")
+spacepad()
 if halfok
-println("Double-Half IRGM")
 AMP=MPGArray(AD, Float16);
 AMF = mpglu!(AMP);
-xmp=AMF\b;
+#xmp=AMF\b;
+solout=\(AMF,b; reporting=reporting, verbose=verbose)
+if reporting
+xmp=solout.sol
+else
+xmp=solout
+end
+nshr= norm(b-AD*xmp,Inf)/norm(b,Inf)
 nsm=norm(xmp-xd,Inf)/norm(xd,Inf); 
 end
+spacepad()
 if hungry
-println("Double-Single Hungry")
 AMD=MPHArray(AD)
 AMFD=mphlu!(AMD)
 else
-println("Double-Single IR")
 AMD=MPArray(AD)
 AMFD=mplu!(AMD)
 end
-xmpd=AMFD\b;
-nsdd=norm(xmpd-xd,Inf)/norm(xd,Inf)
+#xmpd=AMFD\b;
+solout=\(AMFD,b; reporting=reporting, verbose=verbose)
+if reporting
+xmpd=solout.sol
+else
+xmpd=solout
+end
+nsdr= norm(b-AD*xmpd,Inf)/norm(b,Inf)
+nsdd = norm(xmpd-xd,Inf)/norm(xd,Inf)
+spacepad()
 if halfok
-println("cond=$cd; s2derr=$nsd, mpderr=$nsdd, mpherr=$nsm")
-return [cd nsdd nsd nsm]
+println("IR error = $nsdd, IRGM error = $nsm")
+println("Residuals: IRGM: $nsdr, IR: $nsdr")
+return [nsdd nsm]
 else
 println("outgoing relative residual norm = ",
           norm(b-AD*xmpd,Inf)/norm(b,Inf))
-println("s2derr=$nsd, mpderr=$nsdd")
-return [cd nsdd nsd]
+println("IR error = $nsdd")
+return [nsdd nsd]
 end
 end
 
@@ -100,3 +116,8 @@ end
 return gf
 end
 
+function spacepad()
+println("  ")
+println(" ------------------- ")
+println("  ")
+end
