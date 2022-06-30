@@ -23,7 +23,8 @@ bS=TFact.(bsc)
 if (typeof(AF)==MPGTest)
 x=zeros(size(b))
 else
-ldiv!(AFS,bS); x = TH.(bS)
+#ldiv!(AFS,bS); x = TH.(bS)
+n=length(b); x=zeros(TH,n)
 end
 #n=length(b); x=zeros(TH,n)
 #
