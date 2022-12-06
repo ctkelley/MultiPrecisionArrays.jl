@@ -4,18 +4,14 @@ using LinearAlgebra
 using SparseArrays
 using SIAMFANLEquations
 
-struct MPTest
-  AH::Array
-  AL::Array
-  AF::Factorization
-end
+#
+# This is MPArrays.jl
+# The package has data structures and algorithms to manage several
+# variations on iterative refinement.
+#
 
-struct MPHTest
-  AH::Array
-  AL::Array
-  AS::Array
-  AF::Factorization
-end
+include("MPStructs/MPLight.jl")
+include("MPStructs/MPHeavy.jl")
 
 struct MPGArray
     AH::Array
@@ -24,7 +20,7 @@ struct MPGArray
     AS::Array
 end
 
-struct MPGTest
+struct MPGFact
   AH::Array
   AL::Array
   VH::Array
@@ -33,31 +29,20 @@ struct MPGTest
 end
 
 
-MPFact=Union{MPTest, MPHTest, MPGTest}
+MPFact=Union{MPLFact, MPHFact, MPGFact}
 
-MPHFact=Union{MPHTest, MPGTest}
+MPGMFact=Union{MPHFact, MPGFact}
 
-function MPhatv(x, MPHF::MPHFact)
+function MPhatv(x, MPHF::MPGMFact)
 atv=MPHF.AH*x
 return atv
 end
 
-function MPhptv(x, MPHF::MPHFact)
+function MPhptv(x, MPHF::MPGMFact)
 ptv = MPHF.AF\x
 return ptv
 end
 
-
-struct MPArray
-   AH::Array
-   AL::Array
-end
-
-struct MPHArray
-    AH::Array
-    AH2::Array
-    AS::Array
-end
 
 MPIRArray=Union{MPArray,MPHArray}
 
@@ -79,30 +64,6 @@ VH=zeros(T, na, itg)
 MPG=MPGArray(AH, AH2, VH, AS)
 end
 
-
-function MPHArray(AH::Array{Float64,2}, TL=Float32)
-AH2=copy(AH)
-AS=TL.(AH)
-MPH=MPHArray(AH, AH2, AS)
-end
-
-function MPHArray(AH::Array{Float32,2}, TL=Float16)
-AH2=copy(AH)
-AS=TL.(AH)
-MPH=MPHArray(AH, AH2, AS)
-end
-
-function mphlu!(MPH::MPHArray)
-AH=MPH.AH
-TD=eltype(AH)
-AH2=MPH.AH2
-AS=MPH.AS
-ASF=lu!(AS)
-AH2 .= TD.(AS)
-AF = LU(AH2, ASF.ipiv, ASF.info)
-MPF=MPHTest(AH, AH2, AS, AF)
-end
-
 function mpglu!(MPG::MPGArray)
 AH=MPG.AH
 VH=MPG.VH
@@ -112,41 +73,7 @@ AS=MPG.AS
 ASF=lu!(AS)
 AH2 .= TD.(AS)
 AF = LU(AH2, ASF.ipiv, ASF.info)
-MPF=MPGTest(AH, AH2, VH, AS, AF)
-end
-
-function MPArray(AH::Array{Float32,2})
-AL=Float16.(AH)
-MPA=MPArray(AH,AL)
-end
-
-function MPArray(AH::Array{Float64,2})
-AL=Float32.(AH)
-MPA=MPArray(AH,AL)
-end
-
-function mplu!(MPA::MPArray)
-AH=MPA.AH
-AL=MPA.AL
-AF=lu!(AL)
-MPF=MPTest(AH, AL, AF)
-return MPF
-end
-
-function mpqr!(MPA::MPArray)
-AH=MPA.AH
-AL=MPA.AL
-AF=qr!(AL)
-MPF=MPTest(AH, AL, AF)
-return MPF
-end
-
-function mpcholesky!(MPA::MPArray)
-AH=MPA.AH
-AL=MPA.AL
-AF=cholesky!(AL)
-MPF=MPTest(AH, AL, AF)
-return MPF
+MPF=MPGFact(AH, AH2, VH, AS, AF)
 end
 
 import Base.eltype
@@ -156,17 +83,17 @@ return TP
 end
 
 import Base.\
-function \(AF::MPTest, b; verbose=false, reporting=false)
+function \(AF::MPLFact, b; verbose=false, reporting=false)
 xi = mpgesl2(AF,b; verbose=verbose, reporting=reporting)
 return xi
 end
 
-function \(AF::MPHTest, b; verbose=false, reporting=false)
+function \(AF::MPHFact, b; verbose=false, reporting=false)
 xi = mpgesl2(AF,b; verbose=verbose, reporting=reporting)
 return xi
 end
 
-function \(AF::MPGTest, b; verbose=false, reporting=false)
+function \(AF::MPGFact, b; verbose=false, reporting=false)
 xi = mpgesl2(AF,b; verbose=verbose, reporting=reporting)
 return xi
 end
@@ -194,11 +121,12 @@ export MPArray
 export MPFArray
 export MPHArray
 export MPGArray
-export MPTest
-export MPHTest
-export MPGTest
+export MPLFact
+export MPHFact
+export MPGFact
 export mpgesl2
 export promotelu
+export promotelu!
 export MPhatv
 export MPhptv
 
@@ -208,4 +136,11 @@ export MPIRStats
 include("Solvers/mpgesl2.jl")
 include("MPASTats.jl")
 
+module Examples
+export Gmat
+
+include("Examples/Gmat.jl")
+
 end
+
+end # module MPArrays

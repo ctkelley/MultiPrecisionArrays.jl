@@ -1,0 +1,62 @@
+#
+# This file is MPLight.jl 
+# Plain vanilla iterative refinement. The structures store
+# High and low precision arrays
+# Factorizations of these arrays
+#
+
+struct MPArray{TH<:AbstractFloat, TL<:AbstractFloat}
+   AH::Array{TH,2}
+   AL::Array{TL,2}
+end
+
+struct MPLFact{TH<:AbstractFloat, TL<:AbstractFloat, TF<:Factorization}
+  AH::Array{TH,2}
+  AL::Array{TL,2}
+  AF::TF
+end
+
+#
+# The constructors for the multi-precision arrays
+# 
+
+function MPArray(AH::Array{Float32,2}; TL=Float16)
+   AL=TL.(AH)
+   MPA=MPArray(AH,AL)
+end
+
+function MPArray(AH::Array{Float64,2}; TL=Float32)
+AL=TL.(AH)
+MPA=MPArray(AH,AL)
+end
+
+#
+# A few factorizations
+#
+
+function mplu!(MPA::MPArray)
+AH=MPA.AH
+AL=MPA.AL
+AF=lu!(AL)
+MPF=MPLFact(AH, AL, AF)
+return MPF
+end
+
+function mpqr!(MPA::MPArray)
+AH=MPA.AH
+AL=MPA.AL
+AF=qr!(AL)
+MPF=MPLFact(AH, AL, AF)
+return MPF
+end
+
+function mpcholesky!(MPA::MPArray)
+AH=MPA.AH
+AL=MPA.AL
+AF=cholesky!(AL)
+MPF=MPLFact(AH, AL, AF)
+return MPF
+end
+
+
+

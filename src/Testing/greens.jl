@@ -1,4 +1,4 @@
-function ktst(n=1000,kappa=1.0; hungry=false, verbose=false, 
+function ktst(n=1000,kappa=1.0; heavy=false, verbose=false, 
               reporting=false)
 G=Gmat(n);
 AD=I - kappa*G;
@@ -36,7 +36,7 @@ nshr= norm(b-AD*xmp,Inf)/norm(b,Inf)
 nsm=norm(xmp-xd,Inf)/norm(xd,Inf); 
 end
 spacepad()
-if hungry
+if heavy
 AMD=MPHArray(AD)
 AMFD=mphlu!(AMD)
 else
@@ -94,7 +94,7 @@ w=D2*P;
 #println(norm(w-z,Inf),"  ",norm(P-Q,Inf))
 end
 
-function Gmat(n)
+function XGmat(n)
 h=1.0/(n+1.0);
 X=collect(h:h:1.0-h);
 G=[greens(x,y) for x in X, y in X]
@@ -107,7 +107,7 @@ function ker(x,y)
 ker = x*(x-y)^2
 end
 
-function greens(x,y)
+function Xgreens(x,y)
 if x > y
    gf=y*(1.0-x)
 else

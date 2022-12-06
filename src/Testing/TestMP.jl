@@ -24,5 +24,6 @@ export Gmat
 include("ntest.jl")
 include("plot_its_funs.jl")
 include("greens.jl")
+include("../Examples/Gmat.jl")
 
 end

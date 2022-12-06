@@ -1,143 +1,177 @@
-function mpgesl2(AF::MPFact, b; reporting=false, verbose=true)
-mpdebug=false
-normtype=Inf
-TB = eltype(b)
-MPStats=getStats(AF)
-TL=MPStats.TL
-TH=MPStats.TH
-TFact=MPStats.TFact
-#TH = eltype(AF.AH); TL=getTL(AF); TFact = eltype(AF.AL); 
-(TH == TB) || error("inconsistent precisions")
-(TH == Float64) ? tolf=1.e-13 : tolf=1.e-6
-MPStats=getStats(AF)
-Meth=MPStats.Meth
-if verbose
-println(Meth, ": High precision = $TH, Low precision = $TL,
-Factorization storage precision = $TFact")
-end
-AD=AF.AH
-bnrm=norm(b,normtype)
-bsc=b
-AFS=AF.AF
-bS=TFact.(bsc)
-if (typeof(AF)==MPGTest)
-x=zeros(size(b))
-else
-#ldiv!(AFS,bS); x = TH.(bS)
-n=length(b); x=zeros(TH,n)
-end
-#n=length(b); x=zeros(TH,n)
-#
-r = copy(x)
-mul!(r,AD,x)
-r .*= -1.0
-axpy!(1.0, bsc, r)
-tol = tolf * bnrm
-rs=bS
-rhist=Vector{Float64}()
-rnrm=norm(r, normtype)
-rnrmx = rnrm*1.1
-itc=0
-push!(rhist,rnrm)
-while (rnrm > tol) && (rnrm < rnrmx)
-r ./=rnrm
-#
-# Hungry IR?
-#
-if (typeof(AF) == MPHTest)
-ldiv!(AFS,r)
-elseif (typeof(AF) == MPTest)
-#
-# Solver for the correction; AFS in factorization precision
-#
-rs .= TFact.(r)
-ldiv!(AFS,rs)
-r .= TH.(rs)
-elseif (typeof(AF) == MPGTest)
-x0=zeros(size(r))
-eta=1.e-4
-V=AF.VH
-kout=kl_gmres(x0, r, MPhatv, V, eta, MPhptv; pdata=AF, side="left");
-if verbose
-itcc=itc+1
-println("Krylov stats: Iteration $itcc ",  kout.reshist,"  ",kout.idid)
-end
-r .= kout.sol
-else
-error("missing MP Fact type")
-end
-r .*= rnrm
-#
-#
-#
-x .+= r
-mul!(r,AD,x)
-r .*= -1.0
-axpy!(1.0, bsc, r)
-rnrmx = rnrm
-rnrm=norm(r,normtype)
-itc += 1
-#println("current rnrm($itc) = $rnrm")
-push!(rhist,rnrm)
-mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol");
-(rnrm >= rnrmx) && println("Norm increased")
-end
-if verbose
-println("Residual history = $rhist")
-end
-if reporting
-return (rhist = rhist, sol = x, TH=TH, TL=TL, TFact=TFact)
-else
-return x
-end
+"""
+mpgesl2(AF::MPFact, b; reporting=false, verbose=true)
+
+Use a multi-precision factorization to solve a linear system.
+"""
+function mpgesl2(AF::MPFact, b; reporting = false, verbose = true)
+    #
+    # What kind of problem are we dealing with?
+    #
+    mpdebug = false
+    normtype = Inf
+    TB = eltype(b)
+    MPStats = getStats(AF)
+    TL = MPStats.TL
+    TH = MPStats.TH
+    #
+    # TFact is the precision of the factors
+    #
+    TFact = MPStats.TFact
+    #
+    # Are the precisions consistent? If not, I have a bug somewhere.
+    # If so, set the completely arbitrary tolerances
+    #
+    (TH == TB) || error("inconsistent precisions")
+    (TH == Float64) ? tolf = 1.e-13 : tolf = 1.e-6
+    #
+    # Keep the records and accumulate the statistics. 
+    #
+    MPStats = getStats(AF)
+    Meth = MPStats.Meth
+    if verbose
+        println( Meth,": High precision = $TH, Low precision = $TL,
+             Factorization storage precision = $TFact",
+        )
+    end
+    #
+    # Showtime!
+    #
+    AD = AF.AH
+    bnrm = norm(b, normtype)
+    bsc = b
+    AFS = AF.AF
+    bS = TFact.(bsc)
+    #
+    # Initialize the iteration. I am still thinking about how I want
+    # to do this. For now I initialize to zero.
+    #
+    if (typeof(AF) == MPGFact)
+        x = zeros(size(b))
+    else
+        n = length(b)
+        x = zeros(TH, n)
+    end
+    #
+    # Initial residual
+    #
+    r = copy(x)
+    mul!(r, AD, x)
+    r .*= -1.0
+    axpy!(1.0, bsc, r)
+    tol = tolf * bnrm
+    rs = bS
+    rhist = Vector{Float64}()
+    rnrm = norm(r, normtype)
+    rnrmx = rnrm * 1.1
+    itc = 0
+    #
+    # Put initial residual norm into the history and iterate.
+    #
+    push!(rhist, rnrm)
+    while (rnrm > tol) && (rnrm < rnrmx)
+        r ./= rnrm
+        #
+        # Hungry IR?
+        #
+        if (typeof(AF) <: MPHFact)
+            ldiv!(AFS, r)
+        elseif (typeof(AF) <: MPLFact)
+            #
+            # Solver for the correction; AFS in factorization precision
+            #
+            rs .= TFact.(r)
+            ldiv!(AFS, rs)
+            r .= TH.(rs)
+            #
+            # IR-GMRES? call my kl_gmres code. I need to make a special-purpose
+            # code for this.
+            #
+        elseif (typeof(AF) <: MPGFact)
+            x0 = zeros(size(r))
+            eta = 1.e-4
+            V = AF.VH
+            kout = kl_gmres(x0, r, MPhatv, V, eta, MPhptv; pdata = AF, side = "left")
+            #
+            # Make noise?
+            #
+            if verbose
+                itcc = itc + 1
+                println("Krylov stats: Iteration $itcc ", kout.reshist, "  ", kout.idid)
+            end
+            #
+            # Overwite r with d
+            #
+            r .= kout.sol
+        else
+            error("missing MP Fact type")
+        end
+        #
+        # Undo the scaling
+        #
+        r .*= rnrm
+        #
+        # Update the solution and residual
+        #
+        x .+= r
+        mul!(r, AD, x)
+        r .*= -1.0
+        axpy!(1.0, bsc, r)
+        rnrmx = rnrm
+        rnrm = norm(r, normtype)
+        itc += 1
+        push!(rhist, rnrm)
+        mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol")
+        #
+        # If the residual norm increased, complain.
+        #
+        (rnrm >= rnrmx) && println("Norm increased")
+    end
+    if verbose
+        println("Residual history = $rhist")
+    end
+    if reporting
+        return (rhist = rhist, sol = x, TH = TH, TL = TL, TFact = TFact)
+    else
+        return x
+    end
 end
 
 function getTL(AF)
-if (typeof(AF) == MPTest)
-TL = eltype(AF.AL)
-elseif (typeof(AF) == MPHTest)
-TL = eltype(AF.AS)
-elseif (typeof(AF) == MPGTest)
-TL = eltype(AF.AS)
-else
-TX=typeof(AF)
-error("illegal MPTest type $TX")
-end
-return TL
+    if (typeof(AF) <: MPLFact)
+        TL = eltype(AF.AL)
+    elseif (typeof(AF) <: MPHFact)
+        TL = eltype(AF.AS)
+    elseif (typeof(AF) <: MPGFact)
+        TL = eltype(AF.AS)
+    else
+        TX = typeof(AF)
+        error("illegal MPFact type $TX")
+    end
+    return TL
 end
 
 function getMeth(AF)
-if (typeof(AF) == MPTest)
-Meth = "IR";
-elseif (typeof(AF) == MPHTest)
-Meth = "Hungry IR";
-elseif (typeof(AF) == MPGTest)
-Meth = "IRGM";
-else
-TX=typeof(AF)
-error("illegal MPTest type $TX")
-end
-return Meth
+    if (typeof(AF) <: MPLFact)
+        Meth = "IR"
+    elseif (typeof(AF) <: MPHFact)
+        Meth = "Hungry IR"
+    elseif (typeof(AF) <: MPGFact)
+        Meth = "IRGM"
+    else
+        TX = typeof(AF)
+        error("illegal MPFact type $TX")
+    end
+    return Meth
 end
 
 function getStats(AF)
-TH = eltype(AF.AH); TL=getTL(AF); TFact = eltype(AF.AL); 
-if (typeof(AF) == MPGTest)
-   MPStats=MPGStats()
-else
-   MPStats=MPIRStats(TH, TL, TFact)
+    TH = eltype(AF.AH)
+    TL = getTL(AF)
+    TFact = eltype(AF.AL)
+    if (typeof(AF) == MPGFact)
+        MPStats = MPGStats()
+    else
+        MPStats = MPIRStats(TH, TL, TFact)
+    end
+    return MPStats
 end
-return MPStats
-end
-
-
-#function mpgesl2(MPGF::xMPGTest, b)
-#TB = eltype(b)
-#(TB == Float64) ? eta=1.e-13 : eta=1.e-6
-#n=length(b)
-#x0=zeros(n)
-#V=MPGF.VH
-#kout=kl_gmres(x0, b, MPhatv, V, eta, MPhptv; pdata=MPGF, side="left");
-#println(kout.reshist)
-#return kout.sol
-#end
