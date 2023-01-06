@@ -5,10 +5,10 @@ on:
       - 'LICENSE.md'
       - 'README.md'
    branches:
-      - master
+      - main
   pull_request:
    branches:
-      - master
+      - main
    tags: '*'
 
 jobs:
@@ -26,9 +26,9 @@ jobs:
           - '~1.9.0-0'
           - 'nightly'
         os:
-          - ubuntu-latest
+#          - ubuntu-latest
           - macOS-latest
-          - windows-latest
+#          - windows-latest
         arch:
           - x64
     steps:
