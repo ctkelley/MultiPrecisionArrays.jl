@@ -29,7 +29,7 @@ struct MPGFact
 end
 
 
-MPFact=Union{MPLFact, MPHFact, MPGFact}
+MPFact=Union{MPLFact, MPLEFact, MPHFact, MPGFact}
 
 MPGMFact=Union{MPHFact, MPGFact}
 
@@ -88,6 +88,11 @@ xi = mpgesl2(AF,b; verbose=verbose, reporting=reporting)
 return xi
 end
 
+function \(AF::MPLEFact, b; verbose=false, reporting=false)
+xi = mpgesl2(AF,b; verbose=verbose, reporting=reporting)
+return xi
+end
+
 function \(AF::MPHFact, b; verbose=false, reporting=false)
 xi = mpgesl2(AF,b; verbose=verbose, reporting=reporting)
 return xi
@@ -118,10 +123,12 @@ export mpglu!
 export mpqr!
 export mpcholesky!
 export MPArray
+export MPEArray
 export MPFArray
 export MPHArray
 export MPGArray
 export MPLFact
+export MPLEFact
 export MPHFact
 export MPGFact
 export mpgesl2
@@ -134,6 +141,7 @@ export MPGStats
 export MPIRStats
 
 include("Solvers/mpgesl2.jl")
+include("Solvers/IRTriangle.jl")
 include("MPASTats.jl")
 
 module Examples

@@ -67,14 +67,44 @@ function mpgesl2(AF::MPFact, b; reporting = false, verbose = true)
     #
     push!(rhist, rnrm)
     while (rnrm > tol) && (rnrm < rnrmx)
-        #
-        # Scale the residual
-        #
         r ./= rnrm
         #
-        # Use the low-precision factorization
+        # Hungry IR?
         #
-        r .= IRTriangle!(AF, r, rs, verbose)
+        if (typeof(AF) <: MPHFact)
+#            ldiv!(AFS, r)
+            r .= IRTriangle!(AF, r, rs)
+        elseif (typeof(AF) <: MPLFact) || (typeof(AF) <: MPLEFact)
+            #
+            # Solver for the correction; AFS in factorization precision
+            #
+            r .= IRTriangle!(AF, r, rs)
+#            rs .= TFact.(r)
+#            ldiv!(AFS, rs)
+#            r .= TH.(rs)
+            #
+            # IR-GMRES? call my kl_gmres code. I need to make a special-purpose
+            # code for this.
+            #
+        elseif (typeof(AF) <: MPGFact)
+            x0 = zeros(size(r))
+            eta = 1.e-4
+            V = AF.VH
+            kout = kl_gmres(x0, r, MPhatv, V, eta, MPhptv; pdata = AF, side = "left")
+            #
+            # Make noise?
+            #
+            if verbose
+                itcc = itc + 1
+                println("Krylov stats: Iteration $itcc ", kout.reshist, "  ", kout.idid)
+            end
+            #
+            # Overwite r with d
+            #
+            r .= kout.sol
+        else
+            error("missing MP Fact type")
+        end
         #
         # Undo the scaling
         #
