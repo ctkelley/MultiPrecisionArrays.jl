@@ -8,6 +8,8 @@ using Test
 include("Greens/gtest.jl")
 include("NLTest/nltest.jl")
 
+println("starting")
+
 @testset "Greens Functions" begin
    @test greensok();
    @test greensHok();
