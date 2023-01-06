@@ -1,4 +1,4 @@
-# MPArrays.jl v0.1.0
+# MPArrays.jl v0.0.1
 
 __This package is nowhere close to ready for release. It's public only to help me do CI and clean up the docs.__
 
