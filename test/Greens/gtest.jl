@@ -2,7 +2,7 @@ function greensok(n=31)
 G=Gmat(n)
 (e32,l32) = gtest(G);
 ok32 = (e32 < 1.e-13) && (l32 == 3)
-ok32 || println("Greens fail at TL=Float64-32")
+ok32 || println("Greens fail at TL=Float64-32, $e32, $l32")
 (e16,l16) = gtest(G; TL=Float16);
 ok16 = (e16 < 1.e-13) && (l16 == 6)
 ok16 || println("Greens fail at TL=Float64-16")
