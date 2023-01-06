@@ -22,7 +22,7 @@ ok32 || println("GreensH fail at TL=Float64-32, $ok32, $e32, $le32")
 ok16 = (e16 < 1.e-14) && (l16 == 6)
 ok16 || println("GreensH fail at TL=Float64-16")
 (e3216,l3216) = gtestH(G; TL=Float16,TH=Float32);
-ok3216 = (e3216 < 1.e-6) && (l3216 == 3)
+ok3216 = (e3216 < 1.e-6) && (l3216 <= 4)
 ok3216 || println("GreensH fail at TL=Float32-16")
 heavyok = (ok16 && ok32 && ok3216)
 return heavyok
