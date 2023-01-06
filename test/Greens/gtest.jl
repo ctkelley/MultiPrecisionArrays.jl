@@ -17,7 +17,7 @@ function greensHok(n=31)
 G=Gmat(n)
 (e32,l32) = gtestH(G);
 ok32 = (e32 < 1.e-13) && (l32 == 3)
-ok32 || println("GreensH fail at TL=Float64-32")
+ok32 || println("GreensH fail at TL=Float64-32, $ok32, $e32, $le32")
 (e16,l16) = gtestH(G; TL=Float16);
 ok16 = (e16 < 1.e-14) && (l16 == 6)
 ok16 || println("GreensH fail at TL=Float64-16")

@@ -1,4 +1,5 @@
 [![][build-status-img]][build-status-url]
+[![][codecov-img]][codecov-url]
 
 # MPArrays.jl v0.0.1
 
@@ -16,3 +17,6 @@ More later.
 
 [build-status-img]: https://github.com/ctkelley/MPArrays.jl/workflows/CI/badge.svg
 [build-status-url]: https://github.com/ctkelley/MPArrays.jl/actions
+
+[codecov-img]: https://codecov.io/gh/ctkelley/MPArrays.jl/branch/master/graph/badge.svg
+[codecov-url]: https://codecov.io/gh/ctkelley/MPArrays.jl
