@@ -142,7 +142,7 @@ export MPIRStats
 
 include("Solvers/mpgesl2.jl")
 include("Solvers/IRTriangle.jl")
-include("MPASTats.jl")
+include("MPAStats.jl")
 
 module Examples
 export Gmat
