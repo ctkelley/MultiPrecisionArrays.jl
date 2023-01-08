@@ -7,7 +7,7 @@ __This package is nowhere close to ready for registration or release. It's publi
 
 __Please do not make PRs. If you stumble on this mess and have questions/ideas ..., raise an issue or email me at tim_kelley@ncsu.edu__
 
-Nothing is in final form and I am changing the API, internal structures, exported functions/structs and all other stuff frequently. When/if I register this and announce it, then it will be time for complaints and offers to collaborate. 
+Nothing is in final form and I am changing the API, internal structures, exported functions/structs and all kinds of other stuff frequently. When/if I register this and announce it, then it will be time for complaints and offers to collaborate. 
 
 This is the start of a package to support mulitprecision arrays. 
 
