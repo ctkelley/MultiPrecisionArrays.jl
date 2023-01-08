@@ -26,11 +26,8 @@ function mpgesl2(AF::MPFact, b; reporting = false, verbose = true)
     # Keep the records and accumulate the statistics. 
     #
     Meth = MPStats.Meth
-    if verbose
-        println( Meth,": High precision = $TH, Low precision = $TL,
-             Factorization storage precision = $TFact",
-        )
-    end
+    verbose &&
+        println( Meth,": High precision = $TH, Low precision = $TL, Factorization storage precision = $TFact")
     #
     # Showtime!
     #
@@ -96,9 +93,7 @@ function mpgesl2(AF::MPFact, b; reporting = false, verbose = true)
         #
         (rnrm >= rnrmx) && println("Norm increased")
     end
-    if verbose
-        println("Residual history = $rhist")
-    end
+    verbose && println("Residual history = $rhist")
     if reporting
         return (rhist = rhist, sol = x, TH = TH, TL = TL, TFact = TFact)
     else
@@ -120,20 +115,6 @@ function getTL(AF)
         error("illegal MPFact type $TX")
     end
     return TL
-end
-
-function getMeth(AF)
-    if (typeof(AF) <: MPLFact) || (typeof(AF) <: MPLEFact)
-        Meth = "IR"
-    elseif (typeof(AF) <: MPHFact)
-        Meth = "Hungry IR"
-    elseif (typeof(AF) <: MPGFact)
-        Meth = "IRGM"
-    else
-        TX = typeof(AF)
-        error("illegal MPFact type $TX")
-    end
-    return Meth
 end
 
 function getStats(AF)
