@@ -8,10 +8,8 @@ end
 
 function MPIRStats(TH=Float64, TL=Float32, TFact=Float32)
     if TFact == TH
-#    MPStats=MPIRStats([],TH, TL, TFact,MPHArray,"Hungry IR")
-    MPStats=MPIRStats([],TH, TL, TFact, "Hungry IR")
+    MPStats=MPIRStats([],TH, TL, TFact, "Heavy IR")
     else
-#    MPStats=MPIRStats([],TH, TL, TFact,MPArray,"IR")
     MPStats=MPIRStats([],TH, TL, TFact, "IR")
     end
 end

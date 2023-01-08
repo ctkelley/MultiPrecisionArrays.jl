@@ -10,8 +10,8 @@ using SIAMFANLEquations
 # variations on iterative refinement.
 #
 
-include("MPStructs/MPLight.jl")
-include("MPStructs/MPHeavy.jl")
+include("Structs4MP/MPLight.jl")
+include("Structs4MP/MPHeavy.jl")
 
 MPIRArray=Union{MPArray,MPHArray}
 
@@ -62,7 +62,7 @@ export MPIRStats
 
 include("Solvers/mpgesl2.jl")
 include("Solvers/IRTriangle.jl")
-include("MPAStats.jl")
+include("Structs4MP/MPStats.jl")
 
 module Examples
 export Gmat
