@@ -28,7 +28,13 @@ AH=MPH.AH
 TD=eltype(AH)
 AH2=MPH.AH2
 AS=MPH.AS
+#
+# Factor in low precision
+#
 ASF=lu!(AS)
+#
+# Promote he low-precision lu
+#
 AH2 .= TD.(AS)
 AF = LU(AH2, ASF.ipiv, ASF.info)
 MPF=MPHFact(AH, AH2, AS, AF)

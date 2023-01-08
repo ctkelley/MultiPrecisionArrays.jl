@@ -41,20 +41,6 @@ xi = mpgesl2(AF,b; verbose=verbose, reporting=reporting)
 return xi
 end
 
-function promotelu!(AL, AH)
-TH=eltype(AH)
-ALF=lu!(AL)
-AH .= TH.(AL)
-AHF = LU(AH, ALF.ipiv, ALF.info)
-return AHF
-end
-
-function promotelu(A, T=Float32)
-AF=lu!(A)
-AFHigh=LU(T.(A), AF.ipiv, AF.info)
-return AFHigh
-end
-
 export mplu!
 export mphlu!
 export mpglu!
@@ -68,8 +54,6 @@ export MPLFact
 export MPLEFact
 export MPHFact
 export mpgesl2
-export promotelu
-export promotelu!
 export MPhatv
 export MPhptv
 
