@@ -108,8 +108,8 @@ function getTL(AF)
         TL = eltype(AF.AL)
     elseif (typeof(AF) <: MPHFact)
         TL = eltype(AF.AS)
-    elseif (typeof(AF) <: MPGFact)
-        TL = eltype(AF.AS)
+#    elseif (typeof(AF) <: MPGFact)
+#        TL = eltype(AF.AS)
     else
         TX = typeof(AF)
         error("illegal MPFact type $TX")
@@ -121,10 +121,10 @@ function getStats(AF)
     TH = eltype(AF.AH)
     TL = getTL(AF)
     TFact = eltype(AF.AL)
-    if (typeof(AF) == MPGFact)
-        MPStats = MPGStats()
-    else
+#    if (typeof(AF) == MPGFact)
+#        MPStats = MPGStats()
+#    else
         MPStats = MPIRStats(TH, TL, TFact)
-    end
+#    end
     return MPStats
 end

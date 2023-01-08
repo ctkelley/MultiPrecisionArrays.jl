@@ -13,68 +13,11 @@ using SIAMFANLEquations
 include("MPStructs/MPLight.jl")
 include("MPStructs/MPHeavy.jl")
 
-struct MPGArray
-    AH::Array
-    AH2::Array
-    VH::Array
-    AS::Array
-end
-
-struct MPGFact
-  AH::Array
-  AL::Array
-  VH::Array
-  AS::Array
-  AF::Factorization
-end
-
-
-MPFact=Union{MPLFact, MPLEFact, MPHFact, MPGFact}
-
-MPGMFact=Union{MPHFact, MPGFact}
-
-function MPhatv(x, MPHF::MPGMFact)
-atv=MPHF.AH*x
-return atv
-end
-
-function MPhptv(x, MPHF::MPGMFact)
-ptv = MPHF.AF\x
-return ptv
-end
-
-
 MPIRArray=Union{MPArray,MPHArray}
 
-function MPGArray(AH::Array{Float64,2}, TL=Float32, itg=5)
-(ma, na)=size(AH)
-T=eltype(AH)
-AH2=copy(AH)
-AS=TL.(AH)
-VH=zeros(T, na, itg)
-MPG=MPGArray(AH, AH2, VH, AS)
-end
+#MPFact=Union{MPLFact, MPLEFact, MPHFact, MPGFact}
 
-function MPGArray(AH::Array{Float32,2}, TL=Float16, itg=5)
-(ma, na)=size(AH)
-T=eltype(AH)
-AH2=copy(AH)
-AS=TL.(AH)
-VH=zeros(T, na, itg)
-MPG=MPGArray(AH, AH2, VH, AS)
-end
-
-function mpglu!(MPG::MPGArray)
-AH=MPG.AH
-VH=MPG.VH
-TD=eltype(AH)
-AH2=MPG.AH2
-AS=MPG.AS
-ASF=lu!(AS)
-AH2 .= TD.(AS)
-AF = LU(AH2, ASF.ipiv, ASF.info)
-MPF=MPGFact(AH, AH2, VH, AS, AF)
-end
+MPFact=Union{MPLFact, MPLEFact, MPHFact}
 
 import Base.eltype
 function eltype(MP::MPArray)
@@ -94,11 +37,6 @@ return xi
 end
 
 function \(AF::MPHFact, b; verbose=false, reporting=false)
-xi = mpgesl2(AF,b; verbose=verbose, reporting=reporting)
-return xi
-end
-
-function \(AF::MPGFact, b; verbose=false, reporting=false)
 xi = mpgesl2(AF,b; verbose=verbose, reporting=reporting)
 return xi
 end
@@ -126,11 +64,9 @@ export MPArray
 export MPEArray
 export MPFArray
 export MPHArray
-export MPGArray
 export MPLFact
 export MPLEFact
 export MPHFact
-export MPGFact
 export mpgesl2
 export promotelu
 export promotelu!

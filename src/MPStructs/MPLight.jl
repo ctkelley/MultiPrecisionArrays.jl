@@ -79,22 +79,3 @@ MPF=MPLEFact(AH, AL, AF)
 return MPF
 end
 
-
-function mpqr!(MPA::MPArray)
-AH=MPA.AH
-AL=MPA.AL
-AF=qr!(AL)
-MPF=MPLFact(AH, AL, AF, false)
-return MPF
-end
-
-function mpcholesky!(MPA::MPArray)
-AH=MPA.AH
-AL=MPA.AL
-AF=cholesky!(AL)
-MPF=MPLFact(AH, AL, AF, false)
-return MPF
-end
-
-
-
