@@ -1,3 +1,8 @@
+"""
+greensok(n=31)
+
+Test vanilla IR with the inverse Laplacian. 
+"""
 function greensok(n=31)
 G=Gmat(n)
 (e32,l32) = gtest(G);
@@ -13,6 +18,11 @@ lightok=(ok16 && ok32 && ok3216)
 return lightok
 end
 
+"""
+greenHsok(n=31)
+
+Test heavy IR with the inverse Laplacian. 
+"""
 function greensHok(n=31)
 G=Gmat(n)
 (e32,l32) = gtestH(G);
@@ -28,9 +38,37 @@ heavyok = (ok16 && ok32 && ok3216)
 return heavyok
 end
 
+"""
+greensEvsH(n=31)
 
+Make sure heavy IR and expensive IR are give identical results
+"""
+function greensEvsH(n=31)
+G=Gmat(n)
+(ee32, le32, he32) =gtestE(G; reshistout=true)
+(e32, l32, h32) = gtestH(G; reshistout=true)
+errok=(e32==ee32)
+histok=(h32==he32)
+EvsHok32=(errok && histok)
+(ee16, le16, he16) =gtestE(G; TL=Float16, reshistout=true)
+(e16, l16, h16) = gtestH(G; TL=Float16, reshistout=true)
+errok=(e16==ee16)
+histok=(h16==he16)
+EvsHok16=(errok && histok)
+(ee3216, le3216, he3216) =gtestE(G; TL=Float16, TH=Float32, reshistout=true)
+(e3216, l3216, h3216) = gtestH(G; TL=Float16, TH=Float32, reshistout=true)
+errok=(e3216==ee3216)
+histok=(h3216==he3216)
+EvsHok3216=(errok && histok)
+return EvsHok32 && EvsHok16 && EvsHok3216
+end
+
+"""
+gtest(G; TL=Float32,TH=Float64)
+
+Solve the inverse Laplacian problem with IR
+"""
 function gtest(G; TL=Float32,TH=Float64)
-#G=Gmat(n)
 (n,n)=size(G)
 A = I + TH.(G)
 b=ones(TH,n)
@@ -45,7 +83,12 @@ lenit=length(rhist)
 return (nerr, lenit)
 end
 
-function gtestH(G; TL=Float32,TH=Float64)
+"""
+gtestH(G; TL=Float32,TH=Float64, reshistout=false)
+
+Solve the inverse Laplacian problem with heavy IR
+"""
+function gtestH(G; TL=Float32,TH=Float64, reshistout=false)
 #G=Gmat(n)
 (n,n)=size(G)
 A = I + TH.(G)
@@ -58,5 +101,37 @@ xm=soldata.sol
 rhist=soldata.rhist
 nerr=norm(xm-xe,Inf)
 lenit=length(rhist)
+if reshistout
+return (nerr, lenit, rhist)
+else
 return (nerr, lenit)
 end
+end
+
+"""
+gtestE(G; TL=Float32,TH=Float64)
+
+Solve the inverse Laplacian problem with expensive IR
+This is only for CI
+"""
+function gtestE(G; TL=Float32,TH=Float64, reshistout=false)
+#G=Gmat(n)
+(n,n)=size(G)
+A = I + TH.(G)
+b=ones(TH,n)
+xe = A\b
+MPA=MPEArray(A;TL=TL)
+MPF=mplu!(MPA)
+soldata=\(MPF,b;reporting=true)
+xm=soldata.sol
+rhist=soldata.rhist
+nerr=norm(xm-xe,Inf)
+lenit=length(rhist)
+if reshistout
+return (nerr, lenit, rhist)
+else
+return (nerr, lenit)
+end
+end
+
+

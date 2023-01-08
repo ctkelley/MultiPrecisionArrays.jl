@@ -13,6 +13,7 @@ println("starting")
 @testset "Greens Functions" begin
    @test greensok();
    @test greensHok();
+   @test greensEvsH();
 end
 
 @testset "Nonlinear Equations" begin
