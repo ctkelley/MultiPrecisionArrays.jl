@@ -17,6 +17,9 @@ I have this working to the point where ```\``` does the right thing.
 
 More later.
 
+[docs-dev-img]: https://img.shields.io/badge/docs-dev-blue.svg
+[docs-dev-url]: https://ctkelley.github.io/MPArrays.jl/dev
+
 [build-status-img]: https://github.com/ctkelley/MPArrays.jl/workflows/CI/badge.svg
 [build-status-url]: https://github.com/ctkelley/MPArrays.jl/actions
 
