@@ -1,4 +1,4 @@
-# MPArrays.jl
+# MPArrays.jl v0.0.2
 
 [C. T. Kelley](https://ctk.math.ncsu.edu)
 

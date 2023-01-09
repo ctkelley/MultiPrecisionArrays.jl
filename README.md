@@ -1,7 +1,7 @@
 [![][build-status-img]][build-status-url]
 [![][codecov-img]][codecov-url]
 
-# MPArrays.jl v0.0.1
+# MPArrays.jl v0.0.2
 
 __This package is nowhere close to ready for registration or release. It's public only to help me do CI and clean up the docs.__
 
