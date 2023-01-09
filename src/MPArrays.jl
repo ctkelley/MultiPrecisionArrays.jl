@@ -15,9 +15,12 @@ include("Structs4MP/MPHeavy.jl")
 
 MPIRArray=Union{MPArray,MPHArray}
 
+
 #MPFact=Union{MPLFact, MPLEFact, MPHFact, MPGFact}
 
 MPFact=Union{MPLFact, MPLEFact, MPHFact}
+
+MPLFacts=Union{MPLFact, MPLEFact}
 
 import Base.eltype
 function eltype(MP::MPArray)

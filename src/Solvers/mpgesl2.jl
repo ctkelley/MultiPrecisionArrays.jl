@@ -101,21 +101,32 @@ function mpgesl2(AF::MPFact, b; reporting = false, verbose = true)
     end
 end
 
-function getTL(AF)
-    if (typeof(AF) <: MPLFact)
-        TL = eltype(AF.AL)
-    elseif (typeof(AF) <: MPLEFact)
-        TL = eltype(AF.AL)
-    elseif (typeof(AF) <: MPHFact)
-        TL = eltype(AF.AS)
+function getTL(AF::MPLFacts)
+TL = eltype(AF.AL)
+return TL 
+end
+
+function getTL(AF::MPHFact)
+TL = eltype(AF.AS)
+return TL 
+end
+
+
+#function getTL(AF)
+#    if (typeof(AF) <: MPLFact)
+#        TL = eltype(AF.AL)
+#    elseif (typeof(AF) <: MPLEFact)
+#        TL = eltype(AF.AL)
+#    elseif (typeof(AF) <: MPHFact)
+#        TL = eltype(AF.AS)
 #    elseif (typeof(AF) <: MPGFact)
 #        TL = eltype(AF.AS)
-    else
-        TX = typeof(AF)
-        error("illegal MPFact type $TX")
-    end
-    return TL
-end
+#    else
+#        TX = typeof(AF)
+#        error("illegal MPFact type $TX")
+#    end
+#    return TL
+#end
 
 function getStats(AF)
     TH = eltype(AF.AH)
