@@ -14,7 +14,6 @@ struct MPLFact{TH<:AbstractFloat, TL<:AbstractFloat, TF<:Factorization}
   AH::Array{TH,2}
   AL::Array{TL,2}
   AF::TF
-  expensive::Bool
 end
 
 #
@@ -63,11 +62,11 @@ end
 # A few factorizations
 #
 
-function mplu!(MPA::MPArray; expensive=false)
+function mplu!(MPA::MPArray)
 AH=MPA.AH
 AL=MPA.AL
 AF=lu!(AL)
-MPF=MPLFact(AH, AL, AF, expensive)
+MPF=MPLFact(AH, AL, AF)
 return MPF
 end
 

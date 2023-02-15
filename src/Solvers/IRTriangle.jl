@@ -5,7 +5,6 @@ Solve for the defect by demoting the residual and using a low-precision
 factorization. Triangular solves entirely in low precision.
 """
 function IRTriangle!(AF::MPLFact, r, rs, verbose)
-expensive=AF.expensive
 AFS = AF.AF
 MPStats = getStats(AF)
 TFact = eltype(AFS)

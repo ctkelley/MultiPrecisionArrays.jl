@@ -1,7 +1,8 @@
 """
-mpgesl2(AF::MPFact, b; reporting=false, verbose=true, expensive=false)
+mpgesl2(AF::MPFact, b; reporting=false, verbose=true)
 
-Use a multi-precision factorization to solve a linear system.
+Use a multi-precision factorization to solve a linear system with
+plain vanilla iterative refinement.
 """
 function mpgesl2(AF::MPFact, b; reporting = false, verbose = true)
     # # What kind of problem are we dealing with?
