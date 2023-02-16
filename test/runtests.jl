@@ -7,6 +7,7 @@ using Test
 
 include("Greens/gtest.jl")
 include("NLTest/nltest.jl")
+include("DetailsTest/precision_test.jl")
 
 println("starting")
 
@@ -18,4 +19,8 @@ end
 
 @testset "Nonlinear Equations" begin
    @test nltest();
+end
+
+@testset "Details" begin
+   @test precision_test();
 end

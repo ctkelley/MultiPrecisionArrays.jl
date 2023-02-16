@@ -46,7 +46,8 @@ end
 
 export mplu!
 export mphlu!
-export mpglu!
+export mpghlu!
+#export mpglu!
 export mpqr!
 export mpcholesky!
 export MPArray
@@ -56,6 +57,7 @@ export MPHArray
 export MPLFact
 export MPLEFact
 export MPHFact
+export MPGHFact
 export mpgesl2
 export MPhatv
 export MPhptv

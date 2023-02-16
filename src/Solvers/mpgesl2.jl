@@ -41,7 +41,7 @@ function mpgesl2(AF::MPFact, b; reporting = false, verbose = true)
     # Initialize the iteration. I am still thinking about how I want
     # to do this. For now I initialize to zero.
     #
-    x = zeros(size(b))
+    x = zeros(TB,size(b))
 #    if (typeof(AF) == MPGFact)
 #        x = zeros(size(b))
 #    else
@@ -50,15 +50,16 @@ function mpgesl2(AF::MPFact, b; reporting = false, verbose = true)
     #
     # Initial residual
     #
+    oneb=TB(1.0)
     r = copy(x)
     mul!(r, AD, x)
-    r .*= -1.0
-    axpy!(1.0, bsc, r)
+    r .*= -oneb
+    axpy!(oneb, bsc, r)
     tol = tolf * bnrm
     rs = bS
     rhist = Vector{Float64}()
     rnrm = norm(r, normtype)
-    rnrmx = rnrm * 1.1
+    rnrmx = rnrm * TB(1.1)
     itc = 0
     #
     # Put initial residual norm into the history and iterate.
@@ -82,8 +83,8 @@ function mpgesl2(AF::MPFact, b; reporting = false, verbose = true)
         #
         x .+= r
         mul!(r, AD, x)
-        r .*= -1.0
-        axpy!(1.0, bsc, r)
+        r .*= -oneb
+        axpy!(oneb, bsc, r)
         rnrmx = rnrm
         rnrm = norm(r, normtype)
         itc += 1
