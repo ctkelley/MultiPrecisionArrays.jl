@@ -16,6 +16,7 @@ return normok
 end
 
 function testnorm(delnorm, TA, alpha)
+println(delnorm, TA, alpha)
 if TA == Float64
    normok = (alpha < 750.0) ? (delnorm < 1.e-13) : (delnorm < 1.e-11)
 else
