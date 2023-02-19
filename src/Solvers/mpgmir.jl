@@ -49,11 +49,8 @@ function mpgmir(AF::MPGHFact, b; reporting = false,
         #
         # Make some noise
         #
-        if verbose
-            itcc = itc + 1
-            println("Krylov stats: Iteration $itcc ", 
-                     kout.reshist, "  ", kout.idid)
-        end
+        verbose && (itc +=1; println("Krylov stats: Iteration $itcc ", 
+                     kout.reshist, "  ", kout.idid))
         #
         # Overwrite the residual with the correction
         #
@@ -79,9 +76,7 @@ function mpgmir(AF::MPGHFact, b; reporting = false,
         #
         (rnrm >= rnrmx) && (println("Residual norm increased"); normdec=false)
     end
-    if verbose
-        println("Residual history = $rhist")
-    end
+    verbose && println("Residual history = $rhist")
     if reporting
         TL = eltype(AF.AS)
         TFact = eltype(AF.AS)
