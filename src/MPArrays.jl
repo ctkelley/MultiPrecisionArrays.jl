@@ -46,10 +46,11 @@ end
 
 export mplu!
 export mphlu!
-export mpghlu!
+export mpglu!
 #export mpglu!
 export mpqr!
 export mpcholesky!
+export mpgmir
 export MPArray
 export MPEArray
 export MPFArray
@@ -65,6 +66,7 @@ export MPhptv
 export MPGStats
 export MPIRStats
 
+include("Solvers/mpgmir.jl")
 include("Solvers/mpgesl2.jl")
 include("Solvers/IRTriangle.jl")
 include("Structs4MP/MPStats.jl")

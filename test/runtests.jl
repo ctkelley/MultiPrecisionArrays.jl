@@ -8,6 +8,7 @@ using Test
 include("Greens/gtest.jl")
 include("NLTest/nltest.jl")
 include("DetailsTest/precision_test.jl")
+include("GM-IRTest/mpgmtest.jl")
 
 println("starting")
 
@@ -23,4 +24,8 @@ end
 
 @testset "Details" begin
    @test precision_test();
+end
+
+@testset "GM-IR" begin
+   @test mpgmtest(1000)
 end

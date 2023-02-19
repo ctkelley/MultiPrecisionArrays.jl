@@ -51,7 +51,7 @@ AF = LU(AH2, ASF.ipiv, ASF.info)
 MPF=MPHFact(AH, AH2, AS, AF)
 end
 
-function mpghlu!(MPH::MPHArray)
+function mpglu!(MPH::MPHArray)
 AH=MPH.AH
 TD=eltype(AH)
 AH2=MPH.AH2
