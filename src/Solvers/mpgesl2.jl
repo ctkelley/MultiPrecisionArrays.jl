@@ -105,39 +105,20 @@ end
 
 function getTL(AF::MPLFacts)
 TL = eltype(AF.AL)
-return TL 
+TFact = eltype(AF.AL)
+return (TL, TFact)
 end
 
 function getTL(AF::MPHFact)
-TL = eltype(AF.AS)
-return TL 
+TL = eltype(AF.ALow)
+TFact = eltype(AF.AStore)
+return (TL , TFact)
 end
 
 
-#function getTL(AF)
-#    if (typeof(AF) <: MPLFact)
-#        TL = eltype(AF.AL)
-#    elseif (typeof(AF) <: MPLEFact)
-#        TL = eltype(AF.AL)
-#    elseif (typeof(AF) <: MPHFact)
-#        TL = eltype(AF.AS)
-#    elseif (typeof(AF) <: MPGFact)
-#        TL = eltype(AF.AS)
-#    else
-#        TX = typeof(AF)
-#        error("illegal MPFact type $TX")
-#    end
-#    return TL
-#end
-
 function getStats(AF)
     TH = eltype(AF.AH)
-    TL = getTL(AF)
-    TFact = eltype(AF.AL)
-#    if (typeof(AF) == MPGFact)
-#        MPStats = MPGStats()
-#    else
-        MPStats = MPIRStats(TH, TL, TFact)
-#    end
+    (TL, TFact) = getTL(AF)
+    MPStats = MPIRStats(TH, TL, TFact)
     return MPStats
 end

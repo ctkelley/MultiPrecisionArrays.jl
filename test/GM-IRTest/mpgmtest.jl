@@ -7,7 +7,7 @@ normok = normok && get_gmir_results(n, Float64; test6416=true)
 return normok
 end
 
-function get_gmir_results(n, TA; test6416=false)
+function get_gmir_results(n, TA; test6416=false, debug=false)
 TAok=true
 for alpha in [1.0, 10.0, 800.0]
     AD = TA.(I - alpha*Gmat(n))
@@ -19,8 +19,14 @@ for alpha in [1.0, 10.0, 800.0]
     ADM = MPHArray(AD)
     end
     ADF = mpglu!(ADM)
-    z = mpgmir(ADF, b)
+    zt = mpgmir(ADF, b; reporting=true)
+    z=zt.sol
     delnorm=norm(z - xs, Inf)
+    if debug
+    its=length(zt.rhist)
+    rnorm=zt.rhist[its]
+    println("alpha=$alpha, delnorm=$delnorm, rnorm=$rnorm, its = $its")
+    end
     TAok=TAok && testnorm(delnorm, TA, alpha)
 end
 return TAok

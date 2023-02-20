@@ -78,8 +78,8 @@ function mpgmir(AF::MPGHFact, b; reporting = false,
     end
     verbose && println("Residual history = $rhist")
     if reporting
-        TL = eltype(AF.AS)
-        TFact = eltype(AF.AS)
+        TL = eltype(AF.ALow)
+        TFact = eltype(AF.ALow)
         return (rhist = rhist, sol = x, TH = TB, TL = TL, TFact = TFact)
     else
         return x

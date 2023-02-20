@@ -1,13 +1,13 @@
 struct MPHArray
     AH::Array
-    AH2::Array
-    AS::Array
+    AStore::Array
+    ALow::Array
 end
 
 struct MPHFact
   AH::Array
-  AL::Array
-  AS::Array
+  AStore::Array
+  ALow::Array
   AF::Factorization
 end
 
@@ -16,56 +16,56 @@ end
 #
 struct MPGHFact
   AH::Array
-  AL::Array
-  AS::Array
+  AStore::Array
+  ALow::Array
   AF::Factorization
 end
 
 
 function MPHArray(AH::Array{Float64,2}; TL=Float32)
-AH2=copy(AH)
-AS=TL.(AH)
-MPH=MPHArray(AH, AH2, AS)
+AStore=copy(AH)
+ALow=TL.(AH)
+MPH=MPHArray(AH, AStore, ALow)
 end
 
 function MPHArray(AH::Array{Float32,2}; TL=Float16)
-AH2=copy(AH)
-AS=TL.(AH)
-MPH=MPHArray(AH, AH2, AS)
+AStore=copy(AH)
+ALow=TL.(AH)
+MPH=MPHArray(AH, AStore, ALow)
 end
 
 function mphlu!(MPH::MPHArray)
 AH=MPH.AH
 TD=eltype(AH)
-AH2=MPH.AH2
-AS=MPH.AS
+AStore=MPH.AStore
+ALow=MPH.ALow
 #
 # Factor in low precision
 #
-ASF=lu!(AS)
+ALowF=lu!(ALow)
 #
 # Promote the low-precision lu
 #
-AH2 .= TD.(AS)
-AF = LU(AH2, ASF.ipiv, ASF.info)
-MPF=MPHFact(AH, AH2, AS, AF)
+AStore .= TD.(ALow)
+AF = LU(AStore, ALowF.ipiv, ALowF.info)
+MPF=MPHFact(AH, AStore, ALow, AF)
 end
 
 function mpglu!(MPH::MPHArray)
 AH=MPH.AH
 TD=eltype(AH)
-AH2=MPH.AH2
-AS=MPH.AS
+AStore=MPH.AStore
+ALow=MPH.ALow
 #
 # Factor in low precision
 #
-ASF=lu!(AS)
+ALowF=lu!(ALow)
 #
 # Promote the low-precision lu
 #
-AH2 .= TD.(AS)
-AF = LU(AH2, ASF.ipiv, ASF.info)
-MPF=MPGHFact(AH, AH2, AS, AF)
+AStore .= TD.(ALow)
+AF = LU(AStore, ALowF.ipiv, ALowF.info)
+MPF=MPGHFact(AH, AStore, ALow, AF)
 end
 
 
