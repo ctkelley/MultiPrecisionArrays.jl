@@ -67,6 +67,3 @@ AStore .= TD.(ALow)
 AF = LU(AStore, ALowF.ipiv, ALowF.info)
 MPF=MPGHFact(AH, AStore, ALow, AF)
 end
-
-
-

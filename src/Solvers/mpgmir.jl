@@ -33,7 +33,7 @@ function mpgmir(AF::MPGHFact, b; reporting = false,
     # GMRES-IR loop
     #
     itc = 0
-    VF = zeros(TB, n, 20)
+    VF = zeros(TB, n, 80)
     normdec=true
     while (rnrm > irtol*bnorm) && (itc < 10) && normdec
         x0 = zeros(TB, n)
@@ -49,8 +49,10 @@ function mpgmir(AF::MPGHFact, b; reporting = false,
         #
         # Make some noise
         #
-        verbose && (itc +=1; println("Krylov stats: Iteration $itcc ", 
-                     kout.reshist, "  ", kout.idid))
+        itcp1=itc+1
+        winner = kout.idid ? " GMRES converged" : " GMRES failed"
+        verbose && (println("Krylov stats: Iteration $itcp1 :", 
+                     length(kout.reshist), " iterations", "  ", winner))
         #
         # Overwrite the residual with the correction
         #
@@ -70,11 +72,14 @@ function mpgmir(AF::MPGHFact, b; reporting = false,
         rnrm = norm(r, normtype)
         itc += 1
         push!(rhist, rnrm)
+        tol=irtol*bnorm
         mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol")
         #
         # If the residual norm increased, complain.
         #
-        (rnrm >= rnrmx) && (println("Residual norm increased"); normdec=false)
+        (rnrm >= rnrmx) && (normdec=false)
+        ~normdec && mpdebug && (rnrm >= rnrmx) &&
+               println("Residual norm increased")
     end
     verbose && println("Residual history = $rhist")
     if reporting
