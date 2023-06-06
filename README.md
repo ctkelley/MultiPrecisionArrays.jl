@@ -3,7 +3,7 @@
 [![][codecov-img]][codecov-url]
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7521427.svg)](https://doi.org/10.5281/zenodo.7521427)
 
-# MPArrays.jl v0.0.2
+# MultiPrecisionArrays.jl v0.0.2
 
 __This package is nowhere close to ready for registration or release. It's public only to help me do CI and clean up the docs.__
 
