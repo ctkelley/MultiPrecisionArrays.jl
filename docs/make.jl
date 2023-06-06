@@ -1,4 +1,4 @@
-using Documenter, MPArrays, DocumenterTools
+using Documenter, MultiPrecisionArrays, DocumenterTools
 push!(LOAD_PATH,"../src/")
 makedocs(sitename="MPArrays.jl",
 authors="C. T. Kelley",
@@ -10,5 +10,5 @@ pages = Any[
 ]
 )
 deploydocs(
-     repo="github.com/ctkelley/MPArrays.jl.git"
+     repo="github.com/ctkelley/MultiPrecisionArrays.jl.git"
 )
