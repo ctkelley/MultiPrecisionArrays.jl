@@ -1,6 +1,6 @@
 using Documenter, MultiPrecisionArrays, DocumenterTools
 push!(LOAD_PATH,"../src/")
-makedocs(sitename="MPArrays.jl",
+makedocs(sitename="MultiPrecisionArrays.jl",
 authors="C. T. Kelley",
 format = Documenter.HTML(
                prettyurls = get(ENV, "CI", nothing) == "true"
