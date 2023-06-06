@@ -1,5 +1,5 @@
-using Documenter, MultiPrecisionArrays, DocumenterTools
 push!(LOAD_PATH,"../src/")
+using Documenter, MultiPrecisionArrays, DocumenterTools
 makedocs(sitename="MultiPrecisionArrays.jl",
 authors="C. T. Kelley",
 format = Documenter.HTML(
