@@ -1,4 +1,4 @@
-module MPArrays
+module MultiPrecisionArrays
 
 using LinearAlgebra 
 using SparseArrays

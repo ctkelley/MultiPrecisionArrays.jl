@@ -1,5 +1,5 @@
-using MPArrays
-using MPArrays.Examples
+using MultiPrecisionArrays
+using MultiPrecisionArrays.Examples
 using LinearAlgebra
 using SIAMFANLEquations
 using SIAMFANLEquations.TestProblems
