@@ -20,14 +20,14 @@ I have this working to the point where ```\``` does the right thing.
 More later.
 
 [docs-stable-img]: https://img.shields.io/badge/docs-stable-blue.svg
-[docs-stable-url]: https://ctkelley.github.io/MPArrays.jl/stable
+[docs-stable-url]: https://ctkelley.github.io/MultiPrecisionArrays.jl/stable
 
 [docs-dev-img]: https://img.shields.io/badge/docs-dev-blue.svg
-[docs-dev-url]: https://ctkelley.github.io/MPArrays.jl/dev
+[docs-dev-url]: https://ctkelley.github.io/MultiPrecisionArrays.jl/dev
 
-[build-status-img]: https://github.com/ctkelley/MPArrays.jl/workflows/CI/badge.svg
-[build-status-url]: https://github.com/ctkelley/MPArrays.jl/actions
+[build-status-img]: https://github.com/ctkelley/MultiPrecisionArrays.jl/workflows/CI/badge.svg
+[build-status-url]: https://github.com/ctkelley/MultiPrecisionArrays.jl/actions
 
-[codecov-img]: https://codecov.io/gh/ctkelley/MPArrays.jl/branch/main/graph/badge.svg
-[codecov-url]: https://codecov.io/gh/ctkelley/MPArrays.jl
+[codecov-img]: https://codecov.io/gh/ctkelley/MultiPrecisionArrays.jl/branch/main/graph/badge.svg
+[codecov-url]: https://codecov.io/gh/ctkelley/MultiPrecisionArrays.jl
 
