@@ -19,7 +19,6 @@ JVMP=MPArray(JV);
 JVMPD=MPArray(JVD);
 x0=ones(n);
 tol=1.e-14
-dohalf=false
 hdata = heqinit(x0, c);
 nout=nsol(heqf!, x0, FV, JV, heqJ!;
           rtol=tol, atol=tol, pdata = hdata, sham = 1, jfact=lu!)
