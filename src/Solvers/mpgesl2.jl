@@ -110,7 +110,7 @@ return (TL, TFact)
 end
 
 function getTL(AF::MPHFact)
-TL = eltype(AF.ALow)
+TL = eltype(AF.AL)
 TFact = eltype(AF.AStore)
 return (TL , TFact)
 end
