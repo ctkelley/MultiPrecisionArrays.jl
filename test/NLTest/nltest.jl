@@ -64,7 +64,6 @@ return halfpass
 end
 
 
-
 function jheqmp!(JVMP, FV, x,hdata)
 JV=JVMP.AH
 JL=JVMP.AL
