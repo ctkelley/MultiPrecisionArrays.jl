@@ -13,6 +13,15 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 
 This is the start of a package to support multiprecision arrays. This is for my own research right now.
 
+## I'm using this myself.
+
+I have used this in my own work and will be adding links to that stuff as I finish it. 
+
+- Interprecision transfers:This is not a trivial matter. I gave [this talk](Publications_and_Presentations/MPArrays_XSDK-MULTIPRECISION_June_15.pdf) at the XSDK-MULTIPRECSSION meeting on June 15, 2023, about that.
+- Newton's method in three precisions
+
+## What is iterative refinement?
+
 One example is a struct with a Float64 array A and Float32.(A). To do factor/solve you factor the Float32 array and solve with iterative refinement.
 
 I have this working to the point where ```\``` does the right thing.
