@@ -4,12 +4,12 @@ tags:
    - mathematics
    - numerical analysis
    - linear equations
-authors:
+author:
    - name: C. T. Kelley
    - orcid: 0000-0003-2791-0648
    - equal-contrib: true
    - affiliation: 1
-affiliations:
+affiliation:
    - name: North Carolina State University, Raleigh NC, USA
    - index: 1
 date: 18 July 2023
