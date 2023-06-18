@@ -16,9 +16,36 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 This is the start of a package to support multiprecision arrays. This is for my own research right now.
 
 ## Readme Contents:
-- [Endorsement](#I'm-using-this-myself)
 - [Algorithms](#What-is-iterative-refinement?)
+- [Endorsement](#I'm-using-this-myself)
 - [Funding](#Funding)
+
+## What is iterative refinement?
+
+This package will make solving dense systems of linear equations faster by using the LU factorization and iterative refinement. It is limited to LU for now. A very generic description of this for solving a linear systrem $A x = b$ is
+
+__IR(A, b, x)__
+- $r = b - Ax$
+- Factor $A = LU$ in a lower precision
+- While $\| r \|$ is too large
+  - $d = (LU)^{-1} r$
+  - $x = x + d$
+  - $r = b - Ax$
+- end
+
+
+
+
+In Julia, a code to do this would solve the linear system $A x = b$ in double precision by using a
+factorization in a lower precision, say single, withhin a residual correction iteration. 
+
+
+
+
+
+
+I have this working to the point where ```\``` does the right thing.
+
 
 ## I'm using this myself.
 
@@ -34,11 +61,6 @@ I started on this package after finishing
   - [Interprecision Transfers in Iterative Refinement: Making Half Precision on Desktops Less Painful](Publications_and_Presentations/MPArrays_XSDK-MULTIPRECISION_June_15.pdf).
 - __Newton's method in three precisions:__ If you do iterative refinement well, you can make half precision work far better than it did in (KEL22a). 
 
-## What is iterative refinement?
-
-One example is a struct with a Float64 array A and Float32.(A). To do factor/solve you factor the Float32 array and solve with iterative refinement.
-
-I have this working to the point where ```\``` does the right thing.
 
 ## Funding
 
