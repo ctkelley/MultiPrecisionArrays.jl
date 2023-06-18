@@ -8,10 +8,10 @@ tags:
 authors:
   - name: C. T. Kelley
     orcid: 0000-0003-2791-0648
-    affiliation: 1
+#    affiliation: 1
 affiliations:
   - name: North Carolina State University, Raleigh NC, USA
-    index: 1
+#    index: 1
 date: 18 July 2023
 bibliography: paper.bib
 ---
