@@ -1,5 +1,5 @@
 ---
-title: `MultiprecisionArrays.jl: A Julia package for iterative refinement`
+title: 'MultiprecisionArrays.jl: A Julia package for iterative refinement'
 tags:
    - Julia
    - mathematics
