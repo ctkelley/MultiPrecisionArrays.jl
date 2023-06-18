@@ -30,7 +30,8 @@ I started on this package after finishing
 
 (KEL22b) C. T. Kelley, [__Solving Nonlinear Equations with Iterative Methods: Solvers and Examples in Julia__](https://my.siam.org/Store/Product/viewproduct/?ProductId=44313635), SIAM, Philadelphia, 2022. 
 
-- __Interprecision transfers__:This is not a trivial matter. I gave [this talk](Publications_and_Presentations/MPArrays_XSDK-MULTIPRECISION_June_15.pdf) at the XSDK-MULTIPRECSSION meeting on June 15, 2023, about this issue.
+- __Interprecision transfers__:This is not a trivial matter. I gave a talk at the XSDK-MULTIPRECISION meeting on June 15, 2023, about this issue.
+  - [Interprecision Transfers in Iterative Refinement: Making Half Precision on Desktops Less Painful](Publications_and_Presentations/MPArrays_XSDK-MULTIPRECISION_June_15.pdf).
 - __Newton's method in three precisions:__ If you do iterative refinement well, you can make half precision work far better than it did in (KEL22a). 
 
 ## What is iterative refinement?
