@@ -16,9 +16,9 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 This is the start of a package to support multiprecision arrays. This is for my own research right now.
 
 ## Readme Contents:
-- [Endorsement](##I'm-using-this-myself)
-- [Algorithms](##What-is-iterative-refinement?)
-- [Funding](##Funding)
+- [Endorsement](#I'm-using-this-myself)
+- [Algorithms](#What-is-iterative-refinement?)
+- [Funding](#Funding)
 
 ## I'm using this myself.
 
