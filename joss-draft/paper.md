@@ -7,9 +7,12 @@ tags:
 authors:
    - name: C. T. Kelley
    - orcid: 0000-0003-2791-0648
+   - equal-contrib: true
+   - affiliation: 1
 affiliations:
    - name: North Carolina State University, Raleigh NC, USA
-date: June 18, 2023
+   - index: 1
+date: 18 July 2023
 bibliography: paper.bib
 
 --
@@ -23,8 +26,6 @@ What is iterative refinement?
 Who cares?
 
 # Mathematical formulation
-
-$A x = b$
 
 # Test citations
 
