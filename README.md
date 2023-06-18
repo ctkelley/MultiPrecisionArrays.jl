@@ -17,8 +17,14 @@ This is the start of a package to support multiprecision arrays. This is for my 
 
 I have used this in my own work and will be adding links to that stuff as I finish it. 
 
-- Interprecision transfers:This is not a trivial matter. I gave [this talk](Publications_and_Presentations/MPArrays_XSDK-MULTIPRECISION_June_15.pdf) at the XSDK-MULTIPRECSSION meeting on June 15, 2023, about that.
-- Newton's method in three precisions
+I started on this package after finishing
+
+(KEL22a) C. T. Kelley, [__Newton's Method in Mixed Precision__](https://epubs.siam.org/doi/10.1137/20M1342902), SIAM Review 35 (1998), pp 191-211. 
+
+(KEL22b) C. T. Kelley, [__Solving Nonlinear Equations with Iterative Methods: Solvers and Examples in Julia__](https://my.siam.org/Store/Product/viewproduct/?ProductId=44313635), SIAM, Philadelphia, 2022. 
+
+- __Interprecision transfers__:This is not a trivial matter. I gave [this talk](Publications_and_Presentations/MPArrays_XSDK-MULTIPRECISION_June_15.pdf) at the XSDK-MULTIPRECSSION meeting on June 15, 2023, about this issue.
+- __Newton's method in three precisions:__ If you do iterative refinement well, you can make half precision work far better than it did in my earlier
 
 ## What is iterative refinement?
 
@@ -26,7 +32,12 @@ One example is a struct with a Float64 array A and Float32.(A). To do factor/sol
 
 I have this working to the point where ```\``` does the right thing.
 
-More later.
+## Funding
+
+This project was partially supported by
+
+1. National Science Foundation Grant DMS-1906446 and
+2. Department of Energy grant DE-NA003967
 
 [docs-stable-img]: https://img.shields.io/badge/docs-stable-blue.svg
 [docs-stable-url]: https://ctkelley.github.io/MultiPrecisionArrays.jl/stable
