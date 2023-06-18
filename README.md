@@ -5,6 +5,8 @@
 
 # MultiPrecisionArrays.jl v0.0.3
 
+## [C. T. Kelley](https://ctk.math.ncsu.edu)
+
 __This package is nowhere close to ready for registration or release. It's public only to help me do CI and clean up the docs.__
 
 __Please do not make PRs. If you stumble on this mess and have questions/ideas ..., raise an issue or email me at tim_kelley@ncsu.edu__
@@ -12,6 +14,11 @@ __Please do not make PRs. If you stumble on this mess and have questions/ideas .
 Nothing is in final form and I am changing the API, internal structures, exported functions/structs and all kinds of other stuff frequently. When/if I register this and announce it, then it will be time for complaints and offers to collaborate. 
 
 This is the start of a package to support multiprecision arrays. This is for my own research right now.
+
+## Readme Contents:
+- [Endorsement](##I'm-using-this-myself)
+- [Algorithms](##What-is-iterative-refinement?)
+- [Funding](##Funding)
 
 ## I'm using this myself.
 
@@ -24,7 +31,7 @@ I started on this package after finishing
 (KEL22b) C. T. Kelley, [__Solving Nonlinear Equations with Iterative Methods: Solvers and Examples in Julia__](https://my.siam.org/Store/Product/viewproduct/?ProductId=44313635), SIAM, Philadelphia, 2022. 
 
 - __Interprecision transfers__:This is not a trivial matter. I gave [this talk](Publications_and_Presentations/MPArrays_XSDK-MULTIPRECISION_June_15.pdf) at the XSDK-MULTIPRECSSION meeting on June 15, 2023, about this issue.
-- __Newton's method in three precisions:__ If you do iterative refinement well, you can make half precision work far better than it did in my earlier
+- __Newton's method in three precisions:__ If you do iterative refinement well, you can make half precision work far better than it did in (KEL22a). 
 
 ## What is iterative refinement?
 
