@@ -37,7 +37,7 @@ __IR(A, b, x)__
 
 
 In Julia, a code to do this would solve the linear system $A x = b$ in double precision by using a
-factorization in a lower precision, say single, withhin a residual correction iteration. 
+factorization in a lower precision, say single, within a residual correction iteration. 
 
 
 
