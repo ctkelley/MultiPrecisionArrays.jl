@@ -93,7 +93,7 @@ function mpgesl2(AF::MPFact, b; reporting = false, verbose = true)
         #
         # If the residual norm increased, complain.
         #
-        (rnrm >= rnrmx) && println("Norm increased")
+        (rnrm >= rnrmx) && println("IR Norm increased: $rnrm, $rnrmx, $tol")
     end
     verbose && println("Residual history = $rhist")
     if reporting
