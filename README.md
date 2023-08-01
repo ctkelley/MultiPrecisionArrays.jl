@@ -57,10 +57,10 @@ I started on this package after finishing
 
 (KEL22b) C. T. Kelley, [__Solving Nonlinear Equations with Iterative Methods: Solvers and Examples in Julia__](https://my.siam.org/Store/Product/viewproduct/?ProductId=44313635), SIAM, Philadelphia, 2022. 
 
-A paper in preparation exploits most of the package. I use the examples in that paper for CI. If you do iterative refinement well, you can make half precision work far better than it did in (KEL22a). MultiPrecisionArrays drop right into the solvers
+A new paper exploits most of the package. I use the examples in that paper for CI. If you do iterative refinement well, you can make half precision work far better than it did in (KEL22a). MultiPrecisionArrays drop right into the solvers
 in [SIAMFANLEquations.jl](https://github.com/ctkelley/SIAMFANLEquations.jl). 
 
-(KEL23a) C. T. Kelley, __Newton's method in three precisions:__ 
+(KEL23a) C. T. Kelley, [__Newton's method in three precisions__](https://arxiv.org/abs/2307.16051) 
 
 
 ## __Interprecision transfers__:
