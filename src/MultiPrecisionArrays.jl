@@ -3,6 +3,7 @@ module MultiPrecisionArrays
 using LinearAlgebra 
 using SparseArrays
 using SIAMFANLEquations
+using RecursiveFactorization
 
 #
 # This is MPArrays.jl

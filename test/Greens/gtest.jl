@@ -13,7 +13,7 @@ ok16 = (e16 < 1.e-13) && (l16 == 6)
 ok16 || println("Greens fail at TL=Float64-16")
 (e3216,l3216) = gtest(G; TL=Float16,TH=Float32);
 ok3216 = (e3216 < 1.e-6) && (l3216 == 4)
-ok3216 || println("Greens fail at TL=Float32-16")
+ok3216 || println("Greens fail at TL=Float32-16: $e3216, $l3216")
 lightok=(ok16 && ok32 && ok3216)
 return lightok
 end
@@ -58,15 +58,18 @@ EvsHok32 || println("TL=F32: heavy IR and expensive IR differ")
 (ee16, le16, he16) =gtestE(G; TL=Float16, reshistout=true)
 (e16, l16, h16) = gtestH(G; TL=Float16, reshistout=true)
 errok=(e16==ee16)
-#histok=(h16==he16)
-histok=(norm(he16-h16,Inf) < 1.e-14)
+histok=(h16==he16)
+histok || println("he16 - h17 error  ", norm(he16-h16,Inf))
 EvsHok16=(errok && histok)
 (ee3216, le3216, he3216) =gtestE(G; TL=Float16, TH=Float32, reshistout=true)
 (e3216, l3216, h3216) = gtestH(G; TL=Float16, TH=Float32, reshistout=true)
 errok=(e3216==ee3216)
 histok=(h3216==he3216)
+histok=(norm(he3216-he3216,Inf) < 1.e-14)
 EvsHok3216=(errok && histok)
-return EvsHok32 && EvsHok16 && EvsHok3216
+EvsHPass=EvsHok32 && EvsHok16 && EvsHok3216
+EvsHPass || println("heavy vs expensive too far apart")
+return EvsHPass
 end
 
 """

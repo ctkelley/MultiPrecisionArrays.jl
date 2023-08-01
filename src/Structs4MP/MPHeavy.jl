@@ -39,10 +39,12 @@ AH=MPH.AH
 TD=eltype(AH)
 AStore=MPH.AStore
 AL=MPH.AL
+TL=eltype(AL)
+(TL==Float16) ? ALF=rlu!(AL) : ALF=lu!(AL)
 #
 # Factor in low precision
 #
-ALF=lu!(AL)
+#ALF=lu!(AL)
 #
 # Promote the low-precision lu
 #
@@ -56,10 +58,12 @@ AH=MPH.AH
 TD=eltype(AH)
 AStore=MPH.AStore
 AL=MPH.AL
+TL=eltype(AL)
+(TL==Float16) ? ALF=rlu!(AL) : ALF=lu!(AL)
 #
 # Factor in low precision
 #
-ALF=lu!(AL)
+#ALF=lu!(AL)
 #
 # Promote the low-precision lu
 #
