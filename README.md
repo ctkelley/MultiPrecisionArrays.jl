@@ -46,6 +46,15 @@ factorization in a lower precision, say single, within a residual correction ite
 
 I have this working to the point where ```\``` does the right thing.
 
+## Dependencies
+
+As of now you need to install these packages
+
+- RecursiveFactorization
+- SIAMFANLEquations
+
+and use LinearAlgebra and SparseArrays from Base. I will remove SIAMFANLEquations from the list once I get a custom (for GMRES-IR) GMRES solver in here.
+
 
 ## I'm using this myself.
 
@@ -57,10 +66,11 @@ I started on this package after finishing
 
 (KEL22b) C. T. Kelley, [__Solving Nonlinear Equations with Iterative Methods: Solvers and Examples in Julia__](https://my.siam.org/Store/Product/viewproduct/?ProductId=44313635), SIAM, Philadelphia, 2022. 
 
-A new paper exploits most of the package. I use the examples in that paper for CI. If you do iterative refinement well, you can make half precision work far better than it did in (KEL22a). MultiPrecisionArrays drop right into the solvers
-in [SIAMFANLEquations.jl](https://github.com/ctkelley/SIAMFANLEquations.jl). 
+A new paper exploits most of the package. I use the examples in that paper for CI. If you do iterative refinement well, you can make half precision work far better than it did in (KEL22a). MultiPrecisionArrays drop right into the solvers in [SIAMFANLEquations.jl](https://github.com/ctkelley/SIAMFANLEquations.jl). 
 
 (KEL23a) C. T. Kelley, [__Newton's method in three precisions__](https://arxiv.org/abs/2307.16051) 
+
+This paper has a [repo](https://github.com/ctkelley/N3Presults) for reproducing the results with an early version of this package.
 
 
 ## __Interprecision transfers__:
