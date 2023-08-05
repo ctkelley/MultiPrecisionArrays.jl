@@ -1,6 +1,7 @@
 module MultiPrecisionArrays
 
 using LinearAlgebra 
+using LinearAlgebra.BLAS 
 using SparseArrays
 using SIAMFANLEquations
 using RecursiveFactorization
@@ -13,6 +14,7 @@ using RecursiveFactorization
 
 include("Structs4MP/MPLight.jl")
 include("Structs4MP/MPHeavy.jl")
+include("Factorizations/Factorizations.jl")
 
 MPIRArray=Union{MPArray,MPHArray}
 

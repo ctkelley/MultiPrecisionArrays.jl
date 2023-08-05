@@ -56,34 +56,3 @@ function MPEArray(AH::Array{Float64,2}; TL=Float32)
 AL=TL.(AH)
 MPA=MPEArray(AH,AL)
 end
-
-
-#
-# A few factorizations
-#
-
-function mplu!(MPA::MPArray)
-AH=MPA.AH
-AL=MPA.AL
-TL=eltype(AL)
-(TL == Float16) ? AF=rlu!(AL) : AF=lu!(AL)
-#AF=lu!(AL)
-MPF=MPLFact(AH, AL, AF)
-return MPF
-end
-
-function mplu!(MPA::MPEArray)
-AH=MPA.AH
-AL=MPA.AL
-TL=eltype(AL)
-(TL == Float16) ? AF=rlu!(AL) : AF=lu!(AL)
-#AF=lu!(AL)
-MPF=MPLEFact(AH, AL, AF)
-return MPF
-end
-
-function rlu!(C)
-CF=RecursiveFactorization.lu!(C, Vector{Int}(undef,size(C,2)))
-return CF
-end
-
