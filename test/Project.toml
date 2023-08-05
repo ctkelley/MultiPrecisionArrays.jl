@@ -1,4 +1,5 @@
 [deps]
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+RecursiveFactorization = "f2c3362d-daeb-58d1-803e-2bc74f2840b4"
 SIAMFANLEquations = "084e46ad-d928-497d-ad5e-07fa361a48c4"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
