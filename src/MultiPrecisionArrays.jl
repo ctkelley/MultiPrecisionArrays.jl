@@ -4,7 +4,7 @@ using LinearAlgebra
 using LinearAlgebra.BLAS 
 using SparseArrays
 using SIAMFANLEquations
-using RecursiveFactorization
+using Polyester
 
 #
 # This is MPArrays.jl
@@ -15,6 +15,7 @@ using RecursiveFactorization
 include("Structs4MP/MPLight.jl")
 include("Structs4MP/MPHeavy.jl")
 include("Factorizations/Factorizations.jl")
+include("Factorizations/hlu.jl")
 
 MPIRArray=Union{MPArray,MPHArray}
 

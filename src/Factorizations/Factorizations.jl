@@ -6,7 +6,7 @@ function mplu!(MPA::MPArray)
 AH=MPA.AH
 AL=MPA.AL
 TL=eltype(AL)
-(TL == Float16) ? AF=rlu!(AL) : AF=lu!(AL)
+(TL == Float16) ? AF=hlu!(AL) : AF=lu!(AL)
 #AF=lu!(AL)
 MPF=MPLFact(AH, AL, AF)
 return MPF
@@ -16,7 +16,7 @@ function mplu!(MPA::MPEArray)
 AH=MPA.AH
 AL=MPA.AL
 TL=eltype(AL)
-(TL == Float16) ? AF=rlu!(AL) : AF=lu!(AL)
+(TL == Float16) ? AF=hlu!(AL) : AF=lu!(AL)
 #AF=lu!(AL)
 MPF=MPLEFact(AH, AL, AF)
 return MPF
@@ -28,7 +28,7 @@ TD=eltype(AH)
 AStore=MPH.AStore
 AL=MPH.AL
 TL=eltype(AL)
-(TL==Float16) ? ALF=rlu!(AL) : ALF=lu!(AL)
+(TL==Float16) ? ALF=hlu!(AL) : ALF=lu!(AL)
 #
 # Factor in low precision
 #
@@ -47,7 +47,7 @@ TD=eltype(AH)
 AStore=MPH.AStore
 AL=MPH.AL
 TL=eltype(AL)
-(TL==Float16) ? ALF=rlu!(AL) : ALF=lu!(AL)
+(TL==Float16) ? ALF=hlu!(AL) : ALF=lu!(AL)
 #
 # Factor in low precision
 #
@@ -60,7 +60,7 @@ AF = LU(AStore, ALF.ipiv, ALF.info)
 MPF=MPGHFact(AH, AStore, AL, AF)
 end
 
-function rlu!(C)
+function hlu!(C)
 CF=RecursiveFactorization.lu!(C, Vector{Int}(undef,size(C,2)))
 return CF
 end
