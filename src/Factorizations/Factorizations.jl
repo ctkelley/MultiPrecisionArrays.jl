@@ -59,8 +59,3 @@ AStore .= TD.(AL)
 AF = LU(AStore, ALF.ipiv, ALF.info)
 MPF=MPGHFact(AH, AStore, AL, AF)
 end
-
-function hlu!(C)
-CF=RecursiveFactorization.lu!(C, Vector{Int}(undef,size(C,2)))
-return CF
-end
