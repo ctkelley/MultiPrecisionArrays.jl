@@ -1,10 +1,5 @@
-hlu!(
-    A::AbstractMatrix,
-    pivot::Union{RowMaximum,NoPivot,RowNonZero} = lupivottype(eltype(A));
-    check::Bool = true,
-) = generic_hlufact!(A, pivot; check = check)
-function generic_hlufact!(
-    A::AbstractMatrix{T},
+function hlu!(
+    A::Matrix{T},
     pivot::Union{RowMaximum,NoPivot,RowNonZero} = lupivottype(T);
     check::Bool = true,
 ) where {T}
