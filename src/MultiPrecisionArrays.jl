@@ -15,7 +15,7 @@ using Polyester
 include("Structs4MP/MPLight.jl")
 include("Structs4MP/MPHeavy.jl")
 include("Factorizations/Factorizations.jl")
-include("Factorizations/hlu.jl")
+include("Factorizations/hlu!.jl")
 
 MPIRArray=Union{MPArray,MPHArray}
 
