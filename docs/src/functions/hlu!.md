@@ -2,7 +2,7 @@
 ```@docs
 hlu!(
     A::Matrix{T},
-    pivot::Union{RowMaximum,NoPivot,RowNonZero} = lupivottype(T);
-    check::Bool = true,
+#    pivot::Union{RowMaximum,NoPivot,RowNonZero} = lupivottype(T);
+    check::Bool = true
 ) where{T}
 ```
