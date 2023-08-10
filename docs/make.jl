@@ -7,6 +7,9 @@ format = Documenter.HTML(
            ),
 pages = Any[
      "Home" => "index.md",
+     "Factorizations" => Any[
+     "hlu.md",
+     ],
 ]
 )
 deploydocs(

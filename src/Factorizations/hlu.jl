@@ -1,3 +1,15 @@
+"""
+hlu!(A::Matrix{T})
+Return LU factorization of A
+
+This function is a hack of generic_lufact! which is part of
+
+https://github.com/JuliaLang/julia/blob/master/stdlib/LinearAlgebra/src/lu.jl
+
+All I did was thread the critical loop with Polyester.@batch and
+put @simd in the inner loop. These changes got me a 10x speedup
+on my Mac M2 Pro with 8 performance cores. I'm happy.
+"""
 function hlu!(
     A::Matrix{T},
     pivot::Union{RowMaximum,NoPivot,RowNonZero} = lupivottype(T);
