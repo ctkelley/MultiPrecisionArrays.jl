@@ -1,6 +1,10 @@
 """
-hlu!(A::Matrix{T})
+hlu!(A::Matrix{T};)
+    check::Bool = true
+) where {T}
 Return LU factorization of A
+
+C. T. Kelley, 2023
 
 This function is a hack of generic_lufact! which is part of
 
@@ -11,10 +15,10 @@ put @simd in the inner loop. These changes got me a 10x speedup
 on my Mac M2 Pro with 8 performance cores. I'm happy.
 """
 function hlu!(
-    A::Matrix{T},
-    pivot::Union{RowMaximum,NoPivot,RowNonZero} = lupivottype(T);
-    check::Bool = true,
+    A::Matrix{T};
+    check::Bool = true
 ) where {T}
+    pivot=RowMaximum()
     check && LAPACK.chkfinite(A)
     # Extract values
     m, n = size(A)
