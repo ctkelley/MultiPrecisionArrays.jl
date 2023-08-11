@@ -18,6 +18,7 @@ on my Mac M2 Pro with 8 performance cores. I'm happy.
 """
 function hlu!(A::Matrix{T}) where {T}
     pivot=RowMaximum()
+    T == Float16 || error("Use hlu for half precision only!")
     LAPACK.chkfinite(A)
     # Extract values
     m, n = size(A)

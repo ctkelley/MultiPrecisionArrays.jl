@@ -8,6 +8,7 @@ format = Documenter.HTML(
 pages = Any[
      "Home" => "index.md",
      "Factorizations" => Any[
+     "functions/mplu!.md",
      "functions/hlu!.md",
      ]
 ]
