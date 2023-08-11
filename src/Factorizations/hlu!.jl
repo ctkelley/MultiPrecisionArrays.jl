@@ -1,7 +1,5 @@
 """
-hlu!(A::Matrix{T};)
-    check::Bool = true
-) where {T}
+hlu!(A::Matrix{T}) where {T}
 Return LU factorization of A
 
 C. T. Kelley, 2023
@@ -18,12 +16,9 @@ was thread the critical loop with Polyester.@batch and
 put @simd in the inner loop. These changes got me a 10x speedup
 on my Mac M2 Pro with 8 performance cores. I'm happy.
 """
-function hlu!(
-    A::Matrix{T};
-    check::Bool = true
-) where {T}
+function hlu!(A::Matrix{T}) where {T}
     pivot=RowMaximum()
-    check && LAPACK.chkfinite(A)
+    LAPACK.chkfinite(A)
     # Extract values
     m, n = size(A)
     minmn = min(m, n)
@@ -80,7 +75,7 @@ function hlu!(
                 end
         end
     end
-    check && checknonsingular(info, pivot)
+    checknonsingular(info, pivot)
     return LU{T,typeof(A),typeof(ipiv)}(A, ipiv, convert(BlasInt, info))
 end
 
