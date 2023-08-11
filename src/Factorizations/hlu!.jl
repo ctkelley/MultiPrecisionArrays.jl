@@ -10,7 +10,11 @@ This function is a hack of generic_lufact! which is part of
 
 https://github.com/JuliaLang/julia/blob/master/stdlib/LinearAlgebra/src/lu.jl
 
-All I did was thread the critical loop with Polyester.@batch and
+I "fixed" the code to be Float16 only and fixed pivoting
+to only MaxRow.
+
+All I did in the factorization
+was thread the critical loop with Polyester.@batch and
 put @simd in the inner loop. These changes got me a 10x speedup
 on my Mac M2 Pro with 8 performance cores. I'm happy.
 """
@@ -32,7 +36,7 @@ function hlu!(
         for k = 1:minmn
             # find index max
             kp = k
-            if pivot === RowMaximum() && k < m
+            if k < m
                 amax = abs(A[k, k])
                 for i = k+1:m
                     absi = abs(A[i, k])
@@ -41,13 +45,13 @@ function hlu!(
                         amax = absi
                     end
                 end
-            elseif pivot === RowNonZero()
-                for i = k:m
-                    if !iszero(A[i, k])
-                        kp = i
-                        break
-                    end
-                end
+#            elseif pivot === RowNonZero()
+#                for i = k:m
+#                    if !iszero(A[i, k])
+#                        kp = i
+#                        break
+#                    end
+#                end
             end
             ipiv[k] = kp
             if !iszero(A[kp, k])
