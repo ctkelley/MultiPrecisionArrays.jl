@@ -52,10 +52,11 @@ I have this working to the point where ```\``` does the right thing.
 
 As of now you need to install these packages
 
-- RecursiveFactorization
+- Polyester
 - SIAMFANLEquations
 
-and use LinearAlgebra and SparseArrays from Base. I will remove SIAMFANLEquations from the list once I get a custom (for GMRES-IR) GMRES solver in here.
+and use LinearAlgebra and SparseArrays from Base. I will remove SIAMFANLEquations from the list once I get a custom (for GMRES-IR) GMRES solver in here. Polyester is here to stay because 
+threading with ```Polyester.@batch``` makes the LU for Float16 run much faster.
 
 
 ## I'm using this myself.
