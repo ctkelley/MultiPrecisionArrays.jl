@@ -1,4 +1,4 @@
-# Simple MPArray factorization
+# mpul!: Simple MPArray factorization
 ```@docs
 mplu!(MPA::MPArray)
 ```
