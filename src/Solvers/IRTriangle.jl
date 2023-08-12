@@ -6,7 +6,7 @@ factorization. Triangular solves entirely in low precision.
 """
 function IRTriangle!(AF::MPLFact, r, rs, verbose)
 AFS = AF.AF
-MPStats = getStats(AF)
+#MPStats = getStats(AF)
 TFact = eltype(AFS)
 TH = eltype(r)
 rs .= TFact.(r)

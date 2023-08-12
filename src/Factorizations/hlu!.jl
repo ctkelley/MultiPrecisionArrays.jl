@@ -87,5 +87,5 @@ function hlu(A)
 end
 
 # More stuff I got from Base
-lupivottype(::Type{T}) where {T} = RowMaximum()
+#lupivottype(::Type{T}) where {T} = RowMaximum()
 checknonsingular(info, pivot) = LinearAlgebra.checknonsingular(info, pivot)

@@ -20,8 +20,11 @@ include("Factorizations/mplu!.jl")
 
 MPIRArray=Union{MPArray,MPHArray}
 
-
 MPFact=Union{MPLFact, MPLEFact, MPHFact}
+
+on_the_fly(x::MPLFact) = false
+on_the_fly(x::MPLEFact) = true
+on_the_fly(x::MPHFact) = true
 
 MPLFacts=Union{MPLFact, MPLEFact}
 
@@ -87,8 +90,17 @@ export mpgesl2
 export mpgmir
 #
 # Each MPArray data structure comes with a structure to store a factorization.
-# The ones you care about, unless you are a real geek, are
-# MPArray and MPLFact for IR and MPHArray and MPGHFact for IR-GMRES
+# The differences are whether one does on-the-fly interprecision transfers
+# of not. For plain IR, I think the answer is clear (NO) and you should
+# MPArray and MPLFact instead of MPEArray and MPLEFact. The factorization
+# structures shoule be invisible to most people and I may stop exporting
+# them. 
+#
+# Ffor IR-GMRES, it's more subtle. The cost of Heavy IR with MPHArray
+# and MPGHFact is an extra
+# high precision matrix. If you can afford the storage and communication
+# burder, it's a good thing to do. If you can't, on-the-fly is your
+# only option.
 #
 export MPArray
 export MPHArray
