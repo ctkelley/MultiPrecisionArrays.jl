@@ -22,10 +22,12 @@ function mplu!(MPA::MPLArray)
     AL = MPA.AL
     TL = eltype(AL)
     (TL == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
+    # For the MPEArray
     if on_the_fly(MPA)
-         MPF = MPLEFact(AH, AL, AF)
+        MPF = MPLEFact(AH, AL, AF)
     else
-         MPF = MPLFact(AH, AL, AF)
+        # For the plain vanilla MPArray
+        MPF = MPLFact(AH, AL, AF)
     end
     return MPF
 end

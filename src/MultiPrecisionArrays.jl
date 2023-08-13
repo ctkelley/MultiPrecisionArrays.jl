@@ -7,16 +7,16 @@ using SIAMFANLEquations
 using Polyester
 
 #
-# This is MPArrays.jl
+# This is MultiPrecisionArrays.jl
 # The package has data structures and algorithms to manage several
 # variations on iterative refinement.
 #
 
 include("Structs4MP/MPLight.jl")
 include("Structs4MP/MPHeavy.jl")
-include("Factorizations/Factorizations.jl")
 include("Factorizations/hlu!.jl")
 include("Factorizations/mplu!.jl")
+include("Factorizations/mpglu!.jl")
 
 MPIRArray = Union{MPArray,MPHArray}
 
