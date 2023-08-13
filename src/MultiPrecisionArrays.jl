@@ -22,9 +22,9 @@ MPIRArray=Union{MPArray,MPHArray}
 
 MPFact=Union{MPLFact, MPLEFact, MPHFact}
 
-on_the_fly(x::MPLFact) = false
-on_the_fly(x::MPLEFact) = true
-on_the_fly(x::MPHFact) = true
+#on_the_fly(x::MPLFact) = false
+#on_the_fly(x::MPLEFact) = true
+#on_the_fly(x::MPHFact) = true
 
 MPLFacts=Union{MPLFact, MPLEFact}
 
