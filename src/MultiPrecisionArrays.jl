@@ -1,7 +1,7 @@
 module MultiPrecisionArrays
 
-using LinearAlgebra 
-using LinearAlgebra.BLAS 
+using LinearAlgebra
+using LinearAlgebra.BLAS
 using SparseArrays
 using SIAMFANLEquations
 using Polyester
@@ -18,46 +18,46 @@ include("Factorizations/Factorizations.jl")
 include("Factorizations/hlu!.jl")
 include("Factorizations/mplu!.jl")
 
-MPIRArray=Union{MPArray,MPHArray}
+MPIRArray = Union{MPArray,MPHArray}
 
-MPFact=Union{MPLFact, MPLEFact, MPHFact}
+MPFact = Union{MPLFact,MPLEFact,MPHFact}
 
-#on_the_fly(x::MPLFact) = false
-#on_the_fly(x::MPLEFact) = true
-#on_the_fly(x::MPHFact) = true
+on_the_fly(x::MPLFact) = false
+on_the_fly(x::MPLEFact) = true
+on_the_fly(x::MPHFact) = true
 
-MPLFacts=Union{MPLFact, MPLEFact}
+MPLFacts = Union{MPLFact,MPLEFact}
 
 import Base.eltype
 function eltype(MP::MPArray)
-TP=eltype(MP.AH)
-return TP
+    TP = eltype(MP.AH)
+    return TP
 end
 
 function eltype(MPH::MPHArray)
-TP = eltype(MPH.AH)
-return TP
+    TP = eltype(MPH.AH)
+    return TP
 end
 
 import Base.\
-function \(AF::MPLFact, b; verbose=false, reporting=false)
-xi = mpgesl2(AF,b; verbose=verbose, reporting=reporting)
-return xi
+function \(AF::MPLFact, b; verbose = false, reporting = false)
+    xi = mpgesl2(AF, b; verbose = verbose, reporting = reporting)
+    return xi
 end
 
-function \(AF::MPLEFact, b; verbose=false, reporting=false)
-xi = mpgesl2(AF,b; verbose=verbose, reporting=reporting)
-return xi
+function \(AF::MPLEFact, b; verbose = false, reporting = false)
+    xi = mpgesl2(AF, b; verbose = verbose, reporting = reporting)
+    return xi
 end
 
-function \(AF::MPHFact, b; verbose=false, reporting=false)
-xi = mpgesl2(AF,b; verbose=verbose, reporting=reporting)
-return xi
+function \(AF::MPHFact, b; verbose = false, reporting = false)
+    xi = mpgesl2(AF, b; verbose = verbose, reporting = reporting)
+    return xi
 end
 
-function \(AF::MPGHFact, b; verbose=false, reporting=false)
-xi = mpgmir(AF,b; verbose=verbose, reporting=reporting)
-return xi
+function \(AF::MPGHFact, b; verbose = false, reporting = false)
+    xi = mpgmir(AF, b; verbose = verbose, reporting = reporting)
+    return xi
 end
 
 #

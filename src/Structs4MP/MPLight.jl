@@ -5,15 +5,15 @@
 # Factorizations of these arrays
 #
 
-struct MPArray{TH<:AbstractFloat, TL<:AbstractFloat}
-   AH::Array{TH,2}
-   AL::Array{TL,2}
+struct MPArray{TH<:AbstractFloat,TL<:AbstractFloat}
+    AH::Array{TH,2}
+    AL::Array{TL,2}
 end
 
-struct MPLFact{TH<:AbstractFloat, TL<:AbstractFloat, TF<:Factorization}
-  AH::Array{TH,2}
-  AL::Array{TL,2}
-  AF::TF
+struct MPLFact{TH<:AbstractFloat,TL<:AbstractFloat,TF<:Factorization}
+    AH::Array{TH,2}
+    AL::Array{TL,2}
+    AF::TF
 end
 
 #
@@ -22,37 +22,37 @@ end
 # for expensive
 #
 
-struct MPEArray{TH<:AbstractFloat, TL<:AbstractFloat}
-   AH::Array{TH,2}
-   AL::Array{TL,2}
+struct MPEArray{TH<:AbstractFloat,TL<:AbstractFloat}
+    AH::Array{TH,2}
+    AL::Array{TL,2}
 end
 
-struct MPLEFact{TH<:AbstractFloat, TL<:AbstractFloat, TF<:Factorization}
-  AH::Array{TH,2}
-  AL::Array{TL,2}
-  AF::TF
+struct MPLEFact{TH<:AbstractFloat,TL<:AbstractFloat,TF<:Factorization}
+    AH::Array{TH,2}
+    AL::Array{TL,2}
+    AF::TF
 end
 
 #
 # The constructors for the multi-precision arrays
 # 
 
-function MPArray(AH::Array{Float32,2}; TL=Float16)
-   AL=TL.(AH)
-   MPA=MPArray(AH,AL)
+function MPArray(AH::Array{Float32,2}; TL = Float16)
+    AL = TL.(AH)
+    MPA = MPArray(AH, AL)
 end
 
-function MPArray(AH::Array{Float64,2}; TL=Float32)
-AL=TL.(AH)
-MPA=MPArray(AH,AL)
+function MPArray(AH::Array{Float64,2}; TL = Float32)
+    AL = TL.(AH)
+    MPA = MPArray(AH, AL)
 end
 
-function MPEArray(AH::Array{Float32,2}; TL=Float16)
-   AL=TL.(AH)
-   MPA=MPEArray(AH,AL)
+function MPEArray(AH::Array{Float32,2}; TL = Float16)
+    AL = TL.(AH)
+    MPA = MPEArray(AH, AL)
 end
 
-function MPEArray(AH::Array{Float64,2}; TL=Float32)
-AL=TL.(AH)
-MPA=MPEArray(AH,AL)
+function MPEArray(AH::Array{Float64,2}; TL = Float32)
+    AL = TL.(AH)
+    MPA = MPEArray(AH, AL)
 end

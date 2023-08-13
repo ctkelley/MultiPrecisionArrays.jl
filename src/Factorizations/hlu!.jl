@@ -17,7 +17,7 @@ put @simd in the inner loop. These changes got me a 10x speedup
 on my Mac M2 Pro with 8 performance cores. I'm happy.
 """
 function hlu!(A::Matrix{T}) where {T}
-    pivot=RowMaximum()
+    pivot = RowMaximum()
     T == Float16 || @warn("Use hlu for half precision only!")
     LAPACK.chkfinite(A)
     # Extract values
@@ -41,17 +41,17 @@ function hlu!(A::Matrix{T}) where {T}
                         amax = absi
                     end
                 end
-#            elseif pivot === RowNonZero()
-#                for i = k:m
-#                    if !iszero(A[i, k])
-#                        kp = i
-#                        break
-#                    end
-#                end
+                #            elseif pivot === RowNonZero()
+                #                for i = k:m
+                #                    if !iszero(A[i, k])
+                #                        kp = i
+                #                        break
+                #                    end
+                #                end
             end
             ipiv[k] = kp
             if !iszero(A[kp, k])
-                if k!= kp
+                if k != kp
                     # Interchange
                     for i = 1:n
                         tmp = A[k, i]
@@ -68,12 +68,12 @@ function hlu!(A::Matrix{T}) where {T}
                 info = k
             end
             # Update the rest
-                @batch for j = k+1:n
-                    @simd ivdep for i = k+1:m
-                       @inbounds A[i, j] -= A[i, k] * A[k, j]
-#                       @inbounds A[i,j] = muladd(A[i,k],-A[k,j],A[i,j])
-                    end
+            @batch for j = k+1:n
+                @simd ivdep for i = k+1:m
+                    @inbounds A[i, j] -= A[i, k] * A[k, j]
+                    #                       @inbounds A[i,j] = muladd(A[i,k],-A[k,j],A[i,j])
                 end
+            end
         end
     end
     checknonsingular(info, pivot)

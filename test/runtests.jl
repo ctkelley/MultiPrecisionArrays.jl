@@ -14,20 +14,20 @@ include("GM-IRTest/mpgmtest.jl")
 println("starting")
 
 @testset "Greens Functions" begin
-   @test greensok();
-   @test greensHok();
-   @test greensEvsH();
+    @test greensok()
+    @test greensHok()
+    @test greensEvsH()
 end
 
 @testset "Nonlinear Equations" begin
-   @test nltest();
+    @test nltest()
 end
 
 @testset "Details" begin
-   @test precision_test();
-   @test hlu_test();
+    @test precision_test()
+    @test hlu_test()
 end
 
 @testset "GM-IR" begin
-   @test mpgmtest(1000)
+    @test mpgmtest(1000)
 end
