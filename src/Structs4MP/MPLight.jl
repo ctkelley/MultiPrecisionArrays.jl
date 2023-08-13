@@ -27,11 +27,15 @@ struct MPEArray{TH<:AbstractFloat,TL<:AbstractFloat}
     AL::Array{TL,2}
 end
 
+
 struct MPLEFact{TH<:AbstractFloat,TL<:AbstractFloat,TF<:Factorization}
     AH::Array{TH,2}
     AL::Array{TL,2}
     AF::TF
 end
+
+MPLArray = Union{MPArray,MPEArray}
+
 
 #
 # The constructors for the multi-precision arrays

@@ -20,8 +20,12 @@ include("Factorizations/mplu!.jl")
 
 MPIRArray = Union{MPArray,MPHArray}
 
+#MPLArray = Union{MPArray,MPEArray}
+
 MPFact = Union{MPLFact,MPLEFact,MPHFact}
 
+on_the_fly(x::MPArray) = false
+on_the_fly(x::MPEArray) = true
 on_the_fly(x::MPLFact) = false
 on_the_fly(x::MPLEFact) = true
 on_the_fly(x::MPHFact) = true
@@ -99,10 +103,11 @@ export mpgmir
 # Ffor IR-GMRES, it's more subtle. The cost of Heavy IR with MPHArray
 # and MPGHFact is an extra
 # high precision matrix. If you can afford the storage and communication
-# burder, it's a good thing to do. If you can't, on-the-fly is your
+# burden, it's a good thing to do. If you can't, on-the-fly is your
 # only option.
 #
 export MPArray
+export MPLArray
 export MPHArray
 #
 #
