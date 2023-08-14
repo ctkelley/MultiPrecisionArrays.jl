@@ -1,8 +1,11 @@
 """
 IRTriangle!(AF::MPFact, r, rs, verbose)
 
-Solve for the defect by demoting the residual and quering on_the_fly
+Solve for the defect by quering on_the_fly
 to figure out if we can do the triangular solves entirely in low precision.
+
+If on_the_fly(AF) == false, then demote the residual and solve in low
+precision.
 
 The solve overwrites the residual with the defect.
 """

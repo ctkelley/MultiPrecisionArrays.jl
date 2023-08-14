@@ -18,9 +18,7 @@ include("Factorizations/hlu!.jl")
 include("Factorizations/mplu!.jl")
 include("Factorizations/mpglu!.jl")
 
-MPIRArray = Union{MPArray,MPHArray}
-
-#MPLArray = Union{MPArray,MPEArray}
+#MPIRArray = Union{MPArray,MPHArray}
 
 MPFact = Union{MPLFact,MPLEFact,MPHFact}
 
@@ -29,6 +27,10 @@ on_the_fly(x::MPEArray) = true
 on_the_fly(x::MPLFact) = false
 on_the_fly(x::MPLEFact) = true
 on_the_fly(x::MPHFact) = true
+is_heavy(x::MPHFact) = true
+is_heavy(x::MPLFact) = false
+is_heavy(x::MPLEFact) = false
+
 
 MPLFacts = Union{MPLFact,MPLEFact}
 
@@ -44,17 +46,7 @@ function eltype(MPH::MPHArray)
 end
 
 import Base.\
-function \(AF::MPLFact, b; verbose = false, reporting = false)
-    xi = mpgesl2(AF, b; verbose = verbose, reporting = reporting)
-    return xi
-end
-
-function \(AF::MPLEFact, b; verbose = false, reporting = false)
-    xi = mpgesl2(AF, b; verbose = verbose, reporting = reporting)
-    return xi
-end
-
-function \(AF::MPHFact, b; verbose = false, reporting = false)
+function \(AF::MPFact, b; verbose = false, reporting = false)
     xi = mpgesl2(AF, b; verbose = verbose, reporting = reporting)
     return xi
 end
@@ -107,7 +99,6 @@ export mpgmir
 # only option.
 #
 export MPArray
-export MPLArray
 export MPHArray
 #
 #

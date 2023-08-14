@@ -106,18 +106,15 @@ function mpgesl2(AF::MPFact, b; reporting = false, verbose = true)
     end
 end
 
-function getTL(AF::MPLFacts)
+function getTL(AF::MPFact)
     TL = eltype(AF.AL)
-    TFact = eltype(AF.AL)
-    return (TL, TFact)
-end
-
-function getTL(AF::MPHFact)
-    TL = eltype(AF.AL)
+    if is_heavy(AF)
     TFact = eltype(AF.AStore)
+    else
+    TFact = eltype(AF.AL)
+    end
     return (TL, TFact)
 end
-
 
 function getStats(AF)
     TH = eltype(AF.AH)

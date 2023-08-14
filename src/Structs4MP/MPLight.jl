@@ -34,9 +34,6 @@ struct MPLEFact{TH<:AbstractFloat,TL<:AbstractFloat,TF<:Factorization}
     AF::TF
 end
 
-MPLArray = Union{MPArray,MPEArray}
-
-
 #
 # The constructors for the multi-precision arrays
 # 
