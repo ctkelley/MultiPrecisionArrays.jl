@@ -20,7 +20,7 @@ This is the start of a package to support multiprecision arrays. This is for my 
 ## Readme Contents:
 - [Algorithms](##What-is-iterative-refinement?)
 - [Endorsement](##I'm-using-this-myself)
-- [Funding](##Funding)
+- [Funding](#Funding)
 
 ## What is iterative refinement?
 
