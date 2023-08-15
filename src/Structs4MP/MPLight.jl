@@ -38,14 +38,14 @@ end
 # The constructors for the multi-precision arrays
 # 
 
-function MPArray(AH::Array{Float32,2}; TL = Float16)
+function MPArray(AH::Array{Float32,2}; TL = Float16, onthefly=false)
     AL = TL.(AH)
-    MPA = MPArray(AH, AL)
+    onthefly ?  MPA = MPEArray(AH, AL) : MPA = MPArray(AH, AL)
 end
 
-function MPArray(AH::Array{Float64,2}; TL = Float32)
+function MPArray(AH::Array{Float64,2}; TL = Float32, onthefly=false)
     AL = TL.(AH)
-    MPA = MPArray(AH, AL)
+    onthefly ?  MPA = MPEArray(AH, AL) : MPA = MPArray(AH, AL)
 end
 
 function MPEArray(AH::Array{Float32,2}; TL = Float16)

@@ -20,10 +20,10 @@ function mpgesl2(AF::MPFact, b; reporting = false, verbose = true)
     TFact = MPStats.TFact
     #
     # Are the precisions consistent? If not, I have a bug somewhere.
-    # If so, set the completely arbitrary tolerances
+    # Otherwise, set the tolerance on the iteration to 100*eps
     #
     (TH == TB) || error("inconsistent precisions")
-    (TH == Float64) ? tolf = 1.e-13 : tolf = 1.e-6
+    tolf = eps(TH)*TH.(100.0)
     #
     # Keep the records and accumulate the statistics. 
     #
