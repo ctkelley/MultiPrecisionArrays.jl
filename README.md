@@ -35,18 +35,57 @@ __IR(A, b, x)__
   - $r = b - Ax$
 - end
 
-
-
-
 In Julia, a code to do this would solve the linear system $A x = b$ in double precision by using a
-factorization in a lower precision, say single, within a residual correction iteration. 
+factorization in a lower precision, say single, within a residual correction iteration. This means that one would need
+to allocate storage for a copy of $A$ is the lower precision and factor that copy. The one has to determine what the line
+$d = (LU)^{-1} r$ means. Do you case $r$ into the lower precison before the solve or not? __MultiPrecisionArrays.jl__ provides
+data structures and solvers to manage this. The __MPArray__ structure lets you preallocate $A$ and the low precision copy. 
+
+Herewith, the world's most simple example to show how iterative refienment works. We will follow that with some benchmarking on the cost of factorizations.
+The functions we use are __MPArray__ to create the structure and __mplu!__ to factor the low precision copy. In this example high precision is ```Float64``` and low
+precision is ```Float16```.
+```
+julia> using MultiPrecisionArrays
+
+julia> A=rand(5000,5000);
+
+julia> x=ones(5000);
+
+julia> b=A*x;
+
+julia> MPA=MPArray(A); MPAF=mplu!(MPA); y=MPAF\b;
+
+julia> norm(y-x,Inf)
+6.65401e-11
+
+julia> z=A\b; norm(z-x,Inf)
+7.65799e-11
+```
+In this example we compare the result with iterative refinement with ```A\b```, which is LAPACK's LU. As you can see the results are equally good. Note that the factorization object ```MPAF``` is the
+output of ```mplu!```. This is analogous to ```AF=lu!(A)``` in LAPACK.
+
+As of today, you'll need to manage the factorization and the solve separately. One reason for this is that we provide severat variations of iterative refinement and the solvers dispatch on the way we configure
+the multiprecision array. I do not expect this to change.
+
+As for the cost.
+```
+julia> using MultiPrecisionArrays
+
+julia> using BenchmarkTools
+
+julia> A=rand(5000,5000);
+
+julia> @belapsed lu!(AA) setup = (AA = copy($A))
+2.85270e-01
+
+julia> @belapsed mplu!(MPAA) setup = (MPAA = deepcopy($MPA))
+1.32841e-01
+```
+It is no surprise that the factorization in single precision took half as long as the one in double. In the double-single precision case, iterative refinement is a great
+expample of a time/storage tradeoff. You have to store a low precision copy of $A$, so the storage burden increases by 50\% and the factoriztion time is cut in half.
 
 
 
-
-
-
-I have this working to the point where ```\``` does the right thing.
 
 ## Dependencies
 
