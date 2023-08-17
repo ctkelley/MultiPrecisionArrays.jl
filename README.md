@@ -84,7 +84,7 @@ julia> @belapsed mplu!(MPAA) setup = (MPAA = deepcopy($MPA))
 It is no surprise that the factorization in single precision took half as long as the one in double. In the double-single precision case, iterative refinement is a great
 expample of a time/storage tradeoff. You have to store a low precision copy of $A$, so the storage burden increases by 50\% and the factoriztion time is cut in half.
 
-
+__MultiPrecisionArrays.jl__ supports many variations of iterative refinement and we will explain all that in the docs and in a paper in the works.
 
 
 ## Dependencies
