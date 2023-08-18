@@ -64,7 +64,7 @@ julia> z=A\b; norm(z-x,Inf)
 In this example we compare the result with iterative refinement with ```A\b```, which is LAPACK's LU. As you can see the results are equally good. Note that the factorization object ```MPAF``` is the
 output of ```mplu!```. This is analogous to ```AF=lu!(A)``` in LAPACK.
 
-As of today, you'll need to manage the factorization and the solve separately. One reason for this is that we provide severat variations of iterative refinement and the solvers dispatch on the way we configure
+As of today, you'll need to manage the factorization and the solve separately. One reason for this is that we provide several variations of iterative refinement and the solvers dispatch on the way we configure
 the multiprecision array. I do not expect this to change.
 
 As for the cost.
