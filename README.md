@@ -7,7 +7,7 @@
 
 ## [C. T. Kelley](https://ctk.math.ncsu.edu)
 
-This package provides data atructures and solvers for several variants of iterative refinement. It will become much more useful when half precision (aka ```Float16```) is fully supported in LAPACK/BLAS. For now, its only general-purpose
+This package provides data structures and solvers for several variants of iterative refinement. It will become much more useful when half precision (aka ```Float16```) is fully supported in LAPACK/BLAS. For now, its only general-purpose
 application is classical iterative refinement with double precision equations and single precision factorizations. 
 
 The half precision stuff is good for those of us doing research in this field. Half precision performace has progressed to the point where you can acutally get things done. On an Apple M2-Pro, a half precision LU only costs 3--5 times
