@@ -13,7 +13,7 @@ application is classical iterative refinement with double precision equations an
 The half precisoin stuff is good for those of us doing research in this field. Half precision performace has progressed to the point where you can acutally get things done. On an Apple M2-Pro, a half precision LU only costs 3--5 times
 what a double precision LU costs. This may be as good as it gets unless someone wants to duplicate the LAPACK implementation and get the benefits from blocking, recursion, and clever cache management.
 
-You might take a look that [hlu!.jl](src/Factorizations/hlu!.jl).
+You might take a look at [hlu!.jl](src/Factorizations/hlu!.jl), my shameless hack-job LU for half precision.
 
 __This package is nowhere close to ready for registration or release. It's public only to help me do CI and clean up the docs.__
 
