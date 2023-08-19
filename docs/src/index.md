@@ -19,6 +19,7 @@ The idea is to solve $Ax=b$ in high precision using a factorization
 in lower precision. 
 
 __IR(A, b, x)__
+
 - $r = b - Ax$
 - Factor $A = LU$ in a lower precision
 - While $\| r \|$ is too large
