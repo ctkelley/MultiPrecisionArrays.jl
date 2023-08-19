@@ -7,6 +7,14 @@
 
 ## [C. T. Kelley](https://ctk.math.ncsu.edu)
 
+This package provides data atructures and solvers for several variants of iterative refinement. It will become much more useful when half precision (aka ```Float16```) is fully supported in LAPACK/BLAS. For now, it's only general-purpose
+application is classical iterative refinement with double precision equations and single precision factorizations. 
+
+The half precisoin stuff is good for those of us doing research in this field. Half precision performace has progressed to the point where you can acutally get things done. On an Apple M2-Pro, a half precision LU only costs 3--5 times
+what a double precision LU costs. This may be as good as it gets unless someone wants to duplicate the LAPACK implementation and get the benefits from blocking, recursion, and clever cache management.
+
+You might take a look that [hlu!.jl](src/Factorizations/hlu!.jl).
+
 __This package is nowhere close to ready for registration or release. It's public only to help me do CI and clean up the docs.__
 
 __Please do not make PRs. If you stumble on this mess and have questions/ideas ..., raise an issue or email me at tim_kelley@ncsu.edu__
