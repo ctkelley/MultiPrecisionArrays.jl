@@ -7,13 +7,15 @@
 
 ## [C. T. Kelley](https://ctk.math.ncsu.edu)
 
+This is the start of a package to support multiprecision arrays. This is for my own research right now.
+
 This package provides data structures and solvers for several variants of iterative refinement. It will become much more useful when half precision (aka ```Float16```) is fully supported in LAPACK/BLAS. For now, its only general-purpose
 application is classical iterative refinement with double precision equations and single precision factorizations. 
 
 The half precision stuff is good for those of us doing research in this field. Half precision performace has progressed to the point where you can acutally get things done. On an Apple M2-Pro, a half precision LU only costs 3--5 times
 what a double precision LU costs. This may be as good as it gets unless someone wants to duplicate the LAPACK implementation and get the benefits from blocking, recursion, and clever cache management.
 
-__The half precision lu is much faster (more than 10x) as of v0.0.3. Look at [src/Factorizations/hlu.jl](src/Factorizations/hlu.jl) to see the hack job I did to [generic_lu](https://github.com/JuliaLang/julia/blob/master/stdlib/LinearAlgebra/src/lu.jl).__
+__The half precision LU is much faster (more than 10x) as of v0.0.3. Look at [src/Factorizations/hlu.jl](src/Factorizations/hlu.jl) to see the hack job I did to [generic_lu](https://github.com/JuliaLang/julia/blob/master/stdlib/LinearAlgebra/src/lu.jl).__
 
 
 ## Is MultiPrecisionArrays.jl ready for prime time?
@@ -26,7 +28,7 @@ __Please do not make PRs. If you stumble on this mess and have questions/ideas .
 
 Nothing is in final form and I am changing the API, internal structures, exported functions/structs and all kinds of other stuff frequently. When/if I register this and announce it, then it will be time for complaints and offers to collaborate. 
 
-This is the start of a package to support multiprecision arrays. This is for my own research right now.
+
 
 ## Readme Contents:
 - [Algorithms](#What-is-iterative-refinement?)
