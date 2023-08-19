@@ -4,9 +4,14 @@
 
 [MultiPrecisionArrays.jl](https://github.com/ctkelley/MultiPrecisionArrays.jl) is a package for iterative refinement. 
 
-This is mostly for research at this point. It will get more interesting as hardware support for Float16 comes online.
+This package provides data atructures and solvers for several variants of iterative refinement. It will become much more useful when half precision (aka ```Float16```) is fully supported in LAPACK/BLAS. For now, it's only general-purpose
+application is classical iterative refinement with double precision equations and single precision factorizations.
 
-This package will make solving dense systems of linear equations faster by using the LU factorization and iterative refinement. It is limited to LU for now. A very generic description of this for solving a linear systrem $A x = b$ is
+The half precision stuff is good for those of us doing research in this field. Half precision performace has progressed to the point where you can acutally get things done. On an Apple M2-Pro, a half precision LU only costs 3--5 times
+what a double precision LU costs. This may be as good as it gets unless someone wants to duplicate the LAPACK implementation and get the benefits from blocking, recursion, and clever cache management.
+
+We use a hack-job LU factorization for half precision. Look at the source
+for __hlu!.jl__.
 
 __IR(A, b, x)__
 - $r = b - Ax$
