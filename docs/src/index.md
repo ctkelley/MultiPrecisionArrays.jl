@@ -11,7 +11,7 @@ This package will make solving dense systems of linear equations faster by using
 __IR(A, b, x)__
 - $r = b - Ax$
 - Factor $A = LU$ in a lower precision
-- While $\|| r \||$ is too large
+- While $\| r \|$ is too large
   - $d = (LU)^{-1} r$
   - $x = x + d$
   - $r = b - Ax$
