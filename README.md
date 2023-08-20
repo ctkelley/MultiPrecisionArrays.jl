@@ -33,7 +33,7 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 ## Readme Contents:
 - [Algorithms](#algorithms)
 - [Example](#example)
-  - [Subtleties](#a-few-subtleties-in-the-example)
+  - [Subtleties in the example](#a-few-subtleties-in-the-example)
 - [Dependencies](#dependencies)
 - [Endorsement](#Endorsement)
 - [Funding](#funding)
