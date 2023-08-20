@@ -80,7 +80,7 @@ The code for this is in the __/src/Examples__ directory. The file is __Gmat.jl__
 ```
 using MultiPrecisionArrays.Examples
 ```
-to get to i.
+to get to it.
 
 The example below compares the cost of a double precision factorization to a MPArray factorization. The ```MPArray``` structure has high precision and low precision matrix. The structure we will start with 
 is
