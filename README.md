@@ -32,7 +32,7 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 
 ## Readme Contents:
 - [Algorithms](#algorithms)
-  - [Subtleties](#a-few-subtlties-in-the-example)
+  - [Subtleties](#a-few-subtleties-in-the-example)
 - [Endorsement](#Endorsement)
 - [Funding](#funding)
 
@@ -157,7 +157,7 @@ julia> norm(b-A*y,Inf)
 As of today, you'll need to manage the factorization and the solve separately. One reason for this is that we provide several variations of iterative refinement and the solvers dispatch on the way we configure
 the multiprecision array. I do not expect this to change.
 
-### A few subtlties in the example
+### A few subtleties in the example
 
 The constructor ```MPArray``` has two keyword arguments. The easy one to understand is ```TL``` which is the precision of the factoriztion. Julia has support for single (```Float32```) and half (```Float16```)
 precisions. If you set ```TL=Float16``` then low precision will be half. Don't do that unless you know what you're doing.
