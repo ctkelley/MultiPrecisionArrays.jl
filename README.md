@@ -36,6 +36,7 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 - [Funding](#funding)
 
 ## Algorithms
+
 ### What is iterative refinement?
 
 This package will make solving dense systems of linear equations faster by using the LU factorization and iterative refinement. It is limited to LU for now. A very generic description of this for solving a linear systrem $A x = b$ is
@@ -57,6 +58,7 @@ $d = (LU)^{-1} r$ means. Do you cast $r$ into the lower precison before the solv
 data structures and solvers to manage this. The __MPArray__ structure lets you preallocate $A$ and the low precision copy. 
 
 ## Example
+
 ### An example to get started
 
 Herewith, the world's most simple example to show how iterative refienment works. We will follow that with some benchmarking on the cost of factorizations.
