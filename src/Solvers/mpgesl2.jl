@@ -41,28 +41,23 @@ function mpgesl2(AF::MPFact, b; reporting = false, verbose = true)
     AFS = AF.AF
     bS = TFact.(bsc)
     #
-    # Initialize the iteration. I am still thinking about how I want
-    # to do this. For now I initialize to zero.
+    # Initialize the iteration. I initialize to zero. That makes the
+    # iteration count the same as the high precision matvec and the 
+    # triangular sovles
     #
     x = zeros(TB, size(b))
-    #    if (typeof(AF) == MPGFact)
-    #        x = zeros(size(b))
-    #    else
-    #        x = zeros(size(b))
-    #    end
     #
     # Initial residual
     #
-    oneb = TB(1.0)
-    r = copy(x)
-    mul!(r, AD, x)
-    r .*= -oneb
-    axpy!(oneb, bsc, r)
+    r = copy(b)
     tol = tolf * bnrm
     rs = bS
+#
+#
     rhist = Vector{Float64}()
     rnrm = norm(r, normtype)
     rnrmx = rnrm * TB(1.1)
+    oneb = TB(1.0)
     itc = 0
     #
     # Put initial residual norm into the history and iterate.
