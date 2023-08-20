@@ -32,7 +32,7 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 
 ## Readme Contents:
 - [Algorithms](#algorithms)
-- [Endorsement](#i'm-using-this-myself)
+- [Endorsement](#Endorsement)
 - [Funding](#funding)
 
 ## Algorithms
@@ -56,7 +56,8 @@ to allocate storage for a copy of $A$ is the lower precision and factor that cop
 $d = (LU)^{-1} r$ means. Do you cast $r$ into the lower precison before the solve or not? __MultiPrecisionArrays.jl__ provides
 data structures and solvers to manage this. The __MPArray__ structure lets you preallocate $A$ and the low precision copy. 
 
-## An example to get started
+## Example
+### An example to get started
 
 Herewith, the world's most simple example to show how iterative refienment works. We will follow that with some benchmarking on the cost of factorizations.
 The functions we use are __MPArray__ to create the structure and __mplu!__ to factor the low precision copy. In this example high precision is ```Float64``` and low
@@ -223,8 +224,8 @@ As of now you need to install these packages
 and use LinearAlgebra and SparseArrays from Base. I will remove SIAMFANLEquations from the list once I get a custom (for GMRES-IR) GMRES solver in here. Polyester is here to stay because 
 threading with ```Polyester.@batch``` makes the LU for Float16 run much faster.
 
-
-## I'm using this myself.
+## Endorsement
+### I'm using this myself.
 
 I have used this in my own work and will be adding links to that stuff as I finish it. 
 
