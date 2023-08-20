@@ -18,9 +18,10 @@ for __hlu!.jl__.
 The idea is to solve $Ax=b$ in high precision using a factorization
 in lower precision. 
 
-__IR(A, b, x)__
+__IR(A, b)__
 
-- $r = b - Ax$
+- $x = 0$
+- $r = b$
 - Factor $A = LU$ in a lower precision
 - While $\| r \|$ is too large
   - $d = (LU)^{-1} r$
