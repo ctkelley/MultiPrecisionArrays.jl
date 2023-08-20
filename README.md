@@ -31,9 +31,9 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 
 
 ## Readme Contents:
-- [Algorithms](#What-is-iterative-refinement?)
-- [Endorsement](#I'm-using-this-myself)
-- [Funding](#Funding)
+- [Algorithms](#what-is-iterative-refinement?)
+- [Endorsement](#i'm-using-this-myself)
+- [Funding](#funding)
 
 ## What is iterative refinement?
 
