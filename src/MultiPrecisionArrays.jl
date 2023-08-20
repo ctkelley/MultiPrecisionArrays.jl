@@ -88,16 +88,21 @@ export mpgmir
 #
 # Each MPArray data structure comes with a structure to store a factorization.
 # The differences are whether one does on-the-fly interprecision transfers
-# of not. For plain IR, I think the answer is clear (NO) and you should
-# MPArray and MPLFact instead of MPEArray and MPLEFact. The factorization
-# structures shoule be invisible to most people and I may stop exporting
-# them. 
+# of not. For plain IR with high=double and low=single, I think the answer 
+# is clear (NO) and you should use MPArray and MPLFact instead of MPEArray 
+# and MPLEFact. If low precision is half, it's not so clear and the 
+# documentation has an example to illustrate that.
 #
-# Ffor IR-GMRES, it's more subtle. The cost of Heavy IR with MPHArray
-# and MPGHFact is an extra
-# high precision matrix. If you can afford the storage and communication
-# burden, it's a good thing to do. If you can't, on-the-fly is your
-# only option.
+# The factorization structures should be invisible to most people 
+# and I may stop exporting them. 
+#
+# For IR-GMRES, it's more subtle.  The cost of Heavy IR with MPHArray
+# and MPGHFact is an extra high precision matrix. If you can afford the 
+# storage and communication burden, it's a reasonable thing to do. 
+# If you can't, on-the-fly is your only option. The differences in time
+# become less significant as the problem size gets large and the O(N^2)
+# interprecision transfer cost is completely dominated by the O(N^3) 
+# factorization cost. 
 #
 export MPArray
 export MPHArray
