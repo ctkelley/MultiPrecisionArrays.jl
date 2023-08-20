@@ -31,7 +31,7 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 
 
 ## Readme Contents:
-- [Algorithms](#algorithms
+- [Algorithms](#algorithms)
   - [Subtleties](#a-few-subtlties-in-the-example)
 - [Endorsement](#Endorsement)
 - [Funding](#funding)
