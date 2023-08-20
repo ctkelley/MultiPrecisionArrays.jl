@@ -19,10 +19,10 @@ function mpgmir(AF::MPGHFact, b; reporting = false, verbose = false, mpdebug = f
     #
     # Initialize GMRES-IR
     #
-    r = copy(x)
-    mul!(r, AD, x)
-    r .*= -onetb
-    axpy!(onetb, bsc, r)
+    r = copy(b)
+#    mul!(r, AD, x)
+#    r .*= -onetb
+#    axpy!(onetb, bsc, r)
     rnrm = norm(r, normtype)
     rnrmx = rnrm * TB(1.1)
     rhist = Vector{TB}()

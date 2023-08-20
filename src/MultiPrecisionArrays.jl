@@ -35,15 +35,16 @@ is_heavy(x::MPLEFact) = false
 MPLFacts = Union{MPLFact,MPLEFact}
 
 import Base.eltype
-function eltype(MP::MPArray)
+
+function eltype(MP::Union{MPArray,MPHArray,MPEArray})
     TP = eltype(MP.AH)
     return TP
 end
 
-function eltype(MPH::MPHArray)
-    TP = eltype(MPH.AH)
-    return TP
-end
+#function eltype(MPH::MPHArray)
+#    TP = eltype(MPH.AH)
+#    return TP
+#end
 
 import Base.\
 function \(AF::MPFact, b; verbose = false, reporting = false)
@@ -51,7 +52,7 @@ function \(AF::MPFact, b; verbose = false, reporting = false)
     return xi
 end
 
-function \(AF::MPGHFact, b; verbose = false, reporting = false)
+function \(AF::MPGHFact, b; verbose = false, reporting = false) 
     xi = mpgmir(AF, b; verbose = verbose, reporting = reporting)
     return xi
 end
