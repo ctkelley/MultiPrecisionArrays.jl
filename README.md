@@ -39,8 +39,9 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 
 This package will make solving dense systems of linear equations faster by using the LU factorization and iterative refinement. It is limited to LU for now. A very generic description of this for solving a linear systrem $A x = b$ is
 
-__IR(A, b, x)__
-- $r = b - Ax$
+__IR(A, b)__
+- $x = 0$
+- $r = b$
 - Factor $A = LU$ in a lower precision
 - While $\|| r \||$ is too large
   - $d = (LU)^{-1} r$
