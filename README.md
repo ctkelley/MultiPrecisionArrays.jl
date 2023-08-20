@@ -34,6 +34,7 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 - [Algorithms](#algorithms)
 - [Example](#example)
   - [Subtleties in the example](#a-few-subtleties-in-the-example)
+- [Be Careful with Half Precision](#half-preicsion)    
 - [Dependencies](#dependencies)
 - [Endorsement](#Endorsement)
 - [Funding](#funding)
