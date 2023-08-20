@@ -35,7 +35,8 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 - [Endorsement](#i'm-using-this-myself)
 - [Funding](#funding)
 
-## What is iterative refinement?
+## Algorithms
+### What is iterative refinement?
 
 This package will make solving dense systems of linear equations faster by using the LU factorization and iterative refinement. It is limited to LU for now. A very generic description of this for solving a linear systrem $A x = b$ is
 
