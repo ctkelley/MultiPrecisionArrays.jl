@@ -162,7 +162,7 @@ the multiprecision array. I do not expect this to change.
 ### A few subtleties in the example
 
 The constructor ```MPArray``` has two keyword arguments. The easy one to understand is ```TL``` which is the precision of the factoriztion. Julia has support for single (```Float32```) and half (```Float16```)
-precisions. If you set ```TL=Float16``` then low precision will be half. Don't do that unless you know what you're doing. Using half precision is a fast way to get incorrect results. Look at the section on [half precision](#Half_Precision) in this Readme for a bit more bad news.
+precisions. If you set ```TL=Float16``` then low precision will be half. Don't do that unless you know what you're doing. Using half precision is a fast way to get incorrect results. Look at the section on [half precision](#half_Precision) in this Readme for a bit more bad news.
 
 The other keyword arguemnt is __onthefly__. That keyword controls how the triangular solvers from the factorization work. When you solve
 
