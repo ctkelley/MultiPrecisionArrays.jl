@@ -162,41 +162,7 @@ the multiprecision array. I do not expect this to change.
 ### A few subtleties in the example
 
 The constructor ```MPArray``` has two keyword arguments. The easy one to understand is ```TL``` which is the precision of the factoriztion. Julia has support for single (```Float32```) and half (```Float16```)
-precisions. If you set ```TL=Float16``` then low precision will be half. Don't do that unless you know what you're doing.
-
-
-```
-julia> A=I - 800.0*G;
-
-julia> x=ones(N);
-
-julia> b=A*x;
-
-julia> xd=A\b;
-
-julia> norm(b-A*xd,Inf)
-6.96332e-13
-
-julia> norm(xd-x,Inf)
-2.30371e-12
-```
-Now, if we downcast things to half precision, nothing good happens.
-```
-julia> AH=Float16.(A);
-
-julia> AHF=hlu!(AH);
-
-julia> z=AHF\b;
-
-julia> norm(b-A*z,Inf)
-6.25650e-01
-
-julia> norm(z-xd,Inf)
-2.34975e-01
-```
-So you get very poor, but unsurprising, results. While __MultiPrecisionArrays.jl__ supports half precision and I use it all the time, it is not something you would use in your own
-work without looking at the literature and makeing certain you are prepared for strange results. Gettting good results consistently from half precision is an active research area.
-Look at the section on [half precision](#Half_Precision) in this Readme for a bit more bad news.
+precisions. If you set ```TL=Float16``` then low precision will be half. Don't do that unless you know what you're doing. Using half precision is a fast way to get incorrect results. Look at the section on [half precision](#Half_Precision) in this Readme for a bit more bad news.
 
 The other keyword arguemnt is __onthefly__. That keyword controls how the triangular solvers from the factorization work. When you solve
 
