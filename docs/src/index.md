@@ -47,10 +47,10 @@ G u(x) = \int_0^1 g(x,y) u(y) \, dy
 where
 
 ```math
-g(x,y) = \left( \begin{array}{l} 
+g(x,y) = \left( \begin{aligned}
 y (1 - x) \ \mbox{if x > y} \\
 x (1 -y ) \ \mbox{otherwise}
-\end{array}
+\end{aligned}
 \right.
 ```
 
