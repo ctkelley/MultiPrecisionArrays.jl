@@ -31,12 +31,7 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 
 
 ## Readme Contents:
-<<<<<<< HEAD
 
-- [Algorithms](#What-is-iterative-refinement?)
-- [Endorsement](#I'm-using-this-myself)
-- [Funding](#Funding)
-=======
 - [Algorithms](#algorithms)
 - [Example](#example)
   - [Subtleties in the example](#a-few-subtleties-in-the-example)
@@ -44,7 +39,7 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 - [Dependencies](#dependencies)
 - [Endorsement](#endorsement)
 - [Funding](#funding)
->>>>>>> 605377fded8b9bd6a0920771c4e058b1fa4bb854
+
 
 ## Algorithms
 
