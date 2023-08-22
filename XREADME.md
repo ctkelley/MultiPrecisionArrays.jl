@@ -31,12 +31,24 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 
 
 ## Readme Contents:
+<<<<<<< HEAD
 
 - [Algorithms](#What-is-iterative-refinement?)
 - [Endorsement](#I'm-using-this-myself)
 - [Funding](#Funding)
+=======
+- [Algorithms](#algorithms)
+- [Example](#example)
+  - [Subtleties in the example](#a-few-subtleties-in-the-example)
+- [Be Careful with Half Precision](#half-precision)    
+- [Dependencies](#dependencies)
+- [Endorsement](#endorsement)
+- [Funding](#funding)
+>>>>>>> 605377fded8b9bd6a0920771c4e058b1fa4bb854
 
-## What is iterative refinement?
+## Algorithms
+
+### What is iterative refinement?
 
 This package will make solving dense systems of linear equations faster by using the LU factorization and iterative refinement. It is limited to LU for now. A very generic description of this for solving a linear systrem $A x = b$ is
 
@@ -56,7 +68,9 @@ to allocate storage for a copy of $A$ is the lower precision and factor that cop
 $d = (LU)^{-1} r$ means. Do you cast $r$ into the lower precison before the solve or not? __MultiPrecisionArrays.jl__ provides
 data structures and solvers to manage this. The __MPArray__ structure lets you preallocate $A$ and the low precision copy. 
 
-## An example to get started
+## Example
+
+### An example to get started
 
 Herewith, the world's most simple example to show how iterative refienment works. We will follow that with some benchmarking on the cost of factorizations.
 The functions we use are __MPArray__ to create the structure and __mplu!__ to factor the low precision copy. In this example high precision is ```Float64``` and low
@@ -153,18 +167,37 @@ julia> norm(b-A*y,Inf)
 As of today, you'll need to manage the factorization and the solve separately. One reason for this is that we provide several variations of iterative refinement and the solvers dispatch on the way we configure
 the multiprecision array. I do not expect this to change.
 
-### A few subtlties in the example
+### A few subtleties in the example
 
 The constructor ```MPArray``` has two keyword arguments. The easy one to understand is ```TL``` which is the precision of the factoriztion. Julia has support for single (```Float32```) and half (```Float16```)
-precisions. If you set ```TL=Float16``` then low precision will be half. Don't do that unless you know what you're doing.
+precisions. If you set ```TL=Float16``` then low precision will be half. Don't do that unless you know what you're doing. Using half precision is a fast way to get incorrect results. Look at the section on [half precision](#half-Precision) in this Readme for a bit more bad news.
 
-Using half precision will not speed anything up, in fact will make the solver slower. The reason for this is that LAPACK and the BLAS do not support half precision, so all the clever stuff in 
+The other keyword arguemnt is __onthefly__. That keyword controls how the triangular solvers from the factorization work. When you solve
+
+$$ 
+LU d = r
+$$
+
+The LU factors are in low precision and the residual $r$ is in high precision. If you let Julia and LAPACK figure out what to do, then the solves will be done in high precision and
+the entries in the LU factors will be comverted to high precision with each binary operation. The output $d$ will be in high precision. This is called interprecision transfer on-the-fly
+and ```onthefly = true``` will tell the solvers to do it that way. You have $N^2$ interprecsion transfers with each solve and, as we will see, that can have a non-trivial cost.
+
+The default (```onthefly = false```) converts $r$ to low precision, does the solve entirely in low precision, and then promotes $d$ to high precision. You need to be careful to avoid
+overflow and, more importantly, underflow when you do that and we scale $r$ to be a unit vector before conversion to low precisiion and reverse the scaling when we promote $d$. 
+
+
+__MultiPrecisionArrays.jl__ supports many variations of iterative refinement and we will explain all that in the docs and in a paper in the works.
+
+## Half Precision
+
+Using half precision will not speed anything up, in fact will make the solver slower. The reason for this is that LAPACK and the BLAS do not (__YET__) support half precision, so all the clever stuff in 
 there is missing. We proved a half precision LU factorization __/src/Factorizations/hlu!.jl__ that is better than nothing. It's a hack of Julia's  ```generic_lu!``` with threading and a couple 
 complier directives. Even so, it's 2.5 -- 5 x __slower__ that a double precision LU. Half precision suppor is coming (Julia and Apple support it in hardware!) but for now, half precision is for
-research in iterative refinement, not applications. Here's a table (created with  __/Code_For_Docs/HalfTime.jl__ ) that illustrates the point.
+research in iterative refinement, not applications. Here's a table (created with  __/Code_For_Docs/HalfTime.jl__ ) that illustrates the point. In the table we compare LAPACK's LU to the LU we compute with ```hlu!.jl```.
 
 Half precision is also difficult to use properly. __Kids, don't try this at home!__. The low precsion can make iterative refinement fail because the half precision factorization can have
-a large error. Here is an example to illustrate this point. The matrix here is modeslty ill-conditioned and you can see that in the error from a direct solve in double precision.
+a large error. Here is an example to illustrate this point. The matrix here is modestly ill-conditioned and you can see that in the error from a direct solve in double precision.
+
 ```
 julia> A=I - 800.0*G;
 
@@ -197,21 +230,6 @@ julia> norm(z-xd,Inf)
 So you get very poor, but unsurprising, results. While __MultiPrecisionArrays.jl__ supports half precision and I use it all the time, it is not something you would use in your own
 work without looking at the literature and makeing certain you are prepared for strange results. Gettting good results consistently from half precision is an active research area.
 
-The other keyword arguemnt is __onthefly__. That keyword controls how the triangular solvers from the factorization work. When you solve
-
-$$ 
-LU d = r
-$$
-The LU factors are in low precision and the residual $r$ is in high precision. If you let Julia and LAPACK figure out what to do, then the solves will be done in high precision and
-the entries in the LU factors will be comverted to high precision with each binary operation. The output $d$ will be in high precision. This is called interprecision transfer on-the-fly
-and ```onthefly = true``` will tell the solvers to do it that way. You have $N^2$ interprecsion transfers with each solve and, as we will see, that can have a non-trivial cost.
-
-The default (```onthefly = false```) converts $r$ to low precision, does the solve entirely in low precision, and then promotes $d$ to high precision. You need to be careful to avoid
-overflow and, more importantly, underflow when you do that and we scale $r$ to be a unit vector before conversion to low precisiion and reverse the scaling when we promote $d$. 
-
-
-__MultiPrecisionArrays.jl__ supports many variations of iterative refinement and we will explain all that in the docs and in a paper in the works.
-
 
 ## Dependencies
 
@@ -223,8 +241,7 @@ As of now you need to install these packages
 and use LinearAlgebra and SparseArrays from Base. I will remove SIAMFANLEquations from the list once I get a custom (for GMRES-IR) GMRES solver in here. Polyester is here to stay because 
 threading with ```Polyester.@batch``` makes the LU for Float16 run much faster.
 
-
-## I'm using this myself.
+## Endorsement
 
 I have used this in my own work and will be adding links to that stuff as I finish it. 
 
