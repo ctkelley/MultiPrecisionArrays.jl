@@ -48,10 +48,10 @@ where
 
 ```math
 g(x,y) = \left( \begin{aligned}
-y (1 - x) \ \mbox{if x > y} \\
-x (1 -y ) \ \mbox{otherwise}
+y (1 - x) \ & \mbox{if x > y} \\
+x (1 -y ) \  & \mbox{otherwise}
 \end{aligned}
-\right.
+\right)
 ```
 
 The code for this is in the __/src/Examples__ directory. The file is __Gmat.jl__.
