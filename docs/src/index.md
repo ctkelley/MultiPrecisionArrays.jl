@@ -39,19 +39,20 @@ The submodule __MultiPrecisionArrays.Examples__ has an example which we will use
 the trapeziod rule discretization of the Greens operator for $-d^2/dx^2$ on $[0,1]$
 
 
-$$
+\[
 G u(x) = \int_0^1 g(x,y) u(y) \, dy 
-$$
+\]
+
 
 where
 
-$$
+\[
 g(x,y) = \left( \begin{array}{l} 
 y (1 - x) \ \mbox{if x > y} \\
 x (1 -y ) \ \mbox{otherwise}
 \end{array}
 \right.
-$$
+\]
 
 The code for this is in the __/src/Examples__ directory. The file is __Gmat.jl__.
 
