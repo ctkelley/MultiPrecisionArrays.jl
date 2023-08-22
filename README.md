@@ -186,10 +186,10 @@ __MultiPrecisionArrays.jl__ supports many variations of iterative refinement and
 Using half precision will not speed anything up, in fact will make the solver slower. The reason for this is that LAPACK and the BLAS do not (__YET__) support half precision, so all the clever stuff in 
 there is missing. We proved a half precision LU factorization __/src/Factorizations/hlu!.jl__ that is better than nothing. It's a hack of Julia's  ```generic_lu!``` with threading and a couple 
 complier directives. Even so, it's 2.5 -- 5 x __slower__ that a double precision LU. Half precision suppor is coming (Julia and Apple support it in hardware!) but for now, half precision is for
-research in iterative refinement, not applications. Here's a table (created with  __/Code_For_Docs/HalfTime.jl__ ) that illustrates the point.
+research in iterative refinement, not applications. Here's a table (created with  __/Code_For_Docs/HalfTime.jl__ ) that illustrates the point. In the table we compare LAPACK's LU to the LU we compute with ```hlu!.jl```.
 
 Half precision is also difficult to use properly. __Kids, don't try this at home!__. The low precsion can make iterative refinement fail because the half precision factorization can have
-a large error. Here is an example to illustrate this point. The matrix here is modeslty ill-conditioned and you can see that in the error from a direct solve in double precision.
+a large error. Here is an example to illustrate this point. The matrix here is modestly ill-conditioned and you can see that in the error from a direct solve in double precision.
 
 ```
 julia> A=I - 800.0*G;
