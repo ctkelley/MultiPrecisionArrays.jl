@@ -47,8 +47,9 @@ G u(x) = \int_0^1 g(x,y) u(y) \, dy
 where
 
 ```math
-g(x,y) = \begin{aligned} y (1 - x) \ & \mbox{if x > y} \\
-x (1 -y ) \  & \mbox{otherwise}
+\begin{aligned}
+g(x,y) =  & y (1 - x)  \mbox{ if x > y} \\
+& x (1 -y )  \mbox{ otherwise}
 \end{aligned}
 ```
 
