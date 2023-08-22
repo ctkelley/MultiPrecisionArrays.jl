@@ -35,4 +35,24 @@ to allocate storage for a copy of $A$ is the lower precision and factor that cop
 $d = (LU)^{-1} r$ means. Do you case $r$ into the lower precison before the solve or not? __MultiPrecisionArrays.jl__ provides
 data structures and solvers to manage this. The __MPArray__ structure lets you preallocate $A$ and the low precision copy.
 
+The submodule __MultiPrecisionArrays.Examples__ has an example which we will use for most of the documentation. The function ```Gmat(N)``` returns
+the trapeziod rule discretization of the Greens operator for $-d^2/dx^2$ on $[0,1]$
+
+
+$$
+G u(x) = \int_0^1 g(x,y) u(y) \, dy 
+$$
+
+where
+
+$$
+g(x,y) = \left( \begin{array}{l} 
+y (1 - x) \ \mbox{if x > y} \\
+x (1 -y ) \ \mbox{otherwise}
+\end{array}
+\right.
+$$
+
+The code for this is in the __/src/Examples__ directory. The file is __Gmat.jl__.
+
 

@@ -31,6 +31,7 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 
 
 ## Readme Contents:
+
 - [Algorithms](#What-is-iterative-refinement?)
 - [Endorsement](#I'm-using-this-myself)
 - [Funding](#Funding)
@@ -59,7 +60,7 @@ data structures and solvers to manage this. The __MPArray__ structure lets you p
 
 Herewith, the world's most simple example to show how iterative refienment works. We will follow that with some benchmarking on the cost of factorizations.
 The functions we use are __MPArray__ to create the structure and __mplu!__ to factor the low precision copy. In this example high precision is ```Float64``` and low
-precision is ```Float16```. The matrix is the sum of the identity and a constant multiple of the trapezoid rule discretization of the Greens operator for $-d^2/dx^2$ on $[0,1]$
+precision is ```Float32```. The matrix is the sum of the identity and a constant multiple of the trapezoid rule discretization of the Greens operator for $-d^2/dx^2$ on $[0,1]$
 
 
 $$
