@@ -47,11 +47,9 @@ G u(x) = \int_0^1 g(x,y) u(y) \, dy
 where
 
 ```math
-g(x,y) = \left( \begin{aligned}
-y (1 - x) \ & \mbox{if x > y} \\
+g(x,y) = \begin{aligned} y (1 - x) \ & \mbox{if x > y} \\
 x (1 -y ) \  & \mbox{otherwise}
 \end{aligned}
-\right)
 ```
 
 The code for this is in the __/src/Examples__ directory. The file is __Gmat.jl__.
