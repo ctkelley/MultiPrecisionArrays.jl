@@ -1,6 +1,14 @@
 push!(LOAD_PATH, "../src/")
 using Documenter, MultiPrecisionArrays, DocumenterTools
 mathengine=MathJax3
+struct LaTeXEquation
+    content::String
+end
+
+function Base.show(io::IO, ::MIME"text/latex", x::LaTeXEquation)
+    # Wrap in $$ for display math printing
+    return print(io, "\$\$ " * x.content * " \$\$")
+end
 makedocs(
     sitename = "MultiPrecisionArrays.jl",
     authors = "C. T. Kelley",

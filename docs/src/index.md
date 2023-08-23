@@ -55,6 +55,12 @@ x (1 -y ) \ \mbox{otherwise}
 \right.
 ```
 
+LaTeXEquation(raw"""
+    \left[\begin{array}{c}
+        x \\
+        y
+    \end{array}\right]
+""")
 
 - $g(x,y) = y (1 - x)$  if x > y
 - $g(x,y) = x (1 -y )$   otherwise
