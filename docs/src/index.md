@@ -20,13 +20,12 @@ in lower precision.
 
 __IR(A, b)__
 
-- $x = 0$
-- $r = b$
+- Initialize: $x = 0$,  $r = b$
 - Factor $A = LU$ in a lower precision
 - While $\| r \|$ is too large
-  - $d = (LU)^{-1} r$
-  - $x = x + d$
-  - $r = b - Ax$
+  - Compute the defect $d = (LU)^{-1} r$
+  - Correct the solution $x = x + d$
+  - Update the residuial $r = b - Ax$
 - end
 
 In Julia, a code to do this would solve the linear system $A x = b$ in double precision by using a
@@ -47,25 +46,15 @@ G u(x) = \int_0^1 g(x,y) u(y) \, dy
 where
 
 
-```math 
-g(x,y) = \left\{ \begin{array}{l} 
-y (1 - x),  \mbox{if x > y} \\
-x (1 -y ),  \mbox{otherwise}
-\end{array}
-\right.
-```
-
 ```math
 g(x,y) = 
     \left\{\begin{array}{c}
-        y (1-x) ; x > y\\
-        x (1-y) ; x \le y
+        y (1-x) ; \ x > y\\
+        x (1-y) ; \ x \le y
     \end{array}\right.
 ```
 
-- $g(x,y) = y (1 - x)$  if x > y
-- $g(x,y) = x (1 -y )$   otherwise
-
-The code for this is in the __/src/Examples__ directory. The file is __Gmat.jl__.
+The code for this is in the __/src/Examples__ directory. 
+The file is __Gmat.jl__.
 
 
