@@ -56,6 +56,14 @@ where
 \end{aligned}
 ```
 
+$$
+g(x,y) = \left( \begin{array}{l} 
+y (1 - x) \ \mbox{if x > y} \\
+x (1 -y ) \ \mbox{otherwise}
+\end{array}
+\right.
+$$
+
 
 - $g(x,y) =  y (1 - x)$  if x > y
 - $g(x,y) = x (1 -y )$   otherwise
