@@ -47,16 +47,16 @@ G u(x) = \int_0^1 g(x,y) u(y) \, dy
 where
 
 
-$$
+```math 
 g(x,y) = \left( \begin{array}{l} 
 y (1 - x) \ \mbox{if x > y} \\
 x (1 -y ) \ \mbox{otherwise}
 \end{array}
 \right.
-$$
+```
 
 
-- $g(x,y) =  y (1 - x)$  if x > y
+- $g(x,y) = y (1 - x)$  if x > y
 - $g(x,y) = x (1 -y )$   otherwise
 
 The code for this is in the __/src/Examples__ directory. The file is __Gmat.jl__.
