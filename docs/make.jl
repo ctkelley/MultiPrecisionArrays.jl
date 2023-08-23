@@ -1,14 +1,15 @@
 push!(LOAD_PATH, "../src/")
 using Documenter, MultiPrecisionArrays, DocumenterTools
 
-struct LaTeXEquation
-    content::String
-end
-
-function Base.show(io::IO, ::MIME"text/latex", x::LaTeXEquation)
-    # Wrap in $$ for display math printing
-    return print(io, "\$\$ " * x.content * " \$\$")
-end
+mathengine = MathJax3(Dict(:loader => Dict("load" => ["[tex]/require", "[tex]/mathtools"]),
+                           :tex => Dict("inlineMath" => [["\$", "\$"], ["\\(", "\\)"]],
+                                        "packages" => [
+                                            "base",
+                                            "ams",
+                                            "autoload",
+                                            "mathtools",
+                                            "require",
+                                        ])))
 
 makedocs(
     sitename = "MultiPrecisionArrays.jl",
