@@ -46,8 +46,19 @@ G u(x) = \int_0^1 g(x,y) u(y) \, dy
 
 where
 
-- $g(x,y) =  y (1 - x)  \mbox{ if x > y}$
-- $g(x,y) = x (1 -y )  \mbox{ otherwise}$
+
+```math
+\begin{aligned}
+\nabla\cdot\mathbf{E}  &= 4 \pi \rho \\
+\nabla\cdot\mathbf{B}  &= 0 \\
+\nabla\times\mathbf{E} &= - \frac{1}{c} \frac{\partial\mathbf{B}}{\partial t} \\
+\nabla\times\mathbf{B} &= - \frac{1}{c} \left(4 \pi \mathbf{J} + \frac{\partial\mathbf{E}}{\partial t} \right)
+\end{aligned}
+```
+
+
+- $g(x,y) =  y (1 - x)$  if x > y
+- $g(x,y) = x (1 -y )$   otherwise
 
 The code for this is in the __/src/Examples__ directory. The file is __Gmat.jl__.
 
