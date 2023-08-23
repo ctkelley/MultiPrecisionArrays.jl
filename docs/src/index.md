@@ -48,9 +48,9 @@ where
 
 
 ```math 
-g(x,y) = \\left\\{ \begin{array}{l} 
-y (1 - x) \ \mbox{if x > y} \\
-x (1 -y ) \ \mbox{otherwise}
+g(x,y) = \left\{ \begin{array}{l} 
+y (1 - x),  \mbox{if x > y} \\
+x (1 -y ),  \mbox{otherwise}
 \end{array}
 \right.
 ```
@@ -58,8 +58,8 @@ x (1 -y ) \ \mbox{otherwise}
 ```math
 g(x,y) = 
     \left\{\begin{array}{c}
-        y (1-x) \\
-        x (1-y)
+        y (1-x) ; x > y\\
+        x (1-y) ; x \le y
     \end{array}\right.
 ```
 
