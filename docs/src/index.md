@@ -57,10 +57,10 @@ x (1 -y ) \ \mbox{otherwise}
 
 ```math
 g(x,y) = 
-    \left[\begin{array}{c}
+    \left\{\begin{array}{c}
         y (1-x) \\
         x (1-y)
-    \end{array}\right]
+    \end{array}\right.
 ```
 
 - $g(x,y) = y (1 - x)$  if x > y
