@@ -79,7 +79,7 @@ $$
 where
 
 $$
-g(x,y) = \left( \begin{array}{l} 
+g(x,y) = \\left\\{ \begin{array}{l} 
 y (1 - x) \ \mbox{if x > y} \\
 x (1 -y ) \ \mbox{otherwise}
 \end{array}
