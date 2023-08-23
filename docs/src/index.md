@@ -48,19 +48,19 @@ where
 
 
 ```math 
-g(x,y) = \left( \begin{array}{l} 
+g(x,y) = \\left\\{ \begin{array}{l} 
 y (1 - x) \ \mbox{if x > y} \\
 x (1 -y ) \ \mbox{otherwise}
 \end{array}
 \right.
 ```
 
-LaTeXEquation(raw"""
+```math
     \left[\begin{array}{c}
         x \\
         y
     \end{array}\right]
-""")
+```
 
 - $g(x,y) = y (1 - x)$  if x > y
 - $g(x,y) = x (1 -y )$   otherwise
