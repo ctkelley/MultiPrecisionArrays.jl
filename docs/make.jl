@@ -1,5 +1,6 @@
 push!(LOAD_PATH, "../src/")
 using Documenter, MultiPrecisionArrays, DocumenterTools
+mathengine=MathJax3
 makedocs(
     sitename = "MultiPrecisionArrays.jl",
     authors = "C. T. Kelley",
