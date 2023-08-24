@@ -185,7 +185,7 @@ __MultiPrecisionArrays.jl__ supports many variations of iterative refinement and
 
 ## Half Precision
 
-Bottom line: don't do it. See [this page](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Details/#Half-Precision) in the docs for details.
+Bottom line: don't do it and expect good performance. See [this page](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Details/#Half-Precision) in the docs for details.
 
 
 ## Dependencies
