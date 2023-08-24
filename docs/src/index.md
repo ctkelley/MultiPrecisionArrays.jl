@@ -30,9 +30,67 @@ __IR(A, b)__
 
 In Julia, a code to do this would solve the linear system $A x = b$ in double precision by using a
 factorization in a lower precision, say single, within a residual correction iteration. This means that one would need
-to allocate storage for a copy of $A$ is the lower precision and factor that copy. The one has to determine what the line
+to allocate storage for a copy of $A$ is the lower precision and factor that copy. 
+
+Then one has to determine what the line
 $d = (LU)^{-1} r$ means. Do you cast $r$ into the lower precison before the solve or not? __MultiPrecisionArrays.jl__ provides
-data structures and solvers to manage this. The __MPArray__ structure lets you preallocate $A$ and the low precision copy.
+data structures and solvers to manage this. 
+
+Here's a simple Julia function for IR that
+```
+"""
+IR(A,b)
+Simple minded iterative refinement
+Solve Ax=b
+"""
+function IR(A, b)
+    x = zeros(length(b))
+    r = copy(b)
+    tol = 100.0 * eps(Float64)
+    #
+    # Allocate a single precision copy of A and factor in place
+    #
+    A32 = Float32.(A)
+    AF = lu!(A32)
+    #
+    # Give IR at most ten iterations, which it should not need
+    # in this case
+    #
+    itcount = 0
+    while (norm(r) > tol * norm(b)) && (itcount < 10)
+        #
+        # Store r and d = AF\r in the same place.
+        #
+        ldiv!(AF, r)
+        x .+= r
+        r .= b - A * x
+        itcount += 1
+    end
+    return x
+end
+```
+
+The __MPArray__ structure contains both $A$ and the low precision copy.
+This lets you allocate the data in advance an reuse the structure
+for other right hand sides without rebuilting (or refactoring!) the
+low precision copy. 
+
+As written in the function, the defect uses ```ldiv!``` to compute
+```AF\r```. This means that the two triangular factors are stored in
+single precision and interprecision transfers are done with each
+step in the factorization. While that ``on the fly`` interprecision 
+transfer is an option, and is needed in many situtations, the
+default is to downcase $r$ to low precision, do the solve entirely in
+low precision, and the upcast the result. The code for that looks like
+```
+normr=norm(r)
+ds=Float32.(r)/normr
+ldiv!(AF, ds)
+r .= Float64.(ds)*normr
+```
+The scaling by $1.0/normr$ avoids underflow, which is most important
+when the low precision is $Float16$. We will discuss interprecision 
+transfer costs later.
 
 ## Integral Equations Example
 
@@ -45,7 +103,6 @@ for $-d^2/dx^2$ on $[0,1]$
 G u(x) = \int_0^1 g(x,y) u(y) \, dy 
 ```
 
-
 where
 
 
@@ -57,7 +114,50 @@ g(x,y) =
     \end{array}\right.
 ```
 
+The eigenvalues of $G$ are $1/(n^2 \pi^2)$ for $n = 1, 2, \dots$.
+
 The code for this is in the __/src/Examples__ directory. 
 The file is __Gmat.jl__.
 
+In the example we will build a matrix $A = I - \alpha G$. In the examples
+we will use $\alpha=1.0$, a very well conditioned case, and $\alpha=800.0$
+This latter case is very near singularity.
 
+We will solve a linear system with both double precision $LU$ and an MPArray. 
+The problem setup is pretty simple
+```
+julia> using MultiPrecisionArrays
+
+julia> using BenchmarkTools
+
+julia> using MultiPrecisionArrays.Examples
+
+julia> N=4096; G=Gmat(N); A=I - G; x=ones(N); b=A*x;
+
+julia> @belapsed lu!(AC) setup=(AC=copy($A))
+1.43148e-01
+```
+At this point we have timed ```lu1```. The next step is to construct
+an MPArray and factor the low precision matrix. We use the
+constructor ```MPArray``` to store $A$ and the low precision copy
+and the function ```mplu!``` to factor the low precision copy in place
+```
+julia> MPA=MPArray(A);
+
+julia> @belapsed mplu!(MPAC) setup=(MPAC=deepcopy($MPA))
+8.02158e-02
+```
+So the single precision factorization is roughly half the cost of the
+double precision one. Now for the solves. Both ```lu!``` and ```mplu!```
+produce a factorization object and ```\``` works with both.
+You have to be a bit careful because MPA and A share  storage. So
+I will use ```lu``` instead of ```lu!``` when factoring $A$.
+```
+julia> AF=lu(A); xf = AF\b;
+
+julia> MPAF=mplu!(MPA); xmp=MPAF\b;
+
+julia> println(norm(xf-x,Inf),"  ",norm(xmp-x,Inf))
+7.41629e-14  8.88178e-16
+```
+You can see that the solutions are equally good.
