@@ -18,7 +18,7 @@ makedocs(
     pages = Any[
         "Home"=>"index.md",
         "More than you want to know" => "Details.md",
-        "Factorizations"=>Any["functions/MPArray.md", functions/mplu!.md", "functions/hlu!.md"],
+        "Factorizations"=>Any["functions/MPArray.md", "functions/mplu!.md", "functions/hlu!.md"],
     ],
 )
 deploydocs(repo = "github.com/ctkelley/MultiPrecisionArrays.jl.git")
