@@ -8,7 +8,22 @@
 Using half precision will not speed anything up, in fact will make the solver slower. The reason for this is that LAPACK and the BLAS do not (__YET__) support half precision, so all the clever stuff in
 there is missing. We provide a half precision LU factorization __/src/Factorizations/hlu!.jl__ that is better than nothing. It's a hack of Julia's  ```generic_lu!``` with threading and a couple
 complier directives. Even so, it's 2.5 -- 5 x __slower__ that a double precision LU. Half precision suppor is coming (Julia and Apple support it in hardware!) but for now, half precision is for
-research in iterative refinement, not applications. Here's a table (created with  __/Code_For_Docs/HalfTime.jl__ ) that illustrates the point. In the table we compare LAPACK's LU to the LU we compute with ```hlu!.jl```.
+research in iterative refinement, not applications. 
+
+
+Here's a table (created with  __/Code_For_Docs/HalfTime.jl__ ) that illustrates the point. In the table we compare LAPACK's LU to the LU we compute with ```hlu!.jl```. The matrix is $I-G$.
+
+```
+      N       F64       F32       F16     F16/F64 
+     1024  4.00e-03  3.17e-03  4.84e-03  1.21e+00 
+     2048  2.28e-02  1.40e-02  3.62e-02  1.59e+00 
+     4096  1.56e-01  8.51e-02  2.52e-01  1.61e+00 
+     8192  1.14e+00  5.99e-01  4.61e+00  4.04e+00 
+```
+The columns of the table are the dimension of the problem, timings
+for double, single, and half precision, and the ratio of the half
+precision timings to double. The timings came from Julia 1.10-beta2
+running on an Apple M2 Pro with 8 performance cores.
 
 Half precision is also difficult to use properly. __Kids, don't try this at home!__. The low precsion can make iterative refinement fail because the half precision factorization can have
 a large error. Here is an example to illustrate this point. The matrix here is modestly ill-conditioned and you can see that in the error from a direct solve in double precision.

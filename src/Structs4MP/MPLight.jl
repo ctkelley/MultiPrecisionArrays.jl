@@ -37,13 +37,29 @@ end
 #
 # The constructors for the multi-precision arrays
 # 
+"""
+MPArray(AH::Array{Float64,2}; TL = Float32, onthefly=false)
+Default constructor for MPArray. The difference between
+and MPArray and an MPEArray is that the MPEArray does interprecision
+transfres on the fly. 
 
-function MPArray(AH::Array{Float32,2}; TL = Float16, onthefly=false)
+The MPArray data structure is 
+
+struct MPEArray{TH<:AbstractFloat,TL<:AbstractFloat}
+    AH::Array{TH,2}
+    AL::Array{TL,2}
+end
+
+MPEArray is exactly the same but the triangular solver dispatches
+differently.
+"""
+function MPArray(AH::Array{Float64,2}; TL = Float32, onthefly=false)
     AL = TL.(AH)
     onthefly ?  MPA = MPEArray(AH, AL) : MPA = MPArray(AH, AL)
 end
 
-function MPArray(AH::Array{Float64,2}; TL = Float32, onthefly=false)
+
+function MPArray(AH::Array{Float32,2}; TL = Float16, onthefly=false)
     AL = TL.(AH)
     onthefly ?  MPA = MPEArray(AH, AL) : MPA = MPArray(AH, AL)
 end
