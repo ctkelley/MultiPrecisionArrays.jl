@@ -17,6 +17,7 @@ makedocs(
     format = Documenter.HTML(prettyurls = get(ENV, "CI", nothing) == "true"),
     pages = Any[
         "Home"=>"index.md",
+        "More than you want to know" => "Details.md",
         "Factorizations"=>Any["functions/mplu!.md", "functions/hlu!.md"],
     ],
 )
