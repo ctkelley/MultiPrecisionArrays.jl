@@ -150,7 +150,7 @@ julia> @belapsed mplu!(MPAC) setup=(MPAC=deepcopy($MPA))
 So the single precision factorization is roughly half the cost of the
 double precision one. Now for the solves. Both ```lu!``` and ```mplu!```
 produce a factorization object and ```\``` works with both.
-You have to be a bit careful because MPA and A share  storage. So
+You have to be a bit careful because MPA and A share storage. So
 I will use ```lu``` instead of ```lu!``` when factoring $A$.
 ```
 julia> AF=lu(A); xf = AF\b;
