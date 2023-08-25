@@ -27,13 +27,14 @@ function mplu!(MPA::Union{MPArray,MPEArray})
     AH = MPA.AH
     AL = MPA.AL
     TL = eltype(AL)
+    residual=MPA.residual
     (TL == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
     # For the MPEArray
     if on_the_fly(MPA)
-        MPF = MPLEFact(AH, AL, AF)
+        MPF = MPLEFact(AH, AL, AF, residual)
     else
         # For the plain vanilla MPArray
-        MPF = MPLFact(AH, AL, AF)
+        MPF = MPLFact(AH, AL, AF, residual)
     end
     return MPF
 end

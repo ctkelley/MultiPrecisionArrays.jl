@@ -5,6 +5,7 @@
 function mpglu!(MPH::MPHArray; gmresok = true)
     AH = MPH.AH
     TD = eltype(AH)
+    res = MPH.residual
     AStore = MPH.AStore
     AL = MPH.AL
     TL = eltype(AL)
@@ -18,9 +19,9 @@ function mpglu!(MPH::MPHArray; gmresok = true)
     AStore .= TD.(AL)
     AF = LU(AStore, ALF.ipiv, ALF.info)
     if gmresok
-        MPF = MPGHFact(AH, AStore, AL, AF)
+        MPF = MPGHFact(AH, AStore, AL, AF, res)
     else
-        MPF = MPHFact(AH, AStore, AL, AF)
+        MPF = MPHFact(AH, AStore, AL, AF, res)
     end
 end
 

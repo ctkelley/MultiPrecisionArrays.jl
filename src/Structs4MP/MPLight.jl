@@ -8,12 +8,14 @@
 struct MPArray{TH<:AbstractFloat,TL<:AbstractFloat}
     AH::Array{TH,2}
     AL::Array{TL,2}
+    residual::Vector{TH}
 end
 
 struct MPLFact{TH<:AbstractFloat,TL<:AbstractFloat,TF<:Factorization}
     AH::Array{TH,2}
     AL::Array{TL,2}
     AF::TF
+    residual::Vector{TH}
 end
 
 #
@@ -25,6 +27,7 @@ end
 struct MPEArray{TH<:AbstractFloat,TL<:AbstractFloat}
     AH::Array{TH,2}
     AL::Array{TL,2}
+    residual::Vector{TH}
 end
 
 
@@ -32,6 +35,7 @@ struct MPLEFact{TH<:AbstractFloat,TL<:AbstractFloat,TF<:Factorization}
     AH::Array{TH,2}
     AL::Array{TL,2}
     AF::TF
+    residual::Vector{TH}
 end
 
 #
@@ -48,6 +52,7 @@ The MPArray data structure is
 struct MPEArray{TH<:AbstractFloat,TL<:AbstractFloat}
     AH::Array{TH,2}
     AL::Array{TL,2}
+    residual::Vector{TH}
 end
 
 MPEArray is exactly the same but the triangular solver dispatches
@@ -55,21 +60,25 @@ differently.
 """
 function MPArray(AH::Array{Float64,2}; TL = Float32, onthefly=false)
     AL = TL.(AH)
-    onthefly ?  MPA = MPEArray(AH, AL) : MPA = MPArray(AH, AL)
+    (m,n)=size(AH); res=ones(eltype(AH),n)
+    onthefly ?  MPA = MPEArray(AH, AL, res) : MPA = MPArray(AH, AL, res)
 end
 
 
 function MPArray(AH::Array{Float32,2}; TL = Float16, onthefly=false)
     AL = TL.(AH)
-    onthefly ?  MPA = MPEArray(AH, AL) : MPA = MPArray(AH, AL)
+    (m,n)=size(AH); res=ones(eltype(AH),n)
+    onthefly ?  MPA = MPEArray(AH, AL, res) : MPA = MPArray(AH, AL, res)
 end
 
 function MPEArray(AH::Array{Float32,2}; TL = Float16)
     AL = TL.(AH)
-    MPA = MPEArray(AH, AL)
+    (m,n)=size(AH); res=ones(eltype(AH),n)
+    MPA = MPEArray(AH, AL, res)
 end
 
 function MPEArray(AH::Array{Float64,2}; TL = Float32)
+    (m,n)=size(AH); res=ones(eltype(AH),n)
     AL = TL.(AH)
-    MPA = MPEArray(AH, AL)
+    MPA = MPEArray(AH, AL, res)
 end

@@ -14,6 +14,7 @@ function mpgesl2(AF::MPFact, b; reporting = false, verbose = true)
     MPStats = getStats(AF)
     TL = MPStats.TL
     TH = MPStats.TH
+    r = AF.residual
     #
     # TFact is the precision of the factors
     #
@@ -49,7 +50,8 @@ function mpgesl2(AF::MPFact, b; reporting = false, verbose = true)
     #
     # Initial residual
     #
-    r = copy(b)
+#    r = copy(b)
+    r .= b
     tol = tolf * bnrm
     rs = bS
 #

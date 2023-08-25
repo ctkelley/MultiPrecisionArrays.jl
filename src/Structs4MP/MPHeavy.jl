@@ -2,6 +2,7 @@ struct MPHArray
     AH::Array
     AStore::Array
     AL::Array
+    residual::Vector
 end
 
 struct MPHFact
@@ -9,6 +10,7 @@ struct MPHFact
     AStore::Array
     AL::Array
     AF::Factorization
+    residual::Vector
 end
 
 #
@@ -19,17 +21,20 @@ struct MPGHFact
     AStore::Array
     AL::Array
     AF::Factorization
+    residual::Vector
 end
 
 
 function MPHArray(AH::Array{Float64,2}; TL = Float32)
     AStore = copy(AH)
     AL = TL.(AH)
-    MPH = MPHArray(AH, AStore, AL)
+    (m,n)=size(AH); res=ones(eltype(AH),n)
+    MPH = MPHArray(AH, AStore, AL, res)
 end
 
 function MPHArray(AH::Array{Float32,2}; TL = Float16)
     AStore = copy(AH)
     AL = TL.(AH)
-    MPH = MPHArray(AH, AStore, AL)
+    (m,n)=size(AH); res=ones(eltype(AH),n)
+    MPH = MPHArray(AH, AStore, AL, res)
 end

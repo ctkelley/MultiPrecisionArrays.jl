@@ -70,7 +70,8 @@ function IR(A, b)
 end
 ```
 
-The __MPArray__ structure contains both $A$ and the low precision copy.
+The __MPArray__ structure contains both $A$, the low precision copy,
+and a vector for the residual. 
 This lets you allocate the data in advance an reuse the structure
 for other right hand sides without rebuilting (or refactoring!) the
 low precision copy. 
