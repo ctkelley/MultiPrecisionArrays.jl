@@ -1,4 +1,4 @@
-function HalfTime(p = 3)
+function HalfTime(p = 3; tex=false)
     pv = collect(1:1:p)
     ppv = 2 .^ pv
     nv = 512 .* ppv
@@ -16,16 +16,16 @@ function HalfTime(p = 3)
         rt = th / td
         Time_F[p, :] = [N, td, ts, th, rt]
     end
+    if tex
+       timetab(Time_F)
+    else
     dformat = "%9d %9.2e %9.2e %9.2e %9.2e \n"
     hformat = "%7s %9s %9s %9s %11s \n"
     printf(fmt::String, args...) = @eval @printf($fmt, $(args...))
     printf(hformat,headers...)
-#    for i = 1:5
-#        printf("%9s", headers[i])
-#    end
-#    printf("\n")
     for p in pv
         printf(dformat, Time_F[p, :]...)
+    end
     end
     return Time_F
 end

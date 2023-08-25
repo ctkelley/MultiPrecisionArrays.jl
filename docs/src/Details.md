@@ -5,13 +5,20 @@
 
 ## Half Precision
 
-Using half precision will not speed anything up, in fact will make the solver slower. The reason for this is that LAPACK and the BLAS do not (__YET__) support half precision, so all the clever stuff in
-there is missing. We provide a half precision LU factorization __/src/Factorizations/hlu!.jl__ that is better than nothing. It's a hack of Julia's  ```generic_lu!``` with threading and a couple
-complier directives. Even so, it's 2.5 -- 5 x __slower__ that a double precision LU. Half precision suppor is coming (Julia and Apple support it in hardware!) but for now, half precision is for
+Using half precision will not speed anything up, in fact it will make 
+the solver slower. The reason for this is that LAPACK and the BLAS 
+do not (__YET__) support half precision, so all the clever stuff in
+there is missing. We provide a half precision LU
+factorization __/src/Factorizations/hlu!.jl__ that is better than nothing. 
+It's a hack of Julia's  ```generic_lu!``` with threading and a couple
+complier directives. Even so, it's 2.5 -- 5 x __slower__ than a 
+double precision LU. Half precision support is coming 
+(Julia and Apple support it in hardware!) but for now, half precision is for
 research in iterative refinement, not applications. 
 
 
-Here's a table (created with  __/Code_For_Docs/HalfTime.jl__ ) that illustrates the point. In the table we compare LAPACK's LU to the LU we compute with ```hlu!.jl```. The matrix is $I-G$.
+Here's a table (created with  __/Code_For_Docs/HalfTime.jl__ ) that illustrates the point. In the table we compare timings for
+LAPACK's LU to the LU we compute with ```hlu!.jl```. The matrix is $I-G$.
 
 ```
       N       F64       F32       F16     F16/F64 

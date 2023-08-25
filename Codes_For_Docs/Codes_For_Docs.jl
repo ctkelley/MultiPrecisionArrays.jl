@@ -9,6 +9,7 @@ using Printf
 
 include("IR.jl")
 include("HalfTime.jl")
+include("fprintTeX.jl")
 
 export IR
 export HalfTime
