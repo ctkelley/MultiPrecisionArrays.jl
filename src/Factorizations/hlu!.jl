@@ -1,5 +1,5 @@
 """
-hlu!(A::Matrix{T}) where {T}
+hlu!(A::Matrix{T}; minbatch=16) where {T}
 Return LU factorization of A
 
 C. T. Kelley, 2023
@@ -15,8 +15,10 @@ All I did in the factorization
 was thread the critical loop with Polyester.@batch and
 put @simd in the inner loop. These changes got me a 10x speedup
 on my Mac M2 Pro with 8 performance cores. I'm happy.
+
+I set Polyester's minbatch to 16, which worked best for me. YMMV
 """
-function hlu!(A::Matrix{T}) where {T}
+function hlu!(A::Matrix{T}; minbatch=16) where {T}
     pivot = RowMaximum()
     T == Float16 || @warn("Use hlu for half precision only!")
     LAPACK.chkfinite(A)
@@ -68,7 +70,7 @@ function hlu!(A::Matrix{T}) where {T}
                 info = k
             end
             # Update the rest
-            @batch for j = k+1:n
+            @batch minbatch=minbatch for j = k+1:n
                 @simd ivdep for i = k+1:m
                     @inbounds A[i, j] -= A[i, k] * A[k, j]
                     #                       @inbounds A[i,j] = muladd(A[i,k],-A[k,j],A[i,j])
@@ -80,9 +82,9 @@ function hlu!(A::Matrix{T}) where {T}
     return LU{T,typeof(A),typeof(ipiv)}(A, ipiv, convert(BlasInt, info))
 end
 
-function hlu(A)
+function hlu(A; minbatch=1)
     C = copy(A)
-    AF = hlu!(C)
+    AF = hlu!(C; minbatch=minbatch)
     return AF
 end
 

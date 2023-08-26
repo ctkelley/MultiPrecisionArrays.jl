@@ -1,7 +1,7 @@
-function HalfTime(p = 3; tex=false)
+function HalfTime(p = 3; tex=false, minbatch=1)
     pv = collect(1:1:p)
     ppv = 2 .^ pv
-    nv = 512 .* ppv
+    nv = 8 .* ppv
     Time_F = zeros(p, 5)
     headers = ["N", "F64", "F32", "F16", "F16/F64"]
     for p in pv
@@ -12,7 +12,7 @@ function HalfTime(p = 3; tex=false)
         AH = Float16.(AD)
         td = @belapsed lu($AD)
         ts = @belapsed lu($AS)
-        th = @belapsed hlu($AH)
+        th = @belapsed hlu($AH; minbatch=$minbatch)
         rt = th / td
         Time_F[p, :] = [N, td, ts, th, rt]
     end
