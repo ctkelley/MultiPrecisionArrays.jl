@@ -37,11 +37,11 @@ struct MPLEFact{TH<:AbstractFloat,TL<:AbstractFloat,TF<:Factorization}
 end
 
 
-function MPArray(AH::Array{Float32,2}; TL = Float16, onthefly=false)
-    AL = TL.(AH)
-    (m,n)=size(AH); res=ones(eltype(AH),n)
-    onthefly ?  MPA = MPEArray(AH, AL, res) : MPA = MPArray(AH, AL, res)
-end
+#function MPArray(AH::Array{Float32,2}; TL = Float16, onthefly=false)
+#    AL = TL.(AH)
+#    (m,n)=size(AH); res=ones(eltype(AH),n)
+#    onthefly ?  MPA = MPEArray(AH, AL, res) : MPA = MPArray(AH, AL, res)
+#end
 
 function MPEArray(AH::Array{Float32,2}; TL = Float16)
     AL = TL.(AH)

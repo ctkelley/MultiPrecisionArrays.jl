@@ -23,5 +23,10 @@ function MPArray(AH::Array{Float64,2}; TL = Float32, onthefly=false)
     (m,n)=size(AH); res=ones(eltype(AH),n)
     onthefly ?  MPA = MPEArray(AH, AL, res) : MPA = MPArray(AH, AL, res)
 end
+function MPArray(AH::Array{Float32,2}; TL = Float16, onthefly=false)
+    AL = TL.(AH)
+    (m,n)=size(AH); res=ones(eltype(AH),n)
+    onthefly ?  MPA = MPEArray(AH, AL, res) : MPA = MPArray(AH, AL, res)
+end
 
 
