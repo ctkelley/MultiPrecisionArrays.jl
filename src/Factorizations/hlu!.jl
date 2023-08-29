@@ -73,7 +73,7 @@ function hlu!(A::Matrix{T}; minbatch=16) where {T}
             @batch minbatch=minbatch for j = k+1:n
                 @simd ivdep for i = k+1:m
                     @inbounds A[i, j] -= A[i, k] * A[k, j]
-                    #                       @inbounds A[i,j] = muladd(A[i,k],-A[k,j],A[i,j])
+                    #@inbounds A[i,j] = muladd(A[i,k],-A[k,j],A[i,j])
                 end
             end
         end

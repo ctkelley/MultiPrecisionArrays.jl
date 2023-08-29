@@ -12,7 +12,7 @@ using Polyester
 # variations on iterative refinement.
 #
 
-include("Structs4MP/MPLight.jl")
+include("Structs4MP/MPArray.jl")
 include("Structs4MP/MPHeavy.jl")
 include("Factorizations/hlu!.jl")
 include("Factorizations/mplu!.jl")

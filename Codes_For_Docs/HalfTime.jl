@@ -1,7 +1,7 @@
-function HalfTime(p = 3; tex=false, minbatch=1)
+function HalfTime(p = 3; tex=false, minbatch=16)
     pv = collect(1:1:p)
     ppv = 2 .^ pv
-    nv = 8 .* ppv
+    nv = 512 .* ppv
     Time_F = zeros(p, 5)
     headers = ["N", "F64", "F32", "F16", "F16/F64"]
     for p in pv

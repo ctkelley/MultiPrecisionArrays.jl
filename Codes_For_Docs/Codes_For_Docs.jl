@@ -9,9 +9,12 @@ using Printf
 
 include("IR.jl")
 include("HalfTime.jl")
+include("Convergence.jl")
 include("fprintTeX.jl")
 
 export IR
 export HalfTime
+export Convergence
+export conv_tab
 
 end
