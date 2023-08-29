@@ -18,7 +18,7 @@ makedocs(
     pages = Any[
         "Home"=>"index.md",
         "More than you want to know" => "Details.md",
-        "MPArray Constructors" => Any["functions/MPArray.md"]
+        "MPArray Constructors" => Any["functions/MPArray.md",]
         "Factorizations"=>Any["functions/MPArray.md", "functions/mplu!.md"]
     ],
 )
