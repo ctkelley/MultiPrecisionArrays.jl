@@ -1,5 +1,5 @@
 """
-mplu!(MPA::MPArray)
+mplu!(MPA::Union{MPArray,MPEArray})
 
 Plain vanilla MPArray factorization.
 
@@ -33,7 +33,7 @@ function mplu!(MPA::Union{MPArray,MPEArray})
     if on_the_fly(MPA)
         MPF = MPLEFact(AH, AL, AF, residual)
     else
-        # For the plain vanilla MPArray
+    # For the plain vanilla MPArray
         MPF = MPLFact(AH, AL, AF, residual)
     end
     return MPF
