@@ -4,16 +4,20 @@ Default constructor for MPArray.
 
 C. T. Kelley 2023
 
-The difference between and MPArray and an MPEArray is that the 
-MPEArray does interprecision transfers on the fly.
+The difference between and MPArray and an MPEArray is that 
+MPEArray does interprecision transfers on the fly. Set onthefly = true
+and get an MPEArray.
 
 The MPArray data structure is
 
+```
 struct MPArray{TH<:AbstractFloat,TL<:AbstractFloat}
     AH::Array{TH,2}
     AL::Array{TL,2}
     residual::Vector{TH}
 end
+```
+The constructor just builds an MPArray with TH=Float64.
 
 MPEArray is exactly the same but the triangular solver dispatches
 differently.
