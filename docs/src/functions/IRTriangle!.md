@@ -1,4 +1,4 @@
 # IRTriangle!: Triangular solver for LU
 ```@docs
-IRTriangle!(AF::MPFact, r, rs, verbose)
+IRTriangle!(AF::Union{MPLFact,MPLEFact,MPHFact}, r, rs, verbose)
 ```
