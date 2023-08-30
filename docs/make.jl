@@ -20,7 +20,7 @@ makedocs(
         "More than you want to know" => "Details.md",
         "MPArray Constructors" => Any["functions/MPArray.md",],
         "Factorizations"=>Any["functions/hlu!.md", "functions/mplu!.md"],
-        "Solvers"=>Any["IRTriangle!.md"],
+        "Solvers"=>Any["functions/IRTriangle!.md"],
 ],
 )
 deploydocs(repo = "github.com/ctkelley/MultiPrecisionArrays.jl.git")
