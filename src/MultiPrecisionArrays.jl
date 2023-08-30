@@ -49,7 +49,7 @@ end
 
 import Base.\
 function \(AF::MPFact, b; verbose = false, reporting = false)
-    xi = mpgesl2(AF, b; verbose = verbose, reporting = reporting)
+    xi = mpgeslir(AF, b; verbose = verbose, reporting = reporting)
     return xi
 end
 
@@ -79,12 +79,12 @@ export mpglu!
 export mpqr!
 export mpcholesky!
 #
-# The solvers are mpgesl2 (iterative refinement) and mpgmir (IR-GMRES).
+# The solvers are mpgeslir (iterative refinement) and mpgmir (IR-GMRES).
 # I'm not working on more than that right now. I have overloaded
 # \ with these so you should not have to call them directly unless
 # you are looking at iteration statistics
 #
-export mpgesl2
+export mpgeslir
 export mpgmir
 #
 # Each MPArray data structure comes with a structure to store a factorization.
@@ -130,7 +130,7 @@ export MPGStats
 export MPIRStats
 
 include("Solvers/mpgmir.jl")
-include("Solvers/mpgesl2.jl")
+include("Solvers/mpgeslir.jl")
 include("Solvers/IRTriangle.jl")
 include("Structs4MP/MPStats.jl")
 

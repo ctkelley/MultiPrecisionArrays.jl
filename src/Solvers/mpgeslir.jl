@@ -1,10 +1,14 @@
 """
-mpgesl2(AF::MPFact, b; reporting=false, verbose=true)
+mpgeslir(AF::MPFact, b; reporting=false, verbose=true)
 
 Use a multi-precision factorization to solve a linear system with
 plain vanilla iterative refinement.
+
+MPFact is a union of all the MultiPrecision factorizations in the package. 
+The triangular solver will dispatch on the various types depending on
+how the interprecision transfers get done.
 """
-function mpgesl2(AF::MPFact, b; reporting = false, verbose = true)
+function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     #
     # What kind of problem are we dealing with?
     #
@@ -50,7 +54,6 @@ function mpgesl2(AF::MPFact, b; reporting = false, verbose = true)
     #
     # Initial residual
     #
-#    r = copy(b)
     r .= b
     tol = tolf * bnrm
     rs = bS
