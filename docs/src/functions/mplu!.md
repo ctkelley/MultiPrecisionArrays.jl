@@ -1,4 +1,4 @@
 # mplu!: Simple MPArray factorization
 ```@docs
-mplu!(MPA::MPArray)
+mplu!(MPA::Union{MPArray,MPEArray})
 ```

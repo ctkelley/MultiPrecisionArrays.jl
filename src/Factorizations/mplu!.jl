@@ -20,7 +20,7 @@ The
 
 Union{MPArray,MPEArray}
 
-lets me use the on_the_fly trait to figure out what do to.
+lets me use the ```on_the_fly``` trait to figure out what do to.
 
 """
 function mplu!(MPA::Union{MPArray,MPEArray})

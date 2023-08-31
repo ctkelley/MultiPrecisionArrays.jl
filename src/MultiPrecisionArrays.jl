@@ -15,13 +15,16 @@ using Polyester
 include("Structs4MP/MPBase.jl")
 include("Structs4MP/MPArray.jl")
 include("Structs4MP/MPHeavy.jl")
+
+MPFact = Union{MPLFact,MPLEFact,MPHFact}
+MPLFacts = Union{MPLFact,MPLEFact}
+
 include("Factorizations/hlu!.jl")
 include("Factorizations/mplu!.jl")
 include("Factorizations/mpglu!.jl")
 
 #MPIRArray = Union{MPArray,MPHArray}
 
-MPFact = Union{MPLFact,MPLEFact,MPHFact}
 
 on_the_fly(x::MPArray) = false
 on_the_fly(x::MPEArray) = true
@@ -33,7 +36,6 @@ is_heavy(x::MPLFact) = false
 is_heavy(x::MPLEFact) = false
 
 
-MPLFacts = Union{MPLFact,MPLEFact}
 
 import Base.eltype
 
