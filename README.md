@@ -17,12 +17,21 @@ what a double precision LU costs. This may be as good as it gets unless someone 
 
 __The half precision LU is much faster (more than 10x) as of v0.0.3. Look at [src/Factorizations/hlu.jl](src/Factorizations/hlu.jl) to see the hack job I did to [generic_lu](https://github.com/JuliaLang/julia/blob/master/stdlib/LinearAlgebra/src/lu.jl).__
 
+__The documentation is much better than it was in v0.0.3.__
 
 ## Is MultiPrecisionArrays.jl ready for prime time?
 
 No
 
-__This package is nowhere close to ready for registration or release. It's public only to help me do CI and clean up the docs.__
+__This package is nowhere close to ready for registration or release to a general audience. It's public only to help me do CI and clean up the docs.__
+
+I may register this in a few weeks so a few people who work in this field can play with it. Before I do that I need to
+
+- Complete the documentation
+- Get a first draft of the ArXiv preprint posted
+- Get more examples
+
+I do not plan to announce it on Discourse anytime soon.
 
 __Please do not make PRs. If you stumble on this mess and have questions/ideas ..., raise an issue or email me at tim_kelley@ncsu.edu__
 
