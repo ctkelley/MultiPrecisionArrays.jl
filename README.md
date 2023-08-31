@@ -25,7 +25,7 @@ No
 
 __This package is nowhere close to ready for registration or release to a general audience. It's public only to help me do CI and clean up the docs.__
 
-I may register this in a few weeks so a few people who work in this field can play with it. Before I do that I need to
+I may register this in a few weeks so some people who work in this field can play with it. Before I do that I need to
 
 - Complete the documentation
 - Get a first draft of the ArXiv preprint posted
