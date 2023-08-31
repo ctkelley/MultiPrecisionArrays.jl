@@ -19,9 +19,6 @@ include("Structs4MP/MPHeavy.jl")
 MPFact = Union{MPLFact,MPLEFact,MPHFact}
 MPLFacts = Union{MPLFact,MPLEFact}
 
-include("Factorizations/hlu!.jl")
-include("Factorizations/mplu!.jl")
-include("Factorizations/mpglu!.jl")
 
 #MPIRArray = Union{MPArray,MPHArray}
 
@@ -114,6 +111,7 @@ export MPHArray
 #
 export MPLFact
 export MPGHFact
+export MPFact
 #
 #
 #
@@ -135,6 +133,9 @@ include("Solvers/mpgmir.jl")
 include("Solvers/mpgeslir.jl")
 include("Solvers/IRTriangle.jl")
 include("Structs4MP/MPStats.jl")
+include("Factorizations/hlu!.jl")
+include("Factorizations/mplu!.jl")
+include("Factorizations/mpglu!.jl")
 
 module Examples
 export Gmat

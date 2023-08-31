@@ -18,7 +18,7 @@ end
 
 #
 # The MPAE and MPLEFact structures tell the solver to 
-# do the triangular solve in high precision. The E stands
+# do the triangular solve in high precision (ie on-the-fly). The E stands
 # for expensive
 #
 
@@ -36,12 +36,6 @@ struct MPLEFact{TH<:AbstractFloat,TL<:AbstractFloat,TF<:Factorization}
     residual::Vector{TH}
 end
 
-
-#function MPArray(AH::Array{Float32,2}; TL = Float16, onthefly=false)
-#    AL = TL.(AH)
-#    (m,n)=size(AH); res=ones(eltype(AH),n)
-#    onthefly ?  MPA = MPEArray(AH, AL, res) : MPA = MPArray(AH, AL, res)
-#end
 
 function MPEArray(AH::Array{Float32,2}; TL = Float16)
     AL = TL.(AH)
