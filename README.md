@@ -3,7 +3,7 @@
 [![][codecov-img]][codecov-url]
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7521427.svg)](https://doi.org/10.5281/zenodo.7521427)
 
-# MultiPrecisionArrays.jl v0.0.4
+# MultiPrecisionArrays.jl v0.0.5
 
 ## [C. T. Kelley](https://ctk.math.ncsu.edu)
 
