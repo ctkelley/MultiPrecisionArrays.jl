@@ -79,7 +79,7 @@ low precision copy.
 As written in the function, the defect uses ```ldiv!``` to compute
 ```AF\r```. This means that the two triangular factors are stored in
 single precision and interprecision transfers are done with each
-step in the factorization. While that ``on the fly`` interprecision 
+step in the factorization. While that ```on the fly``` interprecision 
 transfer is an option, and is needed in many situtations, the
 default is to downcase $r$ to low precision, do the solve entirely in
 low precision, and the upcast the result. The code for that looks like
@@ -138,7 +138,7 @@ julia> N=4096; G=Gmat(N); A=I - G; x=ones(N); b=A*x;
 julia> @belapsed lu!(AC) setup=(AC=copy($A))
 1.43148e-01
 ```
-At this point we have timed ```lu1```. The next step is to construct
+At this point we have timed ```lu!```. The next step is to construct
 an MPArray and factor the low precision matrix. We use the
 constructor ```MPArray``` to store $A$ and the low precision copy
 and the function ```mplu!``` to factor the low precision copy in place
