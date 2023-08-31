@@ -101,20 +101,23 @@ using MultiPrecisionArrays.Examples
 ```
 to get to it.
 
-The example below compares the cost of a double precision factorization to a MPArray factorization. The ```MPArray``` structure has high precision and low precision matrix. The structure we will start with 
+The example below compares the cost of a double precision factorization to a MPArray factorization. The ```MPArray``` structure has a high precision and a low precision matrix. The structure we will start with 
 is
 ```
 struct MPArray{TH<:AbstractFloat,TL<:AbstractFloat}
     AH::Array{TH,2}
     AL::Array{TL,2}
+    residual::Vector{TH}
 end
 ```
+The structure also stores the residual. 
 
 We will be using the constructor
 ```
 function MPArray(AH::Array{Float64,2}; TL = Float32, onthefly=false)
     AL = TL.(AH)
-    onthefly ?  MPA = MPEArray(AH, AL) : MPA = MPArray(AH, AL)
+    (m,n)=size(AH); res=ones(eltype(AH),n)
+    onthefly ?  MPA = MPEArray(AH, AL, res) : MPA = MPArray(AH, AL, res)
 end
 ```
 The MPArray uses the storage for A, so be carefull about using A for anything else.
