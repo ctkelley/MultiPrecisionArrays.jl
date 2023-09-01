@@ -18,6 +18,7 @@ function IR(A, b)
     # in this case
     #
     itcount = 0
+    # The while loop will get more attention later.
     while (norm(r) &gt; tol * norm(b)) &amp;&amp; (itcount &lt; 10)
         #
         # Store r and d = AF\r in the same place.
@@ -35,7 +36,7 @@ r .= Float64.(ds)*normr</code></pre><p>The scaling by <code>1.0/normr</code> avo
     \left\{\begin{array}{c}
         y (1-x) ; \ x &gt; y\\
         x (1-y) ; \ x \le y
-    \end{array}\right.\]</p><p>The eigenvalues of <span>$G$</span> are <span>$1/(n^2 \pi^2)$</span> for <span>$n = 1, 2, \dots$</span>.</p><p>The code for this is in the <strong>/src/Examples</strong> directory.  The file is <strong>Gmat.jl</strong>.</p><p>In the example we will build a matrix <span>$A = I - \alpha G$</span>. In the examples we will use <span>$\alpha=1.0$</span>, a very well conditioned case, and <span>$\alpha=800.0$</span> This latter case is very near singularity.</p><p>We will solve a linear system with both double precision <span>$LU$</span> and an MPArray.  The problem setup is pretty simple</p><pre><code class="nohighlight hljs">julia&gt; using MultiPrecisionArrays
+    \end{array}\right.\]</p><p>The eigenvalues of <span>$G$</span> are <span>$1/(n^2 \pi^2)$</span> for <span>$n = 1, 2, \dots$</span>.</p><p>The code for this is in the <strong>/src/Examples</strong> directory.  The file is <strong>Gmat.jl</strong>.</p><p>In the example we will build a matrix <span>$A = I - \alpha G$</span>. In the examples we will use <span>$\alpha=1.0$</span>, a very well conditioned case, and <span>$\alpha=800.0$</span> This latter case is very near singularity.</p><p>We will solve a linear system with both double precision <span>$LU$</span> and an MPArray and compare execution time and the quality of the results. The problem setup is pretty simple</p><pre><code class="nohighlight hljs">julia&gt; using MultiPrecisionArrays
 
 julia&gt; using BenchmarkTools
 
@@ -44,7 +45,7 @@ julia&gt; using MultiPrecisionArrays.Examples
 julia&gt; N=4096; G=Gmat(N); A=I - G; x=ones(N); b=A*x;
 
 julia&gt; @belapsed lu!(AC) setup=(AC=copy($A))
-1.43148e-01</code></pre><p>At this point we have timed <code>lu!</code>. The next step is to construct an MPArray and factor the low precision matrix. We use the constructor <code>MPArray</code> to store <span>$A$</span> and the low precision copy and the function <code>mplu!</code> to factor the low precision copy in place</p><pre><code class="nohighlight hljs">julia&gt; MPA=MPArray(A);
+1.43148e-01</code></pre><p>At this point we have timed <code>lu!</code>. The next step is to construct an MPArray and factor the low precision matrix. We use the constructor <code>MPArray</code> to store <span>$A$</span>, the low precision copy and the residual. The we apply the function <code>mplu!</code> to factor the low precision copy in place.</p><pre><code class="nohighlight hljs">julia&gt; MPA=MPArray(A);
 
 julia&gt; @belapsed mplu!(MPAC) setup=(MPAC=deepcopy($MPA))
 8.02158e-02</code></pre><p>So the single precision factorization is roughly half the cost of the double precision one. Now for the solves. Both <code>lu!</code> and <code>mplu!</code> produce a factorization object and <code>\</code> works with both. You have to be a bit careful because MPA and A share storage. So I will use <code>lu</code> instead of <code>lu!</code> when factoring <span>$A$</span>.</p><pre><code class="nohighlight hljs">julia&gt; AF=lu(A); xf = AF\b;
@@ -52,4 +53,4 @@ julia&gt; @belapsed mplu!(MPAC) setup=(MPAC=deepcopy($MPA))
 julia&gt; MPAF=mplu!(MPA); xmp=MPAF\b;
 
 julia&gt; println(norm(xf-x,Inf),&quot;  &quot;,norm(xmp-x,Inf))
-7.41629e-14  8.88178e-16</code></pre><p>You can see that the solutions are equally good.</p></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="Details/">More than you want to know »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.25 on <span class="colophon-date" title="Thursday 31 August 2023 14:57">Thursday 31 August 2023</span>. Using Julia version 1.9.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+7.41629e-14  8.88178e-16</code></pre><p>You can see that the solutions are equally good.</p></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="Details/">More than you want to know »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.25 on <span class="colophon-date" title="Friday 1 September 2023 18:32">Friday 1 September 2023</span>. Using Julia version 1.9.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
