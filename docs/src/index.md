@@ -57,6 +57,7 @@ function IR(A, b)
     # in this case
     #
     itcount = 0
+    # The while loop will get more attention later.
     while (norm(r) > tol * norm(b)) && (itcount < 10)
         #
         # Store r and d = AF\r in the same place.
@@ -124,7 +125,8 @@ In the example we will build a matrix $A = I - \alpha G$. In the examples
 we will use $\alpha=1.0$, a very well conditioned case, and $\alpha=800.0$
 This latter case is very near singularity.
 
-We will solve a linear system with both double precision $LU$ and an MPArray. 
+We will solve a linear system with both double precision $LU$ and an MPArray
+and compare execution time and the quality of the results.
 The problem setup is pretty simple
 ```
 julia> using MultiPrecisionArrays
@@ -140,8 +142,9 @@ julia> @belapsed lu!(AC) setup=(AC=copy($A))
 ```
 At this point we have timed ```lu!```. The next step is to construct
 an MPArray and factor the low precision matrix. We use the
-constructor ```MPArray``` to store $A$ and the low precision copy
-and the function ```mplu!``` to factor the low precision copy in place
+constructor ```MPArray``` to store $A$, the low precision copy
+and the residual. The we apply
+the function ```mplu!``` to factor the low precision copy in place.
 ```
 julia> MPA=MPArray(A);
 
@@ -162,3 +165,5 @@ julia> println(norm(xf-x,Inf),"  ",norm(xmp-x,Inf))
 7.41629e-14  8.88178e-16
 ```
 You can see that the solutions are equally good.
+
+
