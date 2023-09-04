@@ -1,6 +1,14 @@
 # More than you want to know
 
 ## Interprecision Transfers: Part I
+```
+    n      LU64       LU32       HPS        MPS        LPS   LU32/MPS
+  512    1.0e-03    9.7e-04    5.0e-05    1.9e-04    2.8e-05 5.1e+00
+ 1024    3.8e-03    3.0e-03    1.9e-04    4.2e-04    1.0e-04 7.2e+00
+ 2048    2.2e-02    1.4e-02    8.9e-04    3.7e-03    4.1e-04 3.8e+00
+ 4096    1.5e-01    8.3e-02    4.8e-03    1.5e-02    2.3e-03 5.7e+00
+ 8192    1.1e+00    6.0e-01    2.0e-02    5.9e-02    9.8e-03 1.0e+01
+```
 
 
 ## Half Precision

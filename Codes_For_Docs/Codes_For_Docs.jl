@@ -10,11 +10,14 @@ using Printf
 include("IR.jl")
 include("HalfTime.jl")
 include("Convergence.jl")
+include("MakeMPTab.jl")
 include("fprintTeX.jl")
+
 
 export IR
 export HalfTime
 export Convergence
+export MakeMPTab
 export conv_tab
 
 end
