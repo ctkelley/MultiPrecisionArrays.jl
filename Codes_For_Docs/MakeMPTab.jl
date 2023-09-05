@@ -1,8 +1,11 @@
 #
 # This file makes the table comparing the triangular solve options
-# It's the first table in the talk and Table 1.xx in the paper
+# for computer time.
 #
-
+"""
+MakeMPTab(m = 4, texok = false; T = Float64)
+Make a nice table of the timings for the solves.
+"""
 function MakeMPTab(m = 4, texok = false; T = Float64)
     AT = zeros(m, 7)
     p = collect(0:1:m-1)
@@ -43,6 +46,10 @@ function MakeMPTab(m = 4, texok = false; T = Float64)
     return AT
 end
 
+"""
+pitch(n; T = Float64)
+Collect the timings for the triangular solve options.
+"""
 function pitch(n; T = Float64)
     G=Gmat(n); 
     x=ones(n); 
@@ -64,17 +71,26 @@ function pitch(n; T = Float64)
     end
     AHF = lu(AH)
     ASF = lu(AS)
+#
+# Prints the 
+#
     tluh = @belapsed lu(AV) setup = (AV = copy($AH))
-    println("High precsion LU time = $tluh")
     tlus = @belapsed lu(AVS) setup = (AVS = copy($AS))
-    println("Low precision LU time = $tlus")
     thsol = @belapsed $AHF \ $bh
-    println("High precision solve time = $thsol")
     tssol = @belapsed $ASF \ $bh
-    println("MPS time = $tssol")
     tgssol = @belapsed $ASF \ $bs
-    println("LPS time = $tgssol")
     ratio=tlus/tssol
+#
+# Prints the play-by-play to the REPL for my debugging.
+#
+playbyplay=false
+if playbyplay
+    println("High precsion LU time = $tluh")
+    println("Low precision LU time = $tlus")
+    println("High precision solve time = $thsol")
+    println("MPS time = $tssol")
+    println("LPS time = $tgssol")
+end
     rvec = [tluh tlus thsol tssol tgssol ratio]
     return rvec
 end

@@ -57,6 +57,12 @@ function \(AF::MPGHFact, b; verbose = false, reporting = false)
     return xi
 end
 
+function \(MPA::MPArray, b; verbose=false, reporting=false)
+          AC=copy(MPA.AH); MPAC=MPArray(AC); MPF=mplu!(MPAC); 
+          xi=mpgeslir(MPF, b; verbose = verbose, reporting = reporting)
+          return xi
+end
+
 #
 # hlu and hlu! are hacks of the Julia generic_lu source. I've used
 # Polyester.jl to thread them and done some tweaking. On

@@ -11,6 +11,7 @@ include("IR.jl")
 include("HalfTime.jl")
 include("Convergence.jl")
 include("MakeMPTab.jl")
+include("Quality.jl")
 include("fprintTeX.jl")
 
 
@@ -18,6 +19,7 @@ export IR
 export HalfTime
 export Convergence
 export MakeMPTab
+export Quality
 export conv_tab
 
 end
