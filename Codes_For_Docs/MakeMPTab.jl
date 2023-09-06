@@ -74,8 +74,8 @@ function pitch(n; T = Float64)
 #
 # Prints the 
 #
-    tluh = @belapsed lu(AV) setup = (AV = copy($AH))
-    tlus = @belapsed lu(AVS) setup = (AVS = copy($AS))
+    tluh = @belapsed lu(AV) setup = (AV = copy($AH)) evals=1
+    tlus = @belapsed lu(AVS) setup = (AVS = copy($AS)) evals=1
     thsol = @belapsed $AHF \ $bh
     tssol = @belapsed $ASF \ $bh
     tgssol = @belapsed $ASF \ $bs

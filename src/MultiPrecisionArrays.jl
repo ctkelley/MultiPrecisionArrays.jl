@@ -16,6 +16,7 @@ include("Structs4MP/MPBase.jl")
 include("Structs4MP/MPArray.jl")
 include("Structs4MP/MPHeavy.jl")
 
+MPAArray = Union{MPArray, MPEArray}
 MPFact = Union{MPLFact,MPLEFact,MPHFact}
 MPLFacts = Union{MPLFact,MPLEFact}
 
@@ -57,9 +58,8 @@ function \(AF::MPGHFact, b; verbose = false, reporting = false)
     return xi
 end
 
-function \(MPA::MPArray, b; verbose=false, reporting=false)
-          AC=copy(MPA.AH); MPAC=MPArray(AC); MPF=mplu!(MPAC); 
-          xi=mpgeslir(MPF, b; verbose = verbose, reporting = reporting)
+function \(MPA::Union{MPArray,MPEArray}, b; verbose=false, reporting=false)
+          xi = mpgeslir(MPA, b; verbose = verbose, reporting = reporting)
           return xi
 end
 
@@ -121,6 +121,7 @@ export MPFact
 #
 #
 #
+export MPAArray
 export MPEArray
 export MPFArray
 export MPHFact

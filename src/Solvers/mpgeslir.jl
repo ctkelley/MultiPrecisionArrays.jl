@@ -1,4 +1,24 @@
 """
+mpgeslir(MPA::MPAArray, b; reporting = false, verbose = true)
+
+Use a multi-precision factorization to solve a linear system with
+plain vanilla iterative refinement.
+
+This version is analogous to lu (not lu!) and builds a fresh
+MPArray from the high precision matrix, but does not copy that 
+matrix. After that is the factor with mplu! and the solve.
+
+Just like lu, this avoids overwriting the low precision part of MPA.
+I use this to get some timing results. 
+"""
+function mpgeslir(MPA::MPAArray, b; reporting = false, verbose = true)
+AC=MPA.AH
+MPAC=MPArray(AC; onthefly=on_the_fly(MPA))
+MPF=mplu!(MPAC);
+xi=\(MPF, b; reporting=reporting, verbose=verbose)
+return xi
+end
+"""
 mpgeslir(AF::MPFact, b; reporting=false, verbose=true)
 
 Use a multi-precision factorization to solve a linear system with
