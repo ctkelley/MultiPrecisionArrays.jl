@@ -119,8 +119,8 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
         #
         # If the residual norm increased, complain.
         #
-        complain_resid = (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
-        complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
+#        complain_resid = (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
+#        complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
     end
     verbose && println("Residual history = $rhist")
     if reporting

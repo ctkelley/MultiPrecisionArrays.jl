@@ -28,7 +28,7 @@ research in iterative refinement, not applications.
 
 Here's a table (created with  __/Code_For_Docs/HalfTime.jl__ ) that illustrates the point. In the table we compare timings for
 LAPACK's LU to the LU we compute with ```hlu!.jl```. The matrix is 
-$I-800.0**G$.
+$I-800.0*G$.
 
 ```
       N       F64       F32       F16     F16/F64 
@@ -78,5 +78,5 @@ julia> norm(z-xd,Inf)
 2.34975e-01
 ```
 So you get very poor, but unsurprising, results. While __MultiPrecisionArrays.jl__ supports half precision and I use it all the time, it is not something you would use in your own
-work without looking at the literature and makeing certain you are prepared for strange results. Gettting good results consistently from half precision is an active research area.
+work without looking at the literature and making certain you are prepared for strange results. Gettting good results consistently from half precision is an active research area.
 
