@@ -4,17 +4,18 @@ mpgeslir(MPA::MPAArray, b; reporting = false, verbose = true)
 Use a multi-precision factorization to solve a linear system with
 plain vanilla iterative refinement.
 
-This version is analogous to lu (not lu!) and builds a fresh
-MPArray from the high precision matrix, but does not copy that 
-matrix. After that is the factor with mplu! and the solve.
+This version is analogous to A\b and combines the factorization
+and the solve. You start with MPA=MPArray(A) and then pass MPA
+to mpgeslA\b and combines the factorization
+and the solve. 
 
-Just like lu, this avoids overwriting the low precision part of MPA.
-I use this to get some timing results. 
+Unlike lu, this does overwrite the low precision part of MPA.
+I use this to get some timing results  and it's also convenient
+if you want to do factor and solve in one statement. 
 """
 function mpgeslir(MPA::MPAArray, b; reporting = false, verbose = true)
-AC=MPA.AH
-MPAC=MPArray(AC; onthefly=on_the_fly(MPA))
-MPF=mplu!(MPAC);
+#MPZ=deepcopy(MPA)
+MPF=mplu!(MPA);
 xi=\(MPF, b; reporting=reporting, verbose=verbose)
 return xi
 end
@@ -45,10 +46,12 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     TFact = MPStats.TFact
     #
     # Are the precisions consistent? If not, I have a bug somewhere.
-    # Otherwise, set the tolerance on the iteration to 100*eps
+    # Otherwise, set the tolerance on the iteration to 10*eps.
+    # If the iteration can't meet the tolerance, terminate when
+    # the residual norms stagnate (res_old > .9 res_new)
     #
     (TH == TB) || error("inconsistent precisions")
-    tolf = eps(TH)*TH.(100.0)
+    tolf = eps(TH)*TH.(10.0)
     #
     # Keep the records and accumulate the statistics. 
     #
@@ -81,14 +84,14 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
 #
     rhist = Vector{Float64}()
     rnrm = norm(r, normtype)
-    rnrmx = rnrm * TB(1.1)
+    rnrmx = rnrm * TB(2.0)
     oneb = TB(1.0)
     itc = 0
     #
     # Put initial residual norm into the history and iterate.
     #
     push!(rhist, rnrm)
-    while (rnrm > tol) && (rnrm < rnrmx)
+    while (rnrm > tol) && (rnrm <= .9*rnrmx)
         #
         # Scale the residual
         #

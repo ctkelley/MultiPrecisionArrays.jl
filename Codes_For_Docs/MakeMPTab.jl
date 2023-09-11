@@ -19,7 +19,7 @@ function MakeMPTab(m = 4, texok = false; T = Float64)
     @printf(
         "%5s     %5s      %5s       %3s        %3s        %3s   %8s\n",
         "n",
-        "LU64",
+        "MV64",
         "LU32",
         "HPS",
         "MPS",
@@ -38,7 +38,7 @@ function MakeMPTab(m = 4, texok = false; T = Float64)
             AT[idim, 7]
         )
     end
-    headers = ["N", "LU64", "LU32", "HPS", "MPS", "LPS", "LU32/MPS"]
+    headers = ["N", "MV64", "LU32", "HPS", "MPS", "LPS", "LU32/MPS"]
     formats = ("%5d  &  %5.1e &   %5.1e  &  %5.1e &  %5.1e  & %5.1e & %5.1e")
     if texok
         fprintTeX(headers, formats, AT)
@@ -74,7 +74,8 @@ function pitch(n; T = Float64)
 #
 # Prints the 
 #
-    tluh = @belapsed lu(AV) setup = (AV = copy($AH)) evals=1
+#    tluh = @belapsed lu(AV) setup = (AV = copy($AH)) evals=1
+    tluh = @belapsed $AH*$bh 
     tlus = @belapsed lu(AVS) setup = (AVS = copy($AS)) evals=1
     thsol = @belapsed $AHF \ $bh
     tssol = @belapsed $ASF \ $bh
