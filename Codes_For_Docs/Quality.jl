@@ -41,12 +41,12 @@ for idim=1:m
     IRData[idim,:]=[N nerra nerre nresa nrese TLP TMP]
 #    println("errLP = $nerra,  errMP=$nerre, ResLP=$nresa, ResMP=$nrese")
 end
+println(itcount)
 if texok
 headers = ["N", "ELP", "EMP", "RLP", "RMP", "TLP", "TMP"]
 formats = ("%5d  &  %5.1e &   %5.1e  &  %5.1e &  %5.1e  & %5.1e & %5.1e")
 fprintTeX(headers,formats,IRData)
 else
-println(itcount)
 @printf("%s  %s   %s   %s  %s   %s   %s \n", "    N", "    ELP", 
              "     EMP", "     RLP", "       RMP","     TLP", "    TMP")
 for idim=1:m

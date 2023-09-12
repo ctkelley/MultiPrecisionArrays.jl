@@ -4,10 +4,10 @@
 
 [MultiPrecisionArrays.jl](https://github.com/ctkelley/MultiPrecisionArrays.jl) is a package for iterative refinement. 
 
-This package provides data atructures and solvers for several variants of iterative refinement. It will become much more useful when half precision (aka ```Float16```) is fully supported in LAPACK/BLAS. For now, it's only general-purpose
+This package provides data structures and solvers for several variants of iterative refinement. It will become much more useful when half precision (aka ```Float16```) is fully supported in LAPACK/BLAS. For now, it's only general-purpose
 application is classical iterative refinement with double precision equations and single precision factorizations.
 
-The half precision stuff is good for those of us doing research in this field. Half precision performace has progressed to the point where you can acutally get things done. On an Apple M2-Pro, a half precision LU only costs 3--5 times
+The half precision stuff is good for those of us doing research in this field. Half precision performance has progressed to the point where you can actually get things done. On an Apple M2-Pro, a half precision LU only costs 3--5 times
 what a double precision LU costs. This may be as good as it gets unless someone wants to duplicate the LAPACK implementation and get the benefits from blocking, recursion, and clever cache management.
 
 We use a hack-job LU factorization for half precision. Look at the source
@@ -25,7 +25,7 @@ __IR(A, b)__
 - While $\| r \|$ is too large
   - Compute the defect $d = (LU)^{-1} r$
   - Correct the solution $x = x + d$
-  - Update the residuial $r = b - Ax$
+  - Update the residual $r = b - Ax$
 - end
 
 In Julia, a code to do this would solve the linear system $A x = b$ in double precision by using a
@@ -33,7 +33,7 @@ factorization in a lower precision, say single, within a residual correction ite
 to allocate storage for a copy of $A$ is the lower precision and factor that copy. 
 
 Then one has to determine what the line
-$d = (LU)^{-1} r$ means. Do you cast $r$ into the lower precison before the solve or not? __MultiPrecisionArrays.jl__ provides
+$d = (LU)^{-1} r$ means. Do you cast $r$ into the lower precision before the solve or not? __MultiPrecisionArrays.jl__ provides
 data structures and solvers to manage this. 
 
 Here's a simple Julia function for IR that
@@ -74,15 +74,15 @@ end
 The __MPArray__ structure contains both $A$, the low precision copy,
 and a vector for the residual. 
 This lets you allocate the data in advance an reuse the structure
-for other right hand sides without rebuilting (or refactoring!) the
+for other right hand sides without rebuilding (or refactoring!) the
 low precision copy. 
 
 As written in the function, the defect uses ```ldiv!``` to compute
 ```AF\r```. This means that the two triangular factors are stored in
 single precision and interprecision transfers are done with each
 step in the factorization. While that ```on the fly``` interprecision 
-transfer is an option, and is needed in many situtations, the
-default is to downcase $r$ to low precision, do the solve entirely in
+transfer is an option, and is needed in many situations, the
+default is to downcast $r$ to low precision, do the solve entirely in
 low precision, and the upcast the result. The code for that looks like
 ```
 normr=norm(r)

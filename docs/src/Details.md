@@ -42,7 +42,7 @@ for double, single, and half precision, and the ratio of the half
 precision timings to double. The timings came from Julia 1.10-beta2
 running on an Apple M2 Pro with 8 performance cores.
 
-Half precision is also difficult to use properly. The low precsion can 
+Half precision is also difficult to use properly. The low precision can 
 make iterative refinement fail because the half precision factorization 
 can have a large error. Here is an example to illustrate this point. 
 The matrix here is modestly ill-conditioned and you can see that in the 
@@ -78,5 +78,5 @@ julia> norm(z-xd,Inf)
 2.34975e-01
 ```
 So you get very poor, but unsurprising, results. While __MultiPrecisionArrays.jl__ supports half precision and I use it all the time, it is not something you would use in your own
-work without looking at the literature and making certain you are prepared for strange results. Gettting good results consistently from half precision is an active research area.
+work without looking at the literature and making certain you are prepared for strange results. Getting good results consistently from half precision is an active research area.
 
