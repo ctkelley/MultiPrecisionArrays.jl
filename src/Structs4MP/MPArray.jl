@@ -30,7 +30,7 @@ function MPArray(AH::Array{Float64,2}; TL = Float32, onthefly=false)
 end
 """
 MPArray(AH::Array{Float32,2}; TL = Float16, onthefly=false)
-Default single precsion constructor for MPArray.
+Default single precision constructor for MPArray.
 
 So if your high precision array is single, then your low precision
 array is half (Duh!). 
