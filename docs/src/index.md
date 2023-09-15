@@ -91,7 +91,7 @@ ldiv!(AF, ds)
 r .= Float64.(ds)*normr
 ```
 The scaling by ```1.0/normr``` avoids underflow, which is most important
-when the low precision is $Float16$. We will discuss interprecision 
+when the low precision is ```lFloat16```. We will discuss interprecision 
 transfer costs later.
 
 ## Integral Equations Example
@@ -99,7 +99,7 @@ transfer costs later.
 The submodule __MultiPrecisionArrays.Examples__ has an example which we will 
 use for most of the documentation. The function ```Gmat(N)``` returns
 the trapeziod rule discretization of the Greens operator 
-for $-d^2/dx^2$ on $[0,1]$
+for $-d^2/dx^2$ on $[0,1]$ with homogeneous Dirichlet boundary conditions.
 
 ```math 
 G u(x) = \int_0^1 g(x,y) u(y) \, dy 
