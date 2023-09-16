@@ -4,7 +4,7 @@ mpgeslir(MPA::MPAArray, b; reporting = false, verbose = true)
 Use a multi-precision factorization to solve a linear system with
 plain vanilla iterative refinement.
 
-This version is analogous to A\b and combines the factorization
+This version is analogous to ```A\\b``` and combines the factorization
 and the solve. You start with MPA=MPArray(A) and then pass MPA
 to mpgeslA\b and combines the factorization
 and the solve. 
