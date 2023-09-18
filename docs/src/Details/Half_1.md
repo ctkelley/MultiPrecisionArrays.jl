@@ -117,10 +117,10 @@ A d = r
 where one replaces $A$ with the low precision factors
 $\ml \mU$. In GMRES-IR one solves the correction
 equation with a left-preconditioned GMRES iteration using
-$\mU^{-1} \ml^{-1}$ as
+$U^{-1} L^{-1}$ as
 the preconditioner. The preconditioned equation is
 ```math
-\mU^{-1} \ml^{-1} \ma \vd = \mU^{-1} \ml^{-1} \vr.
+U^{-1} L^{-1}  A d = U^{-1} L^{-1} r.
 ```
 
 GMRES-IR will not be as efficient as IR because each iteration is itself
