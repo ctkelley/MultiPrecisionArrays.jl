@@ -16,15 +16,18 @@ function MakeMPTab(m = 4, texok = false; T = Float64)
         AT[idim, 2:7] = pitch(n; T = T)
         AT[idim, 1] = n
     end
+    T==Float64 ?  LULow = "LU32" : LULow="LU16"
+    T==Float64 ?  MVHigh = "MV64" : MVHigh="MV32"
     @printf(
         "%5s     %5s      %5s       %3s        %3s        %3s   %8s\n",
         "n",
-        "MV64",
-        "LU32",
+        "$MVHigh",
+        "$LULow",
+#        "LU32",
         "HPS",
         "MPS",
         "LPS",
-        "LU32/MPS"
+        "$LULow/MPS"
     )
     for idim = 1:m
         @printf(
@@ -38,7 +41,7 @@ function MakeMPTab(m = 4, texok = false; T = Float64)
             AT[idim, 7]
         )
     end
-    headers = ["N", "MV64", "LU32", "HPS", "MPS", "LPS", "LU32/MPS"]
+    headers = ["N", "$MVHigh", "$LULow", "HPS", "MPS", "LPS", "$LULow/MPS"]
     formats = ("%5d  &  %5.1e &   %5.1e  &  %5.1e &  %5.1e  & %5.1e & %5.1e")
     if texok
         fprintTeX(headers, formats, AT)
