@@ -1,4 +1,4 @@
-# Half Precision
+# Half Precision and GMRES-IR
 
 Using half precision will not speed anything up, in fact it will make 
 the solver slower. The reason for this is that LAPACK and the BLAS 
@@ -66,3 +66,69 @@ julia> norm(z-xd,Inf)
 ```
 So you get very poor, but unsurprising, results. While __MultiPrecisionArrays.jl__ supports half precision and I use it all the time, it is not something you would use in your own
 work without looking at the literature and making certain you are prepared for strange results. Getting good results consistently from half precision is an active research area.
+
+So, it should not be a surprise that IR also struggles with half precision.
+We will illustrate this with one simple example. In this example high
+precision will be single and low will be half. Using {\bf MPArray} with
+a single precision matrix will automatically make the low precision matrix
+half precision.
+```
+julia> N=4096; G=800.0*Gmat(N); A=I - Float32.(G);
+
+julia> x=ones(Float32,N); b=A*x;
+
+julia> MPA=MPArray(A); MPF=mplu!(MPA; onthefly=false);
+
+julia> y=MPF\b;
+
+julia> norm(b - A*y,Inf)
+1.05272e+02
+```
+So, IR completely failed for this example. We will show how to extract
+the details of the iteration in a later section.
+
+It is also worthwhile to see if doing the triangular solves on-the-fly
+(MPS) helps.
+
+```
+julia> MPB=MPArray(A; onthefly=true); MPBF=mplu!(MPB);
+
+julia> z=MPBF\b;
+
+julia> norm(b-A*z,Inf)
+1.28174e-03
+```
+So, MPS is better in the half precision case. Moreover, it is also less
+costly thanks to the limited support for half precision computing.
+For that reason, MPS is the default when high precision is single.
+
+However, on-the-fly solves are not enough to get good results and IR
+still terminates too soon.
+
+## GMRES-IR
+
+GMRES-IR solves the correction equation
+with a preconditioned GMRES iteration. One way to think of this
+is that the solve in the IR loop is an approximate solver for the
+correction equation
+```math
+A d = r
+```
+where one replaces $A$ with the low precision factors
+$\ml \mU$. In GMRES-IR one solves the correction
+equation with a left-preconditioned GMRES iteration using
+$\mU^{-1} \ml^{-1}$ as
+the preconditioner. The preconditioned equation is
+```math
+\mU^{-1} \ml^{-1} \ma \vd = \mU^{-1} \ml^{-1} \vr.
+```
+
+GMRES-IR will not be as efficient as IR because each iteration is itself
+an GMRES iteration and application of the preconditioned matrix-vector
+product has the same cost (solve + high precision matrix vector product)
+as a single IR iteration. However, if low precision is half, this approach
+can recover the residual norm one would get from a successful IR iteration.
+
+There is also a storage problem. One should allocate storage for the Krylov
+basis vectors.
+
