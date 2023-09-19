@@ -8,6 +8,7 @@ function mpgmir(AF::MPGFact, b; reporting = false, verbose = false, mpdebug = fa
     normtype = Inf
     TB = eltype(b)
     irtol = (TB == Float64) ? 1.e-14 : 1.e-7
+    tolf = TB.(10.0)*eps(TB)
     n = length(b)
     onetb = TB(1.0)
     bsc = copy(b)
@@ -19,12 +20,11 @@ function mpgmir(AF::MPGFact, b; reporting = false, verbose = false, mpdebug = fa
     #
     # Initialize GMRES-IR
     #
-    r = copy(b)
-#    mul!(r, AD, x)
-#    r .*= -onetb
-#    axpy!(onetb, bsc, r)
+    r = AF.residual
+    r .= b
+#    r = copy(b)
     rnrm = norm(r, normtype)
-    rnrmx = rnrm * TB(1.1)
+    rnrmx = rnrm * TB(2.0)
     rhist = Vector{TB}()
     push!(rhist, rnrm)
     eta = TB(1.e-8)
@@ -34,7 +34,8 @@ function mpgmir(AF::MPGFact, b; reporting = false, verbose = false, mpdebug = fa
     itc = 0
     has_basis(AF) ? VF=AF.VStore : VF = zeros(TB, n, 80)
     normdec = true
-    while (rnrm > irtol * bnorm) && (itc < 40) && normdec
+    kl_store=kstore(n,"gmres")
+    while (rnrm > tolf * bnorm) && ( rnrm <= .9 * rnrmx )
         x0 = zeros(TB, n)
         #
         # Scale the residual 
@@ -43,7 +44,8 @@ function mpgmir(AF::MPGFact, b; reporting = false, verbose = false, mpdebug = fa
         #
         # Solve the correction equation with GMRES
         #
-        kout = kl_gmres(x0, r, MPhatv, VF, eta, MPhptv; pdata = AF, side = "left")
+        kout = kl_gmres(x0, r, MPhatv, VF, eta, MPhptv; 
+               pdata = AF, side = "left", kl_store=kl_store)
         #
         # Make some noise
         #

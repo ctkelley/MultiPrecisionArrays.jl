@@ -1,7 +1,7 @@
 #
 # Factor a MPErray and set it up for GMRES with \
 #
-function mpglu!(MPH::MPEArray; basissize=80)
+function mpglu!(MPH::MPEArray; basissize=10)
 AH = MPH.AH
 TD = eltype(AH)
 res = MPH.residual

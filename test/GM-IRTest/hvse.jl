@@ -6,6 +6,7 @@ nres=norm(eout.rhist - hout.rhist, Inf)
 sres=norm(eout.sol - hout.sol, Inf)
 hvseok= ( (nres < 1.e-15) && (sres < 1.e-15) )
 hvseok || println("MGF problem $nres or $sres too large")
+return hvseok
 end
 
 
