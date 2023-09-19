@@ -3,9 +3,9 @@
 #
 struct MPGEFact
     AH::Array
-    AStore:: Array
     AL::Array
     AF::Factorization
+    VStore:: Array
     residual::Vector
 end
 
@@ -18,7 +18,6 @@ end
 
 struct MPHFact
     AH::Array
-    AStore::Array
     AL::Array
     AF::Factorization
     residual::Vector
@@ -29,7 +28,6 @@ end
 #
 struct MPGHFact
     AH::Array
-    AStore::Array
     AL::Array
     AF::Factorization
     residual::Vector

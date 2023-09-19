@@ -133,7 +133,7 @@ end
 function getTL(AF::MPFact)
     TL = eltype(AF.AL)
     if is_heavy(AF)
-    TFact = eltype(AF.AStore)
+    TFact = eltype(AF.AH)
     else
     TFact = eltype(AF.AL)
     end

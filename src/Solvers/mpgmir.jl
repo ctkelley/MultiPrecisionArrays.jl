@@ -1,5 +1,5 @@
 """
-mpgmir(AF::MPGHFact, b; reporting=false, verbose=true, mpdebug=false)
+mpgmir(AF::MPGFact, b; reporting=false, verbose=true, mpdebug=false)
 
 GMRES-IR solver test for MPGE fact
 """
@@ -32,7 +32,7 @@ function mpgmir(AF::MPGFact, b; reporting = false, verbose = false, mpdebug = fa
     # GMRES-IR loop
     #
     itc = 0
-    has_basis(AF) ? VF=AF.AStore : VF = zeros(TB, n, 80)
+    has_basis(AF) ? VF=AF.VStore : VF = zeros(TB, n, 80)
     normdec = true
     while (rnrm > irtol * bnorm) && (itc < 40) && normdec
         x0 = zeros(TB, n)

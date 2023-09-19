@@ -13,8 +13,8 @@ AL = MPH.AL
     #
     (TL == Float16) ? ALF = hlu!(AL) : ALF = lu!(AL)
     #
-AStore=zeros(TD, n, basissize)
-MPF=MPGEFact(AH, AStore, AL, ALF, res)
+VStore=zeros(TD, n, basissize)
+MPF=MPGEFact(AH, AL, ALF, VStore, res)
 return MPF
 end
 
@@ -39,9 +39,9 @@ function mpglu!(MPH::MPHArray; gmresok = true)
     AStore .= TD.(AL)
     AF = LU(AStore, ALF.ipiv, ALF.info)
     if gmresok
-        MPF = MPGHFact(AH, AStore, AL, AF, res)
+        MPF = MPGHFact(AH, AL, AF, res)
     else
-        MPF = MPHFact(AH, AStore, AL, AF, res)
+        MPF = MPHFact(AH, AL, AF, res)
     end
 end
 
