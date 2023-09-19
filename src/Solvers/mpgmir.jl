@@ -1,9 +1,9 @@
 """
 mpgmir(AF::MPGHFact, b; reporting=false, verbose=true, mpdebug=false)
 
-Prototype GMRES-IR solver
+GMRES-IR solver test for MPGE fact
 """
-function mpgmir(AF::MPGHFact, b; reporting = false, verbose = false, mpdebug = false)
+function mpgmir(AF::MPGFact, b; reporting = false, verbose = false, mpdebug = false)
     #
     normtype = Inf
     TB = eltype(b)
@@ -27,14 +27,14 @@ function mpgmir(AF::MPGHFact, b; reporting = false, verbose = false, mpdebug = f
     rnrmx = rnrm * TB(1.1)
     rhist = Vector{TB}()
     push!(rhist, rnrm)
-    eta = TB(1.e-6)
+    eta = TB(1.e-8)
     #
     # GMRES-IR loop
     #
     itc = 0
-    VF = zeros(TB, n, 80)
+    has_basis(AF) ? VF=AF.AStore : VF = zeros(TB, n, 80)
     normdec = true
-    while (rnrm > irtol * bnorm) && (itc < 10) && normdec
+    while (rnrm > irtol * bnorm) && (itc < 40) && normdec
         x0 = zeros(TB, n)
         #
         # Scale the residual 
@@ -93,12 +93,12 @@ function mpgmir(AF::MPGHFact, b; reporting = false, verbose = false, mpdebug = f
     end
 end
 
-function MPhatv(x, MPHF::MPGHFact)
-    atv = MPHF.AH * x
+function MPhatv(x, MPF::MPGFact)
+    atv = MPF.AH * x
     return atv
 end
 
-function MPhptv(x, MPHF::MPGHFact)
-    ptv = MPHF.AF \ x
+function MPhptv(x, MPF::MPGFact)
+    ptv = MPF.AF \ x
     return ptv
 end

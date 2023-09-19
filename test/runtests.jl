@@ -11,6 +11,7 @@ include("DetailsTest/precision_test.jl")
 include("DetailsTest/hlu_test.jl")
 include("DetailsTest/slashtest.jl")
 include("GM-IRTest/mpgmtest.jl")
+include("GM-IRTest/hvse.jl")
 
 println("starting")
 
@@ -32,4 +33,5 @@ end
 
 @testset "GM-IR" begin
     @test mpgmtest(1000)
+    @test hvse(128)
 end

@@ -1,3 +1,14 @@
+#
+# MPEArray factorization for GMRES-IR
+#
+struct MPGEFact
+    AH::Array
+    AStore:: Array
+    AL::Array
+    AF::Factorization
+    residual::Vector
+end
+
 struct MPHArray
     AH::Array
     AStore::Array
@@ -23,7 +34,6 @@ struct MPGHFact
     AF::Factorization
     residual::Vector
 end
-
 
 function MPHArray(AH::Array{Float64,2}; TL = Float32)
     AStore = copy(AH)

@@ -19,6 +19,8 @@ include("Structs4MP/MPHeavy.jl")
 MPAArray = Union{MPArray, MPEArray}
 MPFact = Union{MPLFact,MPLEFact,MPHFact}
 MPLFacts = Union{MPLFact,MPLEFact}
+MPGFact = Union{MPGEFact, MPGHFact}
+
 
 
 #MPIRArray = Union{MPArray,MPHArray}
@@ -32,6 +34,10 @@ on_the_fly(x::MPHFact) = true
 is_heavy(x::MPHFact) = true
 is_heavy(x::MPLFact) = false
 is_heavy(x::MPLEFact) = false
+is_heavy(x::MPGEFact) = false
+has_basis(x::MPGEFact) = true
+has_basis(x::MPGHFact) = false
+
 
 
 
@@ -117,6 +123,7 @@ export MPHArray
 #
 export MPLFact
 export MPGHFact
+export MPGEFact
 export MPFact
 #
 #

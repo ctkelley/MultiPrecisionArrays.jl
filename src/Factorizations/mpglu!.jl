@@ -1,4 +1,24 @@
 #
+# Factor a MPErray and set it up for GMRES with \
+#
+function mpglu!(MPH::MPEArray; basissize=80)
+AH = MPH.AH
+TD = eltype(AH)
+res = MPH.residual
+n=length(res)
+AL = MPH.AL
+    TL = eltype(AL)
+    #
+    # Factor in low precision
+    #
+    (TL == Float16) ? ALF = hlu!(AL) : ALF = lu!(AL)
+    #
+AStore=zeros(TD, n, basissize)
+MPF=MPGEFact(AH, AStore, AL, ALF, res)
+return MPF
+end
+
+#
 # Factor a heavy MPArray and set it up for GMRES with \
 # If you want to use it with IR (why?) then set gmresok=false
 #
