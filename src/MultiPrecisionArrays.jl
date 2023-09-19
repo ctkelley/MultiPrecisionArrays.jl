@@ -34,7 +34,6 @@ on_the_fly(x::MPHFact) = true
 is_heavy(x::MPHFact) = true
 is_heavy(x::MPLFact) = false
 is_heavy(x::MPLEFact) = false
-is_heavy(x::MPGEFact) = false
 has_basis(x::MPGEFact) = true
 has_basis(x::MPGHFact) = false
 
@@ -59,7 +58,7 @@ function \(AF::MPFact, b; verbose = false, reporting = false)
     return xi
 end
 
-function \(AF::MPGHFact, b; verbose = false, reporting = false) 
+function \(AF::MPGFact, b; verbose = false, reporting = false) 
     xi = mpgmir(AF, b; verbose = verbose, reporting = reporting)
     return xi
 end
