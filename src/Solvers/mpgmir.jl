@@ -35,6 +35,9 @@ function mpgmir(AF::MPGFact, b; reporting = false, verbose = false, mpdebug = fa
     has_basis(AF) ? VF=AF.VStore : VF = zeros(TB, n, 80)
     normdec = true
     kl_store=kstore(n,"gmres")
+    atvd=copy(r)
+    ptvd=copy(r)
+    MP_Data = (MPF = AF, atv = atvd)
     while (rnrm > tolf * bnorm) && ( rnrm <= .9 * rnrmx )
         x0 = zeros(TB, n)
         #
@@ -45,7 +48,7 @@ function mpgmir(AF::MPGFact, b; reporting = false, verbose = false, mpdebug = fa
         # Solve the correction equation with GMRES
         #
         kout = kl_gmres(x0, r, MPhatv, VF, eta, MPhptv; 
-               pdata = AF, side = "left", kl_store=kl_store)
+               pdata = MP_Data, side = "left", kl_store=kl_store)
         #
         # Make some noise
         #
@@ -95,12 +98,23 @@ function mpgmir(AF::MPGFact, b; reporting = false, verbose = false, mpdebug = fa
     end
 end
 
-function MPhatv(x, MPF::MPGFact)
-    atv = MPF.AH * x
+#function MPhatv(x, MPF::MPGFact)
+function MPhatv(x, pdata)
+#    atv = MPF.AH * x
+    atv = pdata.atv
+    mul!(atv, pdata.MPF.AH, x)
+#    atv = pdata.MPF.AH * x
     return atv
 end
 
-function MPhptv(x, MPF::MPGFact)
-    ptv = MPF.AF \ x
-    return ptv
+function MPhptv(x, pdata)
+#function MPhptv(x, MPF::MPGFact)
+#    ptv = MPF.AF \ x
+#    ptv = pdata.ptv
+#    ptv .= x
+     ldiv!(pdata.MPF.AF, x)
+#     ldiv!(pdata.MPF.AF, ptv)
+#    ptv .= pdata.MPF.AF \ x
+#    return ptv
+    return x
 end
