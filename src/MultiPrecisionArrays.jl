@@ -35,7 +35,7 @@ is_heavy(x::MPHFact) = true
 is_heavy(x::MPLFact) = false
 is_heavy(x::MPLEFact) = false
 has_basis(x::MPGEFact) = true
-has_basis(x::MPGHFact) = false
+has_basis(x::MPGHFact) = true
 
 
 

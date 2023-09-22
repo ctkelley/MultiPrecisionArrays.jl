@@ -80,9 +80,12 @@ function pitch(n; T = Float64)
 #    tluh = @belapsed lu(AV) setup = (AV = copy($AH)) evals=1
     tluh = @belapsed $AH*$bh 
     tlus = @belapsed lu(AVS) setup = (AVS = copy($AS)) evals=1
-    thsol = @belapsed $AHF \ $bh
-    tssol = @belapsed $ASF \ $bh
-    tgssol = @belapsed $ASF \ $bs
+#    thsol = @belapsed $AHF \ $bh
+    thsol = @belapsed ldiv!($AHF, rhs) (setup = rhs=copy($bh)) evals=1
+#    tssol = @belapsed $ASF \ $bh
+    tssol = @belapsed ldiv!($ASF, rhs) (setup = rhs=copy($bh)) evals=1
+#    tgssol = @belapsed $ASF \ $bs
+    tgssol = @belapsed ldiv!($ASF, rhs) (setup = rhs=copy($bs)) evals=1
     ratio=tlus/tssol
 #
 # Prints the play-by-play to the REPL for my debugging.

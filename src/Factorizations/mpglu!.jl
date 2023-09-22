@@ -14,7 +14,8 @@ AL = MPH.AL
     (TL == Float16) ? ALF = hlu!(AL) : ALF = lu!(AL)
     #
 VStore=zeros(TD, n, basissize)
-MPF=MPGEFact(AH, AL, ALF, VStore, res)
+KStore=kstore(n,"gmres")
+MPF=MPGEFact(AH, AL, ALF, VStore, KStore, res)
 return MPF
 end
 
@@ -22,10 +23,11 @@ end
 # Factor a heavy MPArray and set it up for GMRES with \
 # If you want to use it with IR (why?) then set gmresok=false
 #
-function mpglu!(MPH::MPHArray; gmresok = true)
+function mpglu!(MPH::MPHArray; gmresok = true, basissize=10)
     AH = MPH.AH
     TD = eltype(AH)
     res = MPH.residual
+    n=length(res)
     AStore = MPH.AStore
     AL = MPH.AL
     TL = eltype(AL)
@@ -39,7 +41,9 @@ function mpglu!(MPH::MPHArray; gmresok = true)
     AStore .= TD.(AL)
     AF = LU(AStore, ALF.ipiv, ALF.info)
     if gmresok
-        MPF = MPGHFact(AH, AL, AF, res)
+        VStore=zeros(TD, n, basissize)
+        KStore=kstore(n,"gmres")
+        MPF = MPGHFact(AH, AL, AF, VStore, KStore, res)
     else
         MPF = MPHFact(AH, AL, AF, res)
     end

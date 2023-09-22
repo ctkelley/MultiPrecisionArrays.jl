@@ -6,6 +6,7 @@ struct MPGEFact
     AL::Array
     AF::Factorization
     VStore:: Array
+    KStore:: NTuple
     residual::Vector
 end
 
@@ -30,6 +31,8 @@ struct MPGHFact
     AH::Array
     AL::Array
     AF::Factorization
+    VStore:: Array
+    KStore:: NTuple
     residual::Vector
 end
 

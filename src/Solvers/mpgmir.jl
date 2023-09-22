@@ -32,11 +32,11 @@ function mpgmir(AF::MPGFact, b; reporting = false, verbose = false, mpdebug = fa
     # GMRES-IR loop
     #
     itc = 0
-    has_basis(AF) ? VF=AF.VStore : VF = zeros(TB, n, 80)
+    VF=AF.VStore
     normdec = true
-    kl_store=kstore(n,"gmres")
+#    kl_store=kstore(n,"gmres")
+    kl_store = AF.KStore
     atvd=copy(r)
-    ptvd=copy(r)
     MP_Data = (MPF = AF, atv = atvd)
     while (rnrm > tolf * bnorm) && ( rnrm <= .9 * rnrmx )
         x0 = zeros(TB, n)
