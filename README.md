@@ -201,7 +201,7 @@ __MultiPrecisionArrays.jl__ supports many variations of iterative refinement and
 
 ## Half Precision
 
-Bottom line: don't use it and expect good performance. See [this page](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Details/Half_1/) in the docs for details.
+Bottom line: don't use it and expect good performance. See [this page](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Half_1/) in the docs for details.
 
 It's a good idea to try GMRES-IR if you are playing with half precision. We support that. GMRES-IR uses a different factorization ```mpglu!``` which factors the 
 low precision matrix and allocates room for the Krylov basis. The you use the solver ```mpgmir``` to use GMRES-IR, where you use the low precision factorization as
