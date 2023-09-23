@@ -114,7 +114,7 @@ struct MPArray{TH<:AbstractFloat,TL<:AbstractFloat}
     residual::Vector{TH}
 end
 ```
-The structure also stores the residual. 
+The structure also stores the residual. The ```MPEArray``` structure is identical. The difference is in the way interprecision transfers work in the triangular solves.
 
 We will be using the constructor
 ```
