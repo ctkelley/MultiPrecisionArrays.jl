@@ -17,8 +17,8 @@ makedocs(
     format = Documenter.HTML(prettyurls = get(ENV, "CI", nothing) == "true"),
     pages = Any[
         "Home"=>"index.md",
-        "More than you want to know" => Any["Details/Interprecision_1.md",
-         "Details/Half_1.md",],
+        "GMRES-IR" => "Details/Half_1.md", 
+        "More than you want to know" => Any["Details/Interprecision_1.md",],
         "MPArray Constructors" => Any["functions/MPArray.md",],
         "Factorizations"=>Any["functions/hlu!.md", "functions/mplu!.md"],
         "Solvers"=>Any["functions/mpgeslir.md"],

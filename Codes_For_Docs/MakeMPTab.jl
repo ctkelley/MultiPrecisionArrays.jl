@@ -3,17 +3,21 @@
 # for computer time.
 #
 """
-MakeMPTab(m = 4, texok = false; T = Float64)
+MakeMPTab(m = 5, texok = false; T = Float64, allocate=true)
 Make a nice table of the timings for the solves.
+
+Your options are the number of rows, if LaTeX is printed or not,
+the high precision, and a switch for allocating or non allocating
+factorizations, matrix multiplies, and solves. 
 """
-function MakeMPTab(m = 4, texok = false; T = Float64)
+function MakeMPTab(m = 5, texok = false; T = Float64, allocate=true)
     AT = zeros(m, 7)
     p = collect(0:1:m-1)
     tp = 2 .^ p
     np = 512 .* tp
     for idim = 1:m
         n = np[idim]
-        AT[idim, 2:7] = pitch(n; T = T)
+        AT[idim, 2:7] = pitch(n, allocate; T = T)
         AT[idim, 1] = n
     end
     T==Float64 ?  LULow = "LU32" : LULow="LU16"
@@ -50,10 +54,10 @@ function MakeMPTab(m = 4, texok = false; T = Float64)
 end
 
 """
-pitch(n; T = Float64)
+pitch(n, allocate=true; T = Float64)
 Collect the timings for the triangular solve options.
 """
-function pitch(n; T = Float64)
+function pitch(n, allocate=true; T = Float64)
     G=Gmat(n); 
     x=ones(n); 
     A = I + 800.0*G
@@ -78,17 +82,19 @@ function pitch(n; T = Float64)
 #
 # Prints the 
 #
-#    tluh = @belapsed lu(AV) setup = (AV = copy($AH)) evals=1
-#    tluh = @belapsed $AH*$bh 
+if allocate
+    tluh = @belapsed $AH*$bh 
+    tlus = @belapsed lu(AVS) setup = (AVS = copy($AS)) evals=1
+    thsol = @belapsed $AHF \ $bh
+    tssol = @belapsed $ASF \ $bh
+    tgssol = @belapsed $ASF \ $bs
+else
     tluh = @belapsed mul!($ch, $AH, $bh)
     tlus = @belapsed lu!(AVS) setup = (AVS = copy($AS)) evals=1
-#    tlus = @belapsed lu(AVS) setup = (AVS = copy($AS)) evals=1
-#    thsol = @belapsed $AHF \ $bh
     thsol = @belapsed ldiv!($AHF, rhs) (setup = rhs=copy($bh)) evals=1
-#    tssol = @belapsed $ASF \ $bh
     tssol = @belapsed ldiv!($ASF, rhs) (setup = rhs=copy($bh)) evals=1
-#    tgssol = @belapsed $ASF \ $bs
     tgssol = @belapsed ldiv!($ASF, rhs) (setup = rhs=copy($bs)) evals=1
+end
     ratio=tlus/tssol
 #
 # Prints the play-by-play to the REPL for my debugging.
