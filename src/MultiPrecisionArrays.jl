@@ -21,7 +21,7 @@ MPFact = Union{MPLFact,MPLEFact,MPHFact}
 MPLFacts = Union{MPLFact,MPLEFact}
 MPGFact = Union{MPGEFact, MPGHFact}
 
-
+export MPGFact
 
 #MPIRArray = Union{MPArray,MPHArray}
 
@@ -34,8 +34,8 @@ on_the_fly(x::MPHFact) = true
 is_heavy(x::MPHFact) = true
 is_heavy(x::MPLFact) = false
 is_heavy(x::MPLEFact) = false
-has_basis(x::MPGEFact) = true
-has_basis(x::MPGHFact) = true
+#has_basis(x::MPGEFact) = true
+#has_basis(x::MPGHFact) = true
 
 
 

@@ -1,9 +1,10 @@
 """
-mpgmir(AF::Union{MPGEFact, MPGHFact}, b; reporting=false, verbose=true, mpdebug=false)
+mpgmir(AF::MPGFact, b; reporting=false, verbose=false, mpdebug=false)
 
 GMRES-IR solver 
 """
-function mpgmir(AF::Union{MPGEFact, MPGHFact}, b; reporting = false, verbose = false, mpdebug = false)
+function mpgmir(AF::MPGFact, b; reporting = false, 
+                verbose = false, mpdebug = false)
     #
     normtype = Inf
     TB = eltype(b)
