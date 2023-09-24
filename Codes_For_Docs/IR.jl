@@ -6,7 +6,7 @@ Solve Ax=b
 function IR(A, b)
     x = zeros(length(b))
     r = copy(b)
-    tol = 100.0 * eps(Float64)
+    tol = 10.0 * eps(Float64)
     #
     # Allocate a single precision copy of A and factor in place
     #
@@ -17,13 +17,16 @@ function IR(A, b)
     # in this case
     #
     itcount = 0
-    while (norm(r) > tol * norm(b)) && (itcount < 10)
+    rnorm=norm(r)
+    rnormold = 2.0*rnorm
+    while (rnorm > tol * norm(b)) && (rnorm < .9 * rnormold)
         #
         # Store r and d = AF\r in the same place.
         #
         ldiv!(AF, r)
         x .+= r
         r .= b - A * x
+        rnorm=norm(r)
         itcount += 1
     end
     return x

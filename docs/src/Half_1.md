@@ -1,4 +1,4 @@
-## Half Precision and GMRES-IR
+# Half Precision and GMRES-IR
 
 Using half precision will not speed anything up, in fact it will make 
 the solver slower. The reason for this is that LAPACK and the BLAS 
@@ -28,6 +28,8 @@ The columns of the table are the dimension of the problem, timings
 for double, single, and half precision, and the ratio of the half
 precision timings to double. The timings came from Julia 1.10-beta2
 running on an Apple M2 Pro with 8 performance cores.
+
+## Half Precision is Subtle
 
 Half precision is also difficult to use properly. The low precision can 
 make iterative refinement fail because the half precision factorization 
