@@ -6,11 +6,10 @@ plain vanilla iterative refinement.
 
 This version is analogous to ```A\\b``` and combines the factorization
 and the solve. You start with MPA=MPArray(A) and then pass MPA
-to mpgeslA\b and combines the factorization
-and the solve. 
+to mpgeslir and combine the factorization and the solve. 
 
 Unlike lu, this does overwrite the low precision part of MPA.
-I use this to get some timing results  and it's also convenient
+I use this to get some timing results and it's also convenient
 if you want to do factor and solve in one statement. 
 """
 function mpgeslir(MPA::MPAArray, b; reporting = false, verbose = true)
@@ -19,6 +18,7 @@ MPF=mplu!(MPA);
 xi=\(MPF, b; reporting=reporting, verbose=verbose)
 return xi
 end
+
 """
 mpgeslir(AF::MPFact, b; reporting=false, verbose=true)
 
