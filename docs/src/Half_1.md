@@ -173,5 +173,24 @@ If you dig into the iterations statistics (more on that later) you
 will see that the GMRES-IR iteration took almost exactly four times
 as many solves and residual computations as the simple IR solve.
 
+We will repeat this experiment on the ill-conditioned example. In this
+example, as we saw earlier, IR fails to converge.
+
+```
+julia> N=4069; AD= I - 800.0*Gmat(N); A=Float32.(AD); x=ones(Float32,N); b=A*x;
+        
+julia> MPA=MPArray(A); MPA2=deepcopy(MPA);
+
+julia> MPF=mplu!(MPA); MPF2=mpglu!(MPA2);
+
+julia> z=MPF\b; y=MPF2\b; println(norm(z-x,Inf),"  ",norm(y-x,Inf))
+0.2875508  0.004160166
+
+julia> println(norm(b-A*z,Inf)/norm(b,Inf),"  ",norm(b-A*y,Inf)/norm(b,Inf))
+0.0012593127  7.937655e-6
+```
+
+So, the relative error and relative residual norm for GMRES-IR
+is much smaller than that for IR.
 
 

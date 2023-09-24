@@ -91,7 +91,7 @@ ldiv!(AF, ds)
 r .= Float64.(ds)*normr
 ```
 The scaling by ```1.0/normr``` avoids underflow, which is most important
-when the low precision is ```lFloat16```. We will discuss interprecision 
+when the low precision is ```Float16```. We will discuss interprecision 
 transfer costs later.
 
 ## Integral Equations Example
