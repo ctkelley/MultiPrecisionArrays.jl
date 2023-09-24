@@ -151,6 +151,10 @@ include("Factorizations/mplu!.jl")
 include("Factorizations/mpglu!.jl")
 
 module Examples
+using MultiPrecisionArrays
+using LinearAlgebra
+using LinearAlgebra.BLAS
+
 export Gmat
 
 include("Examples/Gmat.jl")

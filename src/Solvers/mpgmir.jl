@@ -27,7 +27,8 @@ function mpgmir(AF::MPGFact, b; reporting = false, verbose = false, mpdebug = fa
     rnrmx = rnrm * TB(2.0)
     rhist = Vector{TB}()
     push!(rhist, rnrm)
-    eta = TB(1.e-8)
+#    eta = TB(1.e-8)
+    eta = tolf
     #
     # GMRES-IR loop
     #

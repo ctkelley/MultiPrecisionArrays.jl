@@ -1,4 +1,4 @@
-# Half Precision and GMRES-IR
+## Half Precision and GMRES-IR
 
 Using half precision will not speed anything up, in fact it will make 
 the solver slower. The reason for this is that LAPACK and the BLAS 
@@ -130,5 +130,46 @@ as a single IR iteration. However, if low precision is half, this approach
 can recover the residual norm one would get from a successful IR iteration.
 
 There is also a storage problem. One should allocate storage for the Krylov
-basis vectors.
+basis vectors and other vectors that GMRES needs internally. We do that
+in the factorization phase. So the structure {\bf MPGEFact} has the 
+factorization of the low precision matrix, the residual, the Krylov
+basis and some other vectors needed in the solve. 
+
+Here is a well conditioned example. Both IR and GMRES-IR perform well, with
+GMRES-IR taking significantly more time.  Note that I cannot use the
+same multiprecision array for both factorizations because the data for
+the low precision factorization would be overwritten. So I use the 
+{\bf deepcopy} command from Julia {\bf before} factoring either multiprecision
+array.
+
+```
+julia> using MultiPrecisionArrays
+
+julia> using MultiPrecisionArrays.Examples
+
+julia> using BenchmarkTools
+
+julia> N=4069; AD= I - Gmat(N); A=Float32.(AD); x=ones(Float32,N); b=A*x;
+
+julia> MPA=MPArray(A); MPA2=deepcopy(MPA); 
+
+julia> MPF=mplu!(MPA); MPF2=mpglu!(MPA2);
+
+julia> # build two MPArrays and factor them for IR or GMRES-IR
+
+julia> z=MPF\b; y=MPF2\b; println(norm(z-x,Inf),"  ",norm(y-x,Inf))
+5.9604645e-7  2.9802322e-7
+
+julia> @btime $MPF\$b;
+  13.582 ms (4 allocations: 24.33 KiB)
+
+julia> @btime $MPF2\$b;
+  52.020 ms (223 allocations: 92.84 KiB)
+```
+
+If you dig into the iterations statistics (more on that later) you
+will see that the GMRES-IR iteration took almost exactly four times
+as many solves and residual computations as the simple IR solve.
+
+
 
