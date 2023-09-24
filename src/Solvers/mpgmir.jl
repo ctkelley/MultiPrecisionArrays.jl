@@ -1,7 +1,7 @@
 """
 mpgmir(AF::MPGFact, b; reporting=false, verbose=true, mpdebug=false)
 
-GMRES-IR solver test for MPGE fact
+GMRES-IR solver 
 """
 function mpgmir(AF::MPGFact, b; reporting = false, verbose = false, mpdebug = false)
     #
