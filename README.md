@@ -23,7 +23,7 @@ __The documentation is much better than it was in v0.0.3.__
 
 No
 
-__This package is nowhere close to ready for registration or release to a general audience. It's public only to help me do CI and clean up the docs.__
+__This package is nowhere close to ready for release to a general audience. It's public only to help me do CI and clean up the docs.__
 
 I may register this in a few weeks so some people who work in this field can play with it. Before I do that I need to
 
@@ -217,7 +217,7 @@ As of now you need to install these packages
 - Polyester
 - SIAMFANLEquations
 
-and use LinearAlgebra and SparseArrays from Base. I will remove SIAMFANLEquations from the list once I get a custom (for GMRES-IR) GMRES solver in here. Polyester is here to stay because 
+and use LinearAlgebra and SparseArrays from Base. Sometime (far away) I will remove SIAMFANLEquations from the list once I get a custom (for GMRES-IR) GMRES solver in here. Polyester is here to stay because 
 threading with ```Polyester.@batch``` makes the LU for Float16 run much faster.
 
 ## Endorsement
@@ -239,7 +239,8 @@ This paper has a [repo](https://github.com/ctkelley/N3Presults) for reproducing 
 
 ## __Interprecision transfers__:
 
-This is not a trivial matter. I gave a talk at the XSDK-MULTIPRECISION meeting on June 15, 2023, about this issue.
+This is not a trivial matter. I gave a talk at the XSDK-MULTIPRECISION meeting on June 15, 2023, about this issue. See [the docs](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Details/Interprecision_1/) for the story on this. 
+Most users of this package can ignore this issue.
 
   - [Interprecision Transfers in Iterative Refinement: Making Half Precision on Desktops Less Painful](Publications_and_Presentations/MPArrays_XSDK-MULTIPRECISION_June_15.pdf).
 
