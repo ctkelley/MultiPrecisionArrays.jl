@@ -1,4 +1,4 @@
-#
+{TH<:AbstractFloat,TL<:AbstractFloat}#
 # This file is MPBase.jl 
 # Plain vanilla iterative refinement. The structures store
 # High and low precision arrays and factorizations of these arrays

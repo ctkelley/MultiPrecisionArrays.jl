@@ -58,8 +58,8 @@ function \(AF::MPFact, b; verbose = false, reporting = false)
     return xi
 end
 
-function \(AF::MPGFact, b; verbose = false, reporting = false) 
-    xi = mpgmir(AF, b; verbose = verbose, reporting = reporting)
+function \(AF::MPGFact, b; verbose = false, reporting = false, mpdebug=false) 
+    xi = mpgmir(AF, b; verbose = verbose, reporting = reporting, mpdebug=mpdebug)
     return xi
 end
 

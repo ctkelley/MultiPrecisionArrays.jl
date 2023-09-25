@@ -6,10 +6,9 @@ GMRES-IR solver
 function mpgmir(AF::MPGFact, b; reporting = false, 
                 verbose = false, mpdebug = false)
     #
-    normtype = Inf
+    normtype = 2
     TB = eltype(b)
-    irtol = (TB == Float64) ? 1.e-14 : 1.e-7
-    tolf = TB.(10.0)*eps(TB)
+    tolf = TB(10.0)*eps(TB)
     n = length(b)
     onetb = TB(1.0)
     bsc = copy(b)
@@ -27,6 +26,7 @@ function mpgmir(AF::MPGFact, b; reporting = false,
     rnrm = norm(r, normtype)
     rnrmx = rnrm * TB(2.0)
     rhist = Vector{TB}()
+    khist = Vector{Int64}()
     push!(rhist, rnrm)
 #    eta = TB(1.e-8)
     eta = tolf
@@ -40,7 +40,7 @@ function mpgmir(AF::MPGFact, b; reporting = false,
     kl_store = AF.KStore
     atvd=copy(r)
     MP_Data = (MPF = AF, atv = atvd)
-    while (rnrm > tolf * bnorm) && ( rnrm <= .9 * rnrmx )
+    while (rnrm > tolf * bnorm) && ( rnrm <= .99 * rnrmx )
         x0 = zeros(TB, n)
         #
         # Scale the residual 
@@ -54,6 +54,7 @@ function mpgmir(AF::MPGFact, b; reporting = false,
         #
         # Make some noise
         #
+        push!(khist,length(kout.reshist))
         itcp1 = itc + 1
         winner = kout.idid ? " GMRES converged" : " GMRES failed"
         verbose && (println(
@@ -82,7 +83,7 @@ function mpgmir(AF::MPGFact, b; reporting = false,
         rnrm = norm(r, normtype)
         itc += 1
         push!(rhist, rnrm)
-        tol = irtol * bnorm
+        tol = tolf * bnorm
         mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol")
         #
         # If the residual norm increased, complain.
@@ -94,7 +95,8 @@ function mpgmir(AF::MPGFact, b; reporting = false,
     if reporting
         TL = eltype(AF.AL)
         TFact = eltype(AF.AL)
-        return (rhist = rhist, sol = x, TH = TB, TL = TL, TFact = TFact)
+        return (rhist = rhist, khist = khist,
+               sol = x, TH = TB, TL = TL, TFact = TFact)
     else
         return x
     end
