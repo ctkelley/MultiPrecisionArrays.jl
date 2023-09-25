@@ -28,14 +28,14 @@ __This package is nowhere close to ready for release to a general audience. It's
 I may register this in a few weeks so some people who work in this field can play with it. Before I do that I need to
 
 - Complete the documentation
-- Get a first draft of the ArXiv preprint posted
+- Get a first version of the ArXiv preprint posted
 - Get more examples
 
 I do not plan to announce it on Discourse anytime soon.
 
 __Please do not make PRs. If you stumble on this mess and have questions/ideas ..., raise an issue or email me at tim_kelley@ncsu.edu__
 
-Nothing is in final form and I am changing the API, internal structures, exported functions/structs and all kinds of other stuff frequently. When/if I register this and announce it, then it will be time for complaints and offers to collaborate. 
+Nothing is in final form and I am changing the API, internal structures, exported functions/structs and all kinds of other stuff frequently. When/if I register this and announce it, then it will be time for complaints or unsolicited offers to collaborate.
 
 
 
