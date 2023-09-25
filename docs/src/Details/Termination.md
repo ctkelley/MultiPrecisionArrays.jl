@@ -4,8 +4,8 @@ We terminate the loop when
 ```math
 \| r \| < \tau \| b \|
 ```
-where we use $\tau = 10 * u_H$, where $u_H$ is high precision unit
-roundoff.  The problem with this criterion is
+where we use $\tau = 10 * eps(TH)$, where $eps(TH)$ is high precision floating
+point machine epsilon.  The problem with this criterion is
 that IR can stagnate, especially for ill-conditioned problems, before
 the termination criterion is attained. We detect stagnation by looking
 for a unacceptable decrease (or increase) in the residual norm. So we will
