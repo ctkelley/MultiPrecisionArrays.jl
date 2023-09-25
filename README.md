@@ -217,8 +217,8 @@ As of now you need to install these packages
 - Polyester
 - SIAMFANLEquations
 
-and use LinearAlgebra and SparseArrays from Base. Sometime (far away) I will remove SIAMFANLEquations from the list once I get a custom (for GMRES-IR) GMRES solver in here. Polyester is here to stay because 
-threading with ```Polyester.@batch``` makes the LU for Float16 run much faster.
+and use LinearAlgebra and SparseArrays from Base. I use the Krylov solvers and examples from SIAMFANLEquations. Polyester is here because 
+threading with ```Polyester.@batch``` makes the LU for Float16 run much faster. Once LU for Float16 is in LAPACK/BLAS, I will eliminate that dependency.
 
 ## Endorsement
 
