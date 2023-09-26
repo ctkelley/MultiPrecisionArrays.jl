@@ -43,9 +43,15 @@ Combines the constructor of the multiprecision array with the
 factorization.
 """
 function mplu(A::Array{TH,2}; TL=Float32, onthefly=nothing) where TH <: Real
+#
+# If the high precision matrix is single, the low precision must be half.
+#
 (TH == Float32) && (TL = Float16)
-((onthefly == nothing ) && (TL == Float16)) && (onthefly=true)
-((onthefly == nothing ) && (TL == Float32)) && (onthefly=false)
+#
+# Unless you tell me otherwise, onthefly is true if low precision is half
+# and false if low precision is single.
+#
+(onthefly == nothing ) && (onthefly = (TL==Float16))
 MPA=MPArray(A; TL=TL, onthefly=onthefly)
 MPF=mplu!(MPA)
 return MPF

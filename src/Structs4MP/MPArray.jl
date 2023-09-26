@@ -17,13 +17,14 @@ end
 The constructor just builds an MPArray with TH=Float64. Set TL=Float16
 to get double/half IR.
 
-MPEArray is exactly the same but the triangular solver dispatches
-differently.
+
 """
 function MPArray(AH::Array{Float64,2}; TL = Float32, onthefly=nothing)
     AL = TL.(AH)
-    ((onthefly==nothing) && (TL==Float32)) && (onthefly=false)
-    ((onthefly==nothing) && (TL==Float16)) && (onthefly=true)
+# Default is interprecision on the fly if TL = Float32
+    (onthefly==nothing) && (onthefly = (TL==Float16))
+#    ((onthefly==nothing) && (TL==Float32)) && (onthefly=false)
+#    ((onthefly==nothing) && (TL==Float16)) && (onthefly=true)
     (m,n)=size(AH); res=ones(eltype(AH),n)
     MPA = MPArray(AH, AL, res, onthefly) 
 end

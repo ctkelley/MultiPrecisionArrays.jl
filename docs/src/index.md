@@ -127,43 +127,115 @@ This latter case is very near singularity.
 
 We will solve a linear system with both double precision $LU$ and an MPArray
 and compare execution time and the quality of the results.
-The problem setup is pretty simple
+
+The example below compares the cost of a double precision factorization to a MPArray factorization. The ```MPArray``` structure has a high precision and a low precision matrix. The structure we will start with 
+is
+```
+struct MPArray{TH<:AbstractFloat,TL<:AbstractFloat}
+    AH::Array{TH,2}
+    AL::Array{TL,2}
+    residual::Vector{TH}
+    onthefly::Bool
+end
+```
+The structure also stores the residual. The ```onthefly``` Boolean tells the solver how to do the interprecision transfers. The easy way to get started is to use the ```mplu``` 
+command directly on the matrix. That will build the MPArray, follow that with the factorization, and put in all in a structure
+that you can use with ```\```.
+
+Now we will see how the results look. In this example we compare the result with iterative refinement with ```A\b```, which is LAPACK's LU. 
+As you can see the results are equally good. Note that the factorization object ```MPF``` is the
+output of ```mplu```. This is analogous to ```AF=lu(A)``` in LAPACK.
+
+Now we will see how the results look. In this example we compare the result with iterative refinement with ```A\b```, which is LAPACK's LU. 
+As you can see the results are equally good. Note that the factorization object ```MPF``` is the
+output of ```mplu```. This is analogous to ```AF=lu(A)``` in LAPACK.
+
 ```
 julia> using MultiPrecisionArrays
 
-julia> using BenchmarkTools
-
 julia> using MultiPrecisionArrays.Examples
 
-julia> N=4096; G=Gmat(N); A=I - G; x=ones(N); b=A*x;
+julia> using BenchmarkTools
 
-julia> @belapsed lu!(AC) setup=(AC=copy($A))
-1.43148e-01
-```
-At this point we have timed ```lu!```. The next step is to construct
-an MPArray and factor the low precision matrix. We use the
-constructor ```MPArray``` to store $A$, the low precision copy
-and the residual. The we apply
-the function ```mplu!``` to factor the low precision copy in place.
-```
-julia> MPA=MPArray(A);
+julia> N=4096;
 
-julia> @belapsed mplu!(MPAC) setup=(MPAC=deepcopy($MPA))
-8.02158e-02
+julia> G=Gmat(N);
+
+julia> A = I - G;
+
+julia> MPF=mplu(A); AF=lu(A);
+
+julia> z=MPF\b; w=AF\b;
+
+julia> ze=norm(z-x,Inf); zr=norm(b-A*z,Inf)/norm(b,Inf);
+
+julia> we=norm(w-x,Inf); wr=norm(b-A*w,Inf)/norm(b,Inf);
+
+julia> println("Errors: $ze, $we. Residuals: $zr, $wr")
+Errors: 8.88178e-16, 7.41629e-14. Residuals: 1.33243e-15, 7.40609e-14
+
+```
+
+So the resuts are equally good.
+
+The compute time for ```mplu``` should be half that of ```lu```.
+
+
+```
+julia> @belapsed mplu($A)
+8.55328e-02
+
+julia> @belapsed lu($A)
+1.49645e-01
+
 ```
 So the single precision factorization is roughly half the cost of the
-double precision one. Now for the solves. Both ```lu!``` and ```mplu!```
+double precision one. Now for the solves. Both ```lu``` and ```mplu```
 produce a factorization object and ```\``` works with both.
-You have to be a bit careful because MPA and A share storage. So
-I will use ```lu``` instead of ```lu!``` when factoring $A$.
-```
-julia> AF=lu(A); xf = AF\b;
 
-julia> MPAF=mplu!(MPA); xmp=MPAF\b;
+## A few subtleties in the example
 
-julia> println(norm(xf-x,Inf),"  ",norm(xmp-x,Inf))
-7.41629e-14  8.88178e-16
+Here is the source for ```mplu```
 ```
-You can see that the solutions are equally good.
+"""
+mplu(A::Array{Float64,2}; TL=Float32, onthefly=false)
+
+Combines the constructor of the multiprecision array with the
+factorization.
+"""
+function mplu(A::Array{TH,2}; TL=Float32, onthefly=nothing) where TH <: Real
+#
+# If the high precision matrix is single, the low precision must be half.
+#
+(TH == Float32) && (TL = Float16)
+#
+# Unless you tell me otherwise, onthefly is true if low precision is half
+# and false if low precision is single.
+#
+(onthefly == nothing ) && (onthefly = (TL==Float16))
+MPA=MPArray(A; TL=TL, onthefly=onthefly)
+MPF=mplu!(MPA)
+return MPF
+end
+```
+
+The function ```mplu``` has two keyword arguments. The easy one to understand is ```TL``` which is the precision of the factoriztion. Julia has support for single (```Float32```) and half (```Float16```)
+precisions. If you set ```TL=Float16``` then low precision will be half. Don't do that unless you know what you're doing. Using half precision is a fast way to get incorrect results. Look at the section on [half precision](#half-Precision) in this Readme for a bit more bad news.
+
+The other keyword arguemnt is __onthefly__. That keyword controls how the triangular solvers from the factorization work. When you solve
+
+$$ 
+LU d = r
+$$
+
+The LU factors are in low precision and the residual $r$ is in high precision. If you let Julia and LAPACK figure out what to do, then the solves will be done in high precision and
+the entries in the LU factors will be comverted to high precision with each binary operation. The output $d$ will be in high precision. This is called interprecision transfer on-the-fly
+and ```onthefly = true``` will tell the solvers to do it that way. You have $N^2$ interprecsion transfers with each solve and, as we will see, that can have a non-trivial cost.
+
+When low precision is Float32, then the default is (```onthefly = false```). This converts $r$ to low precision, does the solve entirely in low precision, and then promotes $d$ to high precision. You need to be careful to avoid
+overflow and, more importantly, underflow when you do that and we scale $r$ to be a unit vector before conversion to low precisiion and reverse the scaling when we promote $d$. We take care of this for you.
+
+```mplu``` calls the constructor for the multiprecision array and then factors the low precision matrix. In some cases, such as nonlinear solvers, you will want to separate the constructor and the factorization. When you do that
+remember that ```mplu!``` overwrites the low precision copy of A with the factors, so you can't resuse the multiprecision array for other problems unless you restore the low precision copy.
 
 
