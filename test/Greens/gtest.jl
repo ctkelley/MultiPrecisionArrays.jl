@@ -129,7 +129,7 @@ function gtestE(G; TL = Float32, TH = Float64, reshistout = false)
     A = I + TH.(G)
     b = ones(TH, n)
     xe = A \ b
-    MPA = MPEArray(A; TL = TL)
+    MPA = MPArray(A; TL = TL, onthefly=true)
     MPF = mplu!(MPA)
     soldata = \(MPF, b; reporting = true)
     xm = soldata.sol

@@ -1,5 +1,5 @@
 """
-mplu!(MPA::Union{MPArray,MPEArray})
+mplu!(MPA::MPArray)
 
 Plain vanilla MPArray factorization.
 
@@ -23,19 +23,15 @@ Union{MPArray,MPEArray}
 lets me use the ```on_the_fly``` trait to figure out what do to.
 
 """
-function mplu!(MPA::Union{MPArray,MPEArray})
+function mplu!(MPA::MPArray)
     AH = MPA.AH
     AL = MPA.AL
     TL = eltype(AL)
     residual=MPA.residual
     (TL == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
     # For the MPEArray
-    if on_the_fly(MPA)
-        MPF = MPLEFact(AH, AL, AF, residual)
-    else
-    # For the plain vanilla MPArray
-        MPF = MPLFact(AH, AL, AF, residual)
-    end
+    on_the_fly=MPA.onthefly
+    MPF = MPLFact(AH, AL, AF, residual, on_the_fly)
     return MPF
 end
 

@@ -16,7 +16,7 @@ include("Structs4MP/MPBase.jl")
 include("Structs4MP/MPArray.jl")
 include("Structs4MP/MPHeavy.jl")
 
-MPAArray = Union{MPArray, MPEArray}
+#MPAArray = Union{MPArray, MPEArray}
 MPFact = Union{MPLFact,MPLEFact,MPHFact}
 MPLFacts = Union{MPLFact,MPLEFact}
 MPGFact = Union{MPGEFact, MPGHFact}
@@ -26,16 +26,9 @@ export MPGFact
 #MPIRArray = Union{MPArray,MPHArray}
 
 
-on_the_fly(x::MPArray) = false
-on_the_fly(x::MPEArray) = true
-on_the_fly(x::MPLFact) = false
-on_the_fly(x::MPLEFact) = true
-on_the_fly(x::MPHFact) = true
 is_heavy(x::MPHFact) = true
 is_heavy(x::MPLFact) = false
 is_heavy(x::MPLEFact) = false
-#has_basis(x::MPGEFact) = true
-#has_basis(x::MPGHFact) = true
 
 
 
@@ -123,16 +116,16 @@ export MPHArray
 #
 export MPLFact
 export MPGHFact
-export MPGEFact
+#export MPGEFact
 export MPFact
 #
 #
 #
-export MPAArray
-export MPEArray
+#export MPAArray
+#export MPEArray
 export MPFArray
 export MPHFact
-export MPLEFact
+#export MPLEFact
 export MPhatv
 export MPhptv
 #

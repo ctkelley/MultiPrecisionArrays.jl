@@ -13,7 +13,8 @@ The solve overwrites the residual with the defect.
 """
 function IRTriangle!(AF::Union{MPLFact,MPLEFact,MPHFact}, r, rs, verbose)
     AFS = AF.AF
-    if on_the_fly(AF)
+    on_the_fly=AF.onthefly
+    if on_the_fly
         ldiv!(AFS, r)
     else
         TFact = eltype(AFS)

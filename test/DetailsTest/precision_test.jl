@@ -51,18 +51,18 @@ function precision_test()
     okh6416 = (eltype(xh16) == eltype(xe))
     doubleok = (doubleok && ok6416 && okh6416)
     #
-    MPE = MPEArray(A)
+    MPE = MPArray(A; onthefly=true)
     MPEF = mplu!(MPE)
     xee = MPEF \ b
     oke = (eltype(xee) == eltype(xe))
     #
-    MPEx = MPEArray(A; TL = Float16)
+    MPEx = MPArray(A; TL = Float16, onthefly=true)
     MPEFx = mplu!(MPEx)
     xeex = MPEFx \ b
     okex = (eltype(xeex) == eltype(xe))
     doubleok = (doubleok && oke && okex)
     #
-    MPE32 = MPEArray(A32)
+    MPE32 = MPArray(A32; onthefly=true)
     MPEF32 = mplu!(MPE32)
     xee32 = MPEF32 \ b32
     oke32 = (eltype(xee32) == eltype(xe32))

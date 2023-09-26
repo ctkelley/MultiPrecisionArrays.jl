@@ -40,6 +40,7 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     TL = MPStats.TL
     TH = MPStats.TH
     r = AF.residual
+    onthefly=AF.onthefly
     #
     # TFact is the precision of the factors
     #

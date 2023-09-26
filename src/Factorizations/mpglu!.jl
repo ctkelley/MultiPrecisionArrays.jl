@@ -1,7 +1,7 @@
 #
 # Factor a MPErray and set it up for GMRES with \
 #
-function mpglu!(MPH::MPEArray; basissize=10)
+function mpglu!(MPH::MPArray; basissize=10)
 AH = MPH.AH
 TD = eltype(AH)
 res = MPH.residual
@@ -15,7 +15,7 @@ AL = MPH.AL
     #
 VStore=zeros(TD, n, basissize)
 KStore=kstore(n,"gmres")
-MPF=MPGEFact(AH, AL, ALF, VStore, KStore, res)
+MPF=MPGEFact(AH, AL, ALF, VStore, KStore, res, true)
 return MPF
 end
 
@@ -43,9 +43,9 @@ function mpglu!(MPH::MPHArray; gmresok = true, basissize=10)
     if gmresok
         VStore=zeros(TD, n, basissize)
         KStore=kstore(n,"gmres")
-        MPF = MPGHFact(AH, AL, AF, VStore, KStore, res)
+        MPF = MPGHFact(AH, AL, AF, VStore, KStore, res, true)
     else
-        MPF = MPHFact(AH, AL, AF, res)
+        MPF = MPHFact(AH, AL, AF, res, true)
     end
 end
 
