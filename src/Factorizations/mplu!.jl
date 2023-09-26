@@ -38,3 +38,19 @@ function mplu!(MPA::Union{MPArray,MPEArray})
     end
     return MPF
 end
+
+
+"""
+mplu(A::Array{Float64,2}; TL=Float32, onthefly=false)
+
+Combines the constructor of the multiprecision array with the
+factorization.
+"""
+function mplu(A::Array{TH,2}; TL=Float32, onthefly=nothing) where TH <: Real
+(TH == Float32) && (TL = Float16)
+((onthefly == nothing ) && (TL == Float16)) && (onthefly=true)
+((onthefly == nothing ) && (TL == Float32)) && (onthefly=false)
+MPA=MPArray(A; TL=TL, onthefly=onthefly)
+MPF=mplu!(MPA)
+return MPF
+end

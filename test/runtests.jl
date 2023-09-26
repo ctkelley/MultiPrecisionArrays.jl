@@ -10,6 +10,7 @@ include("NLTest/nltest.jl")
 include("DetailsTest/precision_test.jl")
 include("DetailsTest/hlu_test.jl")
 include("DetailsTest/slashtest.jl")
+include("DetailsTest/mplu_test.jl")
 include("GM-IRTest/mpgmtest.jl")
 include("GM-IRTest/hvse.jl")
 
@@ -29,6 +30,7 @@ end
     @test precision_test()
     @test hlu_test()
     @test slashtest()
+    @test mplu_test()
 end
 
 @testset "GM-IR" begin

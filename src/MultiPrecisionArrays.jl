@@ -84,6 +84,7 @@ export hlu
 # them to nonlinear solvers and eigen solvers.
 #
 export mplu!
+export mplu
 export mphlu!
 export mpglu!
 export mpqr!
