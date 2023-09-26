@@ -16,9 +16,8 @@ include("Structs4MP/MPBase.jl")
 include("Structs4MP/MPArray.jl")
 include("Structs4MP/MPHeavy.jl")
 
-#MPAArray = Union{MPArray, MPEArray}
-MPFact = Union{MPLFact,MPLEFact,MPHFact}
-MPLFacts = Union{MPLFact,MPLEFact}
+MPFact = Union{MPLFact,MPHFact}
+MPLFacts = Union{MPLFact}
 MPGFact = Union{MPGEFact, MPGHFact}
 
 export MPGFact
@@ -28,14 +27,13 @@ export MPGFact
 
 is_heavy(x::MPHFact) = true
 is_heavy(x::MPLFact) = false
-is_heavy(x::MPLEFact) = false
 
 
 
 
 import Base.eltype
 
-function eltype(MP::Union{MPArray,MPHArray,MPEArray})
+function eltype(MP::Union{MPArray,MPHArray})
     TP = eltype(MP.AH)
     return TP
 end
@@ -56,7 +54,7 @@ function \(AF::MPGFact, b; verbose = false, reporting = false, mpdebug=false)
     return xi
 end
 
-function \(MPA::Union{MPArray,MPEArray}, b; verbose=false, reporting=false)
+function \(MPA::Union{MPArray}, b; verbose=false, reporting=false)
           xi = mpgeslir(MPA, b; verbose = verbose, reporting = reporting)
           return xi
 end
@@ -94,7 +92,8 @@ export mpgmir
 # Each MPArray data structure comes with a structure to store a factorization.
 # The differences are whether one does on-the-fly interprecision transfers
 # of not. For plain IR with high=double and low=single, I think the answer 
-# is clear (NO) and you should use MPArray and MPLFact instead of MPEArray 
+# is clear (NO) and you should use MPArray with onthefly = false 
+# (the default).
 # and MPLEFact. If low precision is half, it's not so clear and the 
 # documentation has an example to illustrate that.
 #
@@ -116,16 +115,13 @@ export MPHArray
 #
 export MPLFact
 export MPGHFact
-#export MPGEFact
 export MPFact
 #
 #
 #
-#export MPAArray
 #export MPEArray
 export MPFArray
 export MPHFact
-#export MPLEFact
 export MPhatv
 export MPhptv
 #

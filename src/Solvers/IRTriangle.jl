@@ -11,7 +11,7 @@ precision.
 
 The solve overwrites the residual with the defect.
 """
-function IRTriangle!(AF::Union{MPLFact,MPLEFact,MPHFact}, r, rs, verbose)
+function IRTriangle!(AF::Union{MPLFact,MPHFact}, r, rs, verbose)
     AFS = AF.AF
     on_the_fly=AF.onthefly
     if on_the_fly

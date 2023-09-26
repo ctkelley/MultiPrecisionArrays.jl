@@ -1,5 +1,5 @@
 """
-mpgeslir(MPA::MPAArray, b; reporting = false, verbose = true)
+mpgeslir(MPA::MPArray, b; reporting = false, verbose = true)
 
 Use a multi-precision factorization to solve a linear system with
 plain vanilla iterative refinement.
@@ -12,7 +12,7 @@ Unlike lu, this does overwrite the low precision part of MPA.
 I use this to get some timing results and it's also convenient
 if you want to do factor and solve in one statement. 
 """
-function mpgeslir(MPA::MPAArray, b; reporting = false, verbose = true)
+function mpgeslir(MPA::MPArray, b; reporting = false, verbose = true)
 #MPZ=deepcopy(MPA)
 MPF=mplu!(MPA);
 xi=\(MPF, b; reporting=reporting, verbose=verbose)
