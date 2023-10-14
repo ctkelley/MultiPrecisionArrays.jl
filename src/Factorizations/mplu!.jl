@@ -3,24 +3,20 @@ mplu!(MPA::MPArray)
 
 Plain vanilla MPArray factorization.
 
-The story on interprecision transfers is that 
+The story on interprecision transfers is that you can set the Boolean
+```onthefly``` when you construct the MPArray. If you use ```mplu```
+then you get the defaults
 
-- MPLFact downcasts the residual before the solve and avoids N^2 
-  interprecision transfers. MPLFact factors MPArrays.
+- If ```onthefly == false ``` then the solver downcasts the residual 
+before the solve and avoids N^2 interprecision transfers.
 
-- MPLEFact factors MPEArrays and therefore does interprecision transfers 
+- If ```onthefly == true``` then the solver does interprecision transfers 
   on the fly and incurs the N^2 interprecision transfer cost for that. 
 
-  MPLEFact is what you must use if you plan to use the low precision 
+  ```onthefly == true``` is what you must use if you plan to use 
+  the low precision 
   factorization as a preconditioner in IR-GMRES or you're working in 
-  Float16 and the matrix is very ill-conditioned. MPLEFact factors 
-  MPEArrays, which know to do interprecision transfers on-the-fly.
-
-The 
-
-Union{MPArray,MPEArray}
-
-lets me use the ```on_the_fly``` trait to figure out what do to.
+  Float16 and the matrix is very ill-conditioned. 
 
 """
 function mplu!(MPA::MPArray)
