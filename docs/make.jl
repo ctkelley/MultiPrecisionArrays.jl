@@ -28,7 +28,8 @@ makedocs(
         "MPArray Constructors" => Any["functions/MPArray.md",],
         "Factorizations"=>Any["functions/hlu!.md", "functions/mplu!.md",],
         "Solvers"=>Any["functions/mpgeslir.md", "functions/mpgmir.md",],
+        "References" => ["Refereces.md",],
 ],
-; plugins=[refs.bib]
+; plugins=bib]
 )
 deploydocs(repo = "github.com/ctkelley/MultiPrecisionArrays.jl.git")
