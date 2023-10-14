@@ -28,7 +28,7 @@ makedocs(
         "MPArray Constructors" => Any["functions/MPArray.md",],
         "Factorizations"=>Any["functions/hlu!.md", "functions/mplu!.md",],
         "Solvers"=>Any["functions/mpgeslir.md", "functions/mpgmir.md",],
-        "References" => ["Refereces.md",],
+        "References" => ["References.md",],
 ],
 ; plugins=[bib]
 )
