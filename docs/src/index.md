@@ -4,7 +4,10 @@
 
 [MultiPrecisionArrays.jl](https://github.com/ctkelley/MultiPrecisionArrays.jl) is a package for iterative refinement. 
 
-This packages uses __SIAMFANLEquations.jl__ [ctk:siamfanl](@cite).
+These docs are enough to get you started. The complete version with
+a better account of the theory is [ctk:mparraydoc](@cite). 
+
+This package uses __SIAMFANLEquations.jl__ [ctk:siamfanl](@cite).
 
 This package provides data structures and solvers for several variants of iterative refinement. It will become much more useful when half precision (aka ```Float16```) is fully supported in LAPACK/BLAS. For now, it's only general-purpose
 application is classical iterative refinement with double precision equations and single precision factorizations.
