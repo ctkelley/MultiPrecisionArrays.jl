@@ -18,6 +18,8 @@ before the solve and avoids N^2 interprecision transfers.
   factorization as a preconditioner in IR-GMRES or you're working in 
   Float16 and the matrix is very ill-conditioned. 
 
+  ```onthefly == nothing``` means you take the defaults.
+
 """
 function mplu!(MPA::MPArray)
     AH = MPA.AH
