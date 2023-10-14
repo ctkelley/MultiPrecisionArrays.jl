@@ -12,7 +12,7 @@ mathengine = MathJax3(Dict(:loader => Dict("load" => ["[tex]/require", "[tex]/ma
                                         ])))
 
 bib = CitationBibliography(
-    joinpath(@__DIR__, "src", "MPArray.bib"),
+    joinpath(@__DIR__, "src", "refs.bib"),
     style=:numeric  # default
 )
 
@@ -29,6 +29,6 @@ makedocs(
         "Factorizations"=>Any["functions/hlu!.md", "functions/mplu!.md",],
         "Solvers"=>Any["functions/mpgeslir.md", "functions/mpgmir.md",],
 ],
-; plugins=[bib]
+; plugins=[refs.bib]
 )
 deploydocs(repo = "github.com/ctkelley/MultiPrecisionArrays.jl.git")
