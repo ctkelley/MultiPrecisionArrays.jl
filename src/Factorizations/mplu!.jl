@@ -33,7 +33,7 @@ end
 
 
 """
-mplu(A::Array{Float64,2}; TL=Float32, onthefly=false)
+mplu(A::Array{TH,2}; TL=Float32, onthefly=nothing) where TH <: Real
 
 Combines the constructor of the multiprecision array with the
 factorization.
