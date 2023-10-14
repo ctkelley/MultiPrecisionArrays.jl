@@ -30,6 +30,6 @@ makedocs(
         "Solvers"=>Any["functions/mpgeslir.md", "functions/mpgmir.md",],
         "References" => ["Refereces.md",],
 ],
-; plugins=bib]
+; plugins=[bib]
 )
 deploydocs(repo = "github.com/ctkelley/MultiPrecisionArrays.jl.git")
