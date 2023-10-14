@@ -1,5 +1,5 @@
 push!(LOAD_PATH, "../src/")
-using Documenter, MultiPrecisionArrays, DocumenterTools
+using Documenter, MultiPrecisionArrays, DocumenterTools, DocumenterCitations
 
 mathengine = MathJax3(Dict(:loader => Dict("load" => ["[tex]/require", "[tex]/mathtools"]),
                            :tex => Dict("inlineMath" => [["\$", "\$"], ["\\(", "\\)"]],
@@ -10,6 +10,12 @@ mathengine = MathJax3(Dict(:loader => Dict("load" => ["[tex]/require", "[tex]/ma
                                             "mathtools",
                                             "require",
                                         ])))
+
+bib = CitationBibliography(
+    joinpath(@__DIR__, "src", "MPArray.bib"),
+    style=:numeric  # default
+)
+
 
 makedocs(
     sitename = "MultiPrecisionArrays.jl",
@@ -23,5 +29,6 @@ makedocs(
         "Factorizations"=>Any["functions/hlu!.md", "functions/mplu!.md",],
         "Solvers"=>Any["functions/mpgeslir.md", "functions/mpgmir.md",],
 ],
+; plugins=[bib]
 )
 deploydocs(repo = "github.com/ctkelley/MultiPrecisionArrays.jl.git")
