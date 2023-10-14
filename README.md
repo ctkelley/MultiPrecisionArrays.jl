@@ -3,7 +3,7 @@
 [![][codecov-img]][codecov-url]
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7521427.svg)](https://doi.org/10.5281/zenodo.7521427)
 
-# MultiPrecisionArrays.jl v0.0.6
+# MultiPrecisionArrays.jl v0.0.7
 
 ## [C. T. Kelley](https://ctk.math.ncsu.edu)
 
@@ -17,7 +17,7 @@ what a double precision LU costs. This may be as good as it gets unless someone 
 
 __The half precision LU is much faster (more than 10x) as of v0.0.3. Look at [src/Factorizations/hlu.jl](src/Factorizations/hlu.jl) to see the hack job I did to [generic_lu](https://github.com/JuliaLang/julia/blob/master/stdlib/LinearAlgebra/src/lu.jl).__
 
-__v0.0.6 has some significant changes and simplifications. I should be tagging this in early October.__
+__v0.0.7 should be the version for the first draft of the ArXiv paper. I hope to tag it by the end of the year.__
 
 ## Is MultiPrecisionArrays.jl ready for prime time?
 
