@@ -31,6 +31,7 @@ end
     @test hlu_test()
     @test slashtest()
     @test mplu_test()
+    @test mpglu_test()
 end
 
 @testset "GM-IR" begin

@@ -77,6 +77,7 @@ export hlu
 export mplu!
 export mplu
 export mphlu!
+export mpglu
 export mpglu!
 export mpqr!
 export mpcholesky!
