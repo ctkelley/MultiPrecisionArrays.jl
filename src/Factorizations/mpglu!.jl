@@ -1,6 +1,8 @@
-#
-# Factor a MPArray and set it up for GMRES with \
-#
+"""
+mpglu!(MPH::MPArray; basissize=10)
+Factor a MPArray and set it up for GMRES by allocating room
+for Krylov vectors etc
+"""
 function mpglu!(MPH::MPArray; basissize=10)
 AH = MPH.AH
 TD = eltype(AH)
