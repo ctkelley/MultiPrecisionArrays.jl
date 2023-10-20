@@ -1,5 +1,5 @@
 #
-# Factor a MPErray and set it up for GMRES with \
+# Factor a MPArray and set it up for GMRES with \
 #
 function mpglu!(MPH::MPArray; basissize=10)
 AH = MPH.AH

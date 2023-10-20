@@ -26,7 +26,7 @@ makedocs(
         "GMRES-IR" => Any["Half_1.md",], 
         "More than you want to know" => Any["Details/Termination.md", "Details/Interprecision_1.md",],
         "MPArray Constructors" => Any["functions/MPArray.md",],
-        "Factorizations"=>Any["functions/hlu!.md", "functions/mplu!.md", "functions/mplu.md",],
+        "Factorizations"=>Any["functions/hlu!.md", "functions/mplu!.md", "functions/mplu.md", "functions/mpglu!.md", "functions/mpglu.md",],
         "Solvers"=>Any["functions/mpgeslir.md", "functions/mpgmir.md",],
         "References" => ["References.md",],
 ],
