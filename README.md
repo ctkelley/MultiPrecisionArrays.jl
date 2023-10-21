@@ -195,9 +195,6 @@ julia> @belapsed lu($A)
 It is no surprise that the factorization in single precision took roughly half as long as the one in double. In the double-single precision case, iterative refinement is a great
 expample of a time/storage tradeoff. You have to store a low precision copy of $A$, so the storage burden increases by 50\% and the factoriztion time is cut in half.
 
-As of today, you'll need to manage the factorization and the solve separately. One reason for this is that we provide several variations of iterative refinement and the solvers dispatch on the way we configure
-the multiprecision array. I do not expect this to change.
-
 ### A few subtleties in the example
 
 Here is the source for ```mplu```
