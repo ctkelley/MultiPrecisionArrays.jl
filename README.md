@@ -9,7 +9,7 @@
 
 This is the start of a package to support multiprecision arrays. This is for my own research right now.
 
-This package provides data structures and solvers for several variants of iterative refinement. It will become much more useful when half precision (aka ```Float16```) is fully supported in LAPACK/BLAS. For now, its only general-purpose
+This package provides data structures and solvers for several variants of iterative refinement (IR). It will become much more useful when half precision (aka ```Float16```) is fully supported in LAPACK/BLAS. For now, its only general-purpose
 application is classical iterative refinement with double precision equations and single precision factorizations. 
 
 The half precision stuff is good for those of us doing research in this field. Half precision performace has progressed to the point where you can acutally get things done. On an Apple M2-Pro, a half precision LU only costs 3--5 times
@@ -54,7 +54,7 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 
 ### What is iterative refinement?
 
-This package will make solving dense systems of linear equations faster by using the LU factorization and iterative refinement. It is limited to LU for now. A very generic description of this for solving a linear systrem $A x = b$ is
+This package will make solving dense systems of linear equations faster by using the LU factorization and IR. It is limited to LU for now. A very generic description of this for solving a linear systrem $A x = b$ is
 
 __IR(A, b)__
 - $x = 0$
@@ -71,6 +71,13 @@ factorization in a lower precision, say single, within a residual correction ite
 to allocate storage for a copy of $A$ is the lower precision and factor that copy. The one has to determine what the line
 $d = (LU)^{-1} r$ means. Do you cast $r$ into the lower precison before the solve or not? __MultiPrecisionArrays.jl__ provides
 data structures and solvers to manage this. The __MPArray__ structure lets you preallocate $A$, the low precision copy, and the residual $r$.
+
+IR is a perfect example of a storage/time tradeoff.
+To solve a linear system $A x = b$ in $R^N$ with IR,
+one incurs the storage penalty of making a low
+precision copy of $a$ and reaps the benefit of only having to
+factor the low precision copy.
+
 
 ### Termination of the IR loop.
 
