@@ -1,7 +1,9 @@
 """
 mplu!(MPA::MPArray)
 
-Plain vanilla MPArray factorization.
+Plain vanilla MPArray factorization: Factor the low precision copy
+and leave the high precision matrix alone. You get a factorization
+object as output and can use ```\\``` to solve linear systems.
 
 The story on interprecision transfers is that you can set the Boolean
 ```onthefly``` when you construct the MPArray. If you use ```mplu```

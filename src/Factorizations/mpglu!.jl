@@ -2,6 +2,13 @@
 mpglu!(MPH::MPArray; basissize=10)
 Factor a MPArray and set it up for GMRES by allocating room
 for Krylov vectors etc
+
+This function factors the low precision copy
+and leaves the high precision matrix alone. ```mpglu!``` allocates
+storage for ```basissize``` Kylov vectors and some other things
+GMRES needs.
+You get a factorization
+object as output and can use ```\\``` to solve linear systems.
 """
 function mpglu!(MPH::MPArray; basissize=10)
 AH = MPH.AH
