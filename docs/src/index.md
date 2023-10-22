@@ -11,7 +11,7 @@ This package uses __SIAMFANLEquations.jl__ [ctk:siamfanl](@cite), the
 solver package associated with a book [ctk:fajulia](@cite) and
 suite of IJulia notebooks [ctk:notebooknl](@cite).
 
-This package provides data structures and solvers for several variants of iterative refinement. It will become much more useful when half precision (aka ```Float16```) is fully supported in LAPACK/BLAS. For now, it's only general-purpose
+This package provides data structures and solvers for several variants of iterative refinement (IR). It will become much more useful when half precision (aka ```Float16```) is fully supported in LAPACK/BLAS. For now, it's only general-purpose
 application is classical iterative refinement with double precision equations and single precision factorizations.
 
 The half precision stuff is good for those of us doing research in this field. Half precision performance has progressed to the point where you can actually get things done. On an Apple M2-Pro, a half precision LU only costs 3--5 times
@@ -23,7 +23,14 @@ for __hlu!.jl__.
 ## What is iterative refinement.
 
 The idea is to solve $Ax=b$ in high precision using a factorization
-in lower precision. Here is the textbook 
+in lower precision. 
+
+IR is a perfect example of a storage/time tradeoff. To solve a linear system  
+$Ax=b$ with IR, one incurs the storage penalty of making a low 
+precision copy of  and reaps the benefit of only having to factor the 
+low precision copy.
+
+Here is the textbook 
 version [higham](@cite) using the LU factorization.
 
 __IR(A, b)__
