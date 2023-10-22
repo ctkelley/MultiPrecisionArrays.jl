@@ -282,6 +282,29 @@ basis and some other vectors needed in the solve. The Julia function
 copy of the matrix. The output, like that of ```mplu``` is a factorization
 object that you can use with backslash.
 
+Here is an ill-conditioned example where IR fails to converge. We will construct an ill-conditioned expample and do multi-precision factorizations with
+both ```mplu``` and ```mpglu```. 
+
+```
+julia> using MultiPrecisionArrays
+
+julia> using MultiPrecisionArrays.Examples
+
+julia> N=4069; AD= I - 800.0*Gmat(N); A=Float32.(AD); x=ones(Float32,N); b=A*x;
+
+julia> MPA=MPArray(A); MPA2=deepcopy(MPA);
+
+julia> MPF=mplu!(MPA); MPF2=mpglu!(MPA2);
+
+julia> z=MPF\b; y=MPF2\b; println(norm(z-x,Inf),"  ",norm(y-x,Inf))
+0.2875508  0.004160166
+
+julia> println(norm(b-A*z,Inf)/norm(b,Inf),"  ",norm(b-A*y,Inf)/norm(b,Inf))
+0.0012593127  1.4025759e-5
+```
+As you can see, the relative error and relative residual norms for GMRES-IR
+are much smaller than for IR.
+
 ## Dependencies
 
 As of now you need to install these packages
