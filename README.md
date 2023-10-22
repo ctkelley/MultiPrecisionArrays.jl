@@ -44,8 +44,8 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 - [Algorithms](#algorithms)
 - [Example](#example)
   - [Subtleties in the example](#a-few-subtleties-in-the-example)
+- [Be Careful with Half Precision](#half-precision)
 - [GMRES-IR](#gmres-ir)
-- [Be Careful with Half Precision](#half-precision)    
 - [Dependencies](#dependencies)
 - [Endorsement](#endorsement)
 - [Funding](#funding)
@@ -244,18 +244,43 @@ remember that ```mplu!``` overwrites the low precision copy of A with the factor
 
 __MultiPrecisionArrays.jl__ supports many variations of iterative refinement and we will explain all that in the docs and in a paper in the works.
 
-## GMRES-IR
-
 ## Half Precision
 
 Bottom line: don't use it and expect good performance. See [this page](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Half_1/) in the docs for details.
 
 It's a good idea to try GMRES-IR if you are playing with half precision. We support that. GMRES-IR uses a different factorization ```mpglu!``` which factors the 
 low precision matrix and allocates room for the Krylov basis. The you use the solver ```mpgmir``` to use GMRES-IR, where you use the low precision factorization as
-a preconditioner for GMRES to solve $A d = r$. 
+a preconditioner for GMRES to solve $A d = r$. ```mpglu``` combines the factorization and the solve.
 
+## GMRES-IR
 
+If IR fails to converge, there is still a chance that the low precision factorization could be a good preconditioner for GMRES. In this case we must do 
+interprecision transfers on the fly. The preconditioner is
 
+$$
+P = U^{-1} L^{-1} 
+$$
+
+There are two ways to use $P$. One is to precondition the system directly the other is to precondition the equation for $d$ within IR. GMRES-IR is the latter
+approach. Here The reason for using left preconditioning is that one is not
+interested in a small residual for the correction equation, but in
+capturing $d$ as well as possible. The IR loop is the part of the solve
+that seeks a small residual norm.
+
+GMRES-IR will not be as efficient as IR because each iteration is itself
+an GMRES iteration and application of the preconditioned matrix-vector
+product has the same cost (solve + high precision matrix vector product)
+as a single IR iteration. However, if low precision is half, this approach
+can recover the residual norm one would get from a successful IR iteration.
+
+There is also a storage problem. One should allocate storage for the Krylov
+basis vectors and other vectors that GMRES needs internally. We do that
+in the factorization phase. So the structure ```MPGEFact``` has the
+factorization of the low precision matrix, the residual, the Krylov
+basis and some other vectors needed in the solve. The Julia function
+```mpgl``` constructs the data structure and factors the low precision
+copy of the matrix. The output, like that of ```mplu``` is a factorization
+object that you can use with backslash.
 
 ## Dependencies
 
