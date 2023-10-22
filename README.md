@@ -44,6 +44,7 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 - [Algorithms](#algorithms)
 - [Example](#example)
   - [Subtleties in the example](#a-few-subtleties-in-the-example)
+- [GMRES-IR](#gmres-ir)
 - [Be Careful with Half Precision](#half-precision)    
 - [Dependencies](#dependencies)
 - [Endorsement](#endorsement)
@@ -242,6 +243,8 @@ remember that ```mplu!``` overwrites the low precision copy of A with the factor
 
 
 __MultiPrecisionArrays.jl__ supports many variations of iterative refinement and we will explain all that in the docs and in a paper in the works.
+
+## GMRES-IR
 
 ## Half Precision
 
