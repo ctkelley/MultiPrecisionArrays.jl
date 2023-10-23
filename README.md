@@ -37,6 +37,12 @@ __Please do not make PRs. If you stumble on this mess and have questions/ideas .
 
 Nothing is in final form and I am changing the API, internal structures, exported functions/structs and all kinds of other stuff frequently. When/if I announce this on Discourse, then it will be time for complaints or unsolicited offers to collaborate.
 
+## Coming Attractions
+
+- Three precision IR
+- BiCGSTAB-IR
+- Document extraction of iteration stats
+- First release
 
 
 ## Readme Contents:
