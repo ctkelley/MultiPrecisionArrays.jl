@@ -2,7 +2,9 @@
 
 [C. T. Kelley](https://ctk.math.ncsu.edu)
 
-[MultiPrecisionArrays.jl](https://github.com/ctkelley/MultiPrecisionArrays.jl) is a package for iterative refinement. 
+[MultiPrecisionArrays.jl](https://github.com/ctkelley/MultiPrecisionArrays.jl) 
+[ctk:mparrays](@cite)
+is a package for iterative refinement. 
 
 These docs are enough to get you started. The complete version with
 a better account of the theory is [ctk:mparraydoc](@cite). 
