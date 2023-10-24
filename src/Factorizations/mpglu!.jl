@@ -33,6 +33,13 @@ mpglu(A::Array{TH,2}; TL=Float32, basissize=10) where TH <: Real
 
 Combines the constructor of the multiprecision GMRES-ready array with the
 factorization.
+
+Combines the constructor of the multiprecision array with the
+factorization.
+
+Step 1: build the MPArray
+Step 2: factor the low precision copy, allocate storage for the Krylov
+method, and return the factorization object
 """
 function mpglu(A::Array{TH,2}; TL=Float32, basissize=10) where TH <: Real
 #
@@ -44,6 +51,10 @@ function mpglu(A::Array{TH,2}; TL=Float32, basissize=10) where TH <: Real
 # and false if low precision is single.
 #
 MPA=MPArray(A; TL=TL, onthefly=true)
+#
+# Factor the low precision copy and allocate storage 
+# to get the factorization object MPF
+#
 MPGF=mpglu!(MPA; basissize=basissize)
 return MPGF
 end

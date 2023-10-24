@@ -40,7 +40,10 @@ end
 mplu(A::Array{TH,2}; TL=Float32, onthefly=nothing) where TH <: Real
 
 Combines the constructor of the multiprecision array with the
-factorization.
+factorization. 
+
+Step 1: build the MPArray 
+Step 2: factor the low precision copy and return the factorization object
 """
 function mplu(A::Array{TH,2}; TL=Float32, onthefly=nothing) where TH <: Real
 #
@@ -52,7 +55,13 @@ function mplu(A::Array{TH,2}; TL=Float32, onthefly=nothing) where TH <: Real
 # and false if low precision is single.
 #
 (onthefly == nothing ) && (onthefly = (TL==Float16))
+#
+# Build the multiprecision array MPA
+#
 MPA=MPArray(A; TL=TL, onthefly=onthefly)
+#
+# Factor the low precision copy to get the factorization object MPF
+#
 MPF=mplu!(MPA)
 return MPF
 end
