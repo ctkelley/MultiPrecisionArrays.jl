@@ -117,7 +117,7 @@ correction equation
 A d = r
 ```
 where one replaces $A$ with the low precision factors
-$\ml \mU$. In GMRES-IR one solves the correction
+$LU$. In GMRES-IR one solves the correction
 equation with a left-preconditioned GMRES iteration using
 $U^{-1} L^{-1}$ as
 the preconditioner. The preconditioned equation is
@@ -137,12 +137,13 @@ in the factorization phase. So the structure {\bf MPGEFact} has the
 factorization of the low precision matrix, the residual, the Krylov
 basis and some other vectors needed in the solve. 
 
+The Julia function
+```mpglu``` constructs the data structure and factors the low precision
+copy of the matrix. The output, like that of ```mplu``` is a factorization
+object that you can use with backslash.
+
 Here is a well conditioned example. Both IR and GMRES-IR perform well, with
-GMRES-IR taking significantly more time.  Note that I cannot use the
-same multiprecision array for both factorizations because the data for
-the low precision factorization would be overwritten. So I use the 
-{\bf deepcopy} command from Julia {\bf before} factoring either multiprecision
-array.
+GMRES-IR taking significantly more time.  
 
 ```
 julia> using MultiPrecisionArrays
@@ -153,20 +154,16 @@ julia> using BenchmarkTools
 
 julia> N=4069; AD= I - Gmat(N); A=Float32.(AD); x=ones(Float32,N); b=A*x;
 
-julia> MPA=MPArray(A); MPA2=deepcopy(MPA); 
-
-julia> MPF=mplu!(MPA); MPF2=mpglu!(MPA2);
-
-julia> # build two MPArrays and factor them for IR or GMRES-IR
+julia> MPF=mplu(A); MPF2=mpglu(A);
 
 julia> z=MPF\b; y=MPF2\b; println(norm(z-x,Inf),"  ",norm(y-x,Inf))
-5.9604645e-7  2.9802322e-7
+5.9604645e-7  4.7683716e-7
 
 julia> @btime $MPF\$b;
   13.582 ms (4 allocations: 24.33 KiB)
 
 julia> @btime $MPF2\$b;
-  52.020 ms (223 allocations: 92.84 KiB)
+  40.344 ms (183 allocations: 90.55 KiB)
 ```
 
 If you dig into the iterations statistics (more on that later) you
@@ -179,17 +176,14 @@ example, as we saw earlier, IR fails to converge.
 ```
 julia> N=4069; AD= I - 800.0*Gmat(N); A=Float32.(AD); x=ones(Float32,N); b=A*x;
         
-julia> MPA=MPArray(A); MPA2=deepcopy(MPA);
-
-julia> MPF=mplu!(MPA); MPF2=mpglu!(MPA2);
+julia> MPF=mplu(A); MPF2=mpglu(A);
 
 julia> z=MPF\b; y=MPF2\b; println(norm(z-x,Inf),"  ",norm(y-x,Inf))
 0.2875508  0.004160166
 
 julia> println(norm(b-A*z,Inf)/norm(b,Inf),"  ",norm(b-A*y,Inf)/norm(b,Inf))
-0.0012593127  7.937655e-6
+0.0012593127  1.4025759e-5
 ```
-
 So, the relative error and relative residual norm for GMRES-IR
 is much smaller than that for IR.
 
