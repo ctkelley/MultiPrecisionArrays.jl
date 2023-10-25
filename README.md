@@ -7,7 +7,7 @@
 
 ## [C. T. Kelley](https://ctk.math.ncsu.edu)
 
-This is the start of a package to support multiprecision arrays. This is for my own research right now.
+This is the start of a package to support multiprecision arrays. This is mostly for my own research right now.
 
 This package provides data structures and solvers for several variants of iterative refinement (IR). It will become much more useful when half precision (aka ```Float16```) is fully supported in LAPACK/BLAS. For now, its only general-purpose
 application is classical iterative refinement with double precision equations and single precision factorizations. 
