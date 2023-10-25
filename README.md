@@ -284,7 +284,7 @@ basis vectors and other vectors that GMRES needs internally. We do that
 in the factorization phase. So the structure ```MPGEFact``` has the
 factorization of the low precision matrix, the residual, the Krylov
 basis and some other vectors needed in the solve. The Julia function
-```mpgl``` constructs the data structure and factors the low precision
+```mpglu``` constructs the data structure and factors the low precision
 copy of the matrix. The output, like that of ```mplu``` is a factorization
 object that you can use with backslash.
 
