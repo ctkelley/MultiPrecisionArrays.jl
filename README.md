@@ -352,7 +352,7 @@ Most users of this package can ignore this issue.
 This project was partially supported by
 
 1. National Science Foundation Grant DMS-1906446 and
-2. Department of Energy grant DE-NA003967
+2. [Department of Energy grant DE-NA003967](https://cement-psaap.github.io)
 
 [docs-stable-img]: https://img.shields.io/badge/docs-stable-blue.svg
 [docs-stable-url]: https://ctkelley.github.io/MultiPrecisionArrays.jl/stable
