@@ -44,6 +44,12 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 - Document extraction of iteration stats
 - First release
 
+### Documentation
+
+- This README file
+- The [docs for the package](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev)
+- [Draft of the ArXiv paper](https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/main/Publications_and_Presentations/MPArray.pdf)
+
 
 ## Readme Contents:
 
@@ -107,6 +113,7 @@ $$
 $$
 
 even if the residual decrease criterion is not satisfied.
+
 
 
 
