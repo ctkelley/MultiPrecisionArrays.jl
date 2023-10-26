@@ -351,7 +351,7 @@ Most users of this package can ignore this issue.
 
 This project was partially supported by
 
-1. National Science Foundation Grant DMS-1906446 and
+1.  [National Science Foundation Grant DMS-1906446](https://www.nsf.gov/awardsearch/showAward?AWD_ID=1906446&HistoricalAwards=false) and
 2. [Department of Energy grant DE-NA003967](https://cement-psaap.github.io)
 
 [docs-stable-img]: https://img.shields.io/badge/docs-stable-blue.svg
