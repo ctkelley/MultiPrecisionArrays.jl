@@ -44,7 +44,7 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 - Document extraction of iteration stats
 - First release
 
-### Documentation
+## Documentation
 
 - This README file
 - The [docs for the package](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev)
