@@ -58,6 +58,7 @@ Nothing is in final form and I am changing the API, internal structures, exporte
   - [Subtleties in the example](#a-few-subtleties-in-the-example)
 - [Be Careful with Half Precision](#half-precision)
 - [GMRES-IR](#gmres-ir)
+- [Harvesting Iteration Statistics](#harvesting-iteration-statistics)
 - [Dependencies](#dependencies)
 - [Endorsement](#endorsement)
 - [Funding](#funding)
@@ -317,6 +318,9 @@ julia> println(norm(b-A*z,Inf)/norm(b,Inf),"  ",norm(b-A*y,Inf)/norm(b,Inf))
 ```
 As you can see, the relative error and relative residual norms for GMRES-IR
 are much smaller than for IR.
+
+## Harvesting Iteration Statistics
+
 
 ## Dependencies
 
