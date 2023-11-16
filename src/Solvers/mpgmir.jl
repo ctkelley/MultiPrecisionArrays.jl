@@ -2,6 +2,77 @@
 mpgmir(AF::MPGFact, b; reporting=false, verbose=false, mpdebug=false)
 
 GMRES-IR solver 
+
+We overload the backslash operator to call mprmir for a multiprecision
+MPGFact factorization. So if ```MPA``` is an MPArray and
+```
+AF = mpglu!(MPA)
+```
+Then ```AF\\b``` maps to
+```
+mpgmir(AF, b)
+```
+You should call ```mpgir``` explicitly if you want the iteration
+statistics.
+
+The three kwargs are ```reporting```, ```verbose```, and ```mpdebug```.
+Of these ```reporting``` is most useful. The other two are for my
+debugging pleasure.
+
+When you do
+```
+mpout = mpgmir(AF, b; reporting=true)
+```
+You get a structure where
+
+```mpout.sol``` is the solution
+
+```mpout.rhist``` is the residual history for IR
+
+```mpout.khist``` is the krylovs/IR iteration 
+
+Other parts of ```mpout``` are the high and low precisions 
+```TH``` and  ```TL```.
+
+
+## Example
+```jldoctest
+julia> using MultiPrecisionArrays.Examples
+
+julia> N=4096; A = I - 800.0 * Gmat(N);
+
+julia> MPA=MPArray(A); AF=mpglu!(MPA);
+
+julia> b=ones(N); 
+
+julia> mpout=mpgmir(AF, b; reporting=true);
+
+julia> x=mpout.sol; norm(b-A*x,Inf)
+4.08251e-12
+
+julia> mpout.rhist
+4-element Vector{Float64}:
+ 6.40000e+01
+ 2.82712e-09
+ 5.82236e-11
+ 5.93385e-11
+# Stagnation after the second iteration
+
+julia> mpout.khist
+3-element Vector{Int64}:
+ 4
+ 4
+ 4
+# Four Krylovs per iteration.
+
+julia> mpout.TH
+Float64
+
+julia> mpout.TL
+Float32
+
+```
+
 """
 function mpgmir(AF::MPGFact, b; reporting = false, 
                 verbose = false, mpdebug = false)
@@ -94,9 +165,8 @@ function mpgmir(AF::MPGFact, b; reporting = false,
     verbose && println("Residual history = $rhist")
     if reporting
         TL = eltype(AF.AL)
-        TFact = eltype(AF.AL)
         return (rhist = rhist, khist = khist,
-               sol = x, TH = TB, TL = TL, TFact = TFact)
+               sol = x, TH = TB, TL = TL)
     else
         return x
     end
