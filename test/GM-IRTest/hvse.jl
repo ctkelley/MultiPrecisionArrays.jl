@@ -13,7 +13,7 @@ end
 function unitt(N)
 A64=I - 800.0*Gmat(N)
 A=Float32.(A64)
-MPA=MPArray(A)
+MPA=MPGArray(A)
 MPF=mpglu!(MPA)
 MPH=MPHArray(A)
 MPHF=mpglu!(MPH)

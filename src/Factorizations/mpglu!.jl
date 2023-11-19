@@ -22,24 +22,6 @@ MPF=MPGEFact(AH, AL, ALF, VStore, KStore, res, true)
 return MPF
 end
 
-function mpglu!(MPH::MPArray; basissize=10)
-AH = MPH.AH
-TD = eltype(AH)
-res = MPH.residual
-n=length(res)
-AL = MPH.AL
-    TL = eltype(AL)
-    #
-    # Factor in low precision
-    #
-    (TL == Float16) ? ALF = hlu!(AL) : ALF = lu!(AL)
-    #
-VStore=zeros(TD, n, basissize)
-KStore=kstore(n,"gmres")
-MPF=MPGEFact(AH, AL, ALF, VStore, KStore, res, true)
-return MPF
-end
-
 """
 mpglu(A::Array{TH,2}; TL=Float32, basissize=10) where TH <: Real
 
