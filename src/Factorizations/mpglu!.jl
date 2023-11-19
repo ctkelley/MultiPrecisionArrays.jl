@@ -10,6 +10,18 @@ GMRES needs.
 You get a factorization
 object as output and can use ```\\``` to solve linear systems.
 """
+function mpglu!(MPGA::MPGArray)
+AL=MPGA.AL
+AH=MPGA.AH
+VStore=MPGA.VStore
+KStore=MPGA.KStore
+res=MPGA.residual
+TL=eltype(AL)
+(TL == Float16) ? ALF = hlu!(AL) : ALF = lu!(AL)
+MPF=MPGEFact(AH, AL, ALF, VStore, KStore, res, true)
+return MPF
+end
+
 function mpglu!(MPH::MPArray; basissize=10)
 AH = MPH.AH
 TD = eltype(AH)
@@ -34,28 +46,13 @@ mpglu(A::Array{TH,2}; TL=Float32, basissize=10) where TH <: Real
 Combines the constructor of the multiprecision GMRES-ready array with the
 factorization.
 
-Combines the constructor of the multiprecision array with the
-factorization.
-
-Step 1: build the MPArray
-Step 2: factor the low precision copy, allocate storage for the Krylov
-method, and return the factorization object
+Step 1: build the MPGArray
+Step 2: Call mpglu! to build the factorization object
 """
 function mpglu(A::Array{TH,2}; TL=Float32, basissize=10) where TH <: Real
-#
-# If the high precision matrix is single, the low precision must be half.
-#
-(TH == Float32) && (TL = Float16)
-#
-# Unless you tell me otherwise, onthefly is true if low precision is half
-# and false if low precision is single.
-#
-MPA=MPArray(A; TL=TL, onthefly=true)
-#
-# Factor the low precision copy and allocate storage 
-# to get the factorization object MPF
-#
-MPGF=mpglu!(MPA; basissize=basissize)
+(TH==Float32) ? TL=Float16 : TL=TL
+MPGA=MPGArray(A; basissize=basissize, TL=TL)
+MPGF=mpglu!(MPGA)
 return MPGF
 end
 

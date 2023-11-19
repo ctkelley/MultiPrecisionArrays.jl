@@ -29,7 +29,7 @@ function mpglu_test()
 AD=rand(10,10); MPD=MPArray(AD); MPF1=mpglu!(MPD); MPF2=mpglu(AD);
 eq64=test_eq(MPF1,MPF2)
 eq64 || println("mpglu t1 fails")
-ADx=rand(10,10); MPDx=MPArray(ADx; TL=Float16);
+ADx=rand(10,10); MPDx=MPGArray(ADx; TL=Float16);
 MPF1x=mpglu!(MPDx); MPF2x=mpglu(ADx; TL=Float16);
 eq64x=test_eq(MPF1x,MPF2x)
 eq64x || println("mpglu t2 fails")
@@ -47,6 +47,7 @@ eqok=true
 for nf in fieldnames(MPLFact)
 gx=getfield(MF1,nf); hx =getfield(MF2,nf)
 eqok= ((gx==hx) && eqok)
+eqok || println(nf)
 end
 return eqok
 end

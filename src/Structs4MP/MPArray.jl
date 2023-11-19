@@ -30,7 +30,7 @@ function MPArray(AH::Array{Float64,2}; TL = Float32, onthefly=nothing)
 end
 """
 MPArray(AH::Array{Float32,2}; TL = Float16, onthefly=true)
-Default single precision constructor for MPArray. 
+Default single precision constructor for MPArray with TL=Float16
 
 If your high precision array is single, then your low precision
 array is half (Duh!). 
@@ -39,7 +39,6 @@ We do the triangular
 solves with on-the-fly interprecision transfer in this case because
 the bit of extra accuracy makes a difference and, at least for now,
 on-the-fly interprecision transfers are cheaper.
-
 
 Data structures etc are the same as in the 
 double-single/half case, but you don't have the option to go lower than

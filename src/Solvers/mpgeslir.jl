@@ -8,13 +8,70 @@ This version is analogous to ```A\\b``` and combines the factorization
 and the solve. You start with MPA=MPArray(A) and then pass MPA
 to mpgeslir and combine the factorization and the solve. 
 
+You can also get the multiprecision factorization directly with
+```
+MPF=mplu!(A)
+```
+and then pass ```MPF``` to mpgeslir.
+
 Unlike lu, this does overwrite the low precision part of MPA.
 I use this to get some timing results and it's also convenient
 if you want to do factor and solve in one statement. 
+
+You can also get this with ```x = MPA\\b```.
+
+If you set the kwarg ```reporting``` to true you can get the IR
+residual history. The output of 
+```
+x = MPA\\b
+```
+or
+```
+x=MPF\\b
+```
+is the solition. The output of 
+```
+mout = \\(MPA,b; reporting=true)
+```
+or
+```
+mout = \\(MPF,b; reporting=true)
+```
+is a structure. ```mpout.sol``` is the solution. ```mpout.rhist```
+is the residual history. mpout also contains the datatypes TH for
+high precision and TL for low precision.
+
+## Example
+```jldoctest
+julia> using MultiPrecisionArrays.Examples
+
+julia> N=4096; A = I - 800.0 * Gmat(N); b=ones(N);
+
+julia> MPF=mplu(A);
+
+julia> mout=\\(MPF, b; reporting=true);
+
+julia> mout.rhist
+6-element Vector{Float64}:
+ 1.00000e+00
+ 5.36483e-02
+ 1.57977e-05
+ 5.10232e-09
+ 7.76756e-12
+ 9.90008e-12
+
+# Stagnation after four IR iterations
+
+julia> [mout.TH mout.TL]
+1×2 Matrix{DataType}:
+ Float64  Float32
+
+```
 """
 function mpgeslir(MPA::MPArray, b; reporting = false, verbose = true)
-#MPZ=deepcopy(MPA)
+# Factor MPA and return Factorization object
 MPF=mplu!(MPA);
+# Call mpgeslir for the solve
 xi=\(MPF, b; reporting=reporting, verbose=verbose)
 return xi
 end

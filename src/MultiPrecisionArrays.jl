@@ -14,6 +14,7 @@ using Polyester
 
 include("Structs4MP/MPBase.jl")
 include("Structs4MP/MPArray.jl")
+include("Structs4MP/MPGArray.jl")
 include("Structs4MP/MPHeavy.jl")
 
 MPFact = Union{MPLFact,MPHFact}
@@ -116,12 +117,14 @@ export MPHArray
 #
 export MPLFact
 export MPGHFact
+export MPGEFact
 export MPFact
 #
 #
 #
 #export MPEArray
 export MPFArray
+export MPGArray
 export MPHFact
 export MPhatv
 export MPhptv
