@@ -1,4 +1,5 @@
-# mpglu!: Factor a MPArray and set it up for GMRES with \
+# mpglu!: Factor a MPGArray and set it up for GMRES y allocating room
+for Krylov vectors etc
 ```@docs
-mpglu!(MPH::MPArray; basissize=10)
+mpglu!(MPGA::MPGArray)
 ```

@@ -1,6 +1,6 @@
 """
-mpglu!(MPH::MPArray; basissize=10)
-Factor a MPArray and set it up for GMRES by allocating room
+mpglu!(MPGA::MPGArray)
+Factor a MPGArray and set it up for GMRES by allocating room
 for Krylov vectors etc
 
 This function factors the low precision copy

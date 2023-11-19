@@ -19,7 +19,7 @@ function nlhtest(n = 32, c = 0.999)
     JV16 = zeros(Float16, n, n)
     JVMP = MPArray(JV)
     JVMPH = MPHArray(JV)
-    JVMPD = MPArray(JVD)
+    JVMPG = MPGArray(JVD)
     x0 = ones(n)
     tol = 1.e-14
     hdata = heqinit(x0, c)
@@ -59,10 +59,24 @@ function nlhtest(n = 32, c = 0.999)
         sham = 1,
         jfact = mpglu!,
     )
+    mpgnout = nsol(
+        heqf!,
+        x0,
+        FV,
+        JVMPG,
+        jheqmp!;
+        rtol = tol,
+        atol = tol,
+        pdata = hdata,
+        sham = 1,
+        jfact = mpglu!,
+    )
+
     llu = length(nout.history)
     lmp = length(mpnout.history)
     lmph = length(mphnout.history)
-    hpass = (llu == lmp) && (lmph == lmp)
+    lmpg = length(mpgnout.history)
+    hpass = (llu == lmp) && (lmph == lmp) && (lmp == lmpg)
 end
 
 #
@@ -74,6 +88,7 @@ function nlhtest16(n = 32, c = 1.0)
     JV16 = zeros(Float16, n, n)
     JVMP = MPArray(JV; onthefly=false)
     JVME = MPArray(JV; onthefly=true)
+    JVMPG = MPGArray(JV)
     JVMPH = MPHArray(JV)
     x0 = ones(n)
     tol = 1.e-8
@@ -130,7 +145,7 @@ function nlhtest16(n = 32, c = 1.0)
         heqf!,
         x0,
         FV,
-        JVME,
+        JVMPG,
         jheqmp!;
         rtol = tol,
         atol = tol,

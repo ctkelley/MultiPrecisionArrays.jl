@@ -34,7 +34,7 @@ is_heavy(x::MPLFact) = false
 
 import Base.eltype
 
-function eltype(MP::Union{MPArray,MPHArray})
+function eltype(MP::Union{MPArray,MPHArray,MPGArray})
     TP = eltype(MP.AH)
     return TP
 end
