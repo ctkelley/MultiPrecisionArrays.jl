@@ -51,15 +51,3 @@ KStore=kstore(n,"gmres")
 MPGA=MPGArray(AH, AL, VStore, KStore, res, true)
 return MPGA
 end
-
-function Xmpglu!(MPGA::MPGArray)
-AL=MPGA.AL
-AH=MPGA.AH
-VStore=MPGA.VStore
-KStore=MPGA.KStore
-res=MPGA.residual
-TL=eltype(AL)
-(TL == Float16) ? ALF = hlu!(AL) : ALF = lu!(AL)
-MPF=MPGEFact(AH, AL, ALF, VStore, KStore, res, true)
-return MPF
-end
