@@ -39,10 +39,14 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 
 ## Coming Attractions
 
+- Document extraction of iteration stats
+- Nonlinear solver applications
+- First release
+
+## Coming Later
+
 - Three precision IR
 - BiCGSTAB-IR
-- Document extraction of iteration stats
-- First release
 
 ## Documentation
 
