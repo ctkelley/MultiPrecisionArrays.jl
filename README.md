@@ -306,12 +306,10 @@ julia> using MultiPrecisionArrays.Examples
 
 julia> N=4069; AD= I - 800.0*Gmat(N); A=Float32.(AD); x=ones(Float32,N); b=A*x;
 
-julia> MPA=MPArray(A); MPA2=deepcopy(MPA);
-
-julia> MPF=mplu!(MPA); MPF2=mpglu!(MPA2);
+julia> MPF=mplu(A); MPF2=mpglu(A);
 
 julia> z=MPF\b; y=MPF2\b; println(norm(z-x,Inf),"  ",norm(y-x,Inf))
-0.2875508  0.004160166
+0.2875508  0.0044728518
 
 julia> println(norm(b-A*z,Inf)/norm(b,Inf),"  ",norm(b-A*y,Inf)/norm(b,Inf))
 0.0012593127  1.4025759e-5
