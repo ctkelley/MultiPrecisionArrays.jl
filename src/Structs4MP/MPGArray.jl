@@ -31,7 +31,9 @@ struct MPGArray{TH<:AbstractFloat,TL<:AbstractFloat}
     onthefly::Bool
 end
 
-
+"""
+MPGArray(AH::Array{Float64,2}; basissize=10, TL=Float32)
+"""
 function MPGArray(AH::Array{Float64,2}; basissize=10, TL=Float32)
 AL=TL.(AH)
 (m,n)=size(AH)
@@ -42,6 +44,9 @@ MPGA=MPGArray(AH, AL, VStore, KStore, res, true)
 end
 
 
+"""
+MPGArray(AH::Array{Float32,2}; basissize=10, TL=Float16)
+"""
 function MPGArray(AH::Array{Float32,2}; basissize=10, TL=Float16)
 AL=TL.(AH)
 (m,n)=size(AH)
