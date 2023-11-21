@@ -115,7 +115,7 @@ Float16
 function mpgmir(AF::MPGFact, b; reporting = false, 
                 verbose = false, mpdebug = false)
     #
-    normtype = 2
+    normtype = Inf
     TB = eltype(b)
     tolf = TB(10.0)*eps(TB)
     n = length(b)
