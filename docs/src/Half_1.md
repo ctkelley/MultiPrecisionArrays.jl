@@ -79,7 +79,7 @@ julia> N=4096; G=800.0*Gmat(N); A=I - Float32.(G);
 
 julia> x=ones(Float32,N); b=A*x;
 
-julia> MPA=MPArray(A); MPF=mplu!(MPA; onthefly=false);
+julia> MPF=mplu(A; onthefly=false);
 
 julia> y=MPF\b;
 
@@ -90,10 +90,10 @@ So, IR completely failed for this example. We will show how to extract
 the details of the iteration in a later section.
 
 It is also worthwhile to see if doing the triangular solves on-the-fly
-(MPS) helps.
+(MPS) helps. 
 
 ```
-julia> MPB=MPArray(A; onthefly=true); MPBF=mplu!(MPB);
+julia> MPBF=mplu(A);
 
 julia> z=MPBF\b;
 
