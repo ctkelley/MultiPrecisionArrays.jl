@@ -23,28 +23,17 @@ __v0.0.7 should be the version for the first draft of the ArXiv paper. I hope to
 
 No
 
-__This package is nowhere close to ready for release to a general audience. It's public only to help me do CI and clean up the docs.__
-
-I may register this in a few weeks so some people who work in this field can play with it. Before I do that I need to
-
-- Complete the first draft of the documentation
-- Get a first version of the ArXiv preprint posted
-- Get more examples
+__I have registered this pacakge so a few people who work in this field can play with it. It is not ready for a general audience.__
 
 I do not plan to announce it on Discourse anytime soon.
 
 __Please do not make PRs. If you stumble on this mess and have questions/ideas ..., raise an issue or email me at tim_kelley@ncsu.edu__
 
-Nothing is in final form and I am changing the API, internal structures, exported functions/structs and all kinds of other stuff frequently. When/if I announce this on Discourse, then it will be time for complaints or unsolicited offers to collaborate.
+Nothing is in final form and I am changing the API, internal structures, exported functions/structs and all kinds of other stuff frequently. When/if I announce this on Discourse, then it will be time for complaints.
 
 ## Coming Attractions
 
-- Document extraction of iteration stats
 - Nonlinear solver applications
-- First release
-
-## Coming Later
-
 - Three precision IR
 - BiCGSTAB-IR
 
