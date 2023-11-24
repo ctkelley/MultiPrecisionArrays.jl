@@ -17,7 +17,7 @@ what a double precision LU costs. This may be as good as it gets unless someone 
 
 __The half precision LU is much faster (more than 10x) as of v0.0.3. Look at [src/Factorizations/hlu!.jl](src/Factorizations/hlu!.jl) to see the hack job I did to [generic_lu](https://github.com/JuliaLang/julia/blob/master/stdlib/LinearAlgebra/src/lu.jl).__
 
-__v0.0.7 should be the version for the first draft of the ArXiv paper. I hope to tag it by the end of the year.__
+__v0.0.7 is the version for the ArXiv paper I just submitted.__
 
 ## Is MultiPrecisionArrays.jl ready for prime time?
 
@@ -31,6 +31,8 @@ __Please do not make PRs. If you stumble on this mess and have questions/ideas .
 
 Nothing is in final form and I am changing the API, internal structures, exported functions/structs and all kinds of other stuff frequently. When/if I announce this on Discourse, then it will be time for complaints.
 
+__The __mplu__ and __mpglu__ functions are probably stable for now.
+
 ## Coming Attractions
 
 - Nonlinear solver applications
@@ -41,7 +43,7 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 
 - This README file
 - The [docs for the package](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev)
-- [Draft of the ArXiv paper](https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/main/Publications_and_Presentations/MPArray.pdf)
+- [The sumibtted ArXiv paper](https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/main/Publications_and_Presentations/MPArray.pdf)
 
 
 ## Readme Contents:
