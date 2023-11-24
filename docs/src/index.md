@@ -1,4 +1,4 @@
-# MultiPrecisionArrays.jl v0.0.7
+# MultiPrecisionArrays.jl v0.0.8
 
 [C. T. Kelley](https://ctk.math.ncsu.edu)
 
