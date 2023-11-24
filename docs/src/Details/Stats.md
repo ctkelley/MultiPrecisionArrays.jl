@@ -36,4 +36,4 @@ iterate of $x = 0$ and so the initial residual is simply $r = b$
 and the first entry in the residual history is $|| b ||_\infty$. The
 iteration terminates successfully after four matrix-vector products.
 
-There are more examples for this in the [paper](https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/main/Publications_and_Presentations/MPArray.pdf).
+There are more examples for this in [ctk:mparraydoc](@cite).
