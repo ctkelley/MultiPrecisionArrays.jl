@@ -82,7 +82,7 @@ data structures and solvers to manage this. The __MPArray__ structure lets you p
 IR is a perfect example of a storage/time tradeoff.
 To solve a linear system $A x = b$ in $R^N$ with IR,
 one incurs the storage penalty of making a low
-precision copy of $a$ and reaps the benefit of only having to
+precision copy of $A$ and reaps the benefit of only having to
 factor the low precision copy.
 
 
