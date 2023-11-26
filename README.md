@@ -21,17 +21,15 @@ __The ArXiv paper I just submitted was for v0.0.7.__
 
 ## What parts of MultiPrecisionArrays.jl are ready for prime time?
 
-- Using __mplu__ to cut your solve time in half for double precision matrices is simple to use and works well.
+- Using ```mplu``` to cut your solve time in half for double precision matrices is simple to use and works well.
 - The API for harvesting iteration statistics is stable.
-- If you're a half precision person, the new factorizatino __hlu!__ is __only__ 3-5x slower than a double precisio lu.
+- If you're a half precision person, the new factorizatino ```hlu!``` is __only__ 3-5x slower than a double precisio lu.
 
 __I have registered this pacakge so a few people who work in this field can play with it. I'll announce it on disocourse when I have the API more stable than it is now.__
 
 __Please do not make PRs. If you stumble on this mess and have questions/ideas ..., raise an issue or email me at tim_kelley@ncsu.edu__
 
 Nothing is in final form and I am changing the API, internal structures, exported functions/structs and all kinds of other stuff frequently. When/if I announce this on Discourse, then it will be time for complaints.
-
-The __mplu__ and __mpglu__ functions are probably stable for now.
 
 ## Coming Attractions
 
@@ -43,7 +41,8 @@ The __mplu__ and __mpglu__ functions are probably stable for now.
 
 - This README file
 - The [docs for the package](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev)
-- [The sumibtted ArXiv paper](https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/main/Publications_and_Presentations/MPArray.pdf)
+- [The submitted ArXiv paper for v0.0.7](https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/main/Publications_and_Presentations/MPArray.pdf)
+- [The updated ArXiv paper for v0.0.8](https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/main/Publications_and_Presentations/MPArray.pdf)
 
 
 ## Readme Contents:
