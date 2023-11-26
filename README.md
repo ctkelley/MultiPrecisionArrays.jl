@@ -258,7 +258,7 @@ Bottom line: don't use it and expect good performance. See [this page](https://c
 It's a good idea to try GMRES-IR if you are playing with half precision. GMRES-IR uses a different factorization ```mpglu``` which factors the 
 low precision matrix, allocates room for the Krylov basis, and builds a factorization object. GMRES-IR uses the low precision factorization as
 a preconditioner for GMRES. The call looks like ```MPGF=mpglu(A)```. You solve $A x = b$ with
-```x = MPGF\b```. More details [here](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Half_1/).
+```x = MPGF\b```. More details [here](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Half_1/#GMRES-IR).
 
 ## Harvesting Iteration Statistics
 
