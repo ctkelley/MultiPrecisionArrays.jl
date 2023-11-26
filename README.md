@@ -19,13 +19,13 @@ __The half precision LU is much faster (more than 10x) as of v0.0.3. Look at [sr
 
 __The ArXiv paper I just submitted was for v0.0.7.__
 
-## Is MultiPrecisionArrays.jl ready for prime time?
+## What parts of MultiPrecisionArrays.jl are ready for prime time?
 
-No
+- Using __mplu__ to cut your solve time in half for double precision matrices is simple to use and works well.
+- The API for harvesting iteration statistics is stable.
+- If you're a half precision person, the new factorizatino __hlu!__ is __only__ 3-5x slower than a double precisio lu.
 
-__I have registered this pacakge so a few people who work in this field can play with it. It is not ready for a general audience.__
-
-I do not plan to announce it on Discourse anytime soon.
+__I have registered this pacakge so a few people who work in this field can play with it. I'll announce it on disocourse when I have the API more stable than it is now.__
 
 __Please do not make PRs. If you stumble on this mess and have questions/ideas ..., raise an issue or email me at tim_kelley@ncsu.edu__
 
@@ -52,7 +52,6 @@ The __mplu__ and __mpglu__ functions are probably stable for now.
 - [Example](#example)
   - [Subtleties in the example](#a-few-subtleties-in-the-example)
 - [Be Careful with Half Precision](#half-precision)
-- [GMRES-IR](#gmres-ir)
 - [Harvesting Iteration Statistics](#harvesting-iteration-statistics)
 - [Dependencies](#dependencies)
 - [Endorsement](#endorsement)
@@ -120,8 +119,6 @@ even if the residual decrease criterion is not satisfied.
 Herewith, the world's most simple example to show how iterative refienment works. We will follow that with some benchmarking on the cost of factorizations.
 The functions we use are __MPArray__ to create the structure and __mplu!__ to factor the low precision copy. In this example high precision is ```Float64``` and low
 precision is ```Float32```. The matrix is the sum of the identity and a constant multiple of the trapezoid rule discretization of the Greens operator for $-d^2/dx^2$ on $[0,1]$
-
-
 
 $$
 G u(x) = \int_0^1 g(x,y) u(y) \, dy 
@@ -234,7 +231,7 @@ end
 The function ```mplu``` has two keyword arguments. The easy one to understand is ```TL``` which is the precision of the factoriztion. Julia has support for single (```Float32```) and half (```Float16```)
 precisions. If you set ```TL=Float16``` then low precision will be half. Don't do that unless you know what you're doing. Using half precision is a fast way to get incorrect results. Look at the section on [half precision](#half-Precision) in this Readme for a bit more bad news.
 
-The other keyword arguemnt is __onthefly__. That keyword controls how the triangular solvers from the factorization work. When you solve
+The other keyword arguement is __onthefly__. That keyword controls how the triangular solvers from the factorization work. When you solve
 
 $$ 
 LU d = r
@@ -251,66 +248,16 @@ overflow and, more importantly, underflow when you do that and we scale $r$ to b
 remember that ```mplu!``` overwrites the low precision copy of A with the factors, so you can't resuse the multiprecision array for other problems unless you restore the low precision copy.
 
 
-__MultiPrecisionArrays.jl__ supports many variations of iterative refinement and we will explain all that in the docs and in a paper in the works.
+__MultiPrecisionArrays.jl__ supports many variations of iterative refinement and we explain all that in the docs and a [users guide](https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/main/Publications_and_Presentations/MPArray.pdf).
 
 ## Half Precision
 
 Bottom line: don't use it and expect good performance. See [this page](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Half_1/) in the docs for details.
 
 It's a good idea to try GMRES-IR if you are playing with half precision. GMRES-IR uses a different factorization ```mpglu``` which factors the 
-low precision matrix, allocates room for the Krylov basis, and builds a factorization object. The call looks like ```MPGF=mpglu(A)```. You solve $A x = b$ with
-```x = MPGF\b```.
-
-## GMRES-IR
-
-If IR fails to converge, there is still a chance that the low precision factorization could be a good preconditioner for GMRES. In this case we must do 
-interprecision transfers on the fly. The preconditioner is
-
-$$
-P = U^{-1} L^{-1} 
-$$
-
-There are two ways to use $P$. One is to precondition the system directly the other is to precondition the equation for $d$ within IR. GMRES-IR is the latter
-approach. Here The reason for using left preconditioning is that one is not
-interested in a small residual for the correction equation, but in
-capturing $d$ as well as possible. The IR loop is the part of the solve
-that seeks a small residual norm.
-
-GMRES-IR will not be as efficient as IR because each iteration is itself
-an GMRES iteration and application of the preconditioned matrix-vector
-product has the same cost (solve + high precision matrix vector product)
-as a single IR iteration. However, if low precision is half, this approach
-can recover the residual norm one would get from a successful IR iteration.
-
-There is also a storage problem. One should allocate storage for the Krylov
-basis vectors and other vectors that GMRES needs internally. We do that
-in the factorization phase. So the structure ```MPGEFact``` has the
-factorization of the low precision matrix, the residual, the Krylov
-basis and some other vectors needed in the solve. The Julia function
-```mpglu``` constructs the data structure and factors the low precision
-copy of the matrix. The output, like that of ```mplu``` is a factorization
-object that you can use with backslash.
-
-Here is an ill-conditioned example where IR fails to converge. We will construct an ill-conditioned expample and do multi-precision factorizations with
-both ```mplu``` and ```mpglu```. 
-
-```
-julia> using MultiPrecisionArrays
-
-julia> using MultiPrecisionArrays.Examples
-
-julia> N=4069; AD= I - 800.0*Gmat(N); A=Float32.(AD); x=ones(Float32,N); b=A*x;
-
-julia> MPF=mplu(A); MPF2=mpglu(A);
-
-julia> z=MPF\b; y=MPF2\b; println(norm(z-x,Inf),"  ",norm(y-x,Inf))
-0.2875508  0.0044728518
-
-julia> println(norm(b-A*z,Inf)/norm(b,Inf),"  ",norm(b-A*y,Inf)/norm(b,Inf))
-0.0012593127  1.4025759e-5
-```
-As you can see, the relative error and relative residual norms for GMRES-IR
-are much smaller than for IR.
+low precision matrix, allocates room for the Krylov basis, and builds a factorization object. GMRES-IR uses the low precision factorization as
+a preconditioner for GMRES. The call looks like ```MPGF=mpglu(A)```. You solve $A x = b$ with
+```x = MPGF\b```. More details [here](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Half_1/).
 
 ## Harvesting Iteration Statistics
 
