@@ -23,7 +23,7 @@ __The ArXiv paper I just submitted was for v0.0.7.__
 
 - Using ```mplu``` to cut your solve time in half for double precision matrices is simple to use and works well.
 - The API for harvesting iteration statistics is stable.
-- If you're a half precision person, the new factorizatino ```hlu!``` is __only__ 3-5x slower than a double precisio lu.
+- If you're a half precision person, the new factorizatino ```hlu!``` is __only__ 3-5x slower than a double precision ```lu```.
 
 ## I found this package by accident on the internet. Can I complain about it now?
 
