@@ -25,7 +25,7 @@ __The ArXiv paper I just submitted was for v0.0.7.__
 - The API for harvesting iteration statistics is stable.
 - If you're a half precision person, the new factorizatino ```hlu!``` is __only__ 3-5x slower than a double precision ```lu```.
 
-## I found this package by accident on the internet. Can I complain about it now?
+## I found this repo by accident on the internet. Can I complain about it now?
 
 __I have registered this pacakge so a few people who work in this field can play with it. I'll announce it on disocourse when I have the API more stable than it is now.__
 
