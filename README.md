@@ -31,7 +31,7 @@ __I have registered this pacakge so a few people who work in this field can play
 
 __Please do not make PRs. If you stumble on this mess and have questions/ideas ..., raise an issue or email me at tim_kelley@ncsu.edu__
 
-Nothing is in final form and I am changing the API, internal structures, exported functions/structs and all kinds of other stuff frequently. When/if I announce this on Discourse, then it will be time for complaints.
+Nothing is in final form and I am changing the API, internal structures, exported functions/structs and all kinds of other stuff frequently.
 
 ## Coming Attractions
 
