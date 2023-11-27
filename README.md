@@ -17,8 +17,6 @@ what a double precision LU costs. This may be as good as it gets unless someone 
 
 __The half precision LU is much faster (more than 10x) as of v0.0.3. Look at [src/Factorizations/hlu!.jl](src/Factorizations/hlu!.jl) to see the hack job I did to [generic_lu](https://github.com/JuliaLang/julia/blob/master/stdlib/LinearAlgebra/src/lu.jl).__
 
-__The ArXiv paper I just submitted was for v0.0.7.__
-
 ## What parts of MultiPrecisionArrays.jl are ready for prime time?
 
 - Using ```mplu``` to cut your solve time in half for double precision matrices is simple to use and works well.
