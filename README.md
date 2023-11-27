@@ -103,7 +103,7 @@ for a unacceptable decrease (or increase) in the residual norm. So we will
 terminate the iteration if
 
 $$
-\\| r_{new} \\| \ge .9 \\| vr_{old} \\|
+\\| r_{new} \\| \ge .9 \\| r_{old} \\|
 $$
 
 even if the residual decrease criterion is not satisfied.
