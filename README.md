@@ -179,6 +179,11 @@ expample of a time/storage tradeoff. You have to store a low precision copy of $
 
 ### A few subtleties in the example
 
+Look at the docs for things like
+
+- [Terminating the while loop](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Details/Termination/)
+- [Options and data structures for mplu](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/#Options-and-data-structures-for-mplu)
+
 Here is the source for ```mplu```
 ```
 """
