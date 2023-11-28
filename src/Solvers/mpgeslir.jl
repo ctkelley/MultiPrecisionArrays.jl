@@ -10,11 +10,10 @@ to mpgeslir and combine the factorization and the solve.
 
 You can also get the multiprecision factorization directly with
 ```
-MPF=mplu!(A)
+MPF=mplu(A)
 ```
 and then pass ```MPF``` to mpgeslir.
 
-Unlike lu, this does overwrite the low precision part of MPA.
 I use this to get some timing results and it's also convenient
 if you want to do factor and solve in one statement. 
 
