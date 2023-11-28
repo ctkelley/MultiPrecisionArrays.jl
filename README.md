@@ -184,48 +184,6 @@ Look at the docs for things like
 - [Terminating the while loop](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Details/Termination/)
 - [Options and data structures for mplu](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/#Options-and-data-structures-for-mplu)
 
-Here is the source for ```mplu```
-```
-"""
-mplu(A::Array{Float64,2}; TL=Float32, onthefly=false)
-
-Combines the constructor of the multiprecision array with the
-factorization.
-"""
-function mplu(A::Array{TH,2}; TL=Float32, onthefly=nothing) where TH <: Real
-#
-# If the high precision matrix is single, the low precision must be half.
-#
-(TH == Float32) && (TL = Float16)
-#
-# Unless you tell me otherwise, onthefly is true if low precision is half
-# and false if low precision is single.
-#
-(onthefly == nothing ) && (onthefly = (TL==Float16))
-MPA=MPArray(A; TL=TL, onthefly=onthefly)
-MPF=mplu!(MPA)
-return MPF
-end
-```
-
-The function ```mplu``` has two keyword arguments. The easy one to understand is ```TL``` which is the precision of the factoriztion. Julia has support for single (```Float32```) and half (```Float16```)
-precisions. If you set ```TL=Float16``` then low precision will be half. Don't do that unless you know what you're doing. Using half precision is a fast way to get incorrect results. Look at the section on [half precision](#half-Precision) in this Readme for a bit more bad news.
-
-The other keyword arguement is __onthefly__. That keyword controls how the triangular solvers from the factorization work. When you solve
-
-$$ 
-LU d = r
-$$
-
-The LU factors are in low precision and the residual $r$ is in high precision. If you let Julia and LAPACK figure out what to do, then the solves will be done in high precision and
-the entries in the LU factors will be comverted to high precision with each binary operation. The output $d$ will be in high precision. This is called interprecision transfer on-the-fly
-and ```onthefly = true``` will tell the solvers to do it that way. You have $N^2$ interprecsion transfers with each solve and, as we will see, that can have a non-trivial cost.
-
-When low precision is Float32, then the default is (```onthefly = false```). This converts $r$ to low precision, does the solve entirely in low precision, and then promotes $d$ to high precision. You need to be careful to avoid
-overflow and, more importantly, underflow when you do that and we scale $r$ to be a unit vector before conversion to low precisiion and reverse the scaling when we promote $d$. We take care of this for you.
-
-```mplu``` calls the constructor for the multiprecision array and then factors the low precision matrix. In some cases, such as nonlinear solvers, you will want to separate the constructor and the factorization. When you do that
-remember that ```mplu!``` overwrites the low precision copy of A with the factors, so you can't resuse the multiprecision array for other problems unless you restore the low precision copy.
 
 
 __MultiPrecisionArrays.jl__ supports many variations of iterative refinement and we explain all that in the docs and a [users guide](https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/main/Publications_and_Presentations/MPArray.pdf).
