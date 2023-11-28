@@ -220,7 +220,7 @@ We terminate the while loop when
 \| r \| < \tau \| b \|
 ```
 
-where we use $\tau = 10 * {\mbox eps}(TH)$. Here $\mbox{eps}(TH)$
+where we use $\tau = 10 * eps(TH)$. Here $eps(TH)$
 is high precision
 machine epsilon.  The problem with this criterion is
 that IR can stagnate, especially for ill-conditioned problems, before
