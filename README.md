@@ -49,7 +49,7 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 
 - [Algorithms](#algorithms)
 - [Example](#example)
-  - [Subtleties in the example](#a-few-subtleties-in-the-example)
+  - [A few details](#a-few-details)
 - [Be Careful with Half Precision](#half-precision)
 - [Harvesting Iteration Statistics](#harvesting-iteration-statistics)
 - [Dependencies](#dependencies)
@@ -177,7 +177,7 @@ julia> @belapsed lu($A)
 It is no surprise that the factorization in single precision took roughly half as long as the one in double. In the double-single precision case, iterative refinement is a great
 expample of a time/storage tradeoff. You have to store a low precision copy of $A$, so the storage burden increases by 50\% and the factoriztion time is cut in half.
 
-### A few subtleties in the example
+### A few details
 
 Look at the docs for things like
 
