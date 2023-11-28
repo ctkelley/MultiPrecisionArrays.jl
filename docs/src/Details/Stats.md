@@ -36,4 +36,4 @@ iterate of $x = 0$ and so the initial residual is simply $r = b$
 and the first entry in the residual history is $|| b ||_\infty$. The
 iteration terminates successfully after four matrix-vector products.
 
-There are more examples for this in [ctk:mparrasydocs](@cite).
+There are more examples for this in [ctk:mparraysdocs](@cite).
