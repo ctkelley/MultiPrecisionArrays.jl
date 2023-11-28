@@ -216,9 +216,9 @@ produce a factorization object and ```\``` works with both.
 
 We terminate the while loop when 
 
-$$
+```math
 \\| r \\| < \tau \\| b \\|
-$$
+```
 
 where we use $\tau = 10 * {\mbox eps}(TH)$. Here $\mbox{eps}(TH)$
 is high precision
@@ -228,9 +228,9 @@ the termination criterion is attained. We detect stagnation by looking
 for a unacceptable decrease (or increase) in the residual norm. So we will
 terminate the iteration if
 
-$$
+```math
 \\| r_{new} \\| \ge .9 \\| r_{old} \\|
-$$
+```
 
 even if the residual decrease criterion is not satisfied.
 
