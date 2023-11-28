@@ -75,7 +75,7 @@ __IR(A, b)__
 
 In Julia, a code to do this would solve the linear system $A x = b$ in double precision by using a
 factorization in a lower precision, say single, within a residual correction iteration. This means that one would need
-to allocate storage for a copy of $A$ is the lower precision and factor that copy. The one has to determine what the line
+to allocate storage for a copy of $A$ in the lower precision and factor that copy. Then one has to determine what the line
 $d = (LU)^{-1} r$ means. Do you cast $r$ into the lower precison before the solve or not? __MultiPrecisionArrays.jl__ provides
 data structures and solvers to manage this. The __MPArray__ structure lets you preallocate $A$, the low precision copy, and the residual $r$.
 
