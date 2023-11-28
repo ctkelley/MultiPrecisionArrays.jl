@@ -217,7 +217,7 @@ produce a factorization object and ```\``` works with both.
 We terminate the while loop when 
 
 ```math
-\\| r \\| < \tau \\| b \\|
+\| r \| < \tau \| b \|
 ```
 
 where we use $\tau = 10 * {\mbox eps}(TH)$. Here $\mbox{eps}(TH)$
@@ -229,7 +229,7 @@ for a unacceptable decrease (or increase) in the residual norm. So we will
 terminate the iteration if
 
 ```math
-\\| r_{new} \\| \ge .9 \\| r_{old} \\|
+\| r_{new} \| \ge .9 \| r_{old} \|
 ```
 
 even if the residual decrease criterion is not satisfied.
