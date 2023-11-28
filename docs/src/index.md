@@ -210,31 +210,7 @@ So the single precision factorization is roughly half the cost of the
 double precision one. Now for the solves. Both ```lu``` and ```mplu```
 produce a factorization object and ```\``` works with both.
 
-## A few subtleties in the example
-
-### Termination of the IR loop.
-
-We terminate the while loop when 
-
-```math
-\| r \| < \tau \| b \|
-```
-
-where we use $\tau = 10 * eps(TH)$. Here $eps(TH)$
-is high precision
-machine epsilon.  The problem with this criterion is
-that IR can stagnate, especially for ill-conditioned problems, before
-the termination criterion is attained. We detect stagnation by looking
-for a unacceptable decrease (or increase) in the residual norm. So we will
-terminate the iteration if
-
-```math
-\| r_{new} \| \ge .9 \| r_{old} \|
-```
-
-even if the residual decrease criterion is not satisfied.
-
-### Options and data structures for mplu
+## Options and data structures for mplu
 
 Here is the source for ```mplu```
 ```
