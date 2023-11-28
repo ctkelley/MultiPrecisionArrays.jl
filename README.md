@@ -86,30 +86,6 @@ precision copy of $A$ and reaps the benefit of only having to
 factor the low precision copy.
 
 
-### Termination of the IR loop.
-
-We terminate the while loop when 
-
-$$
-\\| r \\| < \tau \\| b \\|
-$$
-
-where we use $\tau = 10 * {\mbox eps}(TH)$. Here $\mbox{eps}(TH)$
-is high precision
-machine epsilon.  The problem with this criterion is
-that IR can stagnate, especially for ill-conditioned problems, before
-the termination criterion is attained. We detect stagnation by looking
-for a unacceptable decrease (or increase) in the residual norm. So we will
-terminate the iteration if
-
-$$
-\\| r_{new} \\| \ge .9 \\| r_{old} \\|
-$$
-
-even if the residual decrease criterion is not satisfied.
-
-
-
 
 ## Example
 
