@@ -7,7 +7,7 @@
 is a package for iterative refinement. 
 
 These docs are enough to get you started. The complete version with
-a better account of the theory is [ctk:mparraydoc](@cite). 
+a better account of the theory is [ctk:mparraysdocs](@cite). 
 
 This package uses __SIAMFANLEquations.jl__ [ctk:siamfanl](@cite), the
 solver package associated with a book [ctk:fajulia](@cite) and
