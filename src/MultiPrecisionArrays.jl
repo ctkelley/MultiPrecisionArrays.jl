@@ -85,8 +85,7 @@ export mpcholesky!
 #
 # The solvers are mpgeslir (iterative refinement) and mpgmir (IR-GMRES).
 # I'm not working on more than that right now. I have overloaded
-# \ with these so you should not have to call them directly unless
-# you are looking at iteration statistics
+# \ with these so you should not have to call them directly.
 #
 export mpgeslir
 export mpgmir
