@@ -19,7 +19,7 @@ __The half precision LU is much faster (more than 10x) as of v0.0.3. Look at [sr
 
 - Using ```mplu``` to cut your solve time in half for double precision matrices is simple to use and works well.
 - The API for harvesting iteration statistics is stable.
-- If you're a half precision person, the new factorizatino ```hlu!``` is __only__ 3-5x slower than a double precision ```lu```.
+- If you're a half precision person, the new factorization ```hlu!``` is __only__ 3-5x slower than a double precision ```lu```.
 
 ## I found this repo by accident on the internet. Can I complain about it now?
 
