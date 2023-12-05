@@ -21,6 +21,11 @@ __The half precision LU is much faster (more than 10x) as of v0.0.3. Look at [sr
 - The API for harvesting iteration statistics is stable.
 - If you're a half precision person, the new factorization ```hlu!``` is __only__ 3-5x slower than a double precision ```lu```.
 
+## What's new?
+- v0.0.8: Better docs and ...
+   - Update multiprecision factorization in place
+  
+
 ## I found this repo by accident on the internet. Can I complain about it now?
 
 __I have registered this pacakge so a few people who work in this field can play with it. I'll announce it on disocourse when I have the API more stable than it is now.__
