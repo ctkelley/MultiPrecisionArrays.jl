@@ -28,7 +28,7 @@ __The half precision LU is much faster (more than 10x) as of v0.0.3. Look at [sr
 
 ## I found this repo by accident on the internet. Can I complain about it now?
 
-__I have registered this pacakge so a few people who work in this field can play with it. I'll announce it on disocourse when I have the API more stable than it is now.__
+__The core functionality is pretty stable, but not stable enough for me to announce it on discourse.__
 
 __Please do not make PRs. If you stumble on this mess and have questions/ideas ..., raise an issue or email me at tim_kelley@ncsu.edu__
 
