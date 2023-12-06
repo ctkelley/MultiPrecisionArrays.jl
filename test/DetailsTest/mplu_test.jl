@@ -14,7 +14,11 @@ eq64x || println("mplu t2 fails")
 AS=Float32.(AD); MPS=MPArray(AS); MSF1=mplu!(MPS); MSF2=mplu(AS)
 eq32=test_eq(MSF1,MSF2)
 eq32 || println("mplu t3 fails")
-mpluok = (eq64 && eq64x && eq32)
+BD=I + AD; MPB=mplu(BD); MPA=mplu(AD); 
+MPX=mplu!(MPA,BD);
+equp1=test_eq(MPX,MPB)
+equp1 || println("mplu! failure, updating factorization")
+mpluok = (eq64 && eq64x && eq32 && equp1)
 mpluok || println("mplu failure")
 return mpluok
 end
@@ -47,7 +51,9 @@ eqok=true
 for nf in fieldnames(MPLFact)
 gx=getfield(MF1,nf); hx =getfield(MF2,nf)
 eqok= ((gx==hx) && eqok)
-eqok || println(nf)
+(gx==hx) || println(nf)
 end
 return eqok
 end
+
+

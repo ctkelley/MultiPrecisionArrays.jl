@@ -35,6 +35,28 @@ function mplu!(MPA::MPArray)
     return MPF
 end
 
+"""
+mplu!(MPF::MPLFact,A::Array{TH,2}) where TH <: Real
+
+Overwrite a multiprecision factorization MPF to reuse the
+storage to make a multiprecision of a new matrix A.
+
+This will, of course, trash the original factorization.
+"""
+function mplu!(MPF::MPLFact,A::Array{TH,2}) where TH
+TF=eltype(MPF.AH)
+(TF == TH) || error("Precision error in mplu!")
+AH=MPF.AH
+AH = A
+TL = eltype(MPF.AL)
+AL=MPF.AL
+AL .= TL.(A)
+(TL == Float16) ? AF = hlu!(MPF.AL) : AF = lu!(MPF.AL)
+MPF = MPLFact(A, AL, AF, MPF.residual, MPF.onthefly)
+return MPF
+end
+
+
 
 """
 mplu(A::Array{TH,2}; TL=Float32, onthefly=nothing) where TH <: Real
