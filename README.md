@@ -26,7 +26,7 @@ __The half precision LU is much faster (more than 10x) as of v0.0.3. Look at [sr
 
 ## What's new?
 - v0.0.8: Better docs and ...
-   - Update multiprecision factorization in place
+   - Update multiprecision factorizations in place with ```mplu!``` and ```mpglu!```
   
 
 ## I found this repo by accident on the internet. Can I complain about it now?
