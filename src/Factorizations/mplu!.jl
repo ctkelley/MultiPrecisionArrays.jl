@@ -42,6 +42,20 @@ Overwrite a multiprecision factorization MPF to reuse the
 storage to make a multiprecision of a new matrix A.
 
 This will, of course, trash the original factorization.
+
+To use this do
+```
+MPF=mplu!(MPF,A)
+```
+Simply using 
+```
+mplu!(MPF,A)
+```
+may not do what you want because the multiprecision factorization
+structure is immutable and MPF.AF.info cannot be changed.
+
+Reassigning MPF works and resuses almost all of the storage in the 
+originall array.
 """
 function mplu!(MPF::MPLFact,A::Array{TH,2}) where TH
 TF=eltype(MPF.AH)
@@ -51,7 +65,8 @@ AH = A
 TL = eltype(MPF.AL)
 AL=MPF.AL
 AL .= TL.(A)
-(TL == Float16) ? AF = hlu!(MPF.AL) : AF = lu!(MPF.AL)
+(TL == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
+MPF.AF.ipiv .= AF.ipiv
 MPF = MPLFact(A, AL, AF, MPF.residual, MPF.onthefly)
 return MPF
 end
