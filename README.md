@@ -121,7 +121,8 @@ using MultiPrecisionArrays.Examples
 ```
 to get to it.
 
-The example below compares the cost of a double precision factorization to a MPArray factorization. The ```MPArray``` structure has a high precision and a low precision matrix. The structure we will start with 
+The example below compares the cost of a double precision factorization to a MPArray factorization. The ```MPArray``` structure has a high 
+precision (```TH```) and a low precision (```TL```) matrix. The structure we will start with 
 is
 ```
 struct MPArray{TH<:AbstractFloat,TL<:AbstractFloat}
@@ -132,7 +133,7 @@ struct MPArray{TH<:AbstractFloat,TL<:AbstractFloat}
 end
 ```
 The structure also stores the residual. The ```onthefly``` Boolean tells the solver how to do the interprecision transfers. The easy way to get started is to use the ```mplu``` 
-command directly on the matrix. That will build the MPArray, follow that with the factorization, and put in all in a structure
+command directly on the matrix. That will build the MPArray, follow that with the factorization of ```AL```, and put in all in a structure
 that you can use with ```\```.
 
 Now we will see how the results look. In this example we compare the result with iterative refinement with ```A\b```, which is LAPACK's LU. 
