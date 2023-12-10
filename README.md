@@ -20,7 +20,7 @@ __The half precision LU is much faster (more than 10x) as of v0.0.3. Look at [sr
 
 ## What parts of MultiPrecisionArrays.jl are ready for prime time?
 
-- Using ```mplu``` to cut your solve time in half for double precision matrices is simple to use and works well.
+- Using [```mplu```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mplu/) and [```mplu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mplu!/) to cut your solve time in half for double precision matrices is simple to use and works well.
 - The API for harvesting iteration statistics is stable.
 - If you're a half precision person,
    - GMRES-IR works with [```mpglu``` and ```mpglu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpglu!/)
