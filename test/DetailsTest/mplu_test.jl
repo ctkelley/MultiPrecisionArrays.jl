@@ -40,7 +40,11 @@ eq64x || println("mpglu t2 fails")
 AS=Float32.(AD); MPS=MPGArray(AS); MSF1=mpglu!(MPS); MSF2=mpglu(AS)
 eq32=test_eq(MSF1,MSF2)
 eq32 || println("mpglu t3 fails")
-mpgluok = (eq64 && eq64x && eq32)
+BDx=I + ADx; MPBx=mpglu(BDx; TL=Float16);
+MPTx=mpglu!(MPBx,ADx); 
+equp2=test_eq(MPTx,MPF1x)
+equp2 || println("mpglu! failure, updating factorization")
+mpgluok = (eq64 && eq64x && eq32 && equp2)
 mpgluok || println("mpglu failure")
 return mpgluok
 end

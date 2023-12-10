@@ -51,11 +51,13 @@ Simply using
 ```
 mplu!(MPF,A)
 ```
+(ie without explicitly returning MPF)
+
 may not do what you want because the multiprecision factorization
 structure is immutable and MPF.AF.info cannot be changed.
 
 Reassigning MPF works and resuses almost all of the storage in the 
-originall array.
+original array.
 """
 function mplu!(MPF::MPLFact,A::Array{TH,2}) where TH
 TF=eltype(MPF.AH)
@@ -80,6 +82,7 @@ Combines the constructor of the multiprecision array with the
 factorization. 
 
 Step 1: build the MPArray 
+
 Step 2: factor the low precision copy and return the factorization object
 """
 function mplu(A::Array{TH,2}; TL=Float32, onthefly=nothing) where TH <: Real
