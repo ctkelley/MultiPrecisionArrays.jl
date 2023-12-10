@@ -6,7 +6,7 @@
 [![MultiPrecisionArrays Downloads](https://shields.io/endpoint?url=https://pkgs.genieframework.com/api/v1/badge/MultiPrecisionArrays)](https://pkgs.genieframework.com?packages=MultiPrecisionArrays)
 
 
-# MultiPrecisionArrays.jl v0.0.8
+# MultiPrecisionArrays.jl v0.0.9
 
 ## [C. T. Kelley](https://ctk.math.ncsu.edu)
 
