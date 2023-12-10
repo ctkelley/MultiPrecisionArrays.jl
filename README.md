@@ -43,6 +43,7 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 ## Coming Attractions
 
 - Nonlinear solver applications
+- Generality fix (replace Array with AbstractMatrix)
 - Three precision IR
 - BiCGSTAB-IR
 
