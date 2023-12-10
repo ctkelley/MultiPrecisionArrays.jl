@@ -11,6 +11,7 @@ include("DetailsTest/precision_test.jl")
 include("DetailsTest/hlu_test.jl")
 include("DetailsTest/slashtest.jl")
 include("DetailsTest/mplu_test.jl")
+include("DetailsTest/AbsArray.jl")
 include("GM-IRTest/mpgmtest.jl")
 include("GM-IRTest/hvse.jl")
 
@@ -32,6 +33,7 @@ end
     @test slashtest()
     @test mplu_test()
     @test mpglu_test()
+    @test AbsArray()
 end
 
 @testset "GM-IR" begin

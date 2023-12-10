@@ -23,7 +23,7 @@ return MPF
 end
 
 """
-mpglu!(MPG::MPGEFact, A::Array{TH,2}) where TH <: Real
+mpglu!(MPG::MPGEFact, A::AbstractArray{TH,2}) where TH <: Real
 Overwrite a multiprecision factorization MPF to reuse the
 storage to make a multiprecision of a new matrix A.
 
@@ -46,7 +46,7 @@ Reassigning MPG works and resuses almost all of the storage in the
 original array
 """
 
-function mpglu!(MPG::MPGEFact, A::Array{TH,2}) where TH <: Real
+function mpglu!(MPG::MPGEFact, A::AbstractArray{TH,2}) where TH <: Real
 TF=eltype(MPG.AH)
 (TF == TH) || error("Precision error in mplu!")
 AH=MPG.AH
@@ -65,7 +65,7 @@ end
 
 
 """
-mpglu(A::Array{TH,2}; TL=Float32, basissize=10) where TH <: Real
+mpglu(A::AbstractArray{TH,2}; TL=Float32, basissize=10) where TH <: Real
 
 Combines the constructor of the multiprecision GMRES-ready array with the
 factorization.
@@ -74,7 +74,7 @@ Step 1: build the MPGArray
 
 Step 2: Call mpglu! to build the factorization object
 """
-function mpglu(A::Array{TH,2}; TL=Float32, basissize=10) where TH <: Real
+function mpglu(A::AbstractArray{TH,2}; TL=Float32, basissize=10) where TH <: Real
 (TH==Float32) ? TL=Float16 : TL=TL
 MPGA=MPGArray(A; basissize=basissize, TL=TL)
 MPGF=mpglu!(MPGA)

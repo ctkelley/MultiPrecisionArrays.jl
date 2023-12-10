@@ -1,5 +1,5 @@
 """
-hlu!(A::Matrix{T}; minbatch=16) where {T}
+hlu!(A::AbstractMatrix{T}; minbatch=16) where {T}
 Return LU factorization of A
 
 C. T. Kelley, 2023
@@ -18,7 +18,7 @@ on my Mac M2 Pro with 8 performance cores. I'm happy.
 
 I set Polyester's minbatch to 16, which worked best for me. YMMV
 """
-function hlu!(A::Matrix{T}; minbatch=16) where {T}
+function hlu!(A::AbstractMatrix{T}; minbatch=16) where {T}
     pivot = RowMaximum()
     T == Float16 || @warn("Use hlu for half precision only!")
     LAPACK.chkfinite(A)

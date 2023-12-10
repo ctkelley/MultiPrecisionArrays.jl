@@ -36,7 +36,7 @@ function mplu!(MPA::MPArray)
 end
 
 """
-mplu!(MPF::MPLFact,A::Array{TH,2}) where TH <: Real
+mplu!(MPF::MPLFact,A::AbstractArray{TH,2}) where TH <: Real
 
 Overwrite a multiprecision factorization MPF to reuse the
 storage to make a multiprecision of a new matrix A.
@@ -59,7 +59,7 @@ structure is immutable and MPF.AF.info cannot be changed.
 Reassigning MPF works and resuses almost all of the storage in the 
 original array.
 """
-function mplu!(MPF::MPLFact,A::Array{TH,2}) where TH
+function mplu!(MPF::MPLFact,A::AbstractArray{TH,2}) where TH
 TF=eltype(MPF.AH)
 (TF == TH) || error("Precision error in mplu!")
 AH=MPF.AH
@@ -76,7 +76,7 @@ end
 
 
 """
-mplu(A::Array{TH,2}; TL=Float32, onthefly=nothing) where TH <: Real
+mplu(A::AbstractArray{TH,2}; TL=Float32, onthefly=nothing) where TH <: Real
 
 Combines the constructor of the multiprecision array with the
 factorization. 
@@ -85,7 +85,7 @@ Step 1: build the MPArray
 
 Step 2: factor the low precision copy and return the factorization object
 """
-function mplu(A::Array{TH,2}; TL=Float32, onthefly=nothing) where TH <: Real
+function mplu(A::AbstractArray{TH,2}; TL=Float32, onthefly=nothing) where TH <: Real
 #
 # If the high precision matrix is single, the low precision must be half.
 #

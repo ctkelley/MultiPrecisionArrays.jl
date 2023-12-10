@@ -2,8 +2,8 @@
 # MPEArray factorization for GMRES-IR
 #
 struct MPGEFact
-    AH::Array
-    AL::Array
+    AH::AbstractArray
+    AL::AbstractArray
     AF::Factorization
     VStore:: Array
     KStore:: NTuple
@@ -12,16 +12,16 @@ struct MPGEFact
 end
 
 struct MPHArray
-    AH::Array
-    AStore::Array
-    AL::Array
+    AH::AbstractArray
+    AStore::AbstractArray
+    AL::AbstractArray
     residual::Vector
     onthefly::Bool
 end
 
 struct MPHFact
-    AH::Array
-    AL::Array
+    AH::AbstractArray
+    AL::AbstractArray
     AF::Factorization
     residual::Vector
     onthefly::Bool
@@ -31,8 +31,8 @@ end
 # Heavy factorization for GMRES-IR
 #
 struct MPGHFact
-    AH::Array
-    AL::Array
+    AH::AbstractArray
+    AL::AbstractArray
     AF::Factorization
     VStore:: Array
     KStore:: NTuple
@@ -40,14 +40,14 @@ struct MPGHFact
     onthefly::Bool
 end
 
-function MPHArray(AH::Array{Float64,2}; TL = Float32)
+function MPHArray(AH::AbstractArray{Float64,2}; TL = Float32)
     AStore = copy(AH)
     AL = TL.(AH)
     (m,n)=size(AH); res=ones(eltype(AH),n)
     MPH = MPHArray(AH, AStore, AL, res, true)
 end
 
-function MPHArray(AH::Array{Float32,2}; TL = Float16)
+function MPHArray(AH::AbstractArray{Float32,2}; TL = Float16)
     AStore = copy(AH)
     AL = TL.(AH)
     (m,n)=size(AH); res=ones(eltype(AH),n)

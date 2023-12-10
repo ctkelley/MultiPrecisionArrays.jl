@@ -1,5 +1,5 @@
 """
-MPArray(AH::Array{Float64,2}; TL = Float32, onthefly=false)
+MPArray(AH::AbstractArray{Float64,2}; TL = Float32, onthefly=false)
 Default constructor for MPArray. 
 
 C. T. Kelley 2023
@@ -8,8 +8,8 @@ The MPArray data structure is
 
 ```
 struct MPArray{TH<:AbstractFloat,TL<:AbstractFloat}
-    AH::Array{TH,2}
-    AL::Array{TL,2}
+    AH::AbstractArray{TH,2}
+    AL::AbstractArray{TL,2}
     residual::Vector{TH}
     onthefly::Bool
 end
@@ -19,7 +19,7 @@ to get double/half IR.
 
 
 """
-function MPArray(AH::Array{Float64,2}; TL = Float32, onthefly=nothing)
+function MPArray(AH::AbstractArray{Float64,2}; TL = Float32, onthefly=nothing)
     AL = TL.(AH)
 # Default is interprecision on the fly if TL = Float32
     (onthefly==nothing) && (onthefly = (TL==Float16))
@@ -29,7 +29,7 @@ function MPArray(AH::Array{Float64,2}; TL = Float32, onthefly=nothing)
     MPA = MPArray(AH, AL, res, onthefly) 
 end
 """
-MPArray(AH::Array{Float32,2}; TL = Float16, onthefly=true)
+MPArray(AH::AbstractArray{Float32,2}; TL = Float16, onthefly=true)
 Default single precision constructor for MPArray with TL=Float16
 
 If your high precision array is single, then your low precision
@@ -44,7 +44,7 @@ Data structures etc are the same as in the
 double-single/half case, but you don't have the option to go lower than
 half.
 """
-function MPArray(AH::Array{Float32,2}; TL = Float16, onthefly=true)
+function MPArray(AH::AbstractArray{Float32,2}; TL = Float16, onthefly=true)
     AL = TL.(AH)
     (m,n)=size(AH); res=ones(eltype(AH),n)
     MPA = MPArray(AH, AL, res, onthefly)
