@@ -149,8 +149,8 @@ The example below compares the cost of a double precision factorization to a MPA
 is
 ```
 struct MPArray{TH<:AbstractFloat,TL<:AbstractFloat}
-    AH::Array{TH,2}
-    AL::Array{TL,2}
+    AH::AbstractArray{TH,2}
+    AL::AbstractArray{TL,2}
     residual::Vector{TH}
     onthefly::Bool
 end
@@ -215,12 +215,12 @@ produce a factorization object and ```\``` works with both.
 Here is the source for ```mplu```
 ```
 """
-mplu(A::Array{Float64,2}; TL=Float32, onthefly=false)
+mplu(A::AbstractArray{Float64,2}; TL=Float32, onthefly=false)
 
 Combines the constructor of the multiprecision array with the
 factorization.
 """
-function mplu(A::Array{TH,2}; TL=Float32, onthefly=nothing) where TH <: Real
+function mplu(A::AbstractArray{TH,2}; TL=Float32, onthefly=nothing) where TH <: Real
 #
 # If the high precision matrix is single, the low precision must be half.
 #

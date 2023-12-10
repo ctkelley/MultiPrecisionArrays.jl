@@ -35,7 +35,7 @@ MPF=mpglu!(MPF,A)
 ```
 Simply using
 ```
-mpglu!(MPG,A)
+mpglu!(MPG,A) # Don't do this.
 ```
 (ie without explicitly returning MPG)
 

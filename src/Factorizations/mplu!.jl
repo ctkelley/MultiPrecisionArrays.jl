@@ -49,7 +49,7 @@ MPF=mplu!(MPF,A)
 ```
 Simply using 
 ```
-mplu!(MPF,A)
+mplu!(MPF,A) # Don't do this!
 ```
 (ie without explicitly returning MPF)
 
