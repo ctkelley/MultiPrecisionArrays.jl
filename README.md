@@ -30,6 +30,11 @@ __The half precision LU is much faster (more than 10x) as of v0.0.3. Look at [sr
 - v0.0.8: Better docs and ...
    - Update multiprecision factorizations in place with [```mplu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mplu!) and
      [```mpglu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpglu!/)
+
+- v0.0.9: Better docs and ...
+  - Switch from Array to AbstractMatrix
+  - BiCGSTAB-IR
+  - Better API for the Krylov-IR solvers
   
 
 ## I found this repo by accident on the internet. Can I complain about it now?
@@ -51,8 +56,8 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 
 - This README file
 - The [docs for the package](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev)
-- [The ArXiv paper for v0.0.7](https://arxiv.org/abs/2311.14616)
-- [The updated ArXiv paper for v0.0.8](https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/main/Publications_and_Presentations/MPArray.pdf)
+- [The ArXiv paper for v0.0.8](https://arxiv.org/abs/2311.14616) <- coming soon
+- [The updated ArXiv paper for v0.0.9](https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/main/Publications_and_Presentations/MPArray.pdf)
 
 
 ## Readme Contents:
