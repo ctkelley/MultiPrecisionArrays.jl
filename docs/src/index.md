@@ -88,7 +88,7 @@ function IR(A, b)
 end
 ```
 
-The __MPArray__ structure contains both $A$, the low precision copy,
+The ```MPArray``` structure contains both $A$, the low precision copy,
 and a vector for the residual. 
 This lets you allocate the data in advance and reuse the structure
 for other right hand sides without rebuilding (or refactoring!) the
@@ -255,4 +255,40 @@ overflow and, more importantly, underflow when you do that and we scale $r$ to b
 ```mplu``` calls the constructor for the multiprecision array and then factors the low precision matrix. In some cases, such as nonlinear solvers, you will want to separate the constructor and the factorization. When you do that
 remember that ```mplu!``` overwrites the low precision copy of A with the factors, so you can't resuse the multiprecision array for other problems unless you restore the low precision copy.
 
+## Memory Allocations for mplu
+
+The memory footprint of a multiprecision array is dominated by
+the high precision array and the low precision copy. The allocations of
+```
+AF1=lu(A)
+```
+and
+```
+AF2=mplu(A)
+```
+are very different. Typically ```lu``` makes a high precision copy of $\ma$ and
+factors that with ```lu!```. ```mplu``` on the other hand, uses $\ma$
+as the high precision matrix in the multiprecision array structure and
+the makes a low precision copy to send to ```lu!```. Hence ```mplu```
+has half the allocation burden of ```lu```.
+
+That is, of course misleading. The best way to apply ```lu``` is to
+overwrite $A$ with the factorization using
+```
+AF1=lu!(A).
+```
+The analog of this approach with a multiprecision array would be to
+first build an ```MPArray``` structure with
+```
+MPA = MPArray(A)
+```
+which makes $A$ the high precision matrix and also makes a low
+precision copy. This is the stage where the extra memory is allocated
+for the the low precision copy. One follows that with the factorization
+of the low precision matrix to construct the factorization object.
+```
+MPF = mplu!(MPA).
+```
+The function ```mplu``` simply applies ```MPArray``` and follows that with
+```mplu!```.
 
