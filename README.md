@@ -32,7 +32,7 @@ __The half precision LU is much faster (more than 10x) as of v0.0.3. Look at [sr
      [```mpglu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpglu!/)
 
 - v0.0.9: Better docs and ...
-  - Switch from Array to AbstractMatrix
+  - Switch from Array to AbstractArray. Done! Now I can apply ```mplu``` to a transpose.
   - BiCGSTAB-IR
   - Better API for the Krylov-IR solvers
   
@@ -48,7 +48,6 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 ## Coming Attractions
 
 - Nonlinear solver applications
-- Generality fix (replace Array with AbstractMatrix)
 - Three precision IR
 - BiCGSTAB-IR
 
