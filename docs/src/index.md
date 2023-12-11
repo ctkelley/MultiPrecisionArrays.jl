@@ -253,7 +253,9 @@ When low precision is Float32, then the default is (```onthefly = false```). Thi
 overflow and, more importantly, underflow when you do that and we scale $r$ to be a unit vector before conversion to low precisiion and reverse the scaling when we promote $d$. We take care of this for you.
 
 ```mplu``` calls the constructor for the multiprecision array and then factors the low precision matrix. In some cases, such as nonlinear solvers, you will want to separate the constructor and the factorization. When you do that
-remember that ```mplu!``` overwrites the low precision copy of A with the factors, so you can't resuse the multiprecision array for other problems unless you restore the low precision copy.
+remember that ```mplu!``` overwrites the low precision copy of A 
+with the factors. The factorizaton object is different from the multiprecision
+array, even though they share storage. This is just like ```lu!```.
 
 ## Memory Allocations for mplu
 
