@@ -276,8 +276,7 @@ I started on this package after finishing
 A new paper exploits most of the package. I use the examples in that paper for CI. If you do iterative refinement well, you can make half precision work far better than it did in (KEL22a). MultiPrecisionArrays drop right into the solvers in [SIAMFANLEquations.jl](https://github.com/ctkelley/SIAMFANLEquations.jl). 
 
 - (KEL23a) C. T. Kelley, [__Newton's method in three precisions__](https://arxiv.org/abs/2307.16051) To appear in Pacific Journal of Optimization.
-
-This paper has a [repo](https://github.com/ctkelley/N3Presults) for reproducing the results with an early version of this package.
+  - This paper has a [repo](https://github.com/ctkelley/N3Presults) for reproducing the results with an early version of this package.
 
 
 ## __Interprecision transfers__:
