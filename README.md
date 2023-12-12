@@ -54,7 +54,7 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 
 - This README file
 - The [docs for the package](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev)
-- [The ArXiv paper for v0.0.8](https://arxiv.org/abs/2311.14616) <- coming soon
+- [The ArXiv paper for v0.0.8](https://arxiv.org/abs/2311.14616) 
 - [The updated ArXiv paper for v0.0.9](https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/main/Publications_and_Presentations/MPArray.pdf)
 
 
