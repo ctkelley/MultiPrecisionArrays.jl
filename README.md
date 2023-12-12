@@ -91,6 +91,8 @@ factorization in a lower precision, say single, within a residual correction ite
 to allocate storage for a copy of $A$ in the lower precision and factor that copy. Then one has to determine what the line
 $d = (LU)^{-1} r$ means. Do you cast $r$ into the lower precison before the solve or not? __MultiPrecisionArrays.jl__ provides
 data structures and solvers to manage this. The __MPArray__ structure lets you preallocate $A$, the low precision copy, and the residual $r$.
+The factorizations factor the low-precision copy and the solvers use that factorization and the original high-precision matrix to run
+the while loop in the algorithm.
 
 IR is a perfect example of a storage/time tradeoff.
 To solve a linear system $A x = b$ in $R^N$ with IR,
