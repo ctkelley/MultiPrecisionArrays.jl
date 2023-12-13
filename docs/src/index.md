@@ -294,3 +294,21 @@ MPF = mplu!(MPA).
 The function ```mplu``` simply applies ```MPArray``` and follows that with
 ```mplu!```.
 
+## Other IR software in Julia
+
+The package
+[IterativeRefinement.jl](https://github.com/RalphAS/IterativeRefinement.jl)
+is an implementation of the IR method from
+[dongarray](@cite).
+
+The unregistered
+package [Itref.jl](https://github.com/bvieuble/Itref.jl) implements
+IR and the GMRES-IR method from 
+[amestoy:2023](@cite)
+and was used to obtain
+the numerical results in that paper. It does not provide the
+data structures for preallocation that we do and does not seem to have
+been updated lately.
+
+
+
