@@ -67,6 +67,7 @@ Nothing is in final form and I am changing the API, internal structures, exporte
 - [Harvesting Iteration Statistics](#harvesting-iteration-statistics)
 - [Dependencies](#dependencies)
 - [Endorsement](#endorsement)
+- [Other Stuff in Julia](#other-ir-in-julia)
 - [Funding](#funding)
 
 
@@ -288,7 +289,9 @@ Most users of this package can ignore this issue.
 
   - [Interprecision Transfers in Iterative Refinement: Making Half Precision on Desktops Less Painful](Publications_and_Presentations/MPArrays_XSDK-MULTIPRECISION_June_15.pdf).
 
+## Other IR in Julia
 
+See [the docs](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/#Other-IR-software-in-Julia) for a couple citations. 
 
 ## Funding
 
