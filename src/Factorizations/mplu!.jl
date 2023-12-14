@@ -22,6 +22,9 @@ before the solve and avoids N^2 interprecision transfers.
 
   ```onthefly == nothing``` means you take the defaults.
 
+If you want to use static arrays with this stuff, use the 
+mutable @MArray constructor
+
 """
 function mplu!(MPA::MPArray)
     AH = MPA.AH
@@ -58,6 +61,9 @@ structure is immutable and MPF.AF.info cannot be changed.
 
 Reassigning MPF works and resuses almost all of the storage in the 
 original array.
+
+If you want to use static arrays with this stuff, use the 
+mutable @MArray constructor
 """
 function mplu!(MPF::MPLFact,A::AbstractArray{TH,2}) where TH
 TF=eltype(MPF.AH)
