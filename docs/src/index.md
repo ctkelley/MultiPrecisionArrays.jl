@@ -312,7 +312,7 @@ The function ```mplu``` simply applies ```MPArray``` and follows that with
 The package
 [IterativeRefinement.jl](https://github.com/RalphAS/IterativeRefinement.jl)
 is an implementation of the IR method from
-[dongarra](@cite).
+[dongarra:1983](@cite).
 
 The unregistered
 package [Itref.jl](https://github.com/bvieuble/Itref.jl) implements
