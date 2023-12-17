@@ -82,7 +82,7 @@ function hlu!(A::AbstractMatrix{T}; minbatch=16) where {T}
     return LU{T,typeof(A),typeof(ipiv)}(A, ipiv, convert(BlasInt, info))
 end
 
-function hlu(A; minbatch=1)
+function hlu(A; minbatch=16)
     C = copy(A)
     AF = hlu!(C; minbatch=minbatch)
     return AF
