@@ -3,6 +3,7 @@ using MultiPrecisionArrays.Examples
 using LinearAlgebra
 using SIAMFANLEquations
 using SIAMFANLEquations.TestProblems
+using StaticArrays
 using Test
 
 include("Greens/gtest.jl")
@@ -12,6 +13,7 @@ include("DetailsTest/hlu_test.jl")
 include("DetailsTest/slashtest.jl")
 include("DetailsTest/mplu_test.jl")
 include("DetailsTest/AbsArray.jl")
+include("DetailsTest/static_test.jl")
 include("GM-IRTest/mpgmtest.jl")
 include("GM-IRTest/hvse.jl")
 
@@ -34,6 +36,7 @@ end
     @test mplu_test()
     @test mpglu_test()
     @test AbsArray()
+    @test static_test()
 end
 
 @testset "GM-IR" begin
