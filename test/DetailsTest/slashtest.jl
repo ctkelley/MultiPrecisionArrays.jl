@@ -12,7 +12,6 @@ doubleok=(out1==out2)
 doubleok || println("64-32 fails in slashtest")
 As=Float32.(A)
 As = I + Gmat(10,Float32)
-println(size(As))
 xs=ones(Float32,10)
 bs=As*xs;
 MPAS=MPArray(As)
