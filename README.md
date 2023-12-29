@@ -265,6 +265,27 @@ iterate of $x = 0$ and so the initial residual is simply $r = b$
 and the first entry in the residual history is $|| b ||_\infty$. The
 iteration terminates successfully after four matrix-vector products.
 
+You may wonder why the residual after the first iteration was so much
+larger than single precision roundoff. The reason is that the default 
+when the low precision is single is to to LPS for the triangular solves.
+One can enable MPS and see the difference.
+
+ ```
+julia> MPF2=mplu(A; onthefly=true);
+
+julia> mpout2=\(MPF2, b; reporting=true);
+
+julia> mpout2.rhist
+5-element Vector{Float64}:
+ 9.99878e-01
+ 6.17721e-07
+ 3.84581e-13
+ 7.99361e-15
+ 8.88178e-16
+```
+So the second iteration is much better, but the iteration terminated after
+four iterations in both cases.
+
 There are more examples for this in the [paper](https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/main/Publications_and_Presentations/MPArray.pdf).
 
 
