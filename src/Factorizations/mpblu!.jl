@@ -4,7 +4,8 @@ Factor a MPBArray and set it up for BiCGSTAB by allocating room
 for Krylov vectors etc
 
 This function factors the low precision copy
-and leaves the high precision matrix alone. ```mpblu!``` allocates
+and leaves the high precision matrix alone. The constructor for
+MPBArray allocates
 storage for the things BiCGSTAB needs.
 
 You get a factorization

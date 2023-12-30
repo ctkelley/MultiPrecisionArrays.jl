@@ -4,7 +4,8 @@ Factor a MPGArray and set it up for GMRES by allocating room
 for Krylov vectors etc
 
 This function factors the low precision copy
-and leaves the high precision matrix alone. ```mpglu!``` allocates
+and leaves the high precision matrix alone. The constructor 
+for MPGArray allocates
 storage for ```basissize``` Kylov vectors and some other things
 GMRES needs.
 You get a factorization
