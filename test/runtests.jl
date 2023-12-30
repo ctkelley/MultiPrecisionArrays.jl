@@ -14,8 +14,9 @@ include("DetailsTest/slashtest.jl")
 include("DetailsTest/mplu_test.jl")
 include("DetailsTest/AbsArray.jl")
 include("DetailsTest/static_test.jl")
-include("GM-IRTest/mpgmtest.jl")
-include("GM-IRTest/hvse.jl")
+include("Krylov-IRTest/mpgmtest.jl")
+include("Krylov-IRTest/mpbctest.jl")
+include("Krylov-IRTest/hvse.jl")
 
 println("starting")
 
@@ -39,7 +40,8 @@ end
     @test static_test()
 end
 
-@testset "GM-IR" begin
+@testset "Krylov-IR" begin
     @test mpgmtest(1000)
+    @test mpbctest(1000)
     @test hvse(128)
 end

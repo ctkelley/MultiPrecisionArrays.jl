@@ -15,6 +15,7 @@ using Polyester
 include("Structs4MP/MPBase.jl")
 include("Structs4MP/MPArray.jl")
 include("Structs4MP/MPGArray.jl")
+include("Structs4MP/MPBArray.jl")
 include("Structs4MP/MPHeavy.jl")
 
 MPFact = Union{MPLFact,MPHFact}
@@ -22,6 +23,7 @@ MPLFacts = Union{MPLFact}
 MPGFact = Union{MPGEFact, MPGHFact}
 
 export MPGFact
+export MPBFact
 
 #MPIRArray = Union{MPArray,MPHArray}
 
@@ -30,19 +32,12 @@ is_heavy(x::MPHFact) = true
 is_heavy(x::MPLFact) = false
 
 
-
-
 import Base.eltype
 
-function eltype(MP::Union{MPArray,MPHArray,MPGArray})
+function eltype(MP::Union{MPArray,MPHArray,MPGArray,MPBArray})
     TP = eltype(MP.AH)
     return TP
 end
-
-#function eltype(MPH::MPHArray)
-#    TP = eltype(MPH.AH)
-#    return TP
-#end
 
 import Base.\
 function \(AF::MPFact, b; verbose = false, reporting = false)
@@ -59,6 +54,12 @@ function \(MPA::Union{MPArray}, b; verbose=false, reporting=false)
           xi = mpgeslir(MPA, b; verbose = verbose, reporting = reporting)
           return xi
 end
+
+function \(AF::MPBFact, b; verbose = false, reporting = false)
+    xi = mpbcir(AF, b; verbose = verbose, reporting = reporting)
+    return xi
+end
+
 
 #
 # hlu and hlu! are hacks of the Julia generic_lu source. I've used
@@ -78,8 +79,10 @@ export hlu
 export mplu!
 export mplu
 export mphlu!
-export mpglu
+export mpblu
+export mpblu!
 export mpglu!
+export mpglu
 export mpqr!
 export mpcholesky!
 #
@@ -89,6 +92,7 @@ export mpcholesky!
 #
 export mpgeslir
 export mpgmir
+export mpbcir
 #
 # Each MPArray data structure comes with a structure to store a factorization.
 # The differences are whether one does on-the-fly interprecision transfers
@@ -124,7 +128,9 @@ export MPFact
 #export MPEArray
 export MPFArray
 export MPGArray
+export MPBArray
 export MPHFact
+export MPBFact
 export MPhatv
 export MPhptv
 #
@@ -137,11 +143,13 @@ export MPIRStats
 
 include("Solvers/mpgmir.jl")
 include("Solvers/mpgeslir.jl")
+include("Solvers/mpbcir.jl")
 include("Solvers/IRTriangle.jl")
 include("Structs4MP/MPStats.jl")
 include("Factorizations/hlu!.jl")
 include("Factorizations/mplu!.jl")
 include("Factorizations/mpglu!.jl")
+include("Factorizations/mpblu!.jl")
 
 module Examples
 using MultiPrecisionArrays
