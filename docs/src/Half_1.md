@@ -133,7 +133,7 @@ can recover the residual norm one would get from a successful IR iteration.
 
 There is also a storage problem. One should allocate storage for the Krylov
 basis vectors and other vectors that GMRES needs internally. We do that
-in the factorization phase. So the structure {\bf MPGEFact} has the 
+in the factorization phase. So the structure __MPGEFact__ has the 
 factorization of the low precision matrix, the residual, the Krylov
 basis and some other vectors needed in the solve. 
 
@@ -189,3 +189,50 @@ is much smaller than that for IR.
 
 
 ## BiCGSTAB-IR
+
+__MultiPrecisionArrays.jl__ also supports BiCGSTAB [bicgstab](@cite). The
+API is the same as for GMRES-IR with the swap of ```b``` for ```g```. So the
+data structure is __MPBArray__ and the factorizations are
+```mpblu``` and ```mpblu!```. Keep in mind that a BiCGSTAB iteration costs
+two matrix-vector and two preconditioner-vector products.
+
+We will do the same examples we did for GMRES-IR.
+```
+julia> using MultiPrecisionArrays
+
+julia> using MultiPrecisionArrays.Examples
+
+julia> using BenchmarkTools
+
+julia> N=4069; AD= I - Gmat(N); A=Float32.(AD); x=ones(Float32,N); b=A*x;
+
+julia> MPFB=mpblu(A); MPF=mplu(A);
+
+julia> z=MPF\b; y=MPFB\b; println(norm(z-x,Inf),"  ",norm(y-x,Inf))
+5.9604645e-7  4.172325e-7
+
+julia> @btime $MPF\$b;
+  13.371 ms (5 allocations: 24.38 KiB)
+
+julia> @btime $MPFB\$b;
+  77.605 ms (178 allocations: 821.45 KiB)
+```
+The only new thing is that the solve for BiCGSAB-IR took roughly twice
+as long. That is no surprise since the cost of a BiCGSTAB iteration is
+about double that of a GMRES iteration.
+
+The ill-conditioned example tells the same story.
+```
+julia> N=4069; AD= I - 800.0*Gmat(N); A=Float32.(AD); x=ones(Float32,N); b=A*x;
+
+julia> MPF=mplu(A); MPFB2=mpblu(A);
+
+julia> z=MPF\b; y=MPFB2\b; println(norm(z-x,Inf),"  ",norm(y-x,Inf))
+0.2875508  0.0026364326
+
+julia> println(norm(b-A*z,Inf)/norm(b,Inf),"  ",norm(b-A*y,Inf)/norm(b,Inf))
+0.0012593127  7.86059e-6
+```
+So, as was the case with GMRES, BiCGSTAB-IR is a much better solver
+that IR alone.
+
