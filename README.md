@@ -33,18 +33,18 @@ __The half precision LU is much faster (more than 10x) as of v0.0.3. Look at [sr
      [```mpglu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpglu!/)
 
 - v0.0.9: Better docs and ...
-  - Switch from Array to AbstractArray. Done! Now I can apply ```mplu``` to a transpose and mutable static arrays using the ```@MArray``` constructor.
-  - BiCGSTAB-IR. It's in there but the documentation needs work.
+  - Switch from Array to AbstractArray. Now I can apply ```mplu``` to a transpose and mutable static arrays using the ```@MArray``` constructor.
+  - BiCGSTAB-IR. New factorizations [```mpblu```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpblu/) and [```mpblu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpblu!/)
   - Better API for the Krylov-IR solvers
   
 
 ## I found this repo by accident on the internet. Can I complain about it now?
 
-__The core functionality is pretty stable, but not stable enough for me to announce it on discourse.__
+__The core functionality is getting more stable. I will announce it on discourse with v0.1.0.__ You can complain after that.
 
 __Please do not make PRs. If you stumble on this mess and have questions/ideas ..., raise an issue or email me at tim_kelley@ncsu.edu__
 
-Nothing is in final form and I am changing the API, internal structures, exported functions/structs and all kinds of other stuff frequently.
+Since log(version number) < 0, you can expect changes in API, internal structues, and exported functions.
 
 ## Coming Attractions
 
