@@ -33,7 +33,7 @@ __The half precision LU is much faster (more than 10x) as of v0.0.3. Look at [sr
 
 - v0.0.9: Better docs and ...
   - Switch from Array to AbstractArray. Done! Now I can apply ```mplu``` to a transpose and mutable static arrays using the ```@MArray``` constructor.
-  - BiCGSTAB-IR
+  - BiCGSTAB-IR. It's in there but the documentation needs work.
   - Better API for the Krylov-IR solvers
   
 
