@@ -1,4 +1,4 @@
-# Half Precision and GMRES-IR
+# Half Precision and Krylov-IR
 
 Using half precision will not speed anything up, in fact it will make 
 the solver slower. The reason for this is that LAPACK and the BLAS 
@@ -110,7 +110,7 @@ still terminates too soon.
 ## GMRES-IR
 
 GMRES-IR solves the correction equation
-with a preconditioned GMRES iteration. One way to think of this
+with a preconditioned GMRES [gmres](@cite) iteration. One way to think of this
 is that the solve in the IR loop is an approximate solver for the
 correction equation
 ```math
@@ -188,3 +188,4 @@ So, the relative error and relative residual norm for GMRES-IR
 is much smaller than that for IR.
 
 
+## BiCGSTAB-IR
