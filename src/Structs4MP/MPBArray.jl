@@ -1,5 +1,5 @@
 """
-MPBArray(AH::AbstractArray{Float64,2}; TL = Float32, basissize=10)
+MPBArray(AH::AbstractArray{Float64,2}; TL = Float32)
 Default constructor for MPBArray. Allocate the storage for 
 BiCGSTAB-IR
 
@@ -32,14 +32,14 @@ struct MPBArray{TH<:AbstractFloat,TL<:AbstractFloat}
 end
 
 """
-MPBArray(AH::AbstractArray{Float64,2}; basissize=10, TL=Float32)
+MPBArray(AH::AbstractArray{Float64,2}; TL=Float32)
 
 An MPBArray stores the high precision matrix, the low precision factorization
 and a few other things BiCGSTAB needs. If the high precision
 matrix is double, the low precision is single by default. Half is an optioin
 which you get with TL=Float16.
 """
-function MPBArray(AH::AbstractArray{Float64,2}; basissize=10, TL=Float32)
+function MPBArray(AH::AbstractArray{Float64,2}; TL=Float32)
 AL=TL.(AH)
 (m,n)=size(AH)
 res=ones(eltype(AH),n)
@@ -50,14 +50,14 @@ end
 
 
 """
-MPBArray(AH::AbstractArray{Float32,2}; basissize=10, TL=Float16)
+MPBArray(AH::AbstractArray{Float32,2}; TL=Float16)
 
 An MPBArray stores the high precision matrix, the low precision factorization
 and a few other things BiCGSTAB needs. Since High precision is 
 single, low is half. I'm leaving the kwarg for TL in there because it makes
 is easier to cut/paste calls to MPBArray different precisions into a CI loop.
 """
-function MPBArray(AH::AbstractArray{Float32,2}; basissize=10, TL=Float16)
+function MPBArray(AH::AbstractArray{Float32,2}; TL=Float16)
 AL=TL.(AH)
 (m,n)=size(AH)
 res=ones(eltype(AH),n)

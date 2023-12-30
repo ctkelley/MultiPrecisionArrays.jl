@@ -27,10 +27,12 @@ makedocs(
         "More than you want to know" => 
            Any["Details/Termination.md", "Details/Interprecision_1.md",],
         "MPArray Constructors" => 
-           Any["functions/MPArray.md","functions/MPGArray.md",],
+           Any["functions/MPArray.md","functions/MPGArray.md",
+               "functions/MPBArray.md",],
         "Factorizations"=>
           Any["functions/hlu!.md", "functions/mplu!.md", "functions/mplu.md", 
-                 "functions/mpglu!.md", "functions/mpglu.md",],
+                 "functions/mpglu!.md", "functions/mpglu.md",
+                 "functions/mpblu!.md", "functions/mpblu.md",],
         "Iteration Statistics"=>
           Any["Details/Stats.md",],
         "Solvers"=>
