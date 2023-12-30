@@ -44,9 +44,8 @@ may not do what you want because the multiprecision factorization
 structure is immutable and MPF.AF.info cannot be changed.
 
 Reassigning MPG works and resuses almost all of the storage in the
-original array
+original array.
 """
-
 function mpblu!(MPG::MPBFact, A::AbstractArray{TH,2}) where TH <: Real
 TF=eltype(MPG.AH)
 (TF == TH) || error("Precision error in mplu!")
