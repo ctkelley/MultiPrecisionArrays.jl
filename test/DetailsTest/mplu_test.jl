@@ -49,6 +49,32 @@ mpgluok || println("mpglu failure")
 return mpgluok
 end
 
+"""
+mpblu_test()
+
+Make sure that mpblu and mpblu! do what they are supposed to do
+"""
+function mpblu_test()
+AD=rand(10,10); MPD=MPBArray(AD); MPF1=mpblu!(MPD); MPF2=mpblu(AD);
+eq64=test_eq(MPF1,MPF2)
+eq64 || println("mpblu t1 fails")
+ADx=rand(10,10); MPDx=MPBArray(ADx; TL=Float16);
+MPF1x=mpblu!(MPDx); MPF2x=mpblu(ADx; TL=Float16);
+eq64x=test_eq(MPF1x,MPF2x)
+eq64x || println("mpblu t2 fails")
+AS=Float32.(AD); MPS=MPBArray(AS); MSF1=mpblu!(MPS); MSF2=mpblu(AS)
+eq32=test_eq(MSF1,MSF2)
+eq32 || println("mpblu t3 fails")
+BDx=I + ADx; MPBx=mpblu(BDx; TL=Float16);
+MPTx=mpblu!(MPBx,ADx);
+equp2=test_eq(MPTx,MPF1x)
+equp2 || println("mpblu! failure, updating factorization")
+mpbluok = (eq64 && eq64x && eq32 && equp2)
+mpbluok || println("mpblu failure")
+return mpbluok
+end
+
+
 
 function test_eq(MF1,MF2)
 eqok=true

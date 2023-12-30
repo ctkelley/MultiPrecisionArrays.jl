@@ -36,6 +36,7 @@ end
     @test slashtest()
     @test mplu_test()
     @test mpglu_test()
+    @test mpblu_test()
     @test AbsArray()
     @test static_test()
 end
