@@ -24,6 +24,7 @@ __The half precision LU is much faster (more than 10x) as of v0.0.3. Look at [sr
 - The API for [harvesting iteration statistics](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Details/Stats/) is stable.
 - If you're a half precision person,
    - GMRES-IR works with [```mpglu```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpglu/) and [```mpglu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpglu!/)
+   - BiCGSTAB-IR works with  [```mpblu```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpblu/) and [```mpblu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpblu!/)
    - the new factorization [```hlu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/hlu!/) is __only__ 3-5x slower than a double precision ```lu```.
 
 ## What's new?
