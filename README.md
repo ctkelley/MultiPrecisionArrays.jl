@@ -268,8 +268,10 @@ iteration terminates successfully after four matrix-vector products.
 
 You may wonder why the residual after the first iteration was so much
 larger than single precision roundoff. The reason is that the default 
-when the low precision is single is to to LPS for the triangular solves.
-One can enable MPS and see the difference.
+when the low precision is single is to scale and downcast the residual
+for the triangular solves. This is faster for medium sized problems.
+
+One can enable interprecision transfers on the fly and see the difference.
 
  ```
 julia> MPF2=mplu(A; onthefly=true);
