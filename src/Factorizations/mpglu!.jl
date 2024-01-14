@@ -1,7 +1,6 @@
 """
 mpglu!(MPGA::MPGArray)
-Factor a MPGArray and set it up for GMRES by allocating room
-for Krylov vectors etc
+Factor a MPGArray using the allocations from the structure.
 
 This function factors the low precision copy
 and leaves the high precision matrix alone. The constructor 
@@ -32,7 +31,7 @@ This will, of course, trash the original factorization.
 
 To use this do
 ```
-MPF=mpglu!(MPF,A)
+MPG=mpglu!(MPG,A)
 ```
 Simply using
 ```

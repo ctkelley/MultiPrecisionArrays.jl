@@ -21,6 +21,7 @@ include("Structs4MP/MPHeavy.jl")
 MPFact = Union{MPLFact,MPHFact}
 MPLFacts = Union{MPLFact}
 MPGFact = Union{MPGEFact, MPGHFact}
+MPKFact = Union{MPGFact,MPBFact}
 
 export MPGFact
 export MPBFact
@@ -31,6 +32,10 @@ export MPBFact
 is_heavy(x::MPHFact) = true
 is_heavy(x::MPLFact) = false
 
+kmeth(x::MPGFact) = "GMRES"
+kmeth(x::MPBFact) = "BiCGSTAB"
+
+export kmeth
 
 import Base.eltype
 
@@ -86,12 +91,14 @@ export mpglu
 export mpqr!
 export mpcholesky!
 #
-# The solvers are mpgeslir (iterative refinement) and mpgmir (IR-GMRES).
+# The solvers are mpgeslir (iterative refinement) and mpkrir (IR-Krylov).
+# IR-GMRES (mpgmir) and IR-BiCGSTAB (mpbcir) are just calls to mpkrir.
 # I'm not working on more than that right now. I have overloaded
 # \ with these so you should not have to call them directly.
 #
 export mpgeslir
 export mpgmir
+export mpkrir
 export mpbcir
 #
 # Each MPArray data structure comes with a structure to store a factorization.
@@ -142,6 +149,7 @@ export MPGStats
 export MPIRStats
 
 include("Solvers/mpgmir.jl")
+include("Solvers/mpkrir.jl")
 include("Solvers/mpgeslir.jl")
 include("Solvers/mpbcir.jl")
 include("Solvers/IRTriangle.jl")
