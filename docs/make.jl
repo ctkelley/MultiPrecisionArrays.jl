@@ -36,8 +36,7 @@ makedocs(
         "Iteration Statistics"=>
           Any["Details/Stats.md",],
         "Solvers"=>
-             Any["functions/mpgeslir.md", "functions/mpgmir.md", 
-                 "functions/mpkrir.md"],
+             Any["functions/mpgeslir.md", "functions/mpkrir.md"],
         "References" => ["References.md",],
 ],
 ; plugins=[bib]

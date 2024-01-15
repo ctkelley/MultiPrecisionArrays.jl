@@ -7,6 +7,9 @@ This is the generic solver used by GMRES-IR and BiCGSTAB-IR. You use
 the correct MPKFact = Union{MPGFact,MPBFact} structure and mpkrir
 will do the right thing. 
 
+You should not be calling this directly. Use ```\\``` to solve
+linear systems with the multipreicsion factorization.
+
 More documentation on the way.
 
 """

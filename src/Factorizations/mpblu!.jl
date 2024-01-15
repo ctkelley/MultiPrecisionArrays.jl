@@ -25,7 +25,7 @@ end
 """
 mpblu!(MPG::MPBFact, A::AbstractArray{TH,2}) where TH <: Real
 Overwrite a multiprecision factorization MPF to reuse the
-storage to make a multiprecision of a new matrix A.
+storage to make a multiprecision factorization of a new matrix A.
 
 This will, of course, trash the original factorization.
 
