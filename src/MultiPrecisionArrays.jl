@@ -25,6 +25,7 @@ MPKFact = Union{MPGFact,MPBFact}
 
 export MPGFact
 export MPBFact
+export MPKFact
 
 #MPIRArray = Union{MPArray,MPHArray}
 
