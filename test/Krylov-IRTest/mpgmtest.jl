@@ -19,7 +19,7 @@ function get_gmir_results(n, TA; test6416 = false, debug = false)
             ADM = MPHArray(AD)
         end
         ADF = mpglu!(ADM)
-        zt = mpgmir(ADF, b; reporting = true)
+        zt = mpkrir(ADF, b; reporting = true)
         z = zt.sol
         delnorm = norm(z - xs, Inf)
         if debug
