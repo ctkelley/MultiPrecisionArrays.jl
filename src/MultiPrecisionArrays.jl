@@ -51,7 +51,7 @@ function \(AF::MPFact, b; verbose = false, reporting = false)
 end
 
 function \(AF::MPGFact, b; verbose = false, reporting = false, mpdebug=false) 
-    xi = mpgmir(AF, b; verbose = verbose, reporting = reporting, mpdebug=mpdebug)
+    xi = mpkrir(AF, b; verbose = verbose, reporting = reporting, mpdebug=mpdebug)
     return xi
 end
 
@@ -61,7 +61,7 @@ function \(MPA::Union{MPArray}, b; verbose=false, reporting=false)
 end
 
 function \(AF::MPBFact, b; verbose = false, reporting = false)
-    xi = mpbcir(AF, b; verbose = verbose, reporting = reporting)
+    xi = mpkrir(AF, b; verbose = verbose, reporting = reporting)
     return xi
 end
 

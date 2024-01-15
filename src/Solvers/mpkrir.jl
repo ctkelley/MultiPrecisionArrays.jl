@@ -3,9 +3,10 @@ mpkrir(AF::MPKFact, b; reporting=false, verbose=false, mpdebug=false)
 
 Krylov-IR solver 
 
-This is the generic solver called by GMRES-IR and BiCGSTAB-IR
+This is the generic solver used by GMRES-IR and BiCGSTAB-IR. You use
+the correct MPKFact = Union{MPGFact,MPBFact} structure and mpkrir
+will do the right thing. 
 
-I am not exporting this. It is only to help me avoid redundant code.
 """
 function mpkrir(AF::MPKFact, b; reporting = false, 
                 verbose = false, mpdebug = false)
