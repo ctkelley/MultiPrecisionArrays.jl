@@ -93,14 +93,13 @@ export mpqr!
 export mpcholesky!
 #
 # The solvers are mpgeslir (iterative refinement) and mpkrir (IR-Krylov).
-# IR-GMRES (mpgmir) and IR-BiCGSTAB (mpbcir) are just calls to mpkrir.
 # I'm not working on more than that right now. I have overloaded
 # \ with these so you should not have to call them directly.
 #
 export mpgeslir
-export mpgmir
+#export mpgmir
 export mpkrir
-export mpbcir
+#export mpbcir
 #
 # Each MPArray data structure comes with a structure to store a factorization.
 # The differences are whether one does on-the-fly interprecision transfers
@@ -149,10 +148,10 @@ export MPhptv
 export MPGStats
 export MPIRStats
 
-include("Solvers/mpgmir.jl")
+#include("Solvers/mpgmir.jl")
+#include("Solvers/mpbcir.jl")
 include("Solvers/mpkrir.jl")
 include("Solvers/mpgeslir.jl")
-include("Solvers/mpbcir.jl")
 include("Solvers/IRTriangle.jl")
 include("Structs4MP/MPStats.jl")
 include("Factorizations/hlu!.jl")
