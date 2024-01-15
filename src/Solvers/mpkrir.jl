@@ -7,6 +7,8 @@ This is the generic solver used by GMRES-IR and BiCGSTAB-IR. You use
 the correct MPKFact = Union{MPGFact,MPBFact} structure and mpkrir
 will do the right thing. 
 
+More documentation on the way.
+
 """
 function mpkrir(AF::MPKFact, b; reporting = false, 
                 verbose = false, mpdebug = false)

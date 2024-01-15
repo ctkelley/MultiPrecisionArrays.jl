@@ -19,7 +19,7 @@ function get_bcir_results(n, TA; test6416 = false, debug = false)
             ADM = MPBArray(AD)
         end
         ADF = mpblu!(ADM)
-        zt = mpbcir(ADF, b; reporting = true)
+        zt = mpkrir(ADF, b; reporting = true)
         wt = ADF\b;
         slasherr=norm(zt.sol-wt,Inf)
         slashok = (slasherr < 1.e-17)
