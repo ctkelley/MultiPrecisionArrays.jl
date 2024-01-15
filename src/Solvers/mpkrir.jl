@@ -8,9 +8,74 @@ the correct MPKFact = Union{MPGFact,MPBFact} structure and mpkrir
 will do the right thing. 
 
 You should not be calling this directly. Use ```\\``` to solve
-linear systems with the multipreicsion factorization.
+linear systems with the multiprecision factorization and to 
+use the optional kwargs.
 
-More documentation on the way.
+We overload the backslash operator to call mpkrir for a multiprecision
+MPGFact factorization. So if ```MPA``` is an MPGArray and  
+```
+AF = mpglu!(MPA)
+```
+Then ```AF\\b``` maps to
+```
+mpkrir(AF, b)
+```
+which does the GMRES-IR solve. You can also get the multiprecision
+factoriztion directly with
+```
+AF = mpglu(A)
+```
+which builds the mutliprcision MPGArray and then factors the low
+preicsion copy.
+
+Similarly if  ```MPA``` is an MPBArray. Then
+```
+AF = mpblu!(MPA)
+```
+Then ```AF\\b``` maps to
+```
+mpkrir(AF, b)
+```
+which does the BiCGSTAB-IR solve.
+
+You can also use the ```\\``` operator to harvest iteration statistics.
+
+## Example
+```jldoctest
+julia> using MultiPrecisionArrays.Examples
+
+julia> N=4096; A = I - 800.0 * Gmat(N); b=ones(N);
+
+julia> AF=mpglu(A);
+
+julia> solout=\\(AF, b; reporting=true);
+
+# Correct result?
+
+julia> x=solout.sol; norm(b-A*x,Inf)
+9.12193e-12
+
+# Look at the residual history
+
+julia> solout.rhist
+5-element Vector{Float64}:
+ 1.00000e+00
+ 1.16784e-10
+ 8.47566e-12
+ 7.95053e-12
+ 9.12193e-12
+# Stagnation after the 3rd iteration. Now the Krylovs/iteration
+
+julia> solout.khist
+4-element Vector{Int64}:
+ 4
+ 5
+ 4
+ 5
+# 4-5 Krylovs per iteration.
+
+BiCGSTAB works the same way.
+
 
 """
 function mpkrir(AF::MPKFact, b; reporting = false, 
