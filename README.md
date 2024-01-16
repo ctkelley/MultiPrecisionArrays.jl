@@ -28,14 +28,13 @@ __The half precision LU is much faster (more than 10x) as of v0.0.3. Look at [sr
    - the new factorization [```hlu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/hlu!/) is __only__ 3-5x slower than a double precision ```lu```.
 
 ## What's new?
-- v0.0.8: Better docs and ...
-   - Update multiprecision factorizations in place with [```mplu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mplu!) and
-     [```mpglu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpglu!/)
 
 - v0.0.9: Better docs and ...
   - Switch from Array to AbstractArray. Now I can apply ```mplu``` to a transpose and mutable static arrays using the ```@MArray``` constructor.
   - BiCGSTAB-IR. New factorizations [```mpblu```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpblu/) and [```mpblu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpblu!/)
   - Better API for the Krylov-IR solvers
+
+ - v0.1.0: Better docs and ...
   
 
 ## I found this repo by accident on the internet. Can I complain about it now?
