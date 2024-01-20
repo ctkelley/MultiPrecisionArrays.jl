@@ -6,7 +6,7 @@
 [![MultiPrecisionArrays Downloads](https://shields.io/endpoint?url=https://pkgs.genieframework.com/api/v1/badge/MultiPrecisionArrays)](https://pkgs.genieframework.com?packages=MultiPrecisionArrays)
 
 
-# MultiPrecisionArrays.jl v0.0.9
+# MultiPrecisionArrays.jl v0.0.10
 
 ## [C. T. Kelley](https://ctk.math.ncsu.edu)
 
@@ -33,6 +33,8 @@ __The half precision LU is much faster (more than 10x) as of v0.0.3. Look at [sr
   - Switch from Array to AbstractArray. Now I can apply ```mplu``` to a transpose and mutable static arrays using the ```@MArray``` constructor.
   - BiCGSTAB-IR. New factorizations [```mpblu```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpblu/) and [```mpblu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpblu!/)
   - Better API for the Krylov-IR solvers
+
+ - v0.0.10: minor updates and try to get the docs to update correctly
 
  - v0.1.0: Better docs and ...
   
