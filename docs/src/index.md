@@ -6,8 +6,6 @@
 [ctk:mparrays](@cite)
 is a package for iterative refinement. 
 
-v0.0.10 is an attempt to get docs to update correctly
-
 These docs are enough to get you started. The complete version with
 a better account of the theory is [ctk:mparraysdocs](@cite). 
 
