@@ -25,7 +25,8 @@ It's a hack of Julia's  ```generic_lu!``` with threading and a couple
 compiler directives. Even so, it's 2.5 -- 5 x __slower__ than a 
 double precision LU. Half precision support for both Float16
 and BFloat16 is coming 
-(Julia and Apple support it in hardware!) but for now, at least for desktop
+(Julia and Apple support Float16 in hardware! Apple hardware supports
+BFloat16). However, for now, at least for desktop
 computing, half precision is for
 research in iterative refinement, not applications. 
 
