@@ -11,8 +11,9 @@ Float16 (11 bits) and single (24 bits). The size of the significand
 means that you can get in real trouble with half precision in either
 format.  
 
-At this point we offer no support for BFloat16. Progress is being
-made.
+At this point Julia has no native support for BFloat16. Progress is being
+made and the package [BFLoat16s](https://github.com/JuliaMath/BFloat16s.jl)
+will let you experiment.
 
 Using half precision will not speed anything up, in fact it will make 
 the solver slower. The reason for this is that LAPACK and the BLAS 
