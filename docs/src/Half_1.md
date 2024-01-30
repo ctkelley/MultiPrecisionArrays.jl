@@ -1,13 +1,29 @@
 # Half Precision and Krylov-IR
 
+There are two half precision (16 bit) formats. Julia has native
+support for IEEE 16 bit floats (Float16). A second format
+(BFloat16) has a larger exponent field and a smaller 
+significand (mantissa), thereby
+trading precision for range. In fact, the exponent field in BFloat is
+the same size (8 bits) as that for single precision (Float32). The 
+significand, however, is only 8 bits. Which is less than that for 
+Float16 (11 bits) and single (24 bits). The size of the significand
+means that you can get in real trouble with half precision in either
+format.  
+
+At this point we offer no support for BFloat16. Progress is being
+made.
+
 Using half precision will not speed anything up, in fact it will make 
 the solver slower. The reason for this is that LAPACK and the BLAS 
 do not (__YET__) support half precision, so all the clever stuff in
 there is missing. We provide a half precision LU
-factorization __/src/Factorizations/hlu!.jl__ that is better than nothing. 
+factorization for Float16
+ __/src/Factorizations/hlu!.jl__ that is better than nothing. 
 It's a hack of Julia's  ```generic_lu!``` with threading and a couple
 compiler directives. Even so, it's 2.5 -- 5 x __slower__ than a 
-double precision LU. Half precision support is coming 
+double precision LU. Half precision support for both Float16
+and BFloat16 is coming 
 (Julia and Apple support it in hardware!) but for now, at least for desktop
 computing, half precision is for
 research in iterative refinement, not applications. 
