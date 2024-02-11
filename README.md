@@ -5,8 +5,6 @@
 
 [![MultiPrecisionArrays Downloads](https://shields.io/endpoint?url=https://pkgs.genieframework.com/api/v1/badge/MultiPrecisionArrays)](https://pkgs.genieframework.com?packages=MultiPrecisionArrays)
 
-[![Github All Releases](https://img.shields.io/github/downloads/ctkelley/MultiPrecisionArrays.jl/total.svg)]()
-
 
 # MultiPrecisionArrays.jl v0.1.0
 
