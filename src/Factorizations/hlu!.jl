@@ -90,4 +90,5 @@ end
 
 # More stuff I got from Base
 #lupivottype(::Type{T}) where {T} = RowMaximum()
-checknonsingular(info, pivot) = LinearAlgebra.checknonsingular(info, pivot)
+checknonsingular(info, ::RowMaximum) = info == 0 || throw(SingularException(info))
+#checknonsingular(info, pivot) = LinearAlgebra.checknonsingular(info, pivot)
