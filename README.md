@@ -35,7 +35,7 @@ __The half precision LU for Float16 in this package is much faster (more than 10
   - Better API for the Krylov-IR solvers
 
  - v0.1.0: Better docs and ...
-  
+   - Explanation for why I am not excited about evaluating the residual in extended precision + a bit of support for that anyhow
 
 ## I found this repo by accident on the internet. Can I complain about it now?
 
