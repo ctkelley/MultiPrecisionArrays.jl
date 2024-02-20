@@ -37,9 +37,9 @@ __The half precision LU for Float16 in this package is much faster (more than 10
  - v0.1.0: Better docs and ...
    - Explanation for why I am not excited about evaluating the residual in extended precision + a bit of support for that anyhow
 
-## I found this repo by accident on the internet. Can I complain about it now?
+##  Can I complain about this package now?
 
-__The core functionality is getting more stable. I will announce it on discourse with v0.1.0.__ You can complain after that.
+Yes, but ...
 
 __Please do not make PRs. If you stumble on this mess and have questions/ideas ..., raise an issue or email me at tim_kelley@ncsu.edu__
 
