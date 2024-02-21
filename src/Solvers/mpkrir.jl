@@ -1,6 +1,33 @@
 """
 mpkrir(AF::MPKFact, b; reporting=false, verbose=false, mpdebug=false)
 
+I do not export this function. The idea is that you use ```mpglu``
+and do not touch either the constructor or the solver directly.
+
+Use a multi-precision factorization to solve a linear system with
+plain vanilla iterative refinement.
+
+This version is analogous to ```A\\b``` and combines the factorization
+and the solve. You start with MPA=MPArray(A) and then pass MPA
+to mpgeslir and combine the factorization and the solve. 
+
+You can also get the multiprecision factorization directly with
+```
+MPF=mplu(A)
+```
+and then pass ```MPF``` to mpgeslir.
+
+I use this to get some timing results and it's also convenient
+if you want to do factor and solve in one statement. 
+
+You can also get this with ```x = MPA\\b```.
+
+If you set the kwarg ```reporting``` to true you can get the IR
+residual history. The output of 
+```
+x = MPA\\b
+```
+
 Krylov-IR solver 
 
 This is the generic solver used by GMRES-IR and BiCGSTAB-IR. You use

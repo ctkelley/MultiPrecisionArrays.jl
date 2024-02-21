@@ -1,5 +1,6 @@
 #
 # MPEArray factorization for GMRES-IR
+# This stuff is only used for CI
 #
 struct MPGEFact
     AH::AbstractArray
