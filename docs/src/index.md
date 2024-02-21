@@ -88,12 +88,6 @@ function IR(A, b)
 end
 ```
 
-The ```MPArray``` structure contains both $A$, the low precision copy,
-and a vector for the residual. 
-This lets you allocate the data in advance and reuse the structure
-for other right hand sides without rebuilding (or refactoring!) the
-low precision copy. 
-
 As written in the function, the defect uses ```ldiv!``` to compute
 ```AF\r```. This means that the two triangular factors are stored in
 single precision and interprecision transfers are done with each
@@ -158,6 +152,11 @@ end
 The structure also stores the residual. The ```onthefly``` Boolean tells the solver how to do the interprecision transfers. The easy way to get started is to use the ```mplu``` 
 command directly on the matrix. That will build the MPArray, follow that with the factorization, and put in all in a structure
 that you can use with ```\```.
+
+While we document ```MPArray``` and other multiprecision
+data structures, we do not export the constructors. You should use
+the multiprecision factorizations instead.
+
 
 Now we will see how the results look. In this example we compare the result with iterative refinement with ```A\b```, which is LAPACK's LU. 
 As you can see the results are equally good. Note that the factorization object ```MPF``` is the
@@ -231,7 +230,7 @@ Here is the source for ```mplu```
 mplu(A::AbstractArray{Float64,2}; TL=Float32, onthefly=false)
 
 Combines the constructor of the multiprecision array with the
-factorization.
+factorization. 
 """
 function mplu(A::AbstractArray{TH,2}; TL=Float32, onthefly=nothing) where TH <: Real
 #
