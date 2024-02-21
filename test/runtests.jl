@@ -10,6 +10,7 @@ import MultiPrecisionArrays.MPArray
 import MultiPrecisionArrays.MPHArray
 import MultiPrecisionArrays.MPGArray
 import MultiPrecisionArrays.MPBArray
+import MultiPrecisionArrays.MPLFact
 import MultiPrecisionArrays.mpkrir
 
 include("Greens/gtest.jl")

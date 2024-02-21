@@ -4,6 +4,7 @@ import MultiPrecisionArrays.MPArray
 import MultiPrecisionArrays.MPHArray
 import MultiPrecisionArrays.MPGArray
 import MultiPrecisionArrays.MPBArray
+import MultiPrecisionArrays.MPBFact
 import MultiPrecisionArrays.mpgeslir
 import MultiPrecisionArrays.mpgkrir
 
