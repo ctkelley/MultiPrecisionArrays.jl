@@ -6,6 +6,11 @@ using SIAMFANLEquations.TestProblems
 using StaticArrays
 using Test
 
+import MultiPrecisionArrays.MPArray
+import MultiPrecisionArrays.MPHArray
+import MultiPrecisionArrays.MPGArray
+import MultiPrecisionArrays.MPBArray
+
 include("Greens/gtest.jl")
 include("NLTest/nltest.jl")
 include("DetailsTest/precision_test.jl")

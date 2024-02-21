@@ -113,15 +113,15 @@ export mpkrir
 # and I may stop exporting them. 
 #
 # For IR-GMRES, it's more subtle.  The cost of Heavy IR with MPHArray
-# and MPGHFact is an extra high precision matrix. If you can afford the 
-# storage and communication burden, it's a reasonable thing to do. 
+# and MPGHFact is an extra high precision matrix. If you can afford 
+# the storage and communication burden, it's a reasonable thing to do. 
 # If you can't, on-the-fly is your only option. The differences in time
 # become less significant as the problem size gets large and the O(N^2)
 # interprecision transfer cost is completely dominated by the O(N^3) 
 # factorization cost. 
 #
-export MPArray
-export MPHArray
+#export MPArray
+#export MPHArray
 #
 #
 #
@@ -133,20 +133,20 @@ export MPFact
 #
 #
 #export MPEArray
-export MPFArray
-export MPGArray
-export MPBArray
-export MPHFact
-export MPBFact
-export MPhatv
-export MPhptv
+#export MPFArray
+#export MPGArray
+#export MPBArray
+#export MPHFact
+#export MPBFact
+# export MPhatv
+# export MPhptv
 #
 # The data structres for statistics are almost surely not 
 # interesting to anyone but me. I will document how one can
 # use the solvers to get the stats sooner or later.
 #
-export MPGStats
-export MPIRStats
+#export MPGStats
+#export MPIRStats
 
 #include("Solvers/mpgmir.jl")
 #include("Solvers/mpbcir.jl")
