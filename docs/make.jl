@@ -1,5 +1,10 @@
 push!(LOAD_PATH, "../src/")
 using Documenter, MultiPrecisionArrays, DocumenterTools, DocumenterCitations
+import MultiPrecisionArrays.MPArray
+import MultiPrecisionArrays.MPHArray
+import MultiPrecisionArrays.MPGArray
+import MultiPrecisionArrays.MPBArray
+
 
 mathengine = MathJax3(Dict(:loader => Dict("load" => ["[tex]/require", "[tex]/mathtools"]),
                            :tex => Dict("inlineMath" => [["\$", "\$"], ["\\(", "\\)"]],
