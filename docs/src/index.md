@@ -157,7 +157,6 @@ While we document ```MPArray``` and other multiprecision
 data structures, we do not export the constructors. You should use
 the multiprecision factorizations instead.
 
-
 Now we will see how the results look. In this example we compare the result with iterative refinement with ```A\b```, which is LAPACK's LU. 
 As you can see the results are equally good. Note that the factorization object ```MPF``` is the
 output of ```mplu```. This is analogous to ```AF=lu(A)``` in LAPACK.
