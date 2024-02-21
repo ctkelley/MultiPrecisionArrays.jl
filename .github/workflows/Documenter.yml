@@ -7,7 +7,6 @@ ush:
     paths-ignore:
       - 'LICENSE.md'
       - 'README.md'
-    tags: '*'
   pull_request:
 
 jobs:
