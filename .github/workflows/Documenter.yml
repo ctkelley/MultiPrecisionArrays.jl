@@ -1,6 +1,6 @@
 name: Documenter
 
-ush:
+push:
     branches:
       - 'main'
       - 'release-'
