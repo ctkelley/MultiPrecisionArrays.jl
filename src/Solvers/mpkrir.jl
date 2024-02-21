@@ -1,7 +1,7 @@
 """
 mpkrir(AF::MPKFact, b; reporting=false, verbose=false, mpdebug=false)
 
-I do not export this function. The idea is that you use ```mpglu``
+I do not export this function. The idea is that you use ```mpglu```
 and do not touch either the constructor or the solver directly.
 
 Use a multi-precision factorization to solve a linear system with
