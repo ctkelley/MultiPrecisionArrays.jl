@@ -4,6 +4,8 @@ import MultiPrecisionArrays.MPArray
 import MultiPrecisionArrays.MPHArray
 import MultiPrecisionArrays.MPGArray
 import MultiPrecisionArrays.MPBArray
+import MultiPrecisionArrays.mpgeslir
+import MultiPrecisionArrays.mpgkrir
 
 
 mathengine = MathJax3(Dict(:loader => Dict("load" => ["[tex]/require", "[tex]/mathtools"]),

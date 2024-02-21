@@ -23,9 +23,9 @@ MPLFacts = Union{MPLFact}
 MPGFact = Union{MPGEFact, MPGHFact}
 MPKFact = Union{MPGFact,MPBFact}
 
-export MPGFact
-export MPBFact
-export MPKFact
+#export MPGFact
+#export MPBFact
+#export MPKFact
 
 #MPIRArray = Union{MPArray,MPHArray}
 
@@ -36,7 +36,7 @@ is_heavy(x::MPLFact) = false
 kmeth(x::MPGFact) = "GMRES"
 kmeth(x::MPBFact) = "BiCGSTAB"
 
-export kmeth
+#export kmeth
 
 import Base.eltype
 
@@ -96,9 +96,9 @@ export mpcholesky!
 # I'm not working on more than that right now. I have overloaded
 # \ with these so you should not have to call them directly.
 #
-export mpgeslir
+#export mpgeslir
 #export mpgmir
-export mpkrir
+#export mpkrir
 #export mpbcir
 #
 # Each MPArray data structure comes with a structure to store a factorization.
@@ -125,10 +125,10 @@ export mpkrir
 #
 #
 #
-export MPLFact
-export MPGHFact
-export MPGEFact
-export MPFact
+#export MPLFact
+#export MPGHFact
+#export MPGEFact
+#export MPFact
 #
 #
 #
