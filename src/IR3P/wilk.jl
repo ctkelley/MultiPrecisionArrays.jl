@@ -32,7 +32,8 @@ function wilk(A::AbstractArray{Float32,2}, xe::Vector{Float32})
         resnorm = norm(r, nrmtype) / norm(b, nrmtype)
         dnorm = norm(d, nrmtype) / norm(x, nrmtype)
         errnorm = norm(x - xeh, nrmtype) / norm(xe, nrmtype)
-        @printf("%1.5e   %1.5e   %1.5e \n", resnorm, errnorm, dnorm)
+#        @printf("%1.5e   %1.5e   %1.5e \n", resnorm, errnorm, dnorm)
+        println(resnorm, errnorm, dnorm)
         itc += 1
     end
     println(norm(x-xe,Inf))
