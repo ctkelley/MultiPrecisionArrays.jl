@@ -5,10 +5,11 @@ import MultiPrecisionArrays.MPHArray
 import MultiPrecisionArrays.MPGArray
 import MultiPrecisionArrays.MPBArray
 import MultiPrecisionArrays.MPBFact
+import MultiPrecisionArrays.MPLFact
 import MultiPrecisionArrays.MPGEFact
 import MultiPrecisionArrays.MPFact
 import MultiPrecisionArrays.mpgeslir
-import MultiPrecisionArrays.mpgkrir
+import MultiPrecisionArrays.mpkrir
 
 
 mathengine = MathJax3(Dict(:loader => Dict("load" => ["[tex]/require", "[tex]/mathtools"]),
