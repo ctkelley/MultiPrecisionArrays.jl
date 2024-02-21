@@ -17,7 +17,7 @@ include("Structs4MP/MPArray.jl")
 include("Structs4MP/MPGArray.jl")
 include("Structs4MP/MPBArray.jl")
 include("Structs4MP/MPHeavy.jl")
-include("IR3P/wilk.jl")
+include("wilk.jl")
 
 MPFact = Union{MPLFact,MPHFact}
 MPLFacts = Union{MPLFact}
