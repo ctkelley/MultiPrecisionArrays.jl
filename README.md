@@ -35,7 +35,7 @@ __The half precision LU for Float16 in this package is much faster (more than 10
   - Better API for the Krylov-IR solvers
 
  - v0.1.0: Better docs and ...
-   - I will stop exporting the constructors and the MPArray factorizations. You should only be using mplu, mplu!, ...
+   - I no longer export the constructors and the MPArray factorizations. You should only be using mplu, mplu!, ...
    - Explanation for why I am not excited about evaluating the residual in extended precision + a bit of support for that anyhow
 
 ##  Can I complain about this package now?
@@ -97,7 +97,8 @@ to allocate storage for a copy of $A$ in the lower precision and factor that cop
 $d = (LU)^{-1} r$ means. Do you cast $r$ into the lower precison before the solve or not? __MultiPrecisionArrays.jl__ provides
 data structures and solvers to manage this. The __MPArray__ structure lets you preallocate $A$, the low precision copy, and the residual $r$.
 The factorizations factor the low-precision copy and the solvers use that factorization and the original high-precision matrix to run
-the while loop in the algorithm.
+the while loop in the algorithm. We encode all this is functions like ```mplu```, which builds a factorization object that does IR 
+when you use the backslash operator ```\```.
 
 IR is a perfect example of a storage/time tradeoff.
 To solve a linear system $A x = b$ in $R^N$ with IR,
@@ -148,7 +149,8 @@ end
 ```
 The structure also stores the residual. The ```onthefly``` Boolean tells the solver how to do the interprecision transfers. The easy way to get started is to use the ```mplu``` 
 command directly on the matrix. That will build the MPArray, follow that with the factorization of ```AL```, and put in all in a structure
-that you can use with ```\```.
+that you can use as a factorization object with ```\```. I do not export the constructor for this or any other multipreicison arrat structure. You should use functions like ```mplu``` to build 
+multiprecision factorization objects.
 
 Now we will see how the results look. In this example we compare the result with iterative refinement with ```A\b```, which is LAPACK's LU. 
 As you can see the results are equally good. Note that the factorization object ```MPF``` is the
