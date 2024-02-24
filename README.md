@@ -44,7 +44,7 @@ Yes, but ...
 
 __Please do not make PRs. If you stumble on this mess and have questions/ideas ..., raise an issue or email me at tim_kelley@ncsu.edu__
 
-Since log(version number) < 0, you can expect changes in API, internal structues, and exported functions.
+Since log(version number) < 0, you can expect changes in API, internal structures, and exported functions.
 
 ## Coming Attractions
 
@@ -79,7 +79,7 @@ Since log(version number) < 0, you can expect changes in API, internal structues
 
 ### What is iterative refinement?
 
-This package will make solving dense systems of linear equations faster by using the LU factorization and IR. It is limited to LU for now. A very generic description of this for solving a linear systrem $A x = b$ is
+This package will make solving dense systems of linear equations faster by using the LU factorization and IR. It is limited to LU for now. A very generic description of this for solving a linear system $A x = b$ is
 
 __IR(A, b)__
 - $x = 0$
@@ -94,7 +94,7 @@ __IR(A, b)__
 In Julia, a code to do this would solve the linear system $A x = b$ in double precision by using a
 factorization in a lower precision, say single, within a residual correction iteration. This means that one would need
 to allocate storage for a copy of $A$ in the lower precision and factor that copy. Then one has to determine what the line
-$d = (LU)^{-1} r$ means. Do you cast $r$ into the lower precison before the solve or not? __MultiPrecisionArrays.jl__ provides
+$d = (LU)^{-1} r$ means. Do you cast $r$ into the lower precision before the solve or not? __MultiPrecisionArrays.jl__ provides
 data structures and solvers to manage this. The __MPArray__ structure lets you preallocate $A$, the low precision copy, and the residual $r$.
 The factorizations factor the low-precision copy and the solvers use that factorization and the original high-precision matrix to run
 the while loop in the algorithm. We encode all this is functions like ```mplu```, which builds a factorization object that does IR 
@@ -112,7 +112,7 @@ factor the low precision copy.
 
 ### An example to get started
 
-Herewith, the world's most simple example to show how iterative refienment works. We will follow that with some benchmarking on the cost of factorizations.
+Herewith, the world's most simple example to show how iterative refinement works. We will follow that with some benchmarking on the cost of factorizations.
 The functions we use are __MPArray__ to create the structure and __mplu!__ to factor the low precision copy. In this example high precision is ```Float64``` and low
 precision is ```Float32```. The matrix is the sum of the identity and a constant multiple of the trapezoid rule discretization of the Greens operator for $-d^2/dx^2$ on $[0,1]$
 
@@ -149,7 +149,7 @@ end
 ```
 The structure also stores the residual. The ```onthefly``` Boolean tells the solver how to do the interprecision transfers. The easy way to get started is to use the ```mplu``` 
 command directly on the matrix. That will build the MPArray, follow that with the factorization of ```AL```, and put in all in a structure
-that you can use as a factorization object with ```\```. I do not export the constructor for this or any other multipreicison arrat structure. You should use functions like ```mplu``` to build 
+that you can use as a factorization object with ```\```. I do not export the constructor for this or any other multiprecision array structure. You should use functions like ```mplu``` to build 
 multiprecision factorization objects.
 
 Now we will see how the results look. In this example we compare the result with iterative refinement with ```A\b```, which is LAPACK's LU. 
@@ -183,13 +183,13 @@ julia> println("Errors: $ze, $we. Residuals: $zr, $wr")
 Errors: 1.33227e-15, 7.41629e-14. Residuals: 1.33243e-15, 7.40609e-14
 ```
 
-So the resuts are equally good.
+So the results are equally good.
 
 The compute time for ```mplu``` should be a bit more than half that of ```lu!```. The reason is
 that ```mplu``` factors a low precision array, so the factorization cost is cut in half. Memory
 is a different story because. The reason
 is that both ```mplu``` and ```lu!``` do not allocate storage for a new high precision array,
-but ```mplu``` allocats for a low precision copy, so the memory and allocation cost for ```mplu```
+but ```mplu``` allocates for a low precision copy, so the memory and allocation cost for ```mplu```
 is 50% more than ```lu```. 
 
 ```
@@ -201,7 +201,7 @@ julia> @belapsed lu!(AC) setup=(AC=copy($A))
 
 ```
 It is no surprise that the factorization in single precision took roughly half as long as the one in double. In the double-single precision case, iterative refinement is a great
-expample of a time/storage tradeoff. You have to store a low precision copy of $A$, so the storage burden increases by 50\% and the factoriztion time is cut in half.
+example of a time/storage tradeoff. You have to store a low precision copy of $A$, so the storage burden increases by 50\% and the factorization time is cut in half.
 The advantages of IR increase as the dimension increases. IR is less impressive for smaller problems and can even be slower
 ```
 julia> N=30; A=I + Gmat(N); 
