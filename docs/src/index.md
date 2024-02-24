@@ -195,9 +195,9 @@ So the resuts are equally good.
 
 The compute time for ```mplu``` should be a bit more than half that of ```lu!```. The reason is
 that ```mplu``` factors a low precision array, so the factorization cost is cut in half. Memory
-is a different story because. The reason
+is a different story. The reason
 is that both ```mplu``` and ```lu!``` do not allocate storage for a new high precision array,
-but ```mplu``` allocats for a low precision copy, so the memory and allocation cost for ```mplu```
+but ```mplu``` allocate`s for a low precision copy, so the memory and allocation cost for ```mplu```
 is 50% more than ```lu```. 
 
 ```
@@ -209,7 +209,7 @@ julia> @belapsed lu!(AC) setup=(AC=copy($A))
 
 ```
 It is no surprise that the factorization in single precision took roughly half as long as the one in double. In the double-single precision case, iterative refinement is a great
-expample of a time/storage tradeoff. You have to store a low precision copy of $A$, so the storage burden increases by 50\% and the factoriztion time is cut in half.
+example of a time/storage tradeoff. You have to store a low precision copy of $A$, so the storage burden increases by 50\% and the factorization time is cut in half.
 The advantages of IR increase as the dimension increases. IR is less impressive for smaller problems and can even be slower
 ```
 julia> N=30; A=I + Gmat(N); 
@@ -264,7 +264,7 @@ When low precision is Float32, then the default is (```onthefly = false```). Thi
 overflow and, more importantly, underflow when you do that and we scale $r$ to be a unit vector before conversion to low precisiion and reverse the scaling when we promote $d$. We take care of this for you.
 
 ```mplu``` calls the constructor for the multiprecision array and then factors the low precision matrix. In some cases, such as nonlinear solvers, you will want to separate the constructor and the factorization. When you do that
-remember that ```mplu!``` overwrites the low precision copy of A 
+remember that ```mplu!``` overwrites the low precision copy of ```A```
 with the factors. The factorizaton object is different from the multiprecision
 array, even though they share storage. This is just like ```lu!```.
 
@@ -279,31 +279,34 @@ and
 ```
 AF2=mplu(A)
 ```
-are very different. Typically ```lu``` makes a high precision copy of $\ma$ and
-factors that with ```lu!```. ```mplu``` on the other hand, uses $\ma$
+are very different. Typically ```lu``` makes a high precision copy of ```A``` 
+and
+factors that with ```lu!```. ```mplu``` on the other hand, uses ```A```
 as the high precision matrix in the multiprecision array structure and
 the makes a low precision copy to send to ```lu!```. Hence ```mplu```
 has half the allocation burden of ```lu```.
 
-That is, of course misleading. The best way to apply ```lu``` is to
-overwrite $A$ with the factorization using
+That is, of course misleading. The memory-efficient 
+way to apply ```lu``` is to overwrite $A$ with the factorization using
 ```
 AF1=lu!(A).
 ```
-The analog of this approach with a multiprecision array would be to
-first build an ```MPArray``` structure with
+```mplu``` uses an analog of this approach internally. ```mplu```
+first builds an ```MPArray``` structure with
 ```
 MPA = MPArray(A)
 ```
-which makes $A$ the high precision matrix and also makes a low
+which makes ```A``` the high precision matrix and also makes a low
 precision copy. This is the stage where the extra memory is allocated
-for the the low precision copy. One follows that with the factorization
-of the low precision matrix to construct the factorization object.
+for the the low precision copy. Then ```mplu``` computes
+the factorization
+of the low precision matrix with ```mplu!```
+to construct the factorization object.
 ```
 MPF = mplu!(MPA).
 ```
-The function ```mplu``` simply applies ```MPArray``` and follows that with
-```mplu!```.
+So, the function ```mplu``` simply applies ```MPArray``` and follows that 
+with ```mplu!```. 
 
 ## Other IR software in Julia
 
