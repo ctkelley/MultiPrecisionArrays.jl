@@ -37,7 +37,8 @@ __The half precision LU for Float16 in this package is much faster (more than 10
  - v0.1.0: Better docs and ...
    - I no longer export the constructors and the MPArray factorizations. You should only be using mplu, mplu!, mpglu, mpglu!, ...
    - Explanation for why I am not excited about evaluating the residual in extended precision + a bit of support for that anyhow
-
+   - Notation and variable name change to conformm with standard practice (TH --> TW for working precision etc). If you just use the multiprecision factorizations with no options, you will not notice this.
+     
 ##  Can I complain about this package now?
 
 Yes, but ...
