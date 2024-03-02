@@ -1,10 +1,13 @@
 module MultiPrecisionArrays
 
-using LinearAlgebra
-using LinearAlgebra.BLAS
-using SparseArrays
-using SIAMFANLEquations
-using Polyester
+using LinearAlgebra: LinearAlgebra, LAPACK, LU, RowMaximum
+using LinearAlgebra: Factorization, SingularException
+using LinearAlgebra: axpy!, ldiv!, lu!, mul!, norm
+
+using SparseArrays: SparseArrays
+using SIAMFANLEquations: SIAMFANLEquations, kl_bicgstab, kl_gmres
+using SIAMFANLEquations: kstore
+using Polyester: Polyester, @batch
 
 #
 # This is MultiPrecisionArrays.jl
@@ -161,8 +164,8 @@ include("Factorizations/mpblu!.jl")
 
 module Examples
 using MultiPrecisionArrays
-using LinearAlgebra
-using LinearAlgebra.BLAS
+using LinearAlgebra: LinearAlgebra
+#using LinearAlgebra: BLAS
 
 export Gmat
 
