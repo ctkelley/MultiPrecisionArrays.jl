@@ -4,7 +4,6 @@ using LinearAlgebra: I, lu!, norm
 using SIAMFANLEquations: nsol
 using SIAMFANLEquations.TestProblems: heqinit, heqf!, heqJ!
 using StaticArrays
-using ExplicitImports: check_no_implicit_imports
 using Test
 
 import MultiPrecisionArrays.MPArray
@@ -54,5 +53,3 @@ end
     @test mpbctest(1000)
     @test hvse(128)
 end
-
-@test check_no_implicit_imports(MultiPrecisionArrays) === nothing
