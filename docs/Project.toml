@@ -4,4 +4,4 @@ DocumenterTools = "35a29f4d-8980-5a13-9543-d66fff28ecb8"
 DocumenterCitations = "daee34ce-89f3-4625-b898-19384cb65244"
 
 [compat]
-Documenter = "1.1.0"
+Documenter = "1.2.1"
