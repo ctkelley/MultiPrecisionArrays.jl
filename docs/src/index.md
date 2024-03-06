@@ -97,11 +97,11 @@ default is to downcast $r$ to low precision, do the solve entirely in
 low precision, and the upcast the result. The code for that looks like
 ```
 normr=norm(r)
-ds=Float32.(r)/normr
+ds=Float32.(r/normr)
 ldiv!(AF, ds)
 r .= Float64.(ds)*normr
 ```
-The scaling by ```1.0/normr``` avoids underflow, which is most important
+The scaling by ```1.0/normr``` helps to avoid underflow, which is most important
 when the low precision is ```Float16```. We will discuss interprecision 
 transfer costs later.
 
