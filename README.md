@@ -33,10 +33,9 @@ __The half precision LU for Float16 in this package is much faster (more than 10
   - Switch from Array to AbstractArray. Now I can apply ```mplu``` to a transpose and mutable static arrays using the ```@MArray``` constructor.
   - BiCGSTAB-IR. New factorizations [```mpblu```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpblu/) and [```mpblu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpblu!/)
   - Better API for the Krylov-IR solvers
-
+   
  - v0.1.0: Better docs and ...
    - I no longer export the constructors and the MPArray factorizations. You should only be using mplu, mplu!, mpglu, mpglu!, ...
-   - Explanation for why I am not excited about evaluating the residual in extended precision + a bit of support for that anyhow
    - Notation and variable name change to conform with standard practice (TH --> TW for working precision etc). If you just use the multiprecision factorizations with no options, you will not notice this.
      
 ##  Can I complain about this package now?
@@ -49,6 +48,7 @@ Since log(version number) < 0, you can expect changes in API, internal structure
 
 ## Coming Attractions
 
+- Explanation for why I am not excited about evaluating the residual in extended precision + a bit of support for that anyhow
 - Nonlinear solver applications
 - More factorizations: cholesky, qr
 - BFloat16 when/if the support is there. You can use it now, but it is pathologically slow.
