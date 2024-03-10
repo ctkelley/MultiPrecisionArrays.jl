@@ -142,9 +142,9 @@ and compare execution time and the quality of the results.
 The example below compares the cost of a double precision factorization to a MPArray factorization. The ```MPArray``` structure has a high precision and a low precision matrix. The structure we will start with 
 is
 ```
-struct MPArray{TH<:AbstractFloat,TL<:AbstractFloat}
+struct MPArray{TH<:AbstractFloat,TF<:AbstractFloat}
     AH::AbstractArray{TH,2}
-    AL::AbstractArray{TL,2}
+    AL::AbstractArray{TF,2}
     residual::Vector{TH}
     onthefly::Bool
 end
@@ -222,29 +222,29 @@ julia> @belapsed lu!(AC) setup=(AC=copy($A))
 Here is the source for ```mplu```
 ```
 """
-mplu(A::AbstractArray{Float64,2}; TL=Float32, onthefly=false)
+mplu(A::AbstractArray{Float64,2}; TF=Float32, onthefly=false)
 
 Combines the constructor of the multiprecision array with the
 factorization. 
 """
-function mplu(A::AbstractArray{TH,2}; TL=Float32, onthefly=nothing) where TH <: Real
+function mplu(A::AbstractArray{TH,2}; TF=Float32, onthefly=nothing) where TH <: Real
 #
 # If the high precision matrix is single, the low precision must be half.
 #
-(TH == Float32) && (TL = Float16)
+(TH == Float32) && (TF = Float16)
 #
 # Unless you tell me otherwise, onthefly is true if low precision is half
 # and false if low precision is single.
 #
-(onthefly == nothing ) && (onthefly = (TL==Float16))
-MPA=MPArray(A; TL=TL, onthefly=onthefly)
+(onthefly == nothing ) && (onthefly = (TF==Float16))
+MPA=MPArray(A; TF=TF, onthefly=onthefly)
 MPF=mplu!(MPA)
 return MPF
 end
 ```
 
-The function ```mplu``` has two keyword arguments. The easy one to understand is ```TL``` which is the precision of the factorization. Julia has support for single (```Float32```) and half (```Float16```)
-precisions. If you set ```TL=Float16``` then low precision will be half. Don't do that unless you know what you're doing. Using half precision is a fast way to get incorrect results. Look at the section on [half precision](#half-Precision) in this Readme for a bit more bad news.
+The function ```mplu``` has two keyword arguments. The easy one to understand is ```TF``` which is the precision of the factorization. Julia has support for single (```Float32```) and half (```Float16```)
+precisions. If you set ```TF=Float16``` then low precision will be half. Don't do that unless you know what you're doing. Using half precision is a fast way to get incorrect results. Look at the section on [half precision](#half-Precision) in this Readme for a bit more bad news.
 
 The other keyword arguement is __onthefly__. That keyword controls how the triangular solvers from the factorization work. When you solve
 
