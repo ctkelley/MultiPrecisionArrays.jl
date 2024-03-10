@@ -23,7 +23,7 @@ return MPF
 end
 
 """
-mpblu!(MPG::MPBFact, A::AbstractArray{TH,2}) where TH <: Real
+mpblu!(MPG::MPBFact, A::AbstractArray{TW,2}) where TW <: Real
 Overwrite a multiprecision factorization MPF to reuse the
 storage to make a multiprecision factorization of a new matrix A.
 
@@ -45,9 +45,9 @@ structure is immutable and MPF.AF.info cannot be changed.
 Reassigning MPG works and resuses almost all of the storage in the
 original array.
 """
-function mpblu!(MPG::MPBFact, A::AbstractArray{TH,2}) where TH <: Real
+function mpblu!(MPG::MPBFact, A::AbstractArray{TW,2}) where TW <: Real
 TF=eltype(MPG.AH)
-(TF == TH) || error("Precision error in mplu!")
+(TF == TW) || error("Precision error in mplu!")
 AH=MPG.AH
 AH = A
 TF = eltype(MPG.AL)
@@ -64,7 +64,7 @@ end
 
 
 """
-mpblu(A::AbstractArray{TH,2}; TF=Float32) where TH <: Real
+mpblu(A::AbstractArray{TW,2}; TF=Float32) where TW <: Real
 
 Combines the constructor of the multiprecision BiCGSTAB-ready array with the
 factorization.
@@ -73,9 +73,9 @@ Step 1: build the MPBArray
 
 Step 2: Call mpblu! to build the factorization object
 """
-function mpblu(A::AbstractArray{TH,2}; 
-          TF=Float32) where TH <: Real
-(TH==Float32) ? TF=Float16 : TF=TF
+function mpblu(A::AbstractArray{TW,2}; 
+          TF=Float32) where TW <: Real
+(TW==Float32) ? TF=Float16 : TF=TF
 MPBA=MPBArray(A; TF=TF)
 MPBF=mpblu!(MPBA)
 return MPBF

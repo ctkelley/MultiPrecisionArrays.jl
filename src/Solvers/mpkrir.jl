@@ -204,7 +204,7 @@ function mpkrir(AF::MPKFact, b; reporting = false,
     if reporting
         TF = eltype(AF.AL)
         return (rhist = rhist, khist = khist,
-               sol = x, TH = TB, TF = TF)
+               sol = x, TW = TB, TF = TF)
     else
         return x
     end

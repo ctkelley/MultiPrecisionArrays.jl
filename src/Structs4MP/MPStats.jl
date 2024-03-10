@@ -1,15 +1,15 @@
 struct MPIRStats
     rhist::Vector
-    TH::DataType
+    TW::DataType
     TF::DataType
     TFact::DataType
     Meth::String
 end
 
-function MPIRStats(TH = Float64, TF = Float32, TFact = Float32)
-    if TFact == TH
-        MPStats = MPIRStats([], TH, TF, TFact, "Heavy IR")
+function MPIRStats(TW = Float64, TF = Float32, TFact = Float32)
+    if TFact == TW
+        MPStats = MPIRStats([], TW, TF, TFact, "Heavy IR")
     else
-        MPStats = MPIRStats([], TH, TF, TFact, "IR")
+        MPStats = MPIRStats([], TW, TF, TFact, "IR")
     end
 end

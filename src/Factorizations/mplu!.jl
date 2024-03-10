@@ -39,7 +39,7 @@ function mplu!(MPA::MPArray)
 end
 
 """
-mplu!(MPF::MPLFact,A::AbstractArray{TH,2}) where TH <: Real
+mplu!(MPF::MPLFact,A::AbstractArray{TW,2}) where TW <: Real
 
 Overwrite a multiprecision factorization MPF to reuse the
 storage to make a multiprecision of a new matrix A.
@@ -65,9 +65,9 @@ original array.
 If you want to use static arrays with this stuff, use the 
 mutable @MArray constructor
 """
-function mplu!(MPF::MPLFact,A::AbstractArray{TH,2}) where TH
+function mplu!(MPF::MPLFact,A::AbstractArray{TW,2}) where TW
 TF=eltype(MPF.AH)
-(TF == TH) || error("Precision error in mplu!")
+(TF == TW) || error("Precision error in mplu!")
 AH=MPF.AH
 AH = A
 TF = eltype(MPF.AL)
@@ -82,7 +82,7 @@ end
 
 
 """
-mplu(A::AbstractArray{TH,2}; TF=Float32, onthefly=nothing) where TH <: Real
+mplu(A::AbstractArray{TW,2}; TF=Float32, onthefly=nothing) where TW <: Real
 
 Combines the constructor of the multiprecision array with the
 factorization. 
@@ -91,11 +91,11 @@ Step 1: build the MPArray
 
 Step 2: factor the low precision copy and return the factorization object
 """
-function mplu(A::AbstractArray{TH,2}; TF=Float32, onthefly=nothing) where TH <: Real
+function mplu(A::AbstractArray{TW,2}; TF=Float32, onthefly=nothing) where TW <: Real
 #
 # If the high precision matrix is single, the low precision must be half.
 #
-(TH == Float32) && (TF = Float16)
+(TW == Float32) && (TF = Float16)
 #
 # Unless you tell me otherwise, onthefly is true if low precision is half
 # and false if low precision is single.

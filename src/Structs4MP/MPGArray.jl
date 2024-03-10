@@ -9,25 +9,25 @@ C. T. Kelley 2023
 The MPGArray data structure is
 
 ```
-struct MPGArray{TH<:AbstractFloat,TF<:AbstractFloat}
-    AH::AbstractArray{TH,2}
+struct MPGArray{TW<:AbstractFloat,TF<:AbstractFloat}
+    AH::AbstractArray{TW,2}
     AL::AbstractArray{TF,2}
-    VStore::AbstractArray{TH,2}
+    VStore::AbstractArray{TW,2}
     KStore::NTuple
-    residual::Vector{TH}
+    residual::Vector{TW}
     onthefly::Bool
 end
 ```
-The constructor just builds an MPGArray with TH=Float64. Set TF=Float16
+The constructor just builds an MPGArray with TW=Float64. Set TF=Float16
 to get double/half IR.
 """
 
-struct MPGArray{TH<:AbstractFloat,TF<:AbstractFloat}
-    AH::AbstractArray{TH,2}
+struct MPGArray{TW<:AbstractFloat,TF<:AbstractFloat}
+    AH::AbstractArray{TW,2}
     AL::AbstractArray{TF,2}
-    VStore::AbstractArray{TH,2}
+    VStore::AbstractArray{TW,2}
     KStore::NTuple
-    residual::Vector{TH}
+    residual::Vector{TW}
     onthefly::Bool
 end
 

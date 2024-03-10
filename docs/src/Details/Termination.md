@@ -4,7 +4,8 @@ We terminate the loop when
 ```math
 \| r \| < \tau \| b \|
 ```
-where we use $\tau = 10 * eps(TH)$, where $eps(TH)$ is high precision floating
+where we use $\tau = 10 * eps(TW)$, where $eps(TW)$ is the working
+precision floating
 point machine epsilon.  The problem with this criterion is
 that IR can stagnate, especially for ill-conditioned problems, before
 the termination criterion is attained. We detect stagnation by looking

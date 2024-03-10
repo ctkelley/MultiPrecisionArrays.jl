@@ -18,10 +18,10 @@ function IRTriangle!(AF::Union{MPLFact,MPHFact}, r, rs, verbose)
         ldiv!(AFS, r)
     else
         TFact = eltype(AFS)
-        TH = eltype(r)
+        TW = eltype(r)
         rs .= TFact.(r)
         ldiv!(AFS, rs)
-        r .= TH.(rs)
+        r .= TW.(rs)
     end
     return r
 end

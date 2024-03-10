@@ -11,7 +11,7 @@ function greensok(n = 31)
     (e16, l16) = gtest(G; TF = Float16)
     ok16 = (e16 < 1.e-13) && (l16 <= 7)
     ok16 || println("Greens fail at TF=Float64-16: $e16, $l16")
-    (e3216, l3216) = gtest(G; TF = Float16, TH = Float32)
+    (e3216, l3216) = gtest(G; TF = Float16, TW = Float32)
     ok3216 = (e3216 < 5.e-6) && (l3216 <= 4)
     ok3216 || println("Greens fail at TF=Float32-16: $e3216, $l3216")
     lightok = (ok16 && ok32 && ok3216)
@@ -31,7 +31,7 @@ function greensHok(n = 31)
     (e16, l16) = gtestH(G; TF = Float16)
     ok16 = (e16 < 1.e-14) && (l16 == 6)
     ok16 || println("GreensH fail at TF=Float64-16")
-    (e3216, l3216) = gtestH(G; TF = Float16, TH = Float32)
+    (e3216, l3216) = gtestH(G; TF = Float16, TW = Float32)
     ok3216 = (e3216 < 1.e-6) && (l3216 <= 4)
     ok3216 || println("GreensH fail at TF=Float32-16")
     heavyok = (ok16 && ok32 && ok3216)
@@ -61,8 +61,8 @@ function greensEvsH(n = 31)
     histok = (norm(h16 - he16,Inf) < 1.e-14)
     histok || println("he16 - h17 error  ", norm(he16 - h16, Inf))
     EvsHok16 = (errok && histok)
-    (ee3216, le3216, he3216) = gtestE(G; TF = Float16, TH = Float32, reshistout = true)
-    (e3216, l3216, h3216) = gtestH(G; TF = Float16, TH = Float32, reshistout = true)
+    (ee3216, le3216, he3216) = gtestE(G; TF = Float16, TW = Float32, reshistout = true)
+    (e3216, l3216, h3216) = gtestH(G; TF = Float16, TW = Float32, reshistout = true)
     errok = (e3216 == ee3216)
     histok = (h3216 == he3216)
     histok = (norm(he3216 - he3216, Inf) < 1.e-14)
@@ -73,14 +73,14 @@ function greensEvsH(n = 31)
 end
 
 """
-gtest(G; TF=Float32,TH=Float64)
+gtest(G; TF=Float32,TW=Float64)
 
 Solve the inverse Laplacian problem with IR
 """
-function gtest(G; TF = Float32, TH = Float64)
+function gtest(G; TF = Float32, TW = Float64)
     (n, n) = size(G)
-    A = I + TH.(G)
-    b = ones(TH, n)
+    A = I + TW.(G)
+    b = ones(TW, n)
     xe = A \ b
     MPA = MPArray(A; TF = TF)
     MPF = mplu!(MPA)
@@ -93,15 +93,15 @@ function gtest(G; TF = Float32, TH = Float64)
 end
 
 """
-gtestH(G; TF=Float32,TH=Float64, reshistout=false)
+gtestH(G; TF=Float32,TW=Float64, reshistout=false)
 
 Solve the inverse Laplacian problem with heavy IR
 """
-function gtestH(G; TF = Float32, TH = Float64, reshistout = false)
+function gtestH(G; TF = Float32, TW = Float64, reshistout = false)
     #G=Gmat(n)
     (n, n) = size(G)
-    A = I + TH.(G)
-    b = ones(TH, n)
+    A = I + TW.(G)
+    b = ones(TW, n)
     xe = A \ b
     MPA = MPHArray(A; TF = TF)
     MPF = mphlu!(MPA)
@@ -118,16 +118,16 @@ function gtestH(G; TF = Float32, TH = Float64, reshistout = false)
 end
 
 """
-gtestE(G; TF=Float32,TH=Float64)
+gtestE(G; TF=Float32,TW=Float64)
 
 Solve the inverse Laplacian problem with expensive IR
 This is only for CI
 """
-function gtestE(G; TF = Float32, TH = Float64, reshistout = false)
+function gtestE(G; TF = Float32, TW = Float64, reshistout = false)
     #G=Gmat(n)
     (n, n) = size(G)
-    A = I + TH.(G)
-    b = ones(TH, n)
+    A = I + TW.(G)
+    b = ones(TW, n)
     xe = A \ b
     MPA = MPArray(A; TF = TF, onthefly=true)
     MPF = mplu!(MPA)

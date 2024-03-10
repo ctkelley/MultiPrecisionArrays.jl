@@ -142,10 +142,10 @@ and compare execution time and the quality of the results.
 The example below compares the cost of a double precision factorization to a MPArray factorization. The ```MPArray``` structure has a high precision and a low precision matrix. The structure we will start with 
 is
 ```
-struct MPArray{TH<:AbstractFloat,TF<:AbstractFloat}
-    AH::AbstractArray{TH,2}
+struct MPArray{TW<:AbstractFloat,TF<:AbstractFloat}
+    AH::AbstractArray{TW,2}
     AL::AbstractArray{TF,2}
-    residual::Vector{TH}
+    residual::Vector{TW}
     onthefly::Bool
 end
 ```
@@ -227,11 +227,11 @@ mplu(A::AbstractArray{Float64,2}; TF=Float32, onthefly=false)
 Combines the constructor of the multiprecision array with the
 factorization. 
 """
-function mplu(A::AbstractArray{TH,2}; TF=Float32, onthefly=nothing) where TH <: Real
+function mplu(A::AbstractArray{TW,2}; TF=Float32, onthefly=nothing) where TW <: Real
 #
 # If the high precision matrix is single, the low precision must be half.
 #
-(TH == Float32) && (TF = Float16)
+(TW == Float32) && (TF = Float16)
 #
 # Unless you tell me otherwise, onthefly is true if low precision is half
 # and false if low precision is single.

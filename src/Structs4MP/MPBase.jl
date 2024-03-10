@@ -2,17 +2,17 @@
 # Plain vanilla iterative refinement. The structures store
 # High and low precision arrays and factorizations of these arrays
 #
-struct MPArray{TH<:AbstractFloat,TF<:AbstractFloat}
-    AH::AbstractArray{TH,2}
+struct MPArray{TW<:AbstractFloat,TF<:AbstractFloat}
+    AH::AbstractArray{TW,2}
     AL::AbstractArray{TF,2}
-    residual::Vector{TH}
+    residual::Vector{TW}
     onthefly::Bool
 end
 
-struct MPLFact{TH<:AbstractFloat,TF<:AbstractFloat,ATF<:Factorization}
-    AH::AbstractArray{TH,2}
+struct MPLFact{TW<:AbstractFloat,TF<:AbstractFloat,ATF<:Factorization}
+    AH::AbstractArray{TW,2}
     AL::AbstractArray{TF,2}
     AF::ATF
-    residual::Vector{TH}
+    residual::Vector{TW}
     onthefly::Bool
 end

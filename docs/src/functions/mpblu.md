@@ -1,4 +1,4 @@
 # mpblu: Combine MPBArray construction and factorization
 ```@docs
-mpblu(A::AbstractArray{TH,2}; TF=Float32) where TH <: Real
+mpblu(A::AbstractArray{TW,2}; TF=Float32) where TW <: Real
 ```

@@ -7,14 +7,14 @@ C. T. Kelley 2023
 The MPArray data structure is
 
 ```
-struct MPArray{TH<:AbstractFloat,TF<:AbstractFloat}
-    AH::AbstractArray{TH,2}
+struct MPArray{TW<:AbstractFloat,TF<:AbstractFloat}
+    AH::AbstractArray{TW,2}
     AL::AbstractArray{TF,2}
-    residual::Vector{TH}
+    residual::Vector{TW}
     onthefly::Bool
 end
 ```
-The constructor just builds an MPArray with TH=Float64. Set TF=Float16
+The constructor just builds an MPArray with TW=Float64. Set TF=Float16
 to get double/half IR.
 
 

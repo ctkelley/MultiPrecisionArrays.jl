@@ -40,7 +40,7 @@ or
 mout = \\(MPF,b; reporting=true)
 ```
 is a structure. ```mpout.sol``` is the solution. ```mpout.rhist```
-is the residual history. mpout also contains the datatypes TH for
+is the residual history. mpout also contains the datatypes TW for
 high precision and TF for low precision.
 
 ## Example
@@ -64,7 +64,7 @@ julia> mout.rhist
 
 # Stagnation after four IR iterations
 
-julia> [mout.TH mout.TF]
+julia> [mout.TW mout.TF]
 1×2 Matrix{DataType}:
  Float64  Float32
 
@@ -124,7 +124,7 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     TB = eltype(b)
     MPStats = getStats(AF)
     TF = MPStats.TF
-    TH = MPStats.TH
+    TW = MPStats.TW
     r = AF.residual
     onthefly=AF.onthefly
     #
@@ -137,15 +137,15 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     # If the iteration can't meet the tolerance, terminate when
     # the residual norms stagnate (res_old > .9 res_new)
     #
-    (TH == TB) || error("inconsistent precisions")
-    tolf = eps(TH)*TH.(10.0)
+    (TW == TB) || error("inconsistent precisions")
+    tolf = eps(TW)*TW.(10.0)
     #
     # Keep the records and accumulate the statistics. 
     #
     Meth = MPStats.Meth
     verbose && println(
         Meth,
-        ": High precision = $TH, Low precision = $TF, Factorization storage precision = $TFact",
+        ": High precision = $TW, Low precision = $TF, Factorization storage precision = $TFact",
     )
     #
     # Showtime!
@@ -211,7 +211,7 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     end
     verbose && println("Residual history = $rhist")
     if reporting
-        return (rhist = rhist, sol = x, TH = TH, TF = TF, TFact = TFact)
+        return (rhist = rhist, sol = x, TW = TW, TF = TF, TFact = TFact)
     else
         return x
     end
@@ -228,8 +228,8 @@ function getTF(AF::MPFact)
 end
 
 function getStats(AF)
-    TH = eltype(AF.AH)
+    TW = eltype(AF.AH)
     (TF, TFact) = getTF(AF)
-    MPStats = MPIRStats(TH, TF, TFact)
+    MPStats = MPIRStats(TW, TF, TFact)
     return MPStats
 end
