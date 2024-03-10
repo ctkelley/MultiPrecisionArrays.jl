@@ -16,8 +16,8 @@ xmd=MDF\b;
 xms=MDF\bs;
 mpsolok = (norm(xmd-xms,Inf) < 1.e-14) && norm(xmd-x,Inf) < 1.e-14
 mpsolok || println("Static mpsol problem")
-MAF2 = mplu(AS; TL=Float16)
-MDF2 = mplu(AD; TL=Float16)
+MAF2 = mplu(AS; TF=Float16)
+MDF2 = mplu(AD; TF=Float16)
 xmd2=MDF2\b;
 xms2=MDF2\bs;
 mpsolok2 = (norm(xmd2-xms2,Inf) < 1.e-14) && norm(xmd2-x,Inf) < 1.e-14

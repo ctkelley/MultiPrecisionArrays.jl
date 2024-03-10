@@ -202,9 +202,9 @@ function mpkrir(AF::MPKFact, b; reporting = false,
     end
     verbose && println("Residual history = $rhist")
     if reporting
-        TL = eltype(AF.AL)
+        TF = eltype(AF.AL)
         return (rhist = rhist, khist = khist,
-               sol = x, TH = TB, TL = TL)
+               sol = x, TH = TB, TF = TF)
     else
         return x
     end

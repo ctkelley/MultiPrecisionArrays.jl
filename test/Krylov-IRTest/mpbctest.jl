@@ -14,7 +14,7 @@ function get_bcir_results(n, TA; test6416 = false, debug = false)
         xs = ones(TA, n);
         b = AD * xs;
         if test6416
-            ADM = MPBArray(AD; TL = Float16)
+            ADM = MPBArray(AD; TF = Float16)
         else
             ADM = MPBArray(AD)
         end

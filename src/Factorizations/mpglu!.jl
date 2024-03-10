@@ -16,8 +16,8 @@ AH=MPGA.AH
 VStore=MPGA.VStore
 KStore=MPGA.KStore
 res=MPGA.residual
-TL=eltype(AL)
-(TL == Float16) ? ALF = hlu!(AL) : ALF = lu!(AL)
+TF=eltype(AL)
+(TF == Float16) ? ALF = hlu!(AL) : ALF = lu!(AL)
 MPF=MPGEFact(AH, AL, ALF, VStore, KStore, res, true)
 return MPF
 end
@@ -50,10 +50,10 @@ TF=eltype(MPG.AH)
 (TF == TH) || error("Precision error in mplu!")
 AH=MPG.AH
 AH = A
-TL = eltype(MPG.AL)
+TF = eltype(MPG.AL)
 AL=MPG.AL
-AL .= TL.(A)
-(TL == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
+AL .= TF.(A)
+(TF == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
 MPG.AF.ipiv .= AF.ipiv
 VStore=MPG.VStore 
 KStore=MPG.KStore
@@ -64,7 +64,7 @@ end
 
 
 """
-mpglu(A::AbstractArray{TH,2}; TL=Float32, basissize=10) where TH <: Real
+mpglu(A::AbstractArray{TH,2}; TF=Float32, basissize=10) where TH <: Real
 
 Combines the constructor of the multiprecision GMRES-ready array with the
 factorization.
@@ -73,9 +73,9 @@ Step 1: build the MPGArray
 
 Step 2: Call mpglu! to build the factorization object
 """
-function mpglu(A::AbstractArray{TH,2}; TL=Float32, basissize=10) where TH <: Real
-(TH==Float32) ? TL=Float16 : TL=TL
-MPGA=MPGArray(A; basissize=basissize, TL=TL)
+function mpglu(A::AbstractArray{TH,2}; TF=Float32, basissize=10) where TH <: Real
+(TH==Float32) ? TF=Float16 : TF=TF
+MPGA=MPGArray(A; basissize=basissize, TF=TF)
 MPGF=mpglu!(MPGA)
 return MPGF
 end
@@ -92,11 +92,11 @@ function mpglu!(MPH::MPHArray; gmresok = true, basissize=10)
     n=length(res)
     AStore = MPH.AStore
     AL = MPH.AL
-    TL = eltype(AL)
+    TF = eltype(AL)
     #
     # Factor in low precision
     #
-    (TL == Float16) ? ALF = hlu!(AL) : ALF = lu!(AL)
+    (TF == Float16) ? ALF = hlu!(AL) : ALF = lu!(AL)
     #
     # Promote the low-precision lu
     #

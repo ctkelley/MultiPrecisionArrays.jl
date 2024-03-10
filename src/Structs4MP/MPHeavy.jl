@@ -41,16 +41,16 @@ struct MPGHFact
     onthefly::Bool
 end
 
-function MPHArray(AH::AbstractArray{Float64,2}; TL = Float32)
+function MPHArray(AH::AbstractArray{Float64,2}; TF = Float32)
     AStore = copy(AH)
-    AL = TL.(AH)
+    AL = TF.(AH)
     (m,n)=size(AH); res=ones(eltype(AH),n)
     MPH = MPHArray(AH, AStore, AL, res, true)
 end
 
-function MPHArray(AH::AbstractArray{Float32,2}; TL = Float16)
+function MPHArray(AH::AbstractArray{Float32,2}; TF = Float16)
     AStore = copy(AH)
-    AL = TL.(AH)
+    AL = TF.(AH)
     (m,n)=size(AH); res=ones(eltype(AH),n)
     MPH = MPHArray(AH, AStore, AL, res, true)
 end

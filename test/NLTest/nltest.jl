@@ -168,7 +168,7 @@ function jheqmp!(JVMP, FV, x, hdata)
     JL = JVMP.AL
     JV = heqJ!(JV, FV, x, hdata)
     TH = eltype(JVMP)
-    TL = eltype(JL)
-    JL .= TL.(JV)
+    TF = eltype(JL)
+    JL .= TF.(JV)
     return JVMP
 end

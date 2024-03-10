@@ -14,7 +14,7 @@ function get_gmir_results(n, TA; test6416 = false, debug = false)
         xs = ones(TA, n)
         b = AD * xs
         if test6416
-            ADM = MPHArray(AD; TL = Float16)
+            ADM = MPHArray(AD; TF = Float16)
         else
             ADM = MPHArray(AD)
         end

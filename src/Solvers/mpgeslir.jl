@@ -41,7 +41,7 @@ mout = \\(MPF,b; reporting=true)
 ```
 is a structure. ```mpout.sol``` is the solution. ```mpout.rhist```
 is the residual history. mpout also contains the datatypes TH for
-high precision and TL for low precision.
+high precision and TF for low precision.
 
 ## Example
 ```jldoctest
@@ -64,7 +64,7 @@ julia> mout.rhist
 
 # Stagnation after four IR iterations
 
-julia> [mout.TH mout.TL]
+julia> [mout.TH mout.TF]
 1×2 Matrix{DataType}:
  Float64  Float32
 
@@ -123,7 +123,7 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     normtype = Inf
     TB = eltype(b)
     MPStats = getStats(AF)
-    TL = MPStats.TL
+    TF = MPStats.TF
     TH = MPStats.TH
     r = AF.residual
     onthefly=AF.onthefly
@@ -145,7 +145,7 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     Meth = MPStats.Meth
     verbose && println(
         Meth,
-        ": High precision = $TH, Low precision = $TL, Factorization storage precision = $TFact",
+        ": High precision = $TH, Low precision = $TF, Factorization storage precision = $TFact",
     )
     #
     # Showtime!
@@ -211,25 +211,25 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     end
     verbose && println("Residual history = $rhist")
     if reporting
-        return (rhist = rhist, sol = x, TH = TH, TL = TL, TFact = TFact)
+        return (rhist = rhist, sol = x, TH = TH, TF = TF, TFact = TFact)
     else
         return x
     end
 end
 
-function getTL(AF::MPFact)
-    TL = eltype(AF.AL)
+function getTF(AF::MPFact)
+    TF = eltype(AF.AL)
     if is_heavy(AF)
     TFact = eltype(AF.AH)
     else
     TFact = eltype(AF.AL)
     end
-    return (TL, TFact)
+    return (TF, TFact)
 end
 
 function getStats(AF)
     TH = eltype(AF.AH)
-    (TL, TFact) = getTL(AF)
-    MPStats = MPIRStats(TH, TL, TFact)
+    (TF, TFact) = getTF(AF)
+    MPStats = MPIRStats(TH, TF, TFact)
     return MPStats
 end

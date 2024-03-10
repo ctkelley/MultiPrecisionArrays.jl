@@ -16,8 +16,8 @@ AH=MPBA.AH
 VStore=MPBA.VStore
 KStore=MPBA.KStore
 res=MPBA.residual
-TL=eltype(AL)
-(TL == Float16) ? ALF = hlu!(AL) : ALF = lu!(AL)
+TF=eltype(AL)
+(TF == Float16) ? ALF = hlu!(AL) : ALF = lu!(AL)
 MPF=MPBFact(AH, AL, ALF, VStore, KStore, res, true)
 return MPF
 end
@@ -50,10 +50,10 @@ TF=eltype(MPG.AH)
 (TF == TH) || error("Precision error in mplu!")
 AH=MPG.AH
 AH = A
-TL = eltype(MPG.AL)
+TF = eltype(MPG.AL)
 AL=MPG.AL
-AL .= TL.(A)
-(TL == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
+AL .= TF.(A)
+(TF == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
 MPG.AF.ipiv .= AF.ipiv
 VStore=MPG.VStore 
 KStore=MPG.KStore
@@ -64,7 +64,7 @@ end
 
 
 """
-mpblu(A::AbstractArray{TH,2}; TL=Float32) where TH <: Real
+mpblu(A::AbstractArray{TH,2}; TF=Float32) where TH <: Real
 
 Combines the constructor of the multiprecision BiCGSTAB-ready array with the
 factorization.
@@ -74,9 +74,9 @@ Step 1: build the MPBArray
 Step 2: Call mpblu! to build the factorization object
 """
 function mpblu(A::AbstractArray{TH,2}; 
-          TL=Float32) where TH <: Real
-(TH==Float32) ? TL=Float16 : TL=TL
-MPBA=MPBArray(A; TL=TL)
+          TF=Float32) where TH <: Real
+(TH==Float32) ? TF=Float16 : TF=TF
+MPBA=MPBArray(A; TF=TF)
 MPBF=mpblu!(MPBA)
 return MPBF
 end

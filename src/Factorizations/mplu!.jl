@@ -29,9 +29,9 @@ mutable @MArray constructor
 function mplu!(MPA::MPArray)
     AH = MPA.AH
     AL = MPA.AL
-    TL = eltype(AL)
+    TF = eltype(AL)
     residual=MPA.residual
-    (TL == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
+    (TF == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
     # For the MPEArray
     on_the_fly=MPA.onthefly
     MPF = MPLFact(AH, AL, AF, residual, on_the_fly)
@@ -70,10 +70,10 @@ TF=eltype(MPF.AH)
 (TF == TH) || error("Precision error in mplu!")
 AH=MPF.AH
 AH = A
-TL = eltype(MPF.AL)
+TF = eltype(MPF.AL)
 AL=MPF.AL
-AL .= TL.(A)
-(TL == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
+AL .= TF.(A)
+(TF == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
 MPF.AF.ipiv .= AF.ipiv
 MPF = MPLFact(A, AL, AF, MPF.residual, MPF.onthefly)
 return MPF
@@ -82,7 +82,7 @@ end
 
 
 """
-mplu(A::AbstractArray{TH,2}; TL=Float32, onthefly=nothing) where TH <: Real
+mplu(A::AbstractArray{TH,2}; TF=Float32, onthefly=nothing) where TH <: Real
 
 Combines the constructor of the multiprecision array with the
 factorization. 
@@ -91,20 +91,20 @@ Step 1: build the MPArray
 
 Step 2: factor the low precision copy and return the factorization object
 """
-function mplu(A::AbstractArray{TH,2}; TL=Float32, onthefly=nothing) where TH <: Real
+function mplu(A::AbstractArray{TH,2}; TF=Float32, onthefly=nothing) where TH <: Real
 #
 # If the high precision matrix is single, the low precision must be half.
 #
-(TH == Float32) && (TL = Float16)
+(TH == Float32) && (TF = Float16)
 #
 # Unless you tell me otherwise, onthefly is true if low precision is half
 # and false if low precision is single.
 #
-(onthefly == nothing ) && (onthefly = (TL==Float16))
+(onthefly == nothing ) && (onthefly = (TF==Float16))
 #
 # Build the multiprecision array MPA
 #
-MPA=MPArray(A; TL=TL, onthefly=onthefly)
+MPA=MPArray(A; TF=TF, onthefly=onthefly)
 #
 # Factor the low precision copy to get the factorization object MPF
 #
