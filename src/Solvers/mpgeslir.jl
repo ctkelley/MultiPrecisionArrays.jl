@@ -1,5 +1,5 @@
 """
-mpgeslir(MPA::MPArray, b; reporting = false, verbose = true)
+mpgeslir(MPA::MPArray, b; TR=Float16, reporting = false, verbose = true)
 
 I do not export this function. The idea is that you use ```mpglu```
 and do not touch either the constructor or the solver directly.
@@ -70,16 +70,16 @@ julia> [mout.TW mout.TF]
 
 ```
 """
-function mpgeslir(MPA::MPArray, b; reporting = false, verbose = true)
+function mpgeslir(MPA::MPArray, b; TR=Float16, reporting = false, verbose = true)
 # Factor MPA and return Factorization object
 MPF=mplu!(MPA);
 # Call mpgeslir for the solve
-xi=\(MPF, b; reporting=reporting, verbose=verbose)
+xi=\(MPF, b; TR=TR, reporting=reporting, verbose=verbose)
 return xi
 end
 
 """
-mpgeslir(AF::MPFact, b; reporting=false, verbose=true)
+mpgeslir(AF::MPFact, b; TR=Float16, reporting=false, verbose=true)
 
 I do not export this function. The idea is that you use ```mpglu```
 and do not touch either the constructor or the solver directly.
@@ -115,7 +115,7 @@ MPFact is a union of all the MultiPrecision factorizations in the package.
 The triangular solver will dispatch on the various types depending on
 how the interprecision transfers get done.
 """
-function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
+function mpgeslir(AF::MPFact, b; TR=Float16, reporting = false, verbose = true)
     #
     # What kind of problem are we dealing with?
     #
@@ -125,12 +125,18 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     MPStats = getStats(AF)
     TF = MPStats.TF
     TW = MPStats.TW
+    (TR == Float16) && (TR=TW)
+    # If I'm computing a high precision residual, TS=TR
     r = AF.residual
     onthefly=AF.onthefly
+    (eps(TR) < eps(TW)) && (onthefly=true)
     #
-    # TFact is the precision of the factors
+    # TFact is the precision of the factors; should be TF
+    # unless we're dealing with a heavy MPArray for CI
     #
     TFact = MPStats.TFact
+    TFok = ((TF == TFact) || (typeof(AF) == MPHFact))
+    TFok  || error("TF is supposed to be TFact")
     #
     # Are the precisions consistent? If not, I have a bug somewhere.
     # Otherwise, set the tolerance on the iteration to 10*eps.
@@ -138,14 +144,14 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     # the residual norms stagnate (res_old > .9 res_new)
     #
     (TW == TB) || error("inconsistent precisions")
-    tolf = eps(TW)*TW.(10.0)
+    tolf = eps(TR)*TR.(10.0)
     #
     # Keep the records and accumulate the statistics. 
     #
     Meth = MPStats.Meth
     verbose && println(
         Meth,
-        ": High precision = $TW, Low precision = $TF, Factorization storage precision = $TFact",
+        ": High precision = $TW, Low precision = $TF, Factorization storage precision = $TFact, Residual precision = $TR"
     )
     #
     # Showtime!
@@ -164,15 +170,15 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     #
     # Initial residual
     #
-    r .= b
+    r .= b 
     tol = tolf * bnrm
     rs = bS
 #
 #
     rhist = Vector{Float64}()
-    rnrm = norm(r, normtype)
-    rnrmx = rnrm * TB(2.0)
-    oneb = TB(1.0)
+    rnrm = TR(norm(r, normtype))
+    rnrmx = rnrm * TR(2.0)
+    oneb = TR(1.0)
     itc = 0
     #
     # Put initial residual norm into the history and iterate.
