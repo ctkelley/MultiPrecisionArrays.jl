@@ -66,8 +66,8 @@ If you want to use static arrays with this stuff, use the
 mutable @MArray constructor
 """
 function mplu!(MPF::MPLFact,A::AbstractArray{TW,2}) where TW
-TF=eltype(MPF.AH)
-(TF == TW) || error("Precision error in mplu!")
+TH=eltype(MPF.AH)
+(TH == TW) || error("Precision error in mplu!")
 AH=MPF.AH
 AH = A
 TF = eltype(MPF.AL)
@@ -82,7 +82,7 @@ end
 
 
 """
-mplu(A::AbstractArray{TW,2}; TF=Float32, onthefly=nothing) where TW <: Real
+mplu(A::AbstractArray{TW,2}; TF=nothing, onthefly=nothing) where TW <: Real
 
 Combines the constructor of the multiprecision array with the
 factorization. 
@@ -91,16 +91,25 @@ Step 1: build the MPArray
 
 Step 2: factor the low precision copy and return the factorization object
 """
-function mplu(A::AbstractArray{TW,2}; TF=Float32, onthefly=nothing) where TW <: Real
+function mplu(A::AbstractArray{TW,2}; TF=nothing, onthefly=nothing) where TW <: Real
 #
-# If the high precision matrix is single, the low precision must be half.
+# If the high precision matrix is single, the low precision must be half
+# unless you're planning on using a high-precision residual where TR > TW
+# and also factoring in the working precision, so TW == TF.
 #
-(TW == Float32) && (TF = Float16)
+#
+TFdef = Float32
+(TW == Float32) && (TFdef = Float16)
+(TF == nothing) && (TF = TFdef)
 #
 # Unless you tell me otherwise, onthefly is true if low precision is half
 # and false if low precision is single.
 #
 (onthefly == nothing ) && (onthefly = (TF==Float16))
+#
+# IF TF = TW then something funny is happening with the residual precision.
+#
+(TF == TF) && (onthefly=true)
 #
 # Build the multiprecision array MPA
 #

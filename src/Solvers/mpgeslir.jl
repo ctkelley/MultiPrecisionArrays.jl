@@ -72,7 +72,7 @@ julia> [mout.TW mout.TF]
 """
 function mpgeslir(MPA::MPArray, b; TR=Float16, reporting = false, verbose = true)
 # Factor MPA and return Factorization object
-MPF=mplu!(MPA);
+MPF=mplu!(MPA)
 # Call mpgeslir for the solve
 xi=\(MPF, b; TR=TR, reporting=reporting, verbose=verbose)
 return xi
@@ -129,7 +129,8 @@ function mpgeslir(AF::MPFact, b; TR=Float16, reporting = false, verbose = true)
     # If I'm computing a high precision residual, TS=TR
     r = AF.residual
     onthefly=AF.onthefly
-    (eps(TR) < eps(TW)) && (onthefly=true)
+    HiRes = (eps(TR) < eps(TW))
+    HiRes && (onthefly=true)
     #
     # TFact is the precision of the factors; should be TF
     # unless we're dealing with a heavy MPArray for CI
@@ -166,7 +167,7 @@ function mpgeslir(AF::MPFact, b; TR=Float16, reporting = false, verbose = true)
     # iteration count the same as the high precision matvec and the 
     # triangular sovles
     #
-    x = zeros(TB, size(b))
+    x = zeros(TR, size(b))
     #
     # Initial residual
     #
@@ -174,8 +175,11 @@ function mpgeslir(AF::MPFact, b; TR=Float16, reporting = false, verbose = true)
     tol = tolf * bnrm
     rs = bS
 #
-#
-    rhist = Vector{Float64}()
+#   Keep the books. Test for excessive residual precision.
+#  
+    ERes = (eps(TR) < eps(Float64))
+    HiRes ? (THist = TR) : (THist=Float64)
+    rhist = Vector{THist}()
     rnrm = TR(norm(r, normtype))
     rnrmx = rnrm * TR(2.0)
     oneb = TR(1.0)
@@ -184,28 +188,30 @@ function mpgeslir(AF::MPFact, b; TR=Float16, reporting = false, verbose = true)
     # Put initial residual norm into the history and iterate.
     #
     push!(rhist, rnrm)
+    HiRes ? rloop=TR.(r) : rloop=r
+    HiRes ? xloop=TR.(x) : xloop=x
     while (rnrm > tol) && (rnrm <= .9*rnrmx)
         #
         # Scale the residual
         #
-        r ./= rnrm
+        rloop ./= rnrm
         #
         # Use the low-precision factorization
         #
-        r .= IRTriangle!(AF, r, rs, verbose)
+        rloop .= IRTriangle!(AF, rloop, rs, verbose)
         #
         # Undo the scaling
         #
-        r .*= rnrm
+        rloop .*= rnrm
         #
         # Update the solution and residual
         #
-        x .+= r
-        mul!(r, AD, x)
-        r .*= -oneb
-        axpy!(oneb, bsc, r)
+        xloop .+= rloop
+        mul!(rloop, AD, xloop)
+        rloop .*= -oneb
+        axpy!(oneb, bsc, rloop)
         rnrmx = rnrm
-        rnrm = norm(r, normtype)
+        rnrm = norm(rloop, normtype)
         itc += 1
         push!(rhist, rnrm)
         mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol")
@@ -215,6 +221,7 @@ function mpgeslir(AF::MPFact, b; TR=Float16, reporting = false, verbose = true)
 #        complain_resid = (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
 #        complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
     end
+    x = xloop
     verbose && println("Residual history = $rhist")
     if reporting
         return (rhist = rhist, sol = x, TW = TW, TF = TF, TFact = TFact)
