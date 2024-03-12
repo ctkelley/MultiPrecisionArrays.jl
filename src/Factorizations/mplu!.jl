@@ -109,7 +109,7 @@ TFdef = Float32
 #
 # IF TF = TW then something funny is happening with the residual precision.
 #
-(TF == TF) && (onthefly=true)
+(TF == TW) && (onthefly=true)
 #
 # Build the multiprecision array MPA
 #

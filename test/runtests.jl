@@ -24,6 +24,7 @@ include("DetailsTest/static_test.jl")
 include("Krylov-IRTest/mpgmtest.jl")
 include("Krylov-IRTest/mpbctest.jl")
 include("Krylov-IRTest/hvse.jl")
+include("Wilkinson/wilk_test.jl")
 
 println("starting")
 
@@ -52,4 +53,8 @@ end
     @test mpgmtest(1000)
     @test mpbctest(1000)
     @test hvse(128)
+end
+
+@testset "High Residual Precsion" begin
+   @test hi_precision_res()
 end
