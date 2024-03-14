@@ -1,5 +1,5 @@
 """
-hlu!(A::AbstractMatrix{T}; minbatch=16) where {T}
+hlu!(A::AbstractMatrix{T}) where {T}
 Return LU factorization of A
 
 C. T. Kelley, 2023
@@ -12,13 +12,12 @@ I "fixed" the code to be Float16 only and fixed pivoting
 to only MaxRow.
 
 All I did in the factorization
-was thread the critical loop with Polyester.@batch and
+was thread the critical loop with FLoops.@floop and
 put @simd in the inner loop. These changes got me a 10x speedup
 on my Mac M2 Pro with 8 performance cores. I'm happy.
 
-I set Polyester's minbatch to 16, which worked best for me. YMMV
 """
-function hlu!(A::AbstractMatrix{T}; minbatch=16) where {T}
+function hlu!(A::AbstractMatrix{T}) where {T}
     pivot = RowMaximum()
     T == Float16 || @warn("Use hlu for half precision only!")
     LAPACK.chkfinite(A)
@@ -70,21 +69,23 @@ function hlu!(A::AbstractMatrix{T}; minbatch=16) where {T}
                 info = k
             end
             # Update the rest
-            @batch minbatch=minbatch for j = k+1:n
+#            @tasks for j = k+1:n
+             @floop begin for j=k+1:n
                 @simd ivdep for i = k+1:m
                     @inbounds A[i, j] -= A[i, k] * A[k, j]
                     #@inbounds A[i,j] = muladd(A[i,k],-A[k,j],A[i,j])
                 end
-            end
+            end #j loop
+            end # floop begin
         end
     end
     checknonsingular(info, pivot)
     return LU{T,typeof(A),typeof(ipiv)}(A, ipiv, convert(BlasInt, info))
 end
 
-function hlu(A; minbatch=16)
+function hlu(A)
     C = copy(A)
-    AF = hlu!(C; minbatch=minbatch)
+    AF = hlu!(C)
     return AF
 end
 
