@@ -304,11 +304,11 @@ There are more examples for this in the [paper](https://github.com/ctkelley/Mult
 
 As of now you need to install these packages
 
-- Polyester
+- FLoops
 - SIAMFANLEquations
 
-and use LinearAlgebra and SparseArrays from Base. I use the Krylov solvers and examples from SIAMFANLEquations. Polyester is here because 
-threading with ```Polyester.@batch``` makes the LU for Float16 run much faster. Once LU for Float16 is in LAPACK/BLAS, I will eliminate that dependency.
+and use LinearAlgebra and SparseArrays from Base. I use the Krylov solvers and examples from SIAMFANLEquations. FLoops is here because 
+threading with ```FLoops.@floop``` makes the LU for Float16 run much faster. Once LU for Float16 is in LAPACK/BLAS, I will eliminate that dependency.
 
 ## Endorsement
 
