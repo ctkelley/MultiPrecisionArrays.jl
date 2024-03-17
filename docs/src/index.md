@@ -109,7 +109,7 @@ transfer costs later.
 
 The submodule __MultiPrecisionArrays.Examples__ has an example which we will 
 use for most of the documentation. The function ```Gmat(N)``` returns
-the trapeziod rule discretization of the Greens operator 
+the trapezoid rule discretization of the Greens operator 
 for $-d^2/dx^2$ on $[0,1]$ with homogeneous Dirichlet boundary conditions.
 
 ```math 
@@ -233,8 +233,8 @@ function mplu(A::AbstractArray{TW,2}; TF=Float32, onthefly=nothing) where TW <: 
 #
 (TW == Float32) && (TF = Float16)
 #
-# Unless you tell me otherwise, onthefly is true if low precision is half
-# and false if low precision is single.
+# Unless you tell me otherwise, onthefly is true if TF is half
+# and false if TF is single.
 #
 (onthefly == nothing ) && (onthefly = (TF==Float16))
 MPA=MPArray(A; TF=TF, onthefly=onthefly)
@@ -259,7 +259,9 @@ and ```onthefly = true``` will tell the solvers to do it that way. You have $N^2
 When low precision is Float32, then the default is (```onthefly = false```). This converts $r$ to low precision, does the solve entirely in low precision, and then promotes $d$ to high precision. You need to be careful to avoid
 overflow and, more importantly, underflow when you do that and we scale $r$ to be a unit vector before conversion to low precision and reverse the scaling when we promote $d$. We take care of this for you.
 
-```mplu``` calls the constructor for the multiprecision array and then factors the low precision matrix. In some cases, such as nonlinear solvers, you will want to separate the constructor and the factorization. When you do that
+```mplu``` calls the constructor (```MPArray```) for the multiprecision array.
+The constructor allocates storage for a low precision copy of $A$ and then
+factors the low precision matrix. In some cases, such as nonlinear solvers, you will want to separate the constructor and the factorization. When you do that
 remember that ```mplu!``` overwrites the low precision copy of ```A```
 with the factors. The factorization object is different from the multiprecision
 array, even though they share storage. This is just like ```lu!```.

@@ -7,7 +7,7 @@ using LinearAlgebra: axpy!, ldiv!, lu!, mul!, norm
 using SparseArrays: SparseArrays
 using SIAMFANLEquations: SIAMFANLEquations, kl_bicgstab, kl_gmres
 using SIAMFANLEquations: kstore
-using FLoops
+using FLoops: @floop
 
 #
 # This is MultiPrecisionArrays.jl

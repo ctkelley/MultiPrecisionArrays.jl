@@ -71,17 +71,19 @@ julia> [mout.TW mout.TF]
 ```
 
 The ```TR``` kwarg is the residual precision. Leave this alone unless you know
-what you are doing. ```TR``` is a higher precision than TW and when you set TR
+what you are doing. The default is ```Float16``` which tells the solver to
+set ```TR = TW```. If you use this option, then
+```TR``` is a higher precision than TW and when you set TR
 you are essentially solving ```TR.(A) x = TR.(b)``` 
 with IR with the factorization
 in ```TF``` and the residual computation done via ```A TR.(x)``` and 
 interprecision transfers on the fly. So, the storage cost is the matrix,
-and the copy in the factoriztion precision.
+and the copy in the factorization precision.
 
  The classic case is ```TW = TF = Float32``` and ```TR = Float64```. The nasty
 part of this is that you must store TWO copies of the matrix. One for
 the residual computation and the other to overwrite with the factors.
-I do not think this is a good deal.
+I do not think this is a good deal unless A is seriously ill-conditioned.
 My support for this through ```mplu```. To do this you must put the 
 ```TR``` kwarg explicitly in your call to the solver.
 
@@ -183,10 +185,11 @@ function mpgeslir(AF::MPFact, b; TR=Float16, reporting = false, verbose = true)
     MPStats = getStats(AF)
     TF = MPStats.TF
     TW = MPStats.TW
-    (TR == Float16) && (TR=TW)
-    # If I'm computing a high precision residual, TS=TR
     r = AF.residual
     onthefly=AF.onthefly
+    (TR == Float16) && (TR=TW)
+    # If I'm computing a high precision residual, TS=TR
+    # and I must do interprecision transfers on the fly.
     HiRes = (eps(TR) < eps(TW))
     HiRes && (onthefly=true)
     #
@@ -246,8 +249,10 @@ function mpgeslir(AF::MPFact, b; TR=Float16, reporting = false, verbose = true)
     # Put initial residual norm into the history and iterate.
     #
     push!(rhist, rnrm)
+    # Store r and x in the residual precision if TR is not TW
     HiRes ? rloop=TR.(r) : rloop=r
     HiRes ? xloop=TR.(x) : xloop=x
+    # Solve loop
     while (rnrm > tol) && (rnrm <= .9*rnrmx)
         #
         # Scale the residual
