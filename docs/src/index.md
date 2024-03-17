@@ -24,8 +24,9 @@ for __hlu!.jl__.
 
 ## What is iterative refinement.
 
-The idea is to solve $Ax=b$ in high precision using a factorization
-in lower precision. 
+The idea is to solve $Ax=b$ in high precision (the __working precision__)
+```TW``` with a factorization
+in lower precision (the __factorization precision__) ```TF```.
 
 IR is a perfect example of a storage/time tradeoff. To solve a linear system  
 $Ax=b$ with IR, one incurs the storage penalty of making a low 
