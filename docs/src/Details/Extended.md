@@ -90,3 +90,16 @@ julia> norm(b - AP*mrout.sol, Inf)
 So, is the solution to the promoted problem better than the exact solution
 I used to build the problem?
 
+The reader might try this with ```TF=Float16```, the default when
+```TW = Float32```. All that you'll need to do is replace
+```
+AF = mplu(A; TF=Float32);
+```
+with
+```
+AF = mplu(A);
+```
+
+What goes wrong and why?
+
+
