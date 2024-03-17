@@ -205,7 +205,7 @@ function mpgeslir(AF::MPFact, b; TR=Float16, reporting = false, verbose = true)
     # If the iteration can't meet the tolerance, terminate when
     # the residual norms stagnate (res_old > .9 res_new)
     #
-    (TW == TB) || error("inconsistent precisions")
+    (TW == TB) || error("inconsistent precisions; A and b must have same type")
     tolf = eps(TR)*TR.(10.0)
     #
     # Keep the records and accumulate the statistics. 

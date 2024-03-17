@@ -16,17 +16,18 @@ b=ones(Float32,n);
 AD=Float64.(A);
 bd=Float64.(b);
 xe=AD\bd;
-# set up for high precision residual
-AF = mplu(A; TF=Float32, onthefly=true);
-mout = \(AF, b; TR=Float64, reporting=true);
+# set up for high precision residual, TF=Float32
+mout = hires_sol(A, b)
+#
 lres=length(mout.rhist)
 ndel=norm(mout.sol - xe,Inf)
 l1ok=(lres == 4)
 s1ok=(ndel < 1.e-10);
 A1ok=l1ok && s1ok
 A1ok || println("32-32 Failure for alpha=$alpha:   ", lres,"  ",ndel)
-BF=mplu(A; onthefly=true);
-mout = \(BF, b; TR=Float64, reporting=true);
+# high precision residual, TF=Float16
+mout = hires_sol(A, b; TF=Float16)
+#
 lres=length(mout.rhist)
 ndel=norm(mout.sol - xe,Inf)
 (alpha < 500.0) ? lt=6 : lt=8
@@ -37,3 +38,10 @@ A2ok || println("32-16 Failure for alpha=$alpha:   ", lres,"  ",ndel)
 BF=mplu(A; onthefly=true);
 return A2ok && s1ok
 end
+
+function hires_sol(A, b; TR=Float64, TF=Float32)
+AF=mplu(A; TF=TF)
+mout=\(AF, b; reporting=true, TR=TR)
+return mout
+end
+
