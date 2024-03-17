@@ -38,7 +38,7 @@ makedocs(
         "Half Precision and Krylov-IR" => Any["Half_1.md",], 
         "More than you want to know" => 
            Any["Details/Termination.md", "Details/Interprecision_1.md",
-                Details/Extended.md",],
+                "Details/Extended.md",],
         "MPArray Constructors" => 
            Any["functions/MPArray.md","functions/MPGArray.md",
                "functions/MPBArray.md",],
