@@ -16,6 +16,7 @@ function hlu_test()
     #
     failout = testhlufail()
     failok = (failout == "Fact fails")
+    failok || println("fail test fails")
     #
     ndifflh = samefordouble(A)
     doubok = (ndifflh < 1.e-14)
