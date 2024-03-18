@@ -4,14 +4,13 @@ authors = ["C. T. (Tim) Kelley <tim_kelley@ncsu.edu>"]
 version = "0.1.0"
 
 [deps]
-FLoops = "cc61a311-1640-44b5-9fba-1b764f453329"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+OhMyThreads = "67456a42-1dca-4109-a031-0a68de7e3ad5"
 SIAMFANLEquations = "084e46ad-d928-497d-ad5e-07fa361a48c4"
 SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [compat]
-FLoops = "0.2"
 LinearAlgebra = "1"
 SIAMFANLEquations = "1"
 SparseArrays = "1"

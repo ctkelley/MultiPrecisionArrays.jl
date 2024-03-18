@@ -1,5 +1,5 @@
 """
-hlu!(A::AbstractMatrix{T}) where {T}
+thlu!(A::AbstractMatrix{T}) where {T}
 Return LU factorization of A
 
 C. T. Kelley, 2023
@@ -17,14 +17,14 @@ put @simd in the inner loop. These changes got me a 10x speedup
 on my Mac M2 Pro with 8 performance cores. I'm happy.
 
 """
-function hlu!(A::AbstractMatrix{T}) where {T}
+function thlu!(A::AbstractMatrix{T}) where {T}
     pivot = RowMaximum()
-    T == Float16 || @warn("Use hlu for half precision only!")
+    T == Float16 || @warn("Use thlu for half precision only!")
     LAPACK.chkfinite(A)
     # Extract values and make sure the problem is square
     m, n = size(A)
     minmn = min(m, n)
-    (m == n) || @warn("hlu is only tested for square problems")
+    (m == n) || @warn("thlu is only tested for square problems")
     # Initialize variables
     info = 0
     BlasInt = LinearAlgebra.BLAS.BlasInt
@@ -92,9 +92,9 @@ function hlu!(A::AbstractMatrix{T}) where {T}
     return LU{T,typeof(A),typeof(ipiv)}(A, ipiv, convert(BlasInt, info))
 end
 
-function hlu(A)
+function thlu(A)
     C = copy(A)
-    AF = hlu!(C)
+    AF = thlu!(C)
     return AF
 end
 
