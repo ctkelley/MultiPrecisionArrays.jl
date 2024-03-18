@@ -71,6 +71,7 @@ Since log(version number) < 0, you can expect changes in API, internal structure
   - [A few details](#a-few-details)
 - [Be Careful with Half Precision](#half-precision)
 - [Harvesting Iteration Statistics](#harvesting-iteration-statistics)
+- [Residuals in Higher Precision](#evaluating-residuals-in-higher-precision-than-the-working-precision)
 - [Dependencies](#dependencies)
 - [Endorsement](#endorsement)
 - [Other Stuff in Julia](#other-ir-in-julia)
