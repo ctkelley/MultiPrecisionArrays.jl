@@ -72,7 +72,7 @@ function hlu!(A::AbstractMatrix{T}) where {T}
             #            @tasks for j = k+1:n
             # This is where I need the problem to be square
             ntasks=nthreads()
-            if k < minmn
+#            if k < minmn
             ntasks=min(nthreads(), 1 + floor(Int,(n-k)/8))
                 @tasks for j = k+1:n
                    @set begin
@@ -85,7 +85,7 @@ function hlu!(A::AbstractMatrix{T}) where {T}
                         # @inbounds A[i,j] = muladd(A[i,k],Akj,A[i,j])
                     end # i loop
                 end #j loop
-            end # k < minmn if statement
+#            end # k < minmn if statement
         end
     end
     checknonsingular(info, pivot)
