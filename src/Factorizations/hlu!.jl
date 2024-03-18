@@ -13,7 +13,8 @@ to only MaxRow.
 
 All I did in the factorization
 was thread the critical loop with FLoops.@floop and
-put @simd in the inner loop. These changes got me a 10x speedup
+put @simd in the inner loop. For larger problems (n > 128)
+these changes got me a 2-10x speedup
 on my Mac M2 Pro with 8 performance cores. I'm happy.
 
 """
@@ -23,8 +24,9 @@ function hlu!(A::AbstractMatrix{T}) where {T}
     LAPACK.chkfinite(A)
     # Extract values and make sure the problem is square
     m, n = size(A)
+    # Small n? Revert to normal lu
+    (n < 128) && (AF=lu!(A); return AF )
     minmn = min(m, n)
-    (m == n) || @warn("hlu is only tested for square problems")
     # Initialize variables
     info = 0
     BlasInt = LinearAlgebra.BLAS.BlasInt
@@ -69,23 +71,15 @@ function hlu!(A::AbstractMatrix{T}) where {T}
                 info = k
             end
             # Update the rest
-            #            @tasks for j = k+1:n
-            # This is where I need the problem to be square
             ntasks=nthreads()
-#            if k < minmn
             ntasks=min(nthreads(), 1 + floor(Int,(n-k)/8))
-                @tasks for j = k+1:n
-                   @set begin
-                        scheduler=DynamicScheduler(; nchunks=ntasks)
-                    end
+                  tforeach(k+1:n; ntasks=ntasks) do j
                     Akj = -A[k, j]
                     @simd ivdep for i = k+1:m
                         @inbounds A[i, j] += A[i, k] * Akj
-                        # @inbounds A[i, j] -= A[i, k] * A[k, j]
-                        # @inbounds A[i,j] = muladd(A[i,k],Akj,A[i,j])
+#                        @inbounds A[i,j] = muladd(A[i,k],Akj,A[i,j])
                     end # i loop
                 end #j loop
-#            end # k < minmn if statement
         end
     end
     checknonsingular(info, pivot)
