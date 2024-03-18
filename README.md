@@ -235,6 +235,10 @@ low precision matrix, allocates room for the Krylov basis, and builds a factoriz
 a preconditioner for GMRES. The call looks like ```MPGF=mpglu(A)```. You solve $A x = b$ with
 ```x = MPGF\b```. More details [here](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Half_1/#GMRES-IR).
 
+## Evaluating residuals in higher precision than the working precision.
+
+This is the classical application. __MultiPrecisionArrays.jl__ supports that to a limited degree. It's all explained, but not encouraged, [here](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Details/Extended/) in the docs.
+
 ## Harvesting Iteration Statistics
 
 You can get some iteration statistics by using the
