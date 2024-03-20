@@ -29,16 +29,16 @@ __The half precision LU for Float16 in this package is much faster (more than 10
 
 ## What's new?
 
-- v0.0.9: Better docs and ...
-  - Switch from Array to AbstractArray. Now I can apply ```mplu``` to a transpose and mutable static arrays using the ```@MArray``` constructor.
-  - BiCGSTAB-IR. New factorizations [```mpblu```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpblu/) and [```mpblu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpblu!/)
-  - Better API for the Krylov-IR solvers
-   
  - v0.1.0: Better docs and ...
    - I no longer export the constructors and the MPArray factorizations. You should only be using mplu, mplu!, mpglu, mpglu!, ...
    - Notation and variable name change to conform with standard practice (TH --> TW for working precision, TL --> TF for factorization precision etc). If you just use the multiprecision factorizations with no options, you will not notice this.
    - Explanation for why I am not excited about evaluating the residual in extended precision + a bit of support for that anyhow
    - Replacing Polyester with [OhMyThreads](https://github.com/JuliaFolds2/OhMyThreads.jl) v0.5 or later. I am worried about [this](https://discourse.julialang.org/t/why-is-loopvectorization-deprecated/109547/74).
+  
+ - v0.1.1: Better docs and ...
+   - Nonlinear solver applications
+   - Krylov-IR for high precision residuals
+   
 ##  Can I complain about this package now?
 
 Yes, but ...
@@ -49,8 +49,6 @@ Since log(version number) < 0, you can expect changes in API, internal structure
 
 ## Coming Attractions
 
-
-- Nonlinear solver applications
 - More factorizations: cholesky, qr
 - BFloat16 when/if the support is there. You can use it now, but it is pathologically slow.
   - You'll need [BFloat61s.jl](https://github.com/JuliaMath/BFloat16s.jl) because Julia does not support BFloat16 natively.
