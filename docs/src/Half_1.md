@@ -22,7 +22,7 @@ there is missing. We provide a half precision LU
 factorization for Float16
  __/src/Factorizations/hlu!.jl__ that is better than nothing. 
 It's a hack of Julia's  ```generic_lu!``` with threading and a couple
-compiler directives. Even so, it's 2.5 -- 5 x __slower__ than a 
+compiler directives. Even so, it's 2.5 -- 8 x __slower__ than a 
 double precision LU. Half precision support for both Float16
 and BFloat16 is coming 
 (Julia and Apple support Float16 in hardware! Apple hardware supports
@@ -31,20 +31,20 @@ computing, half precision is for
 research in iterative refinement, not applications. 
 
 
-Here's a table (created with  __/Code_For_Docs/HalfTime.jl__ ) that illustrates the point. In the table we compare timings for
+Here's a table that illustrates the point. In the table we compare timings for
 LAPACK's LU to the LU we compute with ```hlu!.jl```. The matrix is 
 $I-800.0*G$.
 
 ```
       N       F64       F32       F16     F16/F64 
-     1024  3.65e-03  2.65e-03  5.26e-03  1.44e+00 
-     2048  2.26e-02  1.41e-02  3.70e-02  1.64e+00 
-     4096  1.55e-01  8.53e-02  2.55e-01  1.65e+00 
-     8192  1.15e+00  6.05e-01  4.23e+00  3.69e+00 
+     1024  3.96e-03  2.70e-03  2.47e-02  6.22e+00 
+     2048  2.27e-02  1.42e-02  6.95e-02  3.06e+00 
+     4096  1.54e-01  8.49e-02  3.08e-01  1.99e+00 
+     8192  1.14e+00  5.98e-01  4.42e+00  3.88e+00 
 ```
 The columns of the table are the dimension of the problem, timings
 for double, single, and half precision, and the ratio of the half
-precision timings to double. The timings came from Julia 1.10-beta2
+precision timings to double. The timings came from Julia 1.10.2
 running on an Apple M2 Pro with 8 performance cores.
 
 ## Half Precision is Subtle

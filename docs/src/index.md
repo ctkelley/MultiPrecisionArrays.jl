@@ -194,8 +194,9 @@ The compute time for ```mplu``` should be a bit more than half that of ```lu!```
 that ```mplu``` factors a low precision array, so the factorization cost is cut in half. Memory
 is a different story. The reason
 is that both ```mplu``` and ```lu!``` do not allocate storage for a new high precision array,
-but ```mplu``` allocate`s for a low precision copy, so the memory and allocation cost for ```mplu```
-is 50% more than ```lu```. 
+but ```mplu``` allocates for a low precision copy, so the memory and allocation cost for ```mplu```
+is 50% 
+more than ```lu```. 
 
 ```
 julia> @belapsed mplu($A)
@@ -206,7 +207,7 @@ julia> @belapsed lu!(AC) setup=(AC=copy($A))
 
 ```
 It is no surprise that the factorization in single precision took roughly half as long as the one in double. In the double-single precision case, iterative refinement is a great
-example of a time/storage tradeoff. You have to store a low precision copy of $A$, so the storage burden increases by 50\% and the factorization time is cut in half.
+example of a time/storage tradeoff. You have to store a low precision copy of $A$, so the storage burden increases by 50% and the factorization time is cut in half.
 The advantages of IR increase as the dimension increases. IR is less impressive for smaller problems and can even be slower
 ```
 julia> N=30; A=I + Gmat(N); 
@@ -286,7 +287,7 @@ the makes a low precision copy to send to ```lu!```. Hence ```mplu```
 has half the allocation burden of ```lu```.
 
 That is, of course misleading. The memory-efficient 
-way to apply ```lu``` is to overwrite $A$ with the factorization using
+way to apply ```lu``` is to overwrite ```A``` with the factorization using
 ```
 AF1=lu!(A).
 ```
