@@ -102,4 +102,11 @@ AF = mplu(A);
 
 What goes wrong and why?
 
+The advantages of evaluating the residual in extended precision grow
+when $A$ is extremely ill-conditioned. Of course, in this case the
+factorization in the working precision could be so inaccurate that
+IR will fail to converge. One approach to respond to this, as you
+might expect, is to use the factorization as a preconditioner and not
+a solver [amestoy:2023](@cite). We will support this in a later version of
+__MultiPrecisionArrays.jl__.
 

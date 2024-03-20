@@ -8,7 +8,7 @@ using SparseArrays: SparseArrays
 using SIAMFANLEquations: SIAMFANLEquations, kl_bicgstab, kl_gmres
 using SIAMFANLEquations: kstore
 #using FLoops: @floop
-using OhMyThreads
+using OhMyThreads: tforeach
 using Base.Threads: nthreads
 
 #
