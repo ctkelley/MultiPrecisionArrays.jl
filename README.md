@@ -41,11 +41,11 @@ __The half precision LU for Float16 in this package is much faster (more than 10
    - Nonlinear solver applications
    - Krylov-IR for high precision residuals
    
-##  Can I complain about this package now?
+##  Can I complain about this package?
 
 Yes, but ...
 
-__Please do not make PRs. If you stumble on this mess and have questions/ideas ..., raise an issue or email me at tim_kelley@ncsu.edu__
+__Please do not make PRs. If you have questions/ideas ..., raise an issue or email me at tim_kelley@ncsu.edu__
 
 Since log(version number) < 0, you can expect changes in API, internal structures, and exported functions.
 
