@@ -8,7 +8,7 @@
 
 # MultiPrecisionArrays.jl v0.1.1
 
-## The latest tagged version is 0.1.0. v0.1.1 will have new features but no breaking changes.
+##  v0.1.1 will have new features but no breaking changes from v0.1.0, the current release.
 
 ## [C. T. Kelley](https://ctk.math.ncsu.edu)
 
