@@ -6,7 +6,8 @@ support for IEEE 16 bit floats (Float16). A second format
 significand (mantissa), thereby
 trading precision for range. In fact, the exponent field in BFloat is
 the same size (8 bits) as that for single precision (Float32). The 
-significand, however, is only 8 bits. Which is less than that for 
+significand, however, is only 8 bits. Compare this to the size
+of the exponent fields for 
 Float16 (11 bits) and single (24 bits). The size of the significand
 means that you can get in real trouble with half precision in either
 format.  
@@ -47,6 +48,9 @@ for double, single, and half precision, and the ratio of the half
 precision timings to double. The timings came from Julia 1.10.2
 running on an Apple M2 Pro with 8 performance cores.
 
+I am constantly playing with ```hlu!.jl``` and these timings will almost
+certainly be different if you try to duplicate them.
+
 ## Half Precision is Subtle
 
 Half precision is also difficult to use properly. The low precision can 
@@ -84,7 +88,8 @@ julia> norm(b-A*z,Inf)
 julia> norm(z-xd,Inf)
 2.34975e-01
 ```
-So you get very poor, but unsurprising, results. While __MultiPrecisionArrays.jl__ supports half precision and I use it all the time, it is not something you would use in your own
+So you get very poor, but unsurprising, results. While __MultiPrecisionArrays.jl__ supports half precision and I use it all the time, it is not something you 
+should use in your own
 work without looking at the literature and making certain you are prepared for strange results. Getting good results consistently from half precision is an active research area.
 
 So, it should not be a surprise that IR also struggles with half precision.

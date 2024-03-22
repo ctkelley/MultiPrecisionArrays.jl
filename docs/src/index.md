@@ -246,7 +246,7 @@ end
 ```
 
 The function ```mplu``` has two keyword arguments. The easy one to understand is ```TF``` which is the precision of the factorization. Julia has support for single (```Float32```) and half (```Float16```)
-precisions. If you set ```TF=Float16``` then low precision will be half. Don't do that unless you know what you're doing. Using half precision is a fast way to get incorrect results. Look at the section on [half precision](#half-Precision) in this Readme for a bit more bad news.
+precisions. If you set ```TF=Float16``` then low precision will be half. Don't do that unless you know what you're doing. Using half precision is a good way to get incorrect results. Look at the section on [half precision](#half-Precision) in this Readme for a bit more bad news.
 
 The other keyword arguement is __onthefly__. That keyword controls how the triangular solvers from the factorization work. When you solve
 
@@ -279,8 +279,8 @@ and
 ```
 AF2=mplu(A)
 ```
-are very different. Typically ```lu``` makes a high precision copy of ```A``` 
-and
+are very different. Typically ```lu``` makes a high precision
+copy of ```A``` and
 factors that with ```lu!```. ```mplu``` on the other hand, uses ```A```
 as the high precision matrix in the multiprecision array structure and
 the makes a low precision copy to send to ```lu!```. Hence ```mplu```
