@@ -60,8 +60,8 @@ Since log(version number) < 0, you can expect changes in API, internal structure
 
 - This README file
 - The [docs for the package](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev)
-- [The ArXiv paper for v0.1.0](https://arxiv.org/abs/2311.14616)
-- [The working paper for v0.1.1](https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/main/Publications_and_Presentations/MPArray.pdf)
+- [The ArXiv paper for v0.1.0](https://arxiv.org/abs/2311.14616) (ArXiv update in progress. Should be done by March 20.)
+- [The working paper for v0.1.1](https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/main/Publications_and_Presentations/MPArray.pdf) (This is the one to read until ArXiv updates.)
 
 
 ## Readme Contents:
