@@ -53,7 +53,7 @@ Since log(version number) < 0, you can expect changes in API, internal structure
 
 - More factorizations: cholesky, qr
 - BFloat16 when/if the support is there. You can use it now, but it is pathologically slow.
-  - You'll need [BFloat61s.jl](https://github.com/JuliaMath/BFloat16s.jl) because Julia does not support BFloat16 natively.
+  - You'll need [BFloat16s.jl](https://github.com/JuliaMath/BFloat16s.jl) because Julia does not support BFloat16 natively.
   - There's work in progress. See issue [41075](https://github.com/JuliaLang/julia/issues/41075) and PRs [51470](https://github.com/JuliaLang/julia/pull/51470) and [53059](https://github.com/JuliaLang/julia/pull/53059).
 
 ## Documentation
