@@ -6,7 +6,9 @@
 <!--- [![MultiPrecisionArrays Downloads](https://shields.io/endpoint?url=https://pkgs.genieframework.com/api/v1/badge/MultiPrecisionArrays)](https://pkgs.genieframework.com?packages=MultiPrecisionArrays) --->
 
 
-# MultiPrecisionArrays.jl v0.1.0
+# MultiPrecisionArrays.jl v0.1.1
+
+## The latest tagged version is 0.1.0. v0.1.1 will have new features but no breaking changes.
 
 ## [C. T. Kelley](https://ctk.math.ncsu.edu)
 
