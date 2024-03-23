@@ -1,10 +1,9 @@
-using MultiPrecisionArrays
+using Test, MultiPrecisionArrays
 using MultiPrecisionArrays.Examples: Gmat
 using LinearAlgebra: I, lu!, norm
 using SIAMFANLEquations: nsol
 using SIAMFANLEquations.TestProblems: heqinit, heqf!, heqJ!
 using StaticArrays
-using Test
 
 import MultiPrecisionArrays.MPArray
 import MultiPrecisionArrays.MPHArray
