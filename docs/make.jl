@@ -25,7 +25,8 @@ mathengine = MathJax3(Dict(:loader => Dict("load" => ["[tex]/require", "[tex]/ma
 
 bib = CitationBibliography(
     joinpath(@__DIR__, "src", "MPArray.bib"),
-    style=:numeric  # default
+#    style=:numeric  # default
+    style=:authoryear # My way!
 )
 
 
