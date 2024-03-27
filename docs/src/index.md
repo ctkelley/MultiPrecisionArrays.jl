@@ -318,7 +318,7 @@ is an implementation of the IR method from
 The unregistered
 package [Itref.jl](https://github.com/bvieuble/Itref.jl) implements
 IR and the GMRES-IR method from 
-[amestoy:2023](@cite)
+[amestoy:2024](@cite)
 and was used to obtain
 the numerical results in that paper. It does not provide the
 data structures for preallocation that we do and does not seem to have
