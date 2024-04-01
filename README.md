@@ -309,11 +309,11 @@ There are more examples for this in the [paper](https://github.com/ctkelley/Mult
 
 As of now you need to install these packages
 
-- FLoops
+- OhMyThreads
 - SIAMFANLEquations
 
 and use LinearAlgebra and SparseArrays from Base. I use the Krylov solvers and examples from SIAMFANLEquations. FLoops is here because 
-threading with ```FLoops.@floop``` makes the LU for Float16 run much faster. Once LU for Float16 is in LAPACK/BLAS, I will eliminate that dependency.
+threading with ```OhMyThreads.@tasks``` makes the LU for Float16 run much faster. Once LU for Float16 is in LAPACK/BLAS, I will eliminate that dependency.
 
 ## Endorsement
 
