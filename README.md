@@ -37,8 +37,7 @@ __The half precision LU for Float16 in this package is much faster (more than 10
    - Explanation for why I am not excited about evaluating the residual in extended precision + a bit of support for that anyhow
    - Replacing Polyester with [OhMyThreads](https://github.com/JuliaFolds2/OhMyThreads.jl) v0.5 or later. I am worried about [this](https://discourse.julialang.org/t/why-is-loopvectorization-deprecated/109547/74).
   
- - v0.1.2: Better docs and ...
-   - The examples in the docs and the paper will use the [AppleAccelerator](https://github.com/JuliaLinearAlgebra/AppleAccelerate.jl) framework
+ - v0.1.1: Better docs and ...
    - Nonlinear solver applications 
    - Krylov-IR for high precision residuals
    
@@ -117,6 +116,9 @@ factor the low precision copy.
 ### An example to get started
 
 Herewith, the world's most simple example to show how iterative refinement works. We will follow that with some benchmarking on the cost of factorizations.
+
+The results here, in the docs, and in the paper use Julia 1.10.x and OPENBLAS (the default) for LAPACK and the BLAS. You should consider trying MKL (Intel machines) or [AppleAccelerate](https://github.com/JuliaLinearAlgebra/AppleAccelerate.jl). I have switched to AppleAccelerate myself. It gets faster with every new OS release.
+
 The functions we use are __MPArray__ to create the structure and __mplu!__ to factor the low precision copy. In this example high precision is ```Float64``` and low
 precision is ```Float32```. The matrix is the sum of the identity and a constant multiple of the trapezoid rule discretization of the Greens operator for $-d^2/dx^2$ on $[0,1]$
 
