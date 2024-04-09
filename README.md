@@ -36,8 +36,10 @@ __The half precision LU for Float16 in this package is much faster (more than 10
    - Notation and variable name change to conform with standard practice (TH --> TW for working precision, TL --> TF for factorization precision etc). If you just use the multiprecision factorizations with no options, you will not notice this.
    - Explanation for why I am not excited about evaluating the residual in extended precision + a bit of support for that anyhow
    - Replacing Polyester with [OhMyThreads](https://github.com/JuliaFolds2/OhMyThreads.jl) v0.5 or later. I am worried about [this](https://discourse.julialang.org/t/why-is-loopvectorization-deprecated/109547/74).
+
+ - v0.1.1: Better docs and examples now use the AppleAccelerator Framework
   
- - v0.1.1: Better docs and ...
+ - v0.1.2: Better docs and ...
    - Nonlinear solver applications
    - Krylov-IR for high precision residuals
    

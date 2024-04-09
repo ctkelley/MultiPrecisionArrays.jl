@@ -76,6 +76,7 @@ function hlu!(A::AbstractMatrix{T}) where {T}
                     Akj = -A[k, j]
                     @simd ivdep for i = k+1:m
                         @inbounds A[i, j] += A[i, k] * Akj
+#                        @inbounds @fastmath A[i, j] += A[i, k] * Akj
 #                        @inbounds A[i,j] = muladd(A[i,k],Akj,A[i,j])
                     end # i loop
                 end #j loop
