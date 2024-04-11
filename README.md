@@ -315,7 +315,7 @@ As of now you need to install these packages
 - OhMyThreads
 - SIAMFANLEquations
 
-and use LinearAlgebra and SparseArrays from Base. I use the Krylov solvers and examples from SIAMFANLEquations. FLoops is here because 
+and use LinearAlgebra and SparseArrays from Base. I use the Krylov solvers and examples from SIAMFANLEquations. OhMyThreads is here because 
 threading with ```OhMyThreads.@tasks``` makes the LU for Float16 run much faster. Once LU for Float16 is in LAPACK/BLAS, I will eliminate that dependency.
 
 ## Endorsement
