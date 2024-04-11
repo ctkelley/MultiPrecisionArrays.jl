@@ -74,10 +74,8 @@ function hlu!(A::AbstractMatrix{T}) where {T}
             ntasks=min(nthreads(), 1 + floor(Int,(n-k)/8))
                   tforeach(k+1:n; ntasks=ntasks) do j
                     Akj = -A[k, j]
-                    @simd ivdep for i = k+1:m
-                        @inbounds A[i, j] += A[i, k] * Akj
-#                        @inbounds @fastmath A[i, j] += A[i, k] * Akj
-#                        @inbounds A[i,j] = muladd(A[i,k],Akj,A[i,j])
+                    @inbounds @simd ivdep for i = k+1:m
+                        A[i, j] += A[i, k] * Akj
                     end # i loop
                 end #j loop
         end
