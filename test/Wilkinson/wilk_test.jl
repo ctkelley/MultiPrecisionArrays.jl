@@ -8,7 +8,8 @@ end
 function wilk_test(n=31, a=1.0)
 G=Gmat(n, Float32);
 #
-# Well conditioned case
+# alpha=1.0 = well conditioned
+# alpha=800.0 = moderately ill conditioned
 #
 alpha=Float32(a)
 A=I + alpha*G;
