@@ -11,7 +11,7 @@ authors:
 #    affiliation: 1
 affiliations:
   - name: C. T. Kelley, North Carolina State University, Raleigh NC, USA
-    index: 1
+#    index: 1
 date: 15 April 2024
 bibliography: paper.bib
 ---
