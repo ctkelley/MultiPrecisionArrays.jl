@@ -54,6 +54,6 @@ end
     @test hvse(128)
 end
 
-@testset "High Residual Precsion" begin
+@testset "High Residual Precision" begin
    @test hi_precision_res()
 end

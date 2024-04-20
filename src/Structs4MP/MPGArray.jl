@@ -36,7 +36,7 @@ MPGArray(AH::AbstractArray{Float64,2}; basissize=10, TF=Float32)
 
 An MPGArray stores the high precision matrix, the low precision factorization,
 the Krylov basis, and a few other things GMRES needs. If the high precision
-matrix is double, the low precision is single by default. Half is an optioin
+matrix is double, the low precision is single by default. Half is an option
 which you get with TF=Float16.
 """
 function MPGArray(AH::AbstractArray{Float64,2}; basissize=10, TF=Float32)

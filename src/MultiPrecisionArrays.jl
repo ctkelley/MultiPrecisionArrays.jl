@@ -75,7 +75,7 @@ end
 #
 # hlu and hlu! are hacks of the Julia generic_lu source. I've used
 # Polyester.jl to thread them and done some tweaking. On
-# my Mac M2 Pro with 8 performace cores I'm seeing a 10x speedup
+# my Mac M2 Pro with 8 performance cores I'm seeing a 10x speedup
 # over where I was before and seem to be using the hardware support
 # for half precision as well as I can. I am still 5x slower than
 # the LAPACK double precision LU, so there's a factor of 20 out there
@@ -146,7 +146,7 @@ export mpcholesky!
 # export MPhatv
 # export MPhptv
 #
-# The data structres for statistics are almost surely not 
+# The data structures for statistics are almost surely not 
 # interesting to anyone but me. I will document how one can
 # use the solvers to get the stats sooner or later.
 #
