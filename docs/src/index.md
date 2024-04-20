@@ -1,4 +1,4 @@
-# MultiPrecisionArrays.jl v0.1.1
+# multiprecisionarrays.jl v0.1.1
 
 [C. T. Kelley](https://ctk.math.ncsu.edu)
 
@@ -248,7 +248,7 @@ end
 The function ```mplu``` has two keyword arguments. The easy one to understand is ```TF``` which is the precision of the factorization. Julia has support for single (```Float32```) and half (```Float16```)
 precisions. If you set ```TF=Float16``` then low precision will be half. Don't do that unless you know what you're doing. Using half precision is a good way to get incorrect results. Look at the section on [half precision](#half-Precision) in this Readme for a bit more bad news.
 
-The other keyword arguement is __onthefly__. That keyword controls how the triangular solvers from the factorization work. When you solve
+The other keyword argument is __onthefly__. That keyword controls how the triangular solvers from the factorization work. When you solve
 
 ```math
 LU d = r
