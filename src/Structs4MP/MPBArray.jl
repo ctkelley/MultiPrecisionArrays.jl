@@ -36,7 +36,7 @@ MPBArray(AH::AbstractArray{Float64,2}; TF=Float32)
 
 An MPBArray stores the high precision matrix, the low precision factorization
 and a few other things BiCGSTAB needs. If the high precision
-matrix is double, the low precision is single by default. Half is an optioin
+matrix is double, the low precision is single by default. Half is an option
 which you get with TF=Float16.
 """
 function MPBArray(AH::AbstractArray{Float64,2}; TF=Float32)
