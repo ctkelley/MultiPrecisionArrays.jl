@@ -122,11 +122,11 @@ function mpkrir(AF::MPKFact, b; reporting = false,
     bsc = copy(b)
     x = zeros(TB, size(b))
     bnorm = norm(b, normtype)
-    anorm = opnorm(A,normtype)
     xnorm = TB(0.0)
     #
     AFS = AF.AF
     AD = AF.AH
+    anorm = opnorm(AD,normtype)
     #
     # Initialize Krylov-IR
     #
