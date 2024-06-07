@@ -2,7 +2,7 @@ module MultiPrecisionArrays
 
 using LinearAlgebra: LinearAlgebra, LAPACK, LU, RowMaximum
 using LinearAlgebra: Factorization, SingularException
-using LinearAlgebra: axpy!, ldiv!, lu!, mul!, norm
+using LinearAlgebra: axpy!, ldiv!, lu!, mul!, norm, opnorm
 
 using SparseArrays: SparseArrays
 using SIAMFANLEquations: SIAMFANLEquations, kl_bicgstab, kl_gmres

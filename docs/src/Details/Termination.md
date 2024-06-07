@@ -2,7 +2,7 @@
 
 We terminate the loop when 
 ```math
-\| r \| < \tau \| b \|
+\| r \| < \tau (\| b \| + \| A \| \| x \|)
 ```
 where we use $\tau = 10 * eps(TW)$, where $eps(TW)$ is the working
 precision floating
