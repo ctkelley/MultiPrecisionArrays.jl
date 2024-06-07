@@ -115,12 +115,15 @@ function mpkrir(AF::MPKFact, b; reporting = false,
     #
     normtype = Inf
     TB = eltype(b)
+    # remember that eps(TB) = 2 * unit roundoff
     tolf = TB(10.0)*eps(TB)
     n = length(b)
     onetb = TB(1.0)
     bsc = copy(b)
     x = zeros(TB, size(b))
     bnorm = norm(b, normtype)
+    anorm = opnorm(A,normtype)
+    xnorm = TB(0.0)
     #
     AFS = AF.AF
     AD = AF.AH
@@ -144,6 +147,7 @@ function mpkrir(AF::MPKFact, b; reporting = false,
     kl_store = AF.KStore
     atvd=copy(r)
     MP_Data = (MPF = AF, atv = atvd)
+    tol = tolf *(bnorm + anorm *xnorm)
     while (rnrm > tolf * bnorm) && ( rnrm <= .99 * rnrmx )
         x0 = zeros(TB, n)
         #
@@ -199,6 +203,8 @@ function mpkrir(AF::MPKFact, b; reporting = false,
         #
         (rnrm >= rnrmx) && (normdec = false)
         ~normdec && mpdebug && (rnrm >= rnrmx) && println("Residual norm increased")
+    xnorm=norm(x,normtype)
+    tol = tolf *(bnorm + anorm *xnorm)
     end
     verbose && println("Residual history = $rhist")
     if reporting

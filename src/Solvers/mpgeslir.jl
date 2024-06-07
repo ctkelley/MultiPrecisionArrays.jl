@@ -219,7 +219,8 @@ function mpgeslir(AF::MPFact, b; TR=Float16, reporting = false, verbose = true)
     # Showtime!
     #
     AD = AF.AH
-    bnrm = norm(b, normtype)
+    bnrm = norm(b, normtype) 
+    anrm = opnorm(AD, normtype)
     bsc = b
     AFS = AF.AF
     bS = TFact.(bsc)
@@ -229,6 +230,7 @@ function mpgeslir(AF::MPFact, b; TR=Float16, reporting = false, verbose = true)
     # triangular sovles
     #
     x = zeros(TR, size(b))
+    xnrm = norm(x, normtype)
     #
     # Initial residual
     #
@@ -253,7 +255,8 @@ function mpgeslir(AF::MPFact, b; TR=Float16, reporting = false, verbose = true)
     HiRes ? rloop=TR.(r) : rloop=r
     HiRes ? xloop=TR.(x) : xloop=x
     # Solve loop
-    while (rnrm > tol) && (rnrm <= .9*rnrmx)
+    # while (rnrm > tol) && (rnrm <= .9*rnrmx)
+    while (rnrm > (anrm * xnrm + bnrm) *tolf) && (rnrm <= .9*rnrmx)
         #
         # Scale the residual
         #
@@ -283,6 +286,7 @@ function mpgeslir(AF::MPFact, b; TR=Float16, reporting = false, verbose = true)
         #
 #        complain_resid = (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
 #        complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
+         xnrm=norm(xloop,normtype)
     end
     x = xloop
     verbose && println("Residual history = $rhist")
