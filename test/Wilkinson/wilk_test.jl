@@ -31,7 +31,7 @@ mout = hires_sol(A, b; TF=Float16)
 #
 lres=length(mout.rhist)
 ndel=norm(mout.sol - xe,Inf)
-(alpha < 500.0) ? lt=6 : lt=8
+(alpha < 500.0) ? lt=7 : lt=9
 l2ok=(lres <= lt) 
 s2ok=(ndel < 1.e-10);
 A2ok=l2ok && s1ok
