@@ -4,7 +4,7 @@ We terminate the loop when
 ```math
 \| r \| < \tau (\| b \| + \| A \| \| x \|)
 ```
-where we use $\tau = 10 * eps(TW)$, where $eps(TW)$ is the working
+where we use $\tau = 0.5 * eps(TW)$, where $eps(TW)$ is the working
 precision floating
 point machine epsilon.  The problem with this criterion is
 that IR can stagnate, especially for ill-conditioned problems, before
