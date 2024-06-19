@@ -4,5 +4,6 @@ B=A';
 MPB=mplu(B)
 z=MPB\b
 absok = (norm(x - z,Inf) < 1.e-12)
+absok || println(norm(x-z,Inf))
 return absok
 end
