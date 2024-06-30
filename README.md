@@ -347,7 +347,7 @@ Most users of this package can ignore this issue.
 
   - [Interprecision Transfers in Iterative Refinement: Making Half Precision on Desktops Less Painful](Publications_and_Presentations/MPArrays_XSDK-MULTIPRECISION_June_15.pdf).
 
-I have a new paper on this  [Interprecision transfers in iterative refinement](https://arxiv.org/pdf/2311.14616.pdf)
+I have a new paper on this. See ref (Kel 24a) [__Interprecision transfers in iterative refinement__](https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/main/Publications_and_Presentations/IR_Note.pdf)
 
 ## Other IR in Julia
 
