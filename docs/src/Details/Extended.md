@@ -7,7 +7,7 @@ residual in a precision ```TR```
 higher than the working precision. If you do this,
 you should store both the solution and the residual in precision
 TR and to interprecision transfers on the fly. In that case you are really
-solving a promoted problem
+solving a promoted problem [ctk:irnote](@cite)
 ```math
 (I_W^R A) x = I_W^R b
 ```
