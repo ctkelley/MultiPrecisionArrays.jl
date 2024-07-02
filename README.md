@@ -335,9 +335,9 @@ A new paper exploits most of the package. I use the examples in that paper for C
 - (KEL23a) C. T. Kelley, [__Newton's method in three precisions__](https://arxiv.org/abs/2307.16051) To appear in Pacific Journal of Optimization.
   - This paper has a [repo](https://github.com/ctkelley/N3Presults) for reproducing the results with an early version of this package.
 
-I just submitted a paper about interprecison transfers.
+I just submitted a paper about interprecison transfers and used MulitPrecisionArrays.jl for the computations.
 
-- (Kel24a) C. T. Kelley, [__Interprecision transfers in iterative refinement__](https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/main/Publications_and_Presentations/IR_Note.pdf)
+- (Kel24a) C. T. Kelley, [__Interprecision transfers in iterative refinement__](https://arxiv.org/pdf/2407.00827)
 
 
 ## __Interprecision transfers__:
@@ -347,7 +347,7 @@ Most users of this package can ignore this issue.
 
   - [Interprecision Transfers in Iterative Refinement: Making Half Precision on Desktops Less Painful](Publications_and_Presentations/MPArrays_XSDK-MULTIPRECISION_June_15.pdf).
 
-I have a new paper on this. See ref (Kel 24a) [__Interprecision transfers in iterative refinement__](https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/main/Publications_and_Presentations/IR_Note.pdf)
+Also see ref (Kel 24a) [__Interprecision transfers in iterative refinement__](https://arxiv.org/pdf/2407.00827)
 
 ## Other IR in Julia
 
