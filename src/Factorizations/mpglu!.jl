@@ -16,9 +16,10 @@ AH=MPGA.AH
 VStore=MPGA.VStore
 KStore=MPGA.KStore
 res=MPGA.residual
+sol=MPGA.sol
 TF=eltype(AL)
 (TF == Float16) ? ALF = hlu!(AL) : ALF = lu!(AL)
-MPF=MPGEFact(AH, AL, ALF, VStore, KStore, res, true)
+MPF=MPGEFact(AH, AL, ALF, VStore, KStore, res, sol, true)
 return MPF
 end
 
@@ -57,7 +58,7 @@ AL .= TF.(A)
 MPG.AF.ipiv .= AF.ipiv
 VStore=MPG.VStore 
 KStore=MPG.KStore
-MPG=MPGEFact(AH, AL, AF, VStore, KStore, MPG.residual, true)
+MPG=MPGEFact(AH, AL, AF, VStore, KStore, MPG.residual, MPG.sol, true)
 return MPG
 end
 
@@ -89,6 +90,7 @@ function mpglu!(MPH::MPHArray; gmresok = true, basissize=10)
     AH = MPH.AH
     TD = eltype(AH)
     res = MPH.residual
+    sol = MPH.sol
     n=length(res)
     AStore = MPH.AStore
     AL = MPH.AL
@@ -105,9 +107,9 @@ function mpglu!(MPH::MPHArray; gmresok = true, basissize=10)
     if gmresok
         VStore=zeros(TD, n, basissize)
         KStore=kstore(n,"gmres")
-        MPF = MPGHFact(AH, AL, AF, VStore, KStore, res, true)
+        MPF = MPGHFact(AH, AL, AF, VStore, KStore, res, sol, true)
     else
-        MPF = MPHFact(AH, AL, AF, res, true)
+        MPF = MPHFact(AH, AL, AF, res, sol, true)
     end
 end
 

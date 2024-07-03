@@ -16,9 +16,10 @@ AH=MPBA.AH
 VStore=MPBA.VStore
 KStore=MPBA.KStore
 res=MPBA.residual
+sol=MPBA.sol
 TF=eltype(AL)
 (TF == Float16) ? ALF = hlu!(AL) : ALF = lu!(AL)
-MPF=MPBFact(AH, AL, ALF, VStore, KStore, res, true)
+MPF=MPBFact(AH, AL, ALF, VStore, KStore, res, sol, true)
 return MPF
 end
 
@@ -57,7 +58,7 @@ AL .= TF.(A)
 MPG.AF.ipiv .= AF.ipiv
 VStore=MPG.VStore 
 KStore=MPG.KStore
-MPG=MPBFact(AH, AL, AF, VStore, KStore, MPG.residual, true)
+MPG=MPBFact(AH, AL, AF, VStore, KStore, MPG.residual, MPG.sol, true)
 return MPG
 end
 

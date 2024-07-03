@@ -31,10 +31,11 @@ function mplu!(MPA::MPArray)
     AL = MPA.AL
     TF = eltype(AL)
     residual=MPA.residual
+    sol=MPA.sol
     (TF == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
     # For the MPEArray
     on_the_fly=MPA.onthefly
-    MPF = MPLFact(AH, AL, AF, residual, on_the_fly)
+    MPF = MPLFact(AH, AL, AF, residual, sol, on_the_fly)
     return MPF
 end
 
@@ -75,7 +76,7 @@ AL=MPF.AL
 AL .= TF.(A)
 (TF == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
 MPF.AF.ipiv .= AF.ipiv
-MPF = MPLFact(A, AL, AF, MPF.residual, MPF.onthefly)
+MPF = MPLFact(A, AL, AF, MPF.residual, MPF.sol, MPF.onthefly)
 return MPF
 end
 
@@ -91,7 +92,7 @@ Step 1: build the MPArray
 
 Step 2: factor the low precision copy and return the factorization object
 """
-function mplu(A::AbstractArray{TW,2}; TF=nothing, onthefly=nothing) where TW <: Real
+function mplu(A::AbstractArray{TW,2}; TF=nothing,  onthefly=nothing) where TW <: Real
 #
 # If the high precision matrix is single, the low precision must be half
 # unless you're planning on using a high-precision residual where TR > TW

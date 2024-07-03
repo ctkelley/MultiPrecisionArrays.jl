@@ -15,6 +15,7 @@ struct MPGArray{TW<:AbstractFloat,TF<:AbstractFloat}
     VStore::AbstractArray{TW,2}
     KStore::NTuple
     residual::Vector{TW}
+    sol::Vector{TW}
     onthefly::Bool
 end
 ```
@@ -28,6 +29,7 @@ struct MPGArray{TW<:AbstractFloat,TF<:AbstractFloat}
     VStore::AbstractArray{TW,2}
     KStore::NTuple
     residual::Vector{TW}
+    sol::Vector{TW}
     onthefly::Bool
 end
 
@@ -39,13 +41,16 @@ the Krylov basis, and a few other things GMRES needs. If the high precision
 matrix is double, the low precision is single by default. Half is an option
 which you get with TF=Float16.
 """
-function MPGArray(AH::AbstractArray{Float64,2}; basissize=10, TF=Float32)
+function MPGArray(AH::AbstractArray{Float64,2}; TR=Float16,
+                 basissize=10, TF=Float32)
 AL=TF.(AH)
 (m,n)=size(AH)
-res=ones(eltype(AH),n)
-VStore=zeros(eltype(AH),n,basissize)
+(TR == Float16) ? TRR=eltype(AH) : TRR = TR
+res=ones(TRR,n)
+sol=ones(TRR,n)
+VStore=zeros(TRR,n,basissize)
 KStore=kstore(n,"gmres")
-MPGA=MPGArray(AH, AL, VStore, KStore, res, true)
+MPGA=MPGArray(AH, AL, VStore, KStore, res, sol, true)
 end
 
 
@@ -61,8 +66,9 @@ function MPGArray(AH::AbstractArray{Float32,2}; basissize=10, TF=Float16)
 AL=TF.(AH)
 (m,n)=size(AH)
 res=ones(eltype(AH),n)
+sol=ones(eltype(AH),n)
 VStore=zeros(eltype(AH),n,basissize)
 KStore=kstore(n,"gmres")
-MPGA=MPGArray(AH, AL, VStore, KStore, res, true)
+MPGA=MPGArray(AH, AL, VStore, KStore, res, sol, true)
 return MPGA
 end
