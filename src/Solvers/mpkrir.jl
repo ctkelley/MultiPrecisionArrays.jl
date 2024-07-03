@@ -1,5 +1,6 @@
 """
-mpkrir(AF::MPKFact, b; reporting=false, verbose=false, mpdebug=false)
+mpkrir(AF::MPKFact, b; TR=Float16, reporting=false, 
+                               verbose=false, mpdebug=false)
 
 I do not export this function. The idea is that you use ```mpglu```
 and do not touch either the constructor or the solver directly.
@@ -105,7 +106,7 @@ BiCGSTAB works the same way.
 
 
 """
-function mpkrir(AF::MPKFact, b; reporting = false, 
+function mpkrir(AF::MPKFact, b; TR=Float16, reporting = false, 
                 verbose = false, mpdebug = false)
     #
     # Which Krylov method are we talking about?
@@ -148,7 +149,7 @@ function mpkrir(AF::MPKFact, b; reporting = false,
     atvd=copy(r)
     MP_Data = (MPF = AF, atv = atvd)
     tol = tolf *(bnorm + anorm *xnorm)
-    while (rnrm > tolf * bnorm) && ( rnrm <= .99 * rnrmx )
+    while (rnrm > tol) && ( rnrm <= .9 * rnrmx )
         x0 = zeros(TB, n)
         #
         # Scale the residual 
