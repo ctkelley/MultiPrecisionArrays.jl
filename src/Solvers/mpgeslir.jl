@@ -70,65 +70,6 @@ julia> [mout.TW mout.TF]
 
 ```
 
-The ```TR``` kwarg is the residual precision. Leave this alone unless you know
-what you are doing. The default is ```Float16``` which tells the solver to
-set ```TR = TW```. If you use this option, then
-```TR``` is a higher precision than TW and when you set TR
-you are essentially solving ```TR.(A) x = TR.(b)``` 
-with IR with the factorization
-in ```TF``` and the residual computation done via ```A TR.(x)``` and 
-interprecision transfers on the fly. So, the storage cost is the matrix,
-and the copy in the factorization precision.
-
- The classic case is ```TW = TF = Float32``` and ```TR = Float64```. The nasty
-part of this is that you must store TWO copies of the matrix. One for
-the residual computation and the other to overwrite with the factors.
-I do not think this is a good deal unless A is seriously ill-conditioned.
-My support for this through ```mplu```. To do this you must put the 
-```TR``` kwarg explicitly in your call to the solver.
-
-## Example
-```jldoctest
-julia> using MultiPrecisionArrays.Examples
-
-julia> n=31; alpha=Float32(1.0);
-
-julia> G=Gmat(n, Float32);
-
-julia> A = I + alpha*G;
-
-julia> b = A*ones(Float32,n);
-
-# use mpa with TF=TW=Float32
-
-AF = mplu(A; TF=Float32, onthefly=true);
-
-# now set TR=Float64 with the kwarg and solve
-
-mout = \\(AF, b; TR=Float64, reporting=true);
-
-# The solution and the residuals are in double. The iteration drives
-# the residual (evaluated in double) to close to double precision roundoff
-
-julia> mout.rhist
-4-element Vector{Float64}:
- 1.12500e+00
- 2.65153e-07
- 6.90559e-14
- 6.66134e-16
-
-# What does this mean. I'll solve the promoted problem. TR.(A) x = b
-
-julia> AD=Float64.(A);
-
-julia> xd = AD\\b;
-
-julia> norm(xd - mout.sol,Inf)
-1.11022e-15
-
-# Is that better?
-```
-
 """
 function mpgeslir(MPA::MPArray, b; reporting = false, verbose = true)
 # Factor MPA and return Factorization object

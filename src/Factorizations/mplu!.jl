@@ -89,9 +89,75 @@ mplu(A::AbstractArray{TW,2}; TF=nothing, TR=nothing,
 Combines the constructor of the multiprecision array with the
 factorization. 
 
-Step 1: build the MPArray 
+Step 1: build the MPArray. 
+
+      (a) Store A and b in precision TW. 
+
+      (b) Store the factorization (copy of A) in precision TF
+
+      (c) Preallocate storage for the residual and a local copy of the
+      solution in precision TR
 
 Step 2: factor the low precision copy and return the factorization object
+
+
+The ```TR``` kwarg is the residual precision. Leave this alone unless you know
+what you are doing. The default is ```nothing``` which tells the solver to
+set ```TR = TW```. If you set ```TR``` it must be
+a higher precision than TW and
+you are essentially solving ```TR.(A) x = TR.(b)```
+with IR with the factorization in ```TF```. The MPArray structure stores
+the solution and the residual in precision ```TR``` and so
+the residual computation is done via ```TR.(A) x```. The
+interprecision transfers are on the fly. So, the storage cost is the matrix,
+and the copy in the factorization precision.
+
+ The classic case is ```TW = TF = Float32``` and ```TR = Float64```. The nasty
+part of this is that you must store TWO copies of the matrix. One for
+the residual computation and the other to overwrite with the factors.
+I do not think this is a good deal unless A is seriously ill-conditioned.
+My support for this is through ```mplu```. To do this you must put the
+```TR``` kwarg explicitly in your call to ```mplu```.   
+
+## Example
+```jldoctest
+julia> using MultiPrecisionArrays.Examples
+
+julia> n=31; alpha=Float32(1.0);
+
+julia> G=Gmat(n, Float32);
+
+julia> A = I + alpha*G;
+
+julia> b = A*ones(Float32,n);
+
+# use mpa with TF=TW=Float32 and TR=Float64
+
+julia> AF = mplu(A; TF=Float32, TR=Float64, onthefly=true);
+
+# Solve and save the iteration history
+
+julia> mout = \\(AF, b; reporting=true);
+julia> mout.rhist
+4-element Vector{Float64}:
+ 1.12500e+00
+ 1.17299e-07
+ 1.42109e-14
+ 4.44089e-16
+
+# What does this mean. I'll solve the promoted problem. TR.(A) x = b
+
+julia> AD=Float64.(A);
+
+julia> xd = AD\\b;
+
+julia> norm(xd - mout.sol,Inf)
+9.99201e-16
+
+# So IR with TR > TW solves a promoted problem.
+```
+
+
 """
 function mplu(A::AbstractArray{TW,2}; TF=nothing, TR=nothing,
                       onthefly=nothing) where TW <: Real

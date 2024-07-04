@@ -143,14 +143,17 @@ and compare execution time and the quality of the results.
 The example below compares the cost of a double precision factorization to a MPArray factorization. The ```MPArray``` structure has a high precision and a low precision matrix. The structure we will start with 
 is
 ```
-struct MPArray{TW<:AbstractFloat,TF<:AbstractFloat}
+struct MPArray{TW<:AbstractFloat,TF<:AbstractFloat,TR<:AbstractFloat}
     AH::AbstractArray{TW,2}
     AL::AbstractArray{TF,2}
-    residual::Vector{TW}
+    residual::Vector{TR}
+    sol::Vector{TR}
     onthefly::Bool
 end
 ```
-The structure also stores the residual. The ```onthefly``` Boolean tells the solver how to do the interprecision transfers. The easy way to get started is to use the ```mplu``` 
+The structure also stores the residual and a local copy of the solution
+in precisoin ```TR```. Typically ```TR = TW```.
+The ```onthefly``` Boolean tells the solver how to do the interprecision transfers. The easy way to get started is to use the ```mplu``` 
 command directly on the matrix. That will build the MPArray, follow that with the factorization, and put in all in a structure
 that you can use with ```\```.
 

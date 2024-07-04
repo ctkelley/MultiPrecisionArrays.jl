@@ -25,8 +25,8 @@ The storage penalty is that you must store two copies of $A$, one for the
 residual computation and the other for the factorization.
 
 Here is an example with a badly conditioned matrix. You must tell
-```mplu``` to factor in the working precision and then use the
-```kwargs``` in the solver to set ```TR```.
+```mplu``` to factor in the working precision and use the
+```kwargs``` in ```mplu``` to set ```TR```.
 
 ```
 julia> using MultiPrecisionArrays
@@ -44,23 +44,24 @@ julia> cond(AD,Inf)
 
 julia> A = Float32.(AD); xe=ones(Float32,N); b=A*xe;
 
-# Make sure TF is what it needs to be for this example
+# Make sure TF and TR are what they need to be for this example
 
-julia> AF = mplu(A; TF=Float32);
+julia> AF = mplu(A; TF=Float32, TR=Float64);
 
-# Use the multiprecision array to solve the problem, set TR.
+# Use the multiprecision array to solve the problem
 
-julia> mrout = \(AF, b; reporting=true, TR=Float64);
+julia> mrout = \(AF, b; reporting=true);
 
 # look at the residual history
 
 julia> mrout.rhist
-5-element Vector{Float64}:
+6-element Vector{Float64}:
  9.88750e+01
- 1.67735e-05
- 9.23976e-10
- 9.37916e-13
- 9.09495e-13
+ 1.60117e-05
+ 7.38538e-11
+ 9.52127e-13
+ 8.10019e-13
+ 8.66862e-13
 
 # Compare results with LU and the exact(?) solution
 
@@ -68,21 +69,21 @@ julia> xr=Float32.(mrout.sol); xs = A\b;
 
 julia> [norm(b - A*xr, Inf) norm(b - A*xs, Inf)]
 1×2 Matrix{Float32}:
- 1.29700e-04  1.41144e-03
+ 1.44958e-04  1.86920e-03
 
 # So the residual is better. What about the difference from xe?
 
 julia> [norm(xr - xe, Inf) norm(xs - xe, Inf)]
 1×2 Matrix{Float32}:
- 8.47816e-04  8.82089e-04
+ 8.87573e-04  1.45426e-02
 
-# Nothing exciting here. You have to wonder what this all means.
+# So we got roughly a factor of ten. Is that worth the storage hit?
 # Finally, how did we do with the promoted problem?
 
 julia> AP=Float64.(A);
 
 julia> norm(b - AP*mrout.sol, Inf)
-7.10543e-13
+6.67910e-13
 
 # Which is what I said it was above.
 ```
@@ -93,18 +94,18 @@ I used to build the problem?
 The reader might try this with ```TF=Float16```, the default when
 ```TW = Float32```. All that you'll need to do is replace
 ```
-AF = mplu(A; TF=Float32);
+AF = mplu(A; TF=Float32, TR=Float64);
 ```
 with
 ```
-AF = mplu(A);
+AF = mplu(A; TR=Float64);
 ```
 
 What goes wrong and why?
 
 The advantages of evaluating the residual in extended precision grow
 when $A$ is extremely ill-conditioned. Of course, in this case the
-factorization in the working precision could be so inaccurate that
+factorization in the factorization precision could be so inaccurate that
 IR will fail to converge. One approach to respond to this, as you
 might expect, is to use the factorization as a preconditioner and not
 a solver [amestoy:2024](@cite). We will support this in a later version of
