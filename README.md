@@ -40,9 +40,8 @@ __The half precision LU for Float16 in this package is much faster (more than 10
  - v0.1.1: Better docs and updated termination criterion (normwise backward error)
    
  - v0.1.2: Even better docs and ...
-   - Nonlinear solver applications 
    - Krylov-IR for high precision residuals
-   
+
 ##  Can I complain about this package?
 
 Yes, but ...
@@ -53,6 +52,7 @@ Since log(version number) < 0, you can expect changes in API, internal structure
 
 ## Coming Attractions
 
+- Nonlinear solver applications
 - More factorizations: cholesky, qr
 - BFloat16 when/if the support is there. You can use it now, but it is pathologically slow.
   - You'll need [BFloat16s.jl](https://github.com/JuliaMath/BFloat16s.jl) because Julia does not support BFloat16 natively.
