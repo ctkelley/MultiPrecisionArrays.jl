@@ -26,12 +26,12 @@ function MPArray(AH::AbstractArray{Float64,2};
     (onthefly==nothing) && (onthefly = (TF==Float16))
 # If TR = nothing, that's a signal to set TR=TH
     (TR==nothing) ? TRR=TH : TRR=TR
-    (m,n)=size(AH); res=ones(TRR,n); sol=ones(TRR,n)
+    (m,n)=size(AH); res=ones(TRR,n); sol=zeros(TRR,n)
     MPA = MPArray(AH, AL, res, sol, onthefly) 
 end
 """
 MPArray(AH::AbstractArray{Float32,2}; 
-             TR = Float16, TF = Float16, onthefly=true)
+             TR = nothing, TF = Float16, onthefly=true)
 Default single precision constructor for MPArray with TF=Float16
 
 If your high precision array is single, then your low precision
@@ -52,7 +52,7 @@ function MPArray(AH::AbstractArray{Float32,2};
     TH = eltype(AH)
 # If TR = nothing, that's a signal to set TR=TH
     (TR==nothing) ? TRR=TH : TRR=TR
-    (m,n)=size(AH); res=ones(TRR,n); sol=ones(TRR,n)
+    (m,n)=size(AH); res=ones(TRR,n); sol=zeros(TRR,n)
     MPA = MPArray(AH, AL, res, sol, onthefly)
 end
 

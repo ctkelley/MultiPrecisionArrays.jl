@@ -83,7 +83,8 @@ end
 
 
 """
-mplu(A::AbstractArray{TW,2}; TF=nothing, onthefly=nothing) where TW <: Real
+mplu(A::AbstractArray{TW,2}; TF=nothing, TR=nothing,
+                    onthefly=nothing) where TW <: Real
 
 Combines the constructor of the multiprecision array with the
 factorization. 
@@ -92,13 +93,15 @@ Step 1: build the MPArray
 
 Step 2: factor the low precision copy and return the factorization object
 """
-function mplu(A::AbstractArray{TW,2}; TF=nothing,  onthefly=nothing) where TW <: Real
+function mplu(A::AbstractArray{TW,2}; TF=nothing, TR=nothing,
+                      onthefly=nothing) where TW <: Real
 #
 # If the high precision matrix is single, the low precision must be half
 # unless you're planning on using a high-precision residual where TR > TW
 # and also factoring in the working precision, so TW == TF.
 #
 #
+(TR == nothing) && (TR = TW)
 TFdef = Float32
 (TW == Float32) && (TFdef = Float16)
 (TF == nothing) && (TF = TFdef)
@@ -114,7 +117,7 @@ TFdef = Float32
 #
 # Build the multiprecision array MPA
 #
-MPA=MPArray(A; TF=TF, onthefly=onthefly)
+MPA=MPArray(A; TF=TF, TR=TR, onthefly=onthefly)
 #
 # Factor the low precision copy to get the factorization object MPF
 #

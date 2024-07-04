@@ -141,7 +141,7 @@ end
 """
 mpgeslir(AF::MPFact, b; TR=Float16, reporting=false, verbose=true)
 
-I do not export this function. The idea is that you use ```mpglu```
+I do not export this function. The idea is that you use ```mplu```
 and do not touch either the constructor or the solver directly.
 
 Use a multi-precision factorization to solve a linear system with
@@ -186,6 +186,12 @@ function mpgeslir(AF::MPFact, b; TR=Float16, reporting = false, verbose = true)
     TF = MPStats.TF
     TW = MPStats.TW
     r = AF.residual
+    TRA = eltype(AF.sol)
+    era=eps(TRA); er=eps(TR);
+    (era < er) && (TR=TRA)
+#    xa = AF.sol .* TRA(0.0)
+    xr = TR.(AF.sol) .* TR(0.0)
+    x=xr
     onthefly=AF.onthefly
     (TR == Float16) && (TR=TW)
     # If I'm computing a high precision residual, TS=TR
@@ -206,7 +212,7 @@ function mpgeslir(AF::MPFact, b; TR=Float16, reporting = false, verbose = true)
     # the residual norms stagnate (res_old > .9 res_new)
     #
     (TW == TB) || error("inconsistent precisions; A and b must have same type")
-    tolf = eps(TR)*TR.(.5)
+    tolf = eps(TR)*TR.(.9)
     #
     # Keep the records and accumulate the statistics. 
     #
@@ -229,13 +235,13 @@ function mpgeslir(AF::MPFact, b; TR=Float16, reporting = false, verbose = true)
     # iteration count the same as the high precision matvec and the 
     # triangular sovles
     #
-    x = zeros(TR, size(b))
+#    x = zeros(TR, size(b))
     xnrm = norm(x, normtype)
     #
     # Initial residual
     #
     r .= b 
-    tol = tolf * bnrm
+    tol = tolf
     rs = bS
 #
 #   Keep the books. Test for excessive residual precision.
