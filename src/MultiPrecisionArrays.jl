@@ -51,8 +51,8 @@ function eltype(MP::Union{MPArray,MPHArray,MPGArray,MPBArray})
 end
 
 import Base.\
-function \(AF::MPFact, b; TR=Float16, verbose = false, reporting = false)
-    xi = mpgeslir(AF, b; TR=TR, verbose = verbose, reporting = reporting)
+function \(AF::MPFact, b; verbose = false, reporting = false)
+    xi = mpgeslir(AF, b; verbose = verbose, reporting = reporting)
     return xi
 end
 
@@ -61,8 +61,8 @@ function \(AF::MPGFact, b; verbose = false, reporting = false, mpdebug=false)
     return xi
 end
 
-function \(MPA::Union{MPArray}, b; TR=Float16, verbose=false, reporting=false)
-          xi = mpgeslir(MPA, b; TR=TR, verbose = verbose, reporting = reporting)
+function \(MPA::Union{MPArray}, b; verbose=false, reporting=false)
+          xi = mpgeslir(MPA, b; verbose = verbose, reporting = reporting)
           return xi
 end
 

@@ -1,5 +1,5 @@
 """
-mpgeslir(MPA::MPArray, b; TR=Float16, reporting = false, verbose = true)
+mpgeslir(MPA::MPArray, b; reporting = false, verbose = true)
 
 I do not export this function. The idea is that you use ```mpglu```
 and do not touch either the constructor or the solver directly.
@@ -130,16 +130,16 @@ julia> norm(xd - mout.sol,Inf)
 ```
 
 """
-function mpgeslir(MPA::MPArray, b; TR=Float16, reporting = false, verbose = true)
+function mpgeslir(MPA::MPArray, b; reporting = false, verbose = true)
 # Factor MPA and return Factorization object
 MPF=mplu!(MPA)
 # Call mpgeslir for the solve
-xi=\(MPF, b; TR=TR, reporting=reporting, verbose=verbose)
+xi=\(MPF, b; reporting=reporting, verbose=verbose)
 return xi
 end
 
 """
-mpgeslir(AF::MPFact, b; TR=Float16, reporting=false, verbose=true)
+mpgeslir(AF::MPFact, b; reporting=false, verbose=true)
 
 I do not export this function. The idea is that you use ```mplu```
 and do not touch either the constructor or the solver directly.
@@ -175,7 +175,7 @@ MPFact is a union of all the MultiPrecision factorizations in the package.
 The triangular solver will dispatch on the various types depending on
 how the interprecision transfers get done.
 """
-function mpgeslir(AF::MPFact, b; TR=Float16, reporting = false, verbose = true)
+function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     #
     # What kind of problem are we dealing with?
     #
@@ -186,14 +186,13 @@ function mpgeslir(AF::MPFact, b; TR=Float16, reporting = false, verbose = true)
     TF = MPStats.TF
     TW = MPStats.TW
     r = AF.residual
-    TRA = eltype(AF.sol)
-    era=eps(TRA); er=eps(TR);
-    (era < er) && (TR=TRA)
+    TR = eltype(AF.sol)
+    x = AF.sol
+    x .*= TR(0.0)
 #    xa = AF.sol .* TRA(0.0)
-    xr = TR.(AF.sol) .* TR(0.0)
-    x=xr
+#    xr = AF.sol .* TR(0.0)
+#    x=xr
     onthefly=AF.onthefly
-    (TR == Float16) && (TR=TW)
     # If I'm computing a high precision residual, TS=TR
     # and I must do interprecision transfers on the fly.
     HiRes = (eps(TR) < eps(TW))
