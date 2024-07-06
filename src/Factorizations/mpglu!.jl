@@ -65,7 +65,8 @@ end
 
 
 """
-mpglu(A::AbstractArray{TW,2}; TF=Float32, basissize=10) where TW <: Real
+mpglu(A::AbstractArray{TW,2}; TF=Float32, TR=nothing, 
+                      basissize=10) where TW <: Real
 
 Combines the constructor of the multiprecision GMRES-ready array with the
 factorization.
@@ -74,9 +75,10 @@ Step 1: build the MPGArray
 
 Step 2: Call mpglu! to build the factorization object
 """
-function mpglu(A::AbstractArray{TW,2}; TF=Float32, basissize=10) where TW <: Real
+function mpglu(A::AbstractArray{TW,2}; TF=Float32, TR=nothing,
+                  basissize=10) where TW <: Real
 (TW==Float32) ? TF=Float16 : TF=TF
-MPGA=MPGArray(A; basissize=basissize, TF=TF)
+MPGA=MPGArray(A; basissize=basissize, TF=TF, TR=TR)
 MPGF=mpglu!(MPGA)
 return MPGF
 end
