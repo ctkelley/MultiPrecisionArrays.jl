@@ -152,7 +152,7 @@ julia> AD=Float64.(A);
 julia> xd = AD\\b;
 
 julia> norm(xd - mout.sol,Inf)
-9.99201e-16
+8.88178e-16
 
 # So IR with TR > TW solves a promoted problem.
 ```

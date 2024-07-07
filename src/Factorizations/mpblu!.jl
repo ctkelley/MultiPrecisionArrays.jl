@@ -65,7 +65,7 @@ end
 
 
 """
-mpblu(A::AbstractArray{TW,2}; TF=Float32) where TW <: Real
+mpblu(A::AbstractArray{TW,2}; TF=Float32, TR=nothing) where TW <: Real
 
 Combines the constructor of the multiprecision BiCGSTAB-ready array with the
 factorization.
@@ -75,9 +75,9 @@ Step 1: build the MPBArray
 Step 2: Call mpblu! to build the factorization object
 """
 function mpblu(A::AbstractArray{TW,2}; 
-          TF=Float32) where TW <: Real
+          TF=Float32, TR=nothing) where TW <: Real
 (TW==Float32) ? TF=Float16 : TF=TF
-MPBA=MPBArray(A; TF=TF)
+MPBA=MPBArray(A; TF=TF, TR=TR)
 MPBF=mpblu!(MPBA)
 return MPBF
 end
