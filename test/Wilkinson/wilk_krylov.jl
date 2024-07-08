@@ -1,4 +1,7 @@
-function wilk_krylov(n=3000,a=800.0; basissize=7)
+function wilk_krylov(n=31,a=800.0; basissize=3)
+#
+# Give GMRES a very small Krylov space to make it take more iterations
+#
 G=Gmat(n, Float32);
 #
 # alpha=1.0 = well conditioned
@@ -17,21 +20,22 @@ mgout=\(AFG, b; reporting=true);
 lmg=length(mgout.rhist)
 promdiffg = norm(xp-mgout.sol,Inf)
 #
-# I want to see somewhere between 6 and 9 iterations
+# I want to see somewhere between 2 and 4 iterations
 # and an error < 10^{-13}
 #
-gmresok= (7 <= lmg <= 10) && (promdiffg < 1.e-13)
+gmresok= (3 <= lmg <= 5) && (promdiffg < 1.e-13)
 #println(lmg,"  ",promdiffg,"  ",gmresok)
 gmresok || println("IRGMRES error. lmg=$lmg, promdiffg=$promdiffg")
 ABG=mpblu(A; TR=Float64)
 mbout=\(ABG, b; reporting=true);
 #
-# BiCGSTAB needs fewer iterations because I limit the dimension of the
-# Krylov basis to 10 for GMRES
+# BiCGSTAB will convege to the defect so you'll need only one iteration.
+# Making the problem larger will result in a more interesting computation,
+# but I'm doing CI here and it must be fast.
 #
 lmb=length(mbout.rhist)
 promdiffb = norm(xp-mbout.sol,Inf)
-bicgstabok= (3 <= lmb <= 5) && (promdiffb < 1.e-13)
+bicgstabok= (1 <= lmb <= 3) && (promdiffb < 1.e-13)
 bicgstabok || println("IRBiCGSTAB error. lmb=$lmb, promdiffb=$promdiffb")
 #println(lmb,"  ",promdiffb,"  ",bicgstabok)
 #results=(mgout=mgout, mbout=mbout)
