@@ -93,6 +93,10 @@ with IR with the factorization in ```TF```.
 The case of interest here is ```TW = Float32; TF = Float16; TR = Float64```.
 IR-GMRES with those precisions is sometimes the savior of half precision.
 
+The default basis size is 10. You can (and should) play with that if you
+are not happy with the results. If you are having trouble storing enough
+vectors, IR-BiCGSTAB ```mpblu``` is worth a shot.
+
 Take this example, please.
 
 ## Example
