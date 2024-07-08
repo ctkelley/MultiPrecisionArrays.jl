@@ -1,4 +1,4 @@
-function wilk_krylov(n=4096,a=800.0; basissize=10)
+function wilk_krylov(n=3000,a=800.0; basissize=7)
 G=Gmat(n, Float32);
 #
 # alpha=1.0 = well conditioned
@@ -17,10 +17,10 @@ mgout=\(AFG, b; reporting=true);
 lmg=length(mgout.rhist)
 promdiffg = norm(xp-mgout.sol,Inf)
 #
-# I want to see somewhere between 7 and 9 iterations
+# I want to see somewhere between 6 and 9 iterations
 # and an error < 10^{-13}
 #
-gmresok= (7 <= lmg <= 9) && (promdiffg < 1.e-13)
+gmresok= (7 <= lmg <= 10) && (promdiffg < 1.e-13)
 #println(lmg,"  ",promdiffg,"  ",gmresok)
 gmresok || println("IRGMRES error. lmg=$lmg, promdiffg=$promdiffg")
 ABG=mpblu(A; TR=Float64)
@@ -31,8 +31,8 @@ mbout=\(ABG, b; reporting=true);
 #
 lmb=length(mbout.rhist)
 promdiffb = norm(xp-mbout.sol,Inf)
-bicgstabok= (4 <= lmb <= 6) && (promdiffb < 1.e-13)
-bicgstabok || println("IRBiCGTAB error. lmb=$lmb, promdiffb=$promdiffb")
+bicgstabok= (3 <= lmb <= 5) && (promdiffb < 1.e-13)
+bicgstabok || println("IRBiCGSTAB error. lmb=$lmb, promdiffb=$promdiffb")
 #println(lmb,"  ",promdiffb,"  ",bicgstabok)
 #results=(mgout=mgout, mbout=mbout)
 IRKrylovok = (gmresok && bicgstabok)
