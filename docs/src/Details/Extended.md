@@ -16,8 +16,7 @@ to some degree. Here $I_P^Q$ is the interprecision transfer from precision
 $P$ to precision $Q$.
 __MultiPrecisionArrays__  
 allows you to do this with the multiprecision
-factorization you get from ```mplu```. I may add this feature to the
-Krylov-IR solvers later.
+factorization you get from ```mplu```. 
 
 The classic example is to let ```TR``` 
 and ```TF``` be single precision and ```TR``` be double.
@@ -111,3 +110,6 @@ might expect, is to use the factorization as a preconditioner and not
 a solver [amestoy:2024](@cite). We will support this in a later version of
 __MultiPrecisionArrays.jl__.
 
+## IR-Krylov with high precision residuals
+
+This is now working and awaiting unit testing and documentation.
