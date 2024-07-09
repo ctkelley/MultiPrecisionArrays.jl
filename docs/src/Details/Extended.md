@@ -138,6 +138,7 @@ julia> mout16.rhist
 so plain vanilla IR with ```TF=Float16```, ```TW=Float32```, and
 ```TR=Float64``` fails to converge. 
 
+```
 julia> GF = mpglu(A; TR=Float64);
 
 julia> moutG = \(GF, b; reporting=true);
@@ -151,17 +152,22 @@ julia> moutG.rhist
  8.10019e-13
  8.66862e-13
 
-# You need several iterations because the default is 10 Krylov vectors
-# And we got the solution to the promoted problem...
+```
 
+You need several iterations because the default is 10 Krylov vectors
+and we got the solution to the promoted problem...
+
+```
 julia> xp = Float64.(A)\b;
 
 julia> norm(xp-moutG.sol, Inf)
 6.52844e-12
+```
 
-# IR-BiCGSTAB should take fewer iterations because there's no storage
-# issue. But remember that BiCGSTAB has a higher cost per linear iteration.
+IR-BiCGSTAB should take fewer iterations because there's no storage
+issue. But remember that BiCGSTAB has a higher cost per linear iteration.
 
+```
 julia> BF = mpblu(A; TR=Float64);
 
 julia> moutB = \(BF, b; reporting=true);
