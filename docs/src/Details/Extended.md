@@ -100,7 +100,7 @@ with
 AF = mplu(A; TR=Float64);
 ```
 
-What goes wrong and why?
+What goes wrong and why? Fixup to follow.
 
 The advantages of evaluating the residual in extended precision grow
 when $A$ is extremely ill-conditioned. Of course, in this case the
@@ -112,4 +112,67 @@ __MultiPrecisionArrays.jl__.
 
 ## IR-Krylov with high precision residuals
 
-This is now working and awaiting unit testing and documentation.
+Half precision factorizations can lead to failure in IR. IR-Krylov
+methods try to fix this by using the low precision factorization as
+a preconditioner, not a solver. __MultiPrecisionArrays.jl__ has two
+IR-Krylov methods and one can adjust the residual precision just as one
+does with ```mplu```. Here is an example of this using the two 
+multiprecision IR-Krylov factorizations ```mpglu``` (GMRES) and 
+```mpblu``` (BiCGSTAB).
+
+Using the same example, we examine the results.
+
+```
+julia> AF = mplu(A; TR=Float64);
+
+julia> mout16=\(AF, b; reporting=true);
+
+julia> mout16.rhist
+5-element Vector{Float64}:
+ 9.88750e+01
+ 3.92614e+00
+ 3.34301e-01
+ 2.01975e-01
+ 2.24576e-01
+```
+so plain vanilla IR with ```TF=Float16```, ```TW=Float32```, and
+```TR=Float64``` fails to converge. 
+
+julia> GF = mpglu(A; TR=Float64);
+
+julia> moutG = \(GF, b; reporting=true);
+
+julia> moutG.rhist
+6-element Vector{Float64}:
+ 9.88750e+01
+ 2.23211e-04
+ 9.61252e-09
+ 1.26477e-12
+ 8.10019e-13
+ 8.66862e-13
+
+# You need several iterations because the default is 10 Krylov vectors
+# And we got the solution to the promoted problem...
+
+julia> xp = Float64.(A)\b;
+
+julia> norm(xp-moutG.sol, Inf)
+6.52844e-12
+
+# IR-BiCGSTAB should take fewer iterations because there's no storage
+# issue. But remember that BiCGSTAB has a higher cost per linear iteration.
+
+julia> BF = mpblu(A; TR=Float64);
+
+julia> moutB = \(BF, b; reporting=true);
+
+julia> moutB.rhist
+4-element Vector{Float64}:
+ 9.88750e+01
+ 2.16858e-11
+ 8.38440e-13
+ 8.81073e-13
+
+julia> norm(xp - moutB.sol, Inf)
+1.36534e-11
+```
