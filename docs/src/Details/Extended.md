@@ -151,7 +151,6 @@ julia> moutG.rhist
  1.26477e-12
  8.10019e-13
  8.66862e-13
-
 ```
 
 You need several iterations because the default is 10 Krylov vectors

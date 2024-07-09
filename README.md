@@ -8,7 +8,7 @@
 
 # MultiPrecisionArrays.jl v0.1.2
 
-##  v0.1.2 will have new features but no breaking changes from v0.1.1, the current release.
+##  v0.1.2 has new features but no breaking changes from v0.1.1, the current release.
 
 ## [C. T. Kelley](https://ctk.math.ncsu.edu)
 
