@@ -7,29 +7,31 @@ C. T. Kelley 2023
 The MPArray data structure is
 
 ```
-struct MPArray{TW<:AbstractFloat,TF<:AbstractFloat}
+struct MPArray{TW<:AbstractFloat,TF<:AbstractFloat,TR<:AbstractFloat}
     AH::AbstractArray{TW,2}
     AL::AbstractArray{TF,2}
-    residual::Vector{TW}
+    residual::Vector{TR}
+    sol::Vector{TR}
     onthefly::Bool
 end
 ```
 The constructor just builds an MPArray with TW=Float64. Set TF=Float16
 to get double/half IR.
-
-
 """
-function MPArray(AH::AbstractArray{Float64,2}; TF = Float32, onthefly=nothing)
+function MPArray(AH::AbstractArray{Float64,2}; 
+             TR=nothing, TF = Float32, onthefly=nothing)
     AL = TF.(AH)
+    TH = eltype(AH)
 # Default is interprecision on the fly if TF = Float32
     (onthefly==nothing) && (onthefly = (TF==Float16))
-#    ((onthefly==nothing) && (TF==Float32)) && (onthefly=false)
-#    ((onthefly==nothing) && (TF==Float16)) && (onthefly=true)
-    (m,n)=size(AH); res=ones(eltype(AH),n)
-    MPA = MPArray(AH, AL, res, onthefly) 
+# If TR = nothing, that's a signal to set TR=TH
+    (TR==nothing) ? TRR=TH : TRR=TR
+    (m,n)=size(AH); res=ones(TRR,n); sol=zeros(TRR,n)
+    MPA = MPArray(AH, AL, res, sol, onthefly) 
 end
 """
-MPArray(AH::AbstractArray{Float32,2}; TF = Float16, onthefly=true)
+MPArray(AH::AbstractArray{Float32,2}; 
+             TR = nothing, TF = Float16, onthefly=true)
 Default single precision constructor for MPArray with TF=Float16
 
 If your high precision array is single, then your low precision
@@ -44,10 +46,14 @@ Data structures etc are the same as in the
 double-single/half case, but you don't have the option to go lower than
 half.
 """
-function MPArray(AH::AbstractArray{Float32,2}; TF = Float16, onthefly=true)
+function MPArray(AH::AbstractArray{Float32,2}; 
+               TR=nothing, TF = Float16, onthefly=true)
     AL = TF.(AH)
-    (m,n)=size(AH); res=ones(eltype(AH),n)
-    MPA = MPArray(AH, AL, res, onthefly)
+    TH = eltype(AH)
+# If TR = nothing, that's a signal to set TR=TH
+    (TR==nothing) ? TRR=TH : TRR=TR
+    (m,n)=size(AH); res=ones(TRR,n); sol=zeros(TRR,n)
+    MPA = MPArray(AH, AL, res, sol, onthefly)
 end
 
 

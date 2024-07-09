@@ -31,10 +31,11 @@ function mplu!(MPA::MPArray)
     AL = MPA.AL
     TF = eltype(AL)
     residual=MPA.residual
+    sol=MPA.sol
     (TF == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
     # For the MPEArray
     on_the_fly=MPA.onthefly
-    MPF = MPLFact(AH, AL, AF, residual, on_the_fly)
+    MPF = MPLFact(AH, AL, AF, residual, sol, on_the_fly)
     return MPF
 end
 
@@ -75,29 +76,98 @@ AL=MPF.AL
 AL .= TF.(A)
 (TF == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
 MPF.AF.ipiv .= AF.ipiv
-MPF = MPLFact(A, AL, AF, MPF.residual, MPF.onthefly)
+MPF = MPLFact(A, AL, AF, MPF.residual, MPF.sol, MPF.onthefly)
 return MPF
 end
 
 
 
 """
-mplu(A::AbstractArray{TW,2}; TF=nothing, onthefly=nothing) where TW <: Real
+mplu(A::AbstractArray{TW,2}; TF=nothing, TR=nothing,
+                    onthefly=nothing) where TW <: Real
 
 Combines the constructor of the multiprecision array with the
 factorization. 
 
-Step 1: build the MPArray 
+Step 1: build the MPArray. 
+
+      (a) Store A and b in precision TW. 
+
+      (b) Store the factorization (copy of A) in precision TF
+
+      (c) Preallocate storage for the residual and a local copy of the
+      solution in precision TR
 
 Step 2: factor the low precision copy and return the factorization object
+
+
+The ```TR``` kwarg is the residual precision. Leave this alone unless you know
+what you are doing. The default is ```nothing``` which tells the solver to
+set ```TR = TW```. If you set ```TR``` it must be
+a higher precision than TW and
+you are essentially solving ```TR.(A) x = TR.(b)```
+with IR with the factorization in ```TF```. The MPArray structure stores
+the solution and the residual in precision ```TR``` and so
+the residual computation is done via ```TR.(A) x```. The
+interprecision transfers are on the fly. So, the storage cost is the matrix,
+and the copy in the factorization precision.
+
+ The classic case is ```TW = TF = Float32``` and ```TR = Float64```. The nasty
+part of this is that you must store TWO copies of the matrix. One for
+the residual computation and the other to overwrite with the factors.
+I do not think this is a good deal unless A is seriously ill-conditioned.
+My support for this is through ```mplu```. To do this you must put the
+```TR``` kwarg explicitly in your call to ```mplu```.   
+
+## Example
+```jldoctest
+julia> using MultiPrecisionArrays.Examples
+
+julia> n=31; alpha=Float32(1.0);
+
+julia> G=Gmat(n, Float32);
+
+julia> A = I + alpha*G;
+
+julia> b = A*ones(Float32,n);
+
+# use mpa with TF=TW=Float32 and TR=Float64
+
+julia> AF = mplu(A; TF=Float32, TR=Float64, onthefly=true);
+
+# Solve and save the iteration history
+
+julia> mout = \\(AF, b; reporting=true);
+julia> mout.rhist
+4-element Vector{Float64}:
+ 1.12500e+00
+ 1.17299e-07
+ 1.42109e-14
+ 4.44089e-16
+
+# What does this mean. I'll solve the promoted problem. TR.(A) x = b
+
+julia> AD=Float64.(A);
+
+julia> xd = AD\\b;
+
+julia> norm(xd - mout.sol,Inf)
+8.88178e-16
+
+# So IR with TR > TW solves a promoted problem.
+```
+
+
 """
-function mplu(A::AbstractArray{TW,2}; TF=nothing, onthefly=nothing) where TW <: Real
+function mplu(A::AbstractArray{TW,2}; TF=nothing, TR=nothing,
+                      onthefly=nothing) where TW <: Real
 #
 # If the high precision matrix is single, the low precision must be half
 # unless you're planning on using a high-precision residual where TR > TW
 # and also factoring in the working precision, so TW == TF.
 #
 #
+(TR == nothing) && (TR = TW)
 TFdef = Float32
 (TW == Float32) && (TFdef = Float16)
 (TF == nothing) && (TF = TFdef)
@@ -113,7 +183,7 @@ TFdef = Float32
 #
 # Build the multiprecision array MPA
 #
-MPA=MPArray(A; TF=TF, onthefly=onthefly)
+MPA=MPArray(A; TF=TF, TR=TR, onthefly=onthefly)
 #
 # Factor the low precision copy to get the factorization object MPF
 #

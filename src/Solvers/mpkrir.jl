@@ -1,5 +1,6 @@
 """
-mpkrir(AF::MPKFact, b; reporting=false, verbose=false, mpdebug=false)
+mpkrir(AF::MPKFact, b; reporting=false, 
+                               verbose=false, mpdebug=false)
 
 I do not export this function. The idea is that you use ```mpglu```
 and do not touch either the constructor or the solver directly.
@@ -114,15 +115,17 @@ function mpkrir(AF::MPKFact, b; reporting = false,
     krylov_ok || error("$ktype is not supported")
     #
     normtype = Inf
-    TB = eltype(b)
-    # remember that eps(TB) = 2 * unit roundoff
-    tolf = TB(0.5)*eps(TB)
+    x = AF.sol
+    TR = eltype(x)
+    x .*= TR(0.0)
+    # remember that eps(TR) = 2 * unit roundoff
+    tolf = TR(0.5)*eps(TR)
     n = length(b)
-    onetb = TB(1.0)
+    onetb = TR(1.0)
     bsc = copy(b)
-    x = zeros(TB, size(b))
+#    x = zeros(TR, size(b))
     bnorm = norm(b, normtype)
-    xnorm = TB(0.0)
+    xnorm = TR(0.0)
     #
     AFS = AF.AF
     AD = AF.AH
@@ -133,8 +136,8 @@ function mpkrir(AF::MPKFact, b; reporting = false,
     r = AF.residual
     r .= b
     rnrm = norm(r, normtype)
-    rnrmx = rnrm * TB(2.0)
-    rhist = Vector{TB}()
+    rnrmx = rnrm * TR(2.0)
+    rhist = Vector{TR}()
     khist = Vector{Int64}()
     push!(rhist, rnrm)
     eta = tolf
@@ -148,8 +151,8 @@ function mpkrir(AF::MPKFact, b; reporting = false,
     atvd=copy(r)
     MP_Data = (MPF = AF, atv = atvd)
     tol = tolf *(bnorm + anorm *xnorm)
-    while (rnrm > tolf * bnorm) && ( rnrm <= .99 * rnrmx )
-        x0 = zeros(TB, n)
+    while (rnrm > tol) && ( rnrm <= .9 * rnrmx )
+        x0 = zeros(TR, n)
         #
         # Scale the residual 
         #
@@ -180,7 +183,7 @@ function mpkrir(AF::MPKFact, b; reporting = false,
         #
         # Overwrite the residual with the correction
         #
-        r .= TB.(kout.sol)
+        r .= TR.(kout.sol)
         #
         # Undo the scaling
         #
@@ -209,8 +212,9 @@ function mpkrir(AF::MPKFact, b; reporting = false,
     verbose && println("Residual history = $rhist")
     if reporting
         TF = eltype(AF.AL)
+        TW = eltype(AF.AH)
         return (rhist = rhist, khist = khist,
-               sol = x, TW = TB, TF = TF)
+               sol = x, TW = TW, TF = TF)
     else
         return x
     end

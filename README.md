@@ -40,9 +40,8 @@ __The half precision LU for Float16 in this package is much faster (more than 10
  - v0.1.1: Better docs and updated termination criterion (normwise backward error)
    
  - v0.1.2: Even better docs and ...
-   - Nonlinear solver applications 
    - Krylov-IR for high precision residuals
-   
+
 ##  Can I complain about this package?
 
 Yes, but ...
@@ -53,6 +52,7 @@ Since log(version number) < 0, you can expect changes in API, internal structure
 
 ## Coming Attractions
 
+- Nonlinear solver applications
 - More factorizations: cholesky, qr
 - BFloat16 when/if the support is there. You can use it now, but it is pathologically slow.
   - You'll need [BFloat16s.jl](https://github.com/JuliaMath/BFloat16s.jl) because Julia does not support BFloat16 natively.
@@ -144,18 +144,20 @@ using MultiPrecisionArrays.Examples
 ```
 to get to it.
 
-The example below compares the cost of a double precision factorization to a MPArray factorization. The ```MPArray``` structure has a high 
-precision (```TH```) and a low precision (```TL```) matrix. The structure we will start with 
+The example below compares the cost of a double precision factorization to a MPArray factorization. The ```MPArray``` structure has a working
+precision (```TW```) and a factorization (low)  precision (```TF```) matrix. The structure we will start with 
 is
 ```
-struct MPArray{TH<:AbstractFloat,TL<:AbstractFloat}
-    AH::Array{TH,2}
-    AL::Array{TL,2}
-    residual::Vector{TH}
+struct MPArray{TW<:AbstractFloat,TF<:AbstractFloat,TR<:AbstractFloat}
+    AH::Array{TW,2}
+    AL::Array{TF,2}
+    residual::Vector{TR}
+    sol::Vector{TR}
     onthefly::Bool
 end
 ```
-The structure also stores the residual. The ```onthefly``` Boolean tells the solver how to do the interprecision transfers. The easy way to get started is to use the ```mplu``` 
+The structure also stores the residual and the solution in the residual precision ```TR```. Most of the time ```TR = TW```.
+The ```onthefly``` Boolean tells the solver how to do the interprecision transfers. The easy way to get started is to use the ```mplu``` 
 command directly on the matrix. That will build the MPArray, follow that with the factorization of ```AL```, and put in all in a structure
 that you can use as a factorization object with ```\```. I do not export the constructor for this or any other multiprecision array structure. You should use functions like ```mplu``` to build 
 multiprecision factorization objects.

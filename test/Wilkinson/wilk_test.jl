@@ -41,8 +41,9 @@ return A2ok && s1ok
 end
 
 function hires_sol(A, b; TR=Float64, TF=Float32)
-AF=mplu(A; TF=TF)
-mout=\(AF, b; reporting=true, TR=TR)
+AF=mplu(A; TF=TF, TR=TR)
+#mout=\(AF, b; reporting=true, TR=TR)
+mout=\(AF, b; reporting=true)
 return mout
 end
 
