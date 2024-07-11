@@ -257,7 +257,9 @@ precision form of IR (TF=half, TW=single, nonlinear residual
 computed in double) and required direct use of multiprecision
 constructors that we do not export in __MultiPrecisionArrays.jl__.
 We will fully support the application to nonlinear solvers in
-a future version. 
+a future version. We give a detailed account of interprecision
+transfers in [@kelley:2024c] and use 
+__MultiPrecisionArrays.jl__ to generate the table in that paper.
 
 
 # Other Julia Packages for IR
