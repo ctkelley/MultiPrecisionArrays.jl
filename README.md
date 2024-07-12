@@ -6,9 +6,9 @@
 <!--- [![MultiPrecisionArrays Downloads](https://shields.io/endpoint?url=https://pkgs.genieframework.com/api/v1/badge/MultiPrecisionArrays)](https://pkgs.genieframework.com?packages=MultiPrecisionArrays) --->
 
 
-# MultiPrecisionArrays.jl v0.1.2
+# MultiPrecisionArrays.jl v0.1.3
 
-##  v0.1.2 has new features but no breaking changes from v0.1.1, the current release.
+##  v0.1.3 will have new features but no breaking changes from v0.1.2, the current release.
 
 ## [C. T. Kelley](https://ctk.math.ncsu.edu)
 
@@ -42,6 +42,8 @@ __The half precision LU for Float16 in this package is much faster (more than 10
  - v0.1.2: Even better docs and ...
    - Krylov-IR for high precision residuals
 
+- v0.1.3: Still better docs and ..
+
 ##  Can I complain about this package?
 
 Yes, but ...
@@ -62,8 +64,8 @@ Since log(version number) < 0, you can expect changes in API, internal structure
 
 - This README file
 - The [docs for the package](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev)
-- [The ArXiv paper for v0.1.1](https://arxiv.org/pdf/2311.14616.pdf)
-- [The working paper for v0.1.2](https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/main/Publications_and_Presentations/MPArray.pdf) 
+- [The ArXiv paper for v0.1.2](https://arxiv.org/pdf/2311.14616.pdf)
+- [The working paper for v0.1.3](https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/main/Publications_and_Presentations/MPArray.pdf) 
 
 
 ## Readme Contents:
