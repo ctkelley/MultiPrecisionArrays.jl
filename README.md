@@ -8,7 +8,8 @@
 
 # MultiPrecisionArrays.jl v0.1.3
 
-##  v0.1.3 will have new features but no breaking changes from v0.1.2, the current release.
+##  v0.1.3 will have better performance but no breaking changes from v0.1.2, the current release. Performance fix in the works.
+The termination criteria will change and I will add some options to make it more/less expensive. Computing __opnorm(A,Inf)__ for the termination criteria costs as much as a couple IR iterations
 
 ## [C. T. Kelley](https://ctk.math.ncsu.edu)
 
@@ -43,6 +44,7 @@ __The half precision LU for Float16 in this package is much faster (more than 10
    - Krylov-IR for high precision residuals
 
 - v0.1.3: Still better docs and ..
+   - Fixing a performance bug. 
 
 ##  Can I complain about this package?
 
