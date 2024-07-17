@@ -120,8 +120,10 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     #
     # What kind of problem are we dealing with?
     #
+oldway=true
     mpdebug = false
     normtype = Inf
+#    normtype = 1
     TB = eltype(b)
     MPStats = getStats(AF)
     TF = MPStats.TF
@@ -152,7 +154,12 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     # the residual norms stagnate (res_old > .9 res_new)
     #
     (TW == TB) || error("inconsistent precisions; A and b must have same type")
-    tolf = eps(TR)*TR.(.9)
+#    oldway ? tf=.9 : tf = 10.0
+    residterm = AF.residterm
+    residterm ? tf=10.0 : tf=.9
+    tolf = eps(TR)*tf
+#    tolf = eps(TR)*TR.(.9)
+#    tolf = eps(TR)*10.0
     #
     # Keep the records and accumulate the statistics. 
     #
@@ -166,10 +173,13 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     #
     AD = AF.AH
     bnrm = norm(b, normtype) 
-    anrm = opnorm(AD, normtype)
+#
+#   I'm using the L1 norm because it's much faster.
+#
+    residterm=AF.residterm
+    residterm ?  anrm = 0.0 : anrm = opnorm(AD, 1)
     bsc = b
     AFS = AF.AF
-    bS = TFact.(bsc)
     #
     # Initialize the iteration. I initialize to zero. That makes the
     # iteration count the same as the high precision matvec and the 
@@ -182,7 +192,11 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     #
     r .= b 
     tol = tolf
-    rs = bS
+#    bS = TFact.(bsc)
+#    rs = bS
+#    rs = TFact.(bsc)
+     onthefly ? (rs=ones(TF,1)) : (rs=zeros(TF,size(b)))
+     
 #
 #   Keep the books. Test for excessive residual precision.
 #  
@@ -200,15 +214,18 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     # Store r and x in the residual precision if TR is not TW
     HiRes ? rloop=TR.(r) : rloop=r
     HiRes ? xloop=TR.(x) : xloop=x
+oldway ? rrf = .9 : rrf = .5
     # Solve loop
-    # while (rnrm > tol) && (rnrm <= .9*rnrmx)
-    while (rnrm > (anrm * xnrm + bnrm) *tolf) && (rnrm <= .9*rnrmx)
+#    while (rnrm > (anrm * xnrm + bnrm) *tolf) && (rnrm <= .9*rnrmx)
+#    while (rnrm > (anrm * xnrm + bnrm) *tolf) && (rnrm <= .5*rnrmx)
+    while (rnrm > (anrm * xnrm + bnrm) *tolf) && (rnrm <= rrf*rnrmx)
         #
         # Scale the residual
         #
         rloop ./= rnrm
         #
         # Use the low-precision factorization
+        # The residual is overwritten with the correction here.
         #
         rloop .= IRTriangle!(AF, rloop, rs, verbose)
         #
@@ -220,8 +237,14 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
         #
         xloop .+= rloop
         mul!(rloop, AD, xloop)
+        #
+        # After mul! the residual is overwritten with Ax
+        #
         rloop .*= -oneb
         axpy!(oneb, bsc, rloop)
+        #
+        # and now the residual is b-Ax like it needs to be
+        #
         rnrmx = rnrm
         rnrm = norm(rloop, normtype)
         itc += 1

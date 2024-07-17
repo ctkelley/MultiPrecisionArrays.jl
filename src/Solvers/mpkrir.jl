@@ -114,12 +114,14 @@ function mpkrir(AF::MPKFact, b; reporting = false,
     krylov_ok = (ktype=="GMRES") || (ktype=="BiCGSTAB")
     krylov_ok || error("$ktype is not supported")
     #
-    normtype = Inf
+    normtype = 1
     x = AF.sol
     TR = eltype(x)
     x .*= TR(0.0)
     # remember that eps(TR) = 2 * unit roundoff
-    tolf = TR(0.5)*eps(TR)
+    residterm=AF.residterm
+    residterm ? tf=10.0 : tf=.9
+    tolf = tf*eps(TR)
     n = length(b)
     onetb = TR(1.0)
     bsc = copy(b)
@@ -129,7 +131,8 @@ function mpkrir(AF::MPKFact, b; reporting = false,
     #
     AFS = AF.AF
     AD = AF.AH
-    anorm = opnorm(AD,normtype)
+    residterm ?  anrm = 0.0 : anrm = opnorm(AD, 1)
+#    anorm = opnorm(AD,normtype)
     #
     # Initialize Krylov-IR
     #
@@ -150,7 +153,7 @@ function mpkrir(AF::MPKFact, b; reporting = false,
     kl_store = AF.KStore
     atvd=copy(r)
     MP_Data = (MPF = AF, atv = atvd)
-    tol = tolf *(bnorm + anorm *xnorm)
+    tol = tolf *(bnorm + anrm *xnorm)
     while (rnrm > tol) && ( rnrm <= .9 * rnrmx )
         x0 = zeros(TR, n)
         #
@@ -207,7 +210,7 @@ function mpkrir(AF::MPKFact, b; reporting = false,
         (rnrm >= rnrmx) && (normdec = false)
         ~normdec && mpdebug && (rnrm >= rnrmx) && println("Residual norm increased")
     xnorm=norm(x,normtype)
-    tol = tolf *(bnorm + anorm *xnorm)
+    tol = tolf *(bnorm + anrm *xnorm)
     end
     verbose && println("Residual history = $rhist")
     if reporting

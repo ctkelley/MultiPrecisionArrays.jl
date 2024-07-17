@@ -1,5 +1,5 @@
 """
-mplu!(MPA::MPArray)
+mplu!(MPA::MPArray; residterm=residtermdefault)
 
 Plain vanilla MPArray factorization: Factor the low precision copy
 and leave the high precision matrix alone. You get a factorization
@@ -26,7 +26,7 @@ If you want to use static arrays with this stuff, use the
 mutable @MArray constructor
 
 """
-function mplu!(MPA::MPArray)
+function mplu!(MPA::MPArray; residterm=residtermdefault)
     AH = MPA.AH
     AL = MPA.AL
     TF = eltype(AL)
@@ -35,7 +35,7 @@ function mplu!(MPA::MPArray)
     (TF == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
     # For the MPEArray
     on_the_fly=MPA.onthefly
-    MPF = MPLFact(AH, AL, AF, residual, sol, on_the_fly)
+    MPF = MPLFact(AH, AL, AF, residual, sol, on_the_fly,residterm)
     return MPF
 end
 
@@ -76,14 +76,15 @@ AL=MPF.AL
 AL .= TF.(A)
 (TF == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
 MPF.AF.ipiv .= AF.ipiv
-MPF = MPLFact(A, AL, AF, MPF.residual, MPF.sol, MPF.onthefly)
+residterm=MPF.residterm
+MPF = MPLFact(A, AL, AF, MPF.residual, MPF.sol, MPF.onthefly, residterm)
 return MPF
 end
 
 
 
 """
-mplu(A::AbstractArray{TW,2}; TF=nothing, TR=nothing,
+mplu(A::AbstractArray{TW,2}; TF=nothing, TR=nothing, residterm=residtermdefault,
                     onthefly=nothing) where TW <: Real
 
 Combines the constructor of the multiprecision array with the
@@ -159,8 +160,8 @@ julia> norm(xd - mout.sol,Inf)
 
 
 """
-function mplu(A::AbstractArray{TW,2}; TF=nothing, TR=nothing,
-                      onthefly=nothing) where TW <: Real
+function mplu(A::AbstractArray{TW,2}; TF=nothing, TR=nothing, 
+       residterm=residtermdefault, onthefly=nothing) where TW <: Real
 #
 # If the high precision matrix is single, the low precision must be half
 # unless you're planning on using a high-precision residual where TR > TW
@@ -187,6 +188,6 @@ MPA=MPArray(A; TF=TF, TR=TR, onthefly=onthefly)
 #
 # Factor the low precision copy to get the factorization object MPF
 #
-MPF=mplu!(MPA)
+MPF=mplu!(MPA; residterm=residterm)
 return MPF
 end

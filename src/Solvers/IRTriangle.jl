@@ -1,5 +1,5 @@
 """
-IRTriangle!(AF::Union{MPLFact,MPLEFact,MPHFact}, r, rs, verbose)
+IRTriangle!(AF::Union{MPLFact,MPHFact}, r, rs, verbose)
 This is the solve phase using the factorization object (AFS) you get
 from a multiprecision LU factorization.
 

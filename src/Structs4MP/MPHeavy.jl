@@ -11,6 +11,7 @@ struct MPGEFact
     residual::Vector
     sol::Vector
     onthefly::Bool
+    residterm::Bool
 end
 
 struct MPHArray
@@ -29,6 +30,7 @@ struct MPHFact
     residual::Vector
     sol::Vector
     onthefly::Bool
+    residterm::Bool
 end
 
 #
@@ -43,6 +45,7 @@ struct MPGHFact
     residual::Vector
     sol::Vector
     onthefly::Bool
+    residterm::Bool
 end
 
 function MPHArray(AH::AbstractArray{Float64,2}; TF = Float32)

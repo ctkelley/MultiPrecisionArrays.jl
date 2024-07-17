@@ -84,5 +84,6 @@ struct MPBFact
     residual::Vector
     sol::Vector
     onthefly::Bool
+    residterm::Bool
 end
 
