@@ -114,13 +114,13 @@ function mpkrir(AF::MPKFact, b; reporting = false,
     krylov_ok = (ktype=="GMRES") || (ktype=="BiCGSTAB")
     krylov_ok || error("$ktype is not supported")
     #
-    normtype = 1
+    normtype = Inf
     x = AF.sol
     TR = eltype(x)
     x .*= TR(0.0)
     # remember that eps(TR) = 2 * unit roundoff
     residterm=AF.residterm
-    residterm ? tf=10.0 : tf=.9
+    residterm ? tf=1.0 : tf=.9
     tolf = tf*eps(TR)
     n = length(b)
     onetb = TR(1.0)
@@ -154,7 +154,8 @@ function mpkrir(AF::MPKFact, b; reporting = false,
     atvd=copy(r)
     MP_Data = (MPF = AF, atv = atvd)
     tol = tolf *(bnorm + anrm *xnorm)
-    while (rnrm > tol) && ( rnrm <= .9 * rnrmx )
+    rrf = .9
+    while (rnrm > tol) && ( rnrm <= rrf * rnrmx )
         x0 = zeros(TR, n)
         #
         # Scale the residual 

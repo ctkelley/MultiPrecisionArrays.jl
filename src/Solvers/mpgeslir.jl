@@ -55,12 +55,12 @@ julia> mout=\\(MPF, b; reporting=true);
 
 julia> mout.rhist
 6-element Vector{Float64}:
- 1.00000e+00
- 5.36483e-02
- 1.57977e-05
- 5.10232e-09
- 7.76756e-12
- 9.90008e-12
+ 9.90000e+01
+ 3.65823e-03
+ 6.17917e-07
+ 8.74678e-11
+ 2.04636e-12
+ 2.03215e-12
 
 # Stagnation after four IR iterations
 
@@ -120,8 +120,8 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     #
     # What kind of problem are we dealing with?
     #
-oldway=true
     mpdebug = false
+    N=length(b)
     normtype = Inf
 #    normtype = 1
     TB = eltype(b)
@@ -154,9 +154,8 @@ oldway=true
     # the residual norms stagnate (res_old > .9 res_new)
     #
     (TW == TB) || error("inconsistent precisions; A and b must have same type")
-#    oldway ? tf=.9 : tf = 10.0
     residterm = AF.residterm
-    residterm ? tf=10.0 : tf=.9
+    residterm ? tf=1.0 : tf=.5
     tolf = eps(TR)*tf
 #    tolf = eps(TR)*TR.(.9)
 #    tolf = eps(TR)*10.0
@@ -176,7 +175,7 @@ oldway=true
 #
 #   I'm using the L1 norm because it's much faster.
 #
-    residterm=AF.residterm
+#    residterm=AF.residterm
     residterm ?  anrm = 0.0 : anrm = opnorm(AD, 1)
     bsc = b
     AFS = AF.AF
@@ -192,10 +191,7 @@ oldway=true
     #
     r .= b 
     tol = tolf
-#    bS = TFact.(bsc)
-#    rs = bS
-#    rs = TFact.(bsc)
-     onthefly ? (rs=ones(TF,1)) : (rs=zeros(TF,size(b)))
+    onthefly ? (rs=ones(TF,1)) : (rs=zeros(TF,size(b)))
      
 #
 #   Keep the books. Test for excessive residual precision.
@@ -204,7 +200,7 @@ oldway=true
     HiRes ? (THist = TR) : (THist=Float64)
     rhist = Vector{THist}()
     rnrm = TR(norm(r, normtype))
-    rnrmx = rnrm * TR(2.0)
+    rnrmx = rnrm * 1.e6
     oneb = TR(1.0)
     itc = 0
     #
@@ -214,7 +210,7 @@ oldway=true
     # Store r and x in the residual precision if TR is not TW
     HiRes ? rloop=TR.(r) : rloop=r
     HiRes ? xloop=TR.(x) : xloop=x
-oldway ? rrf = .9 : rrf = .5
+    rrf=.9
     # Solve loop
 #    while (rnrm > (anrm * xnrm + bnrm) *tolf) && (rnrm <= .9*rnrmx)
 #    while (rnrm > (anrm * xnrm + bnrm) *tolf) && (rnrm <= .5*rnrmx)
@@ -249,13 +245,14 @@ oldway ? rrf = .9 : rrf = .5
         rnrm = norm(rloop, normtype)
         itc += 1
         push!(rhist, rnrm)
+        xnrm=norm(xloop,normtype)
+        tol = tolf*(anrm * xnrm + bnrm)
         mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol")
         #
         # If the residual norm increased, complain.
         #
 #        complain_resid = (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
 #        complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
-         xnrm=norm(xloop,normtype)
     end
     x = xloop
     verbose && println("Residual history = $rhist")

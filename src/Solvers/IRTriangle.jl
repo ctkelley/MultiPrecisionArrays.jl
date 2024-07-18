@@ -15,13 +15,15 @@ function IRTriangle!(AF::Union{MPLFact,MPHFact}, r, rs, verbose)
     AFS = AF.AF
     on_the_fly=AF.onthefly
     if on_the_fly
-        ldiv!(AFS, r)
+    ldiv!(AFS, r)
     else
-        TFact = eltype(AFS)
-        TW = eltype(r)
-        rs .= TFact.(r)
+#        TFact = eltype(AFS)
+#        TW = eltype(r)
+#        rs .= TFact.(r)
+        rs .= r
         ldiv!(AFS, rs)
-        r .= TW.(rs)
+        r .= rs
+#r .= TW.(AFS\rs)
     end
     return r
 end

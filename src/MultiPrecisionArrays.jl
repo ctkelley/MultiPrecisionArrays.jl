@@ -34,7 +34,7 @@ MPKFact = Union{MPGFact,MPBFact}
 
 #MPIRArray = Union{MPArray,MPHArray}
 
-const residtermdefault = false
+const residtermdefault = true
 
 is_heavy(x::MPHFact) = true
 is_heavy(x::MPLFact) = false
