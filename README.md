@@ -8,9 +8,10 @@
 
 # MultiPrecisionArrays.jl v0.1.3
 
-##  v0.1.3 will have better performance but no breaking changes from v0.1.2, the current release. Performance fix in the works.
-The termination criteria will change and I will add some options to make it more/less expensive. Computing __opnorm(A,Inf)__ for the termination criteria costs as much as a couple IR iterations
-
+##  v0.1.3 will have better performance but no breaking changes from v0.1.2, the current release. Performance fix in the works. Here is a list ...
+- The termination criteria will change and I will add some options to make it more/less expensive. Computing __opnorm(A,Inf)__ for the termination criteria costs as much as a couple IR iterations
+- The AppleAccelerate BLAS is slower in triangular sovles than OPEN BLAS by a factor of over two (Float32) and about 1.5 (Float64). I am abandoning Apple's BLAS for IR until this is fixed.
+  
 ## [C. T. Kelley](https://ctk.math.ncsu.edu)
 
 This package provides data structures and solvers for several variants of iterative refinement (IR). It will become much more useful when half precision (aka ```Float16```) is fully supported in LAPACK/BLAS. For now, its only general-purpose
