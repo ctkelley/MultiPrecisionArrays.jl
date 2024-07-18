@@ -22,6 +22,11 @@ before the solve and avoids N^2 interprecision transfers.
 
   ```onthefly == nothing``` means you take the defaults.
 
+The kwarg ```residterm``` sets the termination criterion. 
+```residterm == true``` (default) terminates the iteration on 
+small residuals.  ```residterm == false``` terminates the iteration on
+small normwise backward errors. Look at the docs for details.
+
 If you want to use static arrays with this stuff, use the 
 mutable @MArray constructor
 
@@ -120,6 +125,12 @@ I do not think this is a good deal unless A is seriously ill-conditioned.
 My support for this is through ```mplu```. To do this you must put the
 ```TR``` kwarg explicitly in your call to ```mplu```.   
 
+The kwarg ```residterm``` sets the termination criterion.
+```residterm == true``` (default) terminates the iteration on
+small residuals.  ```residterm == false``` terminates the iteration on
+small normwise backward errors. Look at the docs for details.
+
+
 ## Example
 ```jldoctest
 julia> using MultiPrecisionArrays.Examples
@@ -139,12 +150,14 @@ julia> AF = mplu(A; TF=Float32, TR=Float64, onthefly=true);
 # Solve and save the iteration history
 
 julia> mout = \\(AF, b; reporting=true);
+
 julia> mout.rhist
-4-element Vector{Float64}:
+5-element Vector{Float64}:
  1.12500e+00
- 1.17299e-07
- 1.42109e-14
- 4.44089e-16
+ 1.74765e-07
+ 3.10862e-14
+ 6.66134e-16
+ 2.22045e-16
 
 # What does this mean. I'll solve the promoted problem. TR.(A) x = b
 
@@ -153,7 +166,7 @@ julia> AD=Float64.(A);
 julia> xd = AD\\b;
 
 julia> norm(xd - mout.sol,Inf)
-8.88178e-16
+1.11022e-15
 
 # So IR with TR > TW solves a promoted problem.
 ```

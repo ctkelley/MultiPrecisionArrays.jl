@@ -210,10 +210,8 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     # Store r and x in the residual precision if TR is not TW
     HiRes ? rloop=TR.(r) : rloop=r
     HiRes ? xloop=TR.(x) : xloop=x
-    rrf=.9
+    rrf=.5
     # Solve loop
-#    while (rnrm > (anrm * xnrm + bnrm) *tolf) && (rnrm <= .9*rnrmx)
-#    while (rnrm > (anrm * xnrm + bnrm) *tolf) && (rnrm <= .5*rnrmx)
     while (rnrm > (anrm * xnrm + bnrm) *tolf) && (rnrm <= rrf*rnrmx)
         #
         # Scale the residual

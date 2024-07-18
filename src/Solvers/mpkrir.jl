@@ -81,25 +81,23 @@ julia> solout=\\(AF, b; reporting=true);
 # Correct result?
 
 julia> x=solout.sol; norm(b-A*x,Inf)
-9.12193e-12
+9.45199e-12
 
 # Look at the residual history
 
 julia> solout.rhist
-5-element Vector{Float64}:
+4-element Vector{Float64}:
  1.00000e+00
- 1.16784e-10
- 8.47566e-12
- 7.95053e-12
- 9.12193e-12
-# Stagnation after the 3rd iteration. Now the Krylovs/iteration
+ 1.27149e-10
+ 9.00036e-12
+ 9.45199e-12
+# Stagnation after the 2nd iteration. Now the Krylovs/iteration
 
 julia> solout.khist
-4-element Vector{Int64}:
+3-element Vector{Int64}:
  4
  5
  4
- 5
 # 4-5 Krylovs per iteration.
 
 BiCGSTAB works the same way.
@@ -139,6 +137,7 @@ function mpkrir(AF::MPKFact, b; reporting = false,
     r = AF.residual
     r .= b
     rnrm = norm(r, normtype)
+    bnrm = norm(b, normtype)
     rnrmx = rnrm * TR(2.0)
     rhist = Vector{TR}()
     khist = Vector{Int64}()
@@ -154,7 +153,7 @@ function mpkrir(AF::MPKFact, b; reporting = false,
     atvd=copy(r)
     MP_Data = (MPF = AF, atv = atvd)
     tol = tolf *(bnorm + anrm *xnorm)
-    rrf = .9
+    rrf = .5
     while (rnrm > tol) && ( rnrm <= rrf * rnrmx )
         x0 = zeros(TR, n)
         #
