@@ -11,7 +11,7 @@
 ##  v0.1.3 will have better performance but no breaking changes from v0.1.2, the current release. Performance fix in the works. Here is a list ...
 - The termination criteria will change and I will add some options to make it more/less expensive. Computing __opnorm(A,Inf)__ for the termination criteria costs as much as a couple IR iterations. So that will become an option and terminating on small residuals will be the default. I will also use $\| A \|_1$ because
 it is the least expensive norm to compute. Further economy will be in v0.1.4.
-- The AppleAccelerate BLAS is slower in triangular sovles than OPEN BLAS by a factor of over two (Float32) and about 1.5 (Float64). I am abandoning Apple's BLAS for IR until this is fixed.
+- The AppleAccelerate BLAS and Open BLAS can perform differently on Apple M* machines. It is not clear which is best and that may depend on number of cores, BLAS threads, version of Julia ... Play with this if you see poor performane in the solve phase of IR.   
   
 ## [C. T. Kelley](https://ctk.math.ncsu.edu)
 
@@ -171,6 +171,11 @@ multiprecision factorization objects.
 Now we will see how the results look. In this example we compare the result with iterative refinement with ```A\b```, which is LAPACK's LU. 
 As you can see the results are equally good. Note that the factorization object ```MPF``` is the
 output of ```mplu```. This is analogous to ```AF=lu(A)``` in LAPACK.
+
+You may not get exactly the same results for this example on
+different hardware, BLAS, number of cores, versions of Julia/OS/MulitPrecisionArrays.
+I am still playing with the termination criteria and the iteration
+count could grow or shrink as I do that as could the residual for the converged result.
 
 ```
 julia> using MultiPrecisionArrays
