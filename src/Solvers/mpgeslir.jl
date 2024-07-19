@@ -43,6 +43,11 @@ is a structure. ```mpout.sol``` is the solution. ```mpout.rhist```
 is the residual history. mpout also contains the datatypes TW for
 high precision and TF for low precision.
 
+You may not get exactly the same results for this example on
+different hardware, BLAS, versions of Julia or this package. 
+I am still playing with the termination criteria and the iteration
+count could grow or shrink as I do that.
+
 ## Example
 ```jldoctest
 julia> using MultiPrecisionArrays.Examples

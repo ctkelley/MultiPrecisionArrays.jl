@@ -105,6 +105,11 @@ vectors, IR-BiCGSTAB ```mpblu``` is worth a shot.
 
 Take this example, please.
 
+You may not get exactly the same results for this example on
+different hardware, BLAS, versions of Julia or this package. 
+I am still playing with the termination criteria and the iteration
+count could grow or shrink as I do that.
+
 ## Example
 ```jldoctest
 julia> using MultiPrecisionArrays

@@ -165,6 +165,11 @@ Now we will see how the results look. In this example we compare the result with
 As you can see the results are equally good. Note that the factorization object ```MPF``` is the
 output of ```mplu```. This is analogous to ```AF=lu(A)``` in LAPACK.
 
+You may not get exactly the same results for the examples on
+different hardware, BLAS, versions of Julia or this package. 
+I am still playing with the termination criteria and the iteration
+count could grow or shrink as I do that.
+
 ```
 julia> using MultiPrecisionArrays
 
@@ -187,7 +192,7 @@ julia> ze=norm(z-x,Inf); zr=norm(b-A*z,Inf)/norm(b,Inf);
 julia> we=norm(w-x,Inf); wr=norm(b-A*w,Inf)/norm(b,Inf);
 
 julia> println("Errors: $ze, $we. Residuals: $zr, $wr")
-Errors: 8.88178e-16, 7.41629e-14. Residuals: 1.33243e-15, 7.40609e-14
+Errors: 2.22045e-16, 6.71685e-14. Residuals: 2.22045e-16, 6.71685e-14
 
 ```
 
@@ -216,7 +221,7 @@ The advantages of IR increase as the dimension increases. IR is less impressive 
 julia> N=30; A=I + Gmat(N); 
 
 julia> @belapsed mplu($A)
-4.19643e-06
+5.22217e-06
 
 julia> @belapsed lu!(AC) setup=(AC=copy($A))
 3.70825e-06

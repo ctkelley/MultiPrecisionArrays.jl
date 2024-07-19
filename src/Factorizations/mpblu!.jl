@@ -84,6 +84,11 @@ is that there is no Kylov basis to store.
 
 Here's the example from ```mpglu```
 
+You may not get exactly the same results for this example on
+different hardware, BLAS, versions of Julia or this package. 
+I am still playing with the termination criteria and the iteration
+count could grow or shrink as I do that.
+
 #Example
 ```jldoctest
 julia> using MultiPrecisionArrays

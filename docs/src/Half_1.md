@@ -59,6 +59,12 @@ can have a large error. Here is an example to illustrate this point.
 The matrix here is modestly ill-conditioned and you can see that in the 
 error from a direct solve in double precision.
 
+You may not get exactly the same results for this example on
+different hardware, BLAS, versions of Julia or this package.
+I am still playing with the termination criteria and the iteration
+count could grow or shrink as I do that.
+
+
 ```
 julia> A=I - 800.0*G;
 

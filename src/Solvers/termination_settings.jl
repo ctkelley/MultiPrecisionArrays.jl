@@ -2,7 +2,8 @@ function termination_settings(TR, residterm)
 #
 # I am continually tweaking this stuff
 #
-residterm ? tf=1.0 : tf=.5
+Cr=1.0; Ce=.5;
+residterm ? tf=Cr : tf=Ce
 tolf = eps(TR)*tf
 #
 #   I'm using the L1 norm because it's much faster.
