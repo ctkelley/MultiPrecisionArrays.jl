@@ -155,8 +155,11 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     #
     (TW == TB) || error("inconsistent precisions; A and b must have same type")
     residterm = AF.residterm
-    residterm ? tf=1.0 : tf=.5
-    tolf = eps(TR)*tf
+    term_data=termination_settings(TR, residterm)
+    tolf = term_data.tolf
+    anrm = term_data.anrm
+#    residterm ? tf=10.0 : tf=.5
+#    tolf = eps(TR)*tf
 #    tolf = eps(TR)*TR.(.9)
 #    tolf = eps(TR)*10.0
     #
@@ -176,7 +179,7 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
 #   I'm using the L1 norm because it's much faster.
 #
 #    residterm=AF.residterm
-    residterm ?  anrm = 0.0 : anrm = opnorm(AD, 1)
+#    residterm ?  anrm = 0.0 : anrm = opnorm(AD, 1)
     bsc = b
     AFS = AF.AF
     #

@@ -34,6 +34,9 @@ MPKFact = Union{MPGFact,MPBFact}
 
 #MPIRArray = Union{MPArray,MPHArray}
 
+#
+# Termination criteria defaults
+#
 const residtermdefault = true
 
 is_heavy(x::MPHFact) = true
@@ -159,6 +162,7 @@ export mpcholesky!
 include("Solvers/mpkrir.jl")
 include("Solvers/mpgeslir.jl")
 include("Solvers/IRTriangle.jl")
+include("Solvers/termination_settings.jl")
 include("Structs4MP/MPStats.jl")
 include("Factorizations/hlu!.jl")
 include("Factorizations/mplu!.jl")

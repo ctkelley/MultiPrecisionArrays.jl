@@ -118,8 +118,11 @@ function mpkrir(AF::MPKFact, b; reporting = false,
     x .*= TR(0.0)
     # remember that eps(TR) = 2 * unit roundoff
     residterm=AF.residterm
-    residterm ? tf=1.0 : tf=.9
-    tolf = tf*eps(TR)
+    term_data=termination_settings(TR, residterm)
+    tolf = term_data.tolf
+    anrm = term_data.anrm
+#    residterm ? tf=1.0 : tf=.9
+#    tolf = tf*eps(TR)
     n = length(b)
     onetb = TR(1.0)
     bsc = copy(b)
@@ -129,7 +132,7 @@ function mpkrir(AF::MPKFact, b; reporting = false,
     #
     AFS = AF.AF
     AD = AF.AH
-    residterm ?  anrm = 0.0 : anrm = opnorm(AD, 1)
+#    residterm ?  anrm = 0.0 : anrm = opnorm(AD, 1)
 #    anorm = opnorm(AD,normtype)
     #
     # Initialize Krylov-IR
