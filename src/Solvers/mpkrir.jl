@@ -125,7 +125,9 @@ function mpkrir(AF::MPKFact, b; reporting = false,
     residterm=AF.residterm
     term_data=termination_settings(TR, residterm)
     tolf = term_data.tolf
-    anrm = term_data.anrm
+    AD=AF.AH
+    residterm ?  anrm = 0.0 : anrm = opnorm(AD, 1)
+#    anrm = term_data.anrm
 #    residterm ? tf=1.0 : tf=.9
 #    tolf = tf*eps(TR)
     n = length(b)

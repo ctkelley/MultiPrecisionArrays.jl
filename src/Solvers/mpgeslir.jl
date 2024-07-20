@@ -162,7 +162,8 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     residterm = AF.residterm
     term_data=termination_settings(TR, residterm)
     tolf = term_data.tolf
-    anrm = term_data.anrm
+    AD=AF.AH
+    residterm ?  anrm = 0.0 : anrm = opnorm(AD, 1)
 #    residterm ? tf=10.0 : tf=.5
 #    tolf = eps(TR)*tf
 #    tolf = eps(TR)*TR.(.9)
