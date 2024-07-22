@@ -39,8 +39,8 @@ MPKFact = Union{MPGFact,MPBFact}
 #
 const residtermdefault = true
 
-is_heavy(x::MPHFact) = true
-is_heavy(x::MPLFact) = false
+#is_heavy(x::MPHFact) = true
+#is_heavy(x::MPLFact) = false
 
 kmeth(x::MPGFact) = "GMRES"
 kmeth(x::MPBFact) = "BiCGSTAB"
