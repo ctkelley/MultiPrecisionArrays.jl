@@ -1,10 +1,41 @@
 # Is O(N^2) work negligible?
 
+In this sectiion ```TR = TW = Float64``` and
+```TF = TS = Float32```, which means that the iterprecision transfers
+in the triangular solvers are done in-place. We terminate on small residuals.
+
+The premise behind IR is that reducing the $O(N^3)$ cost of the
+factorization will make the solve faster because everything else
+is $O(N^2)$ work. It's worth looking to this.
+
+We will use the old-fashioned defintion of a FLOP as an add, a multiply
+and a bit of address computation. So we have $N^2$ flops for any of
+
+ - matrix-vector multiply $\ma \vx$,
+ - the two triangular solves with the LU factors $(\ml \mU)^{-1} \vb$, and
+ - computaion of the $\ell^1$ or $\ell^\infty$ matrix operator norms
+$\| \ma \|_{1,\infty}$.
+
+A linear solve with an LU factorization and the standard triangular
+solve has a cost of $(N^3/3) + N^2$ TR-FLOPS. The factorization for IR
+has a cost of $N^3/3$ TF-FLOPS or $N^3/6$ TR-FLOPS.
+
+A single IR iteration costs a matrix-vector product in precision TR
+and a triangular solve in precision TF for a total of
+$3 N^2/2$ TR-FLOPS. Hence a linear solve with IR that needs $n_I$ iterations
+costs
+\[
+\frac{N^3}{6} + 3 n_I N^2/2
+\]
+TR-FLOPS if one terminates on small residuals and an extra $N^2$ TR-FLOPS
+if one computes the norm of $\ma$ in precision TR.
+
+IR will clearly be better for large values of $N$. How large is that?
 In this example we compare the cost of factorization and solve
 using $lu!$ and $ldiv$ (cols 2-4) with the equivalent multiprecision
 commands $mplu$ and $\backslash$
 
-The operator is $A = I - G(N)$. We tabulate
+The operator is ```A = I - Gmat(N)```. We tabulate
 
  - LU: time for ```AF=lu!(A)```
 
@@ -18,6 +49,17 @@ The operator is $A = I - G(N)$. We tabulate
 
  - TOT: MPLU+MPS
 
+ - OPNORM: Cost for $\| A \|_1$, which one needs to terminate on small normwise backward error.
+
+The message from the tables is that the triangular solves are more costly
+than operation counts might indicate. One reason for this is that the
+LU factorization exploits multi-core computing better than a triangular
+solve. It is also interesting to see how the choice of BLAS affects the
+results and how the cost of the operator norm of the matrix is more than
+a triangular solve.
+
+For both cases, multiprecision arrays perform better when $N \ge 2048$
+with the difference becoming larger as $N$ increases.
 
 openBLAS
 ```
