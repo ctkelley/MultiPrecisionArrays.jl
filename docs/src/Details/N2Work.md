@@ -8,7 +8,7 @@ The premise behind IR is that reducing the $O(N^3)$ cost of the
 factorization will make the solve faster because everything else
 is $O(N^2)$ work. It's worth looking to this.
 
-We will use the old-fashioned defintion of a FLOP as an add, a multiply
+We will use the old-fashioned definition of a FLOP as an add, a multiply
 and a bit of address computation. So we have $N^2$ flops for any of
 
  - matrix-vector multiply $A x$,

@@ -11,7 +11,7 @@
 ##  v0.1.3 will have better performance but no breaking changes from v0.1.2, the current release. Performance fix in the works. Here is a list ...
 - The termination criteria will change and I will add some options to make it more/less expensive. Computing __opnorm(A,Inf)__ for the termination criteria costs as much as a couple IR iterations. So that will become an option and terminating on small residuals will be the default. I will also use $\| A \|_1$ because
 it is the least expensive norm to compute. Further economy will be in v0.1.4.
-- The AppleAccelerate BLAS and Open BLAS can perform differently on Apple M* machines. It is not clear which is best and that may depend on number of cores, BLAS threads, version of Julia ... Play with this if you see poor performane in the solve phase of IR.   
+- The AppleAccelerate BLAS and Open BLAS can perform differently on Apple M* machines. It is not clear which is best and that may depend on number of cores, BLAS threads, version of Julia ... Play with this if you see poor performance in the solve phase of IR.   
   
 ## [C. T. Kelley](https://ctk.math.ncsu.edu)
 
