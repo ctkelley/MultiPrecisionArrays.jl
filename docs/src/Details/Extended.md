@@ -27,6 +27,12 @@ Here is an example with a badly conditioned matrix. You must tell
 ```mplu``` to factor in the working precision and use the
 ```kwargs``` in ```mplu``` to set ```TR```.
 
+You may not get exactly the same results for this example on
+different hardware, BLAS, versions of Julia or this package.
+I am still playing with the termination criteria and the iteration
+count could grow or shrink as I do that.
+
+
 ```
 julia> using MultiPrecisionArrays
 

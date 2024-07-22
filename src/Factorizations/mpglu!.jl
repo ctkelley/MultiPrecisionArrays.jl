@@ -1,5 +1,5 @@
 """
-mpglu!(MPGA::MPGArray)
+mpglu!(MPGA::MPGArray; residterm=residtermdefault)
 Factor a MPGArray using the allocations from the structure.
 
 This function factors the low precision copy
@@ -9,8 +9,13 @@ storage for ```basissize``` Kylov vectors and some other things
 GMRES needs.
 You get a factorization
 object as output and can use ```\\``` to solve linear systems.
+
+The kwarg ```residterm``` sets the termination criterion. 
+```residterm == true``` (default) terminates the iteration on 
+small residuals.  ```residterm == false``` terminates the iteration on
+small normwise backward errors. Look at the docs for details.
 """
-function mpglu!(MPGA::MPGArray)
+function mpglu!(MPGA::MPGArray; residterm=residtermdefault)
 AL=MPGA.AL
 AH=MPGA.AH
 VStore=MPGA.VStore
@@ -19,7 +24,7 @@ res=MPGA.residual
 sol=MPGA.sol
 TF=eltype(AL)
 (TF == Float16) ? ALF = hlu!(AL) : ALF = lu!(AL)
-MPF=MPGEFact(AH, AL, ALF, VStore, KStore, res, sol, true)
+MPF=MPGEFact(AH, AL, ALF, VStore, KStore, res, sol, true,residterm)
 return MPF
 end
 
@@ -58,7 +63,8 @@ AL .= TF.(A)
 MPG.AF.ipiv .= AF.ipiv
 VStore=MPG.VStore 
 KStore=MPG.KStore
-MPG=MPGEFact(AH, AL, AF, VStore, KStore, MPG.residual, MPG.sol, true)
+residterm=MPG.residterm
+MPG=MPGEFact(AH, AL, AF, VStore, KStore, MPG.residual, MPG.sol, true, residterm)
 return MPG
 end
 
@@ -66,7 +72,7 @@ end
 
 """
 mpglu(A::AbstractArray{TW,2}; TF=Float32, TR=nothing, 
-                      basissize=10) where TW <: Real
+    residterm=residtermdefault1, basissize=10) where TW <: Real
 
 Combines the constructor of the multiprecision GMRES-ready array with the
 factorization.
@@ -98,6 +104,11 @@ are not happy with the results. If you are having trouble storing enough
 vectors, IR-BiCGSTAB ```mpblu``` is worth a shot.
 
 Take this example, please.
+
+You may not get exactly the same results for this example on
+different hardware, BLAS, versions of Julia or this package. 
+I am still playing with the termination criteria and the iteration
+count could grow or shrink as I do that.
 
 ## Example
 ```jldoctest
@@ -159,11 +170,11 @@ julia> xp=Float64.(A)\\b; norm(xp-mout3.sol,Inf)
 
 ```
 """
-function mpglu(A::AbstractArray{TW,2}; TF=Float32, TR=nothing,
-                  basissize=10) where TW <: Real
+function mpglu(A::AbstractArray{TW,2}; TF=Float32, TR=nothing, 
+          residterm=residtermdefault, basissize=10) where TW <: Real
 (TW==Float32) ? TF=Float16 : TF=TF
 MPGA=MPGArray(A; basissize=basissize, TF=TF, TR=TR)
-MPGF=mpglu!(MPGA)
+MPGF=mpglu!(MPGA; residterm=residterm)
 return MPGF
 end
 
@@ -172,7 +183,8 @@ end
 # Factor a heavy MPArray and set it up for GMRES with \
 # If you want to use it with IR (why?) then set gmresok=false
 #
-function mpglu!(MPH::MPHArray; gmresok = true, basissize=10)
+function mpglu!(MPH::MPHArray; gmresok = true, basissize=10, 
+              residterm=residtermdefault)
     AH = MPH.AH
     TD = eltype(AH)
     res = MPH.residual
@@ -193,9 +205,9 @@ function mpglu!(MPH::MPHArray; gmresok = true, basissize=10)
     if gmresok
         VStore=zeros(TD, n, basissize)
         KStore=kstore(n,"gmres")
-        MPF = MPGHFact(AH, AL, AF, VStore, KStore, res, sol, true)
+        MPF = MPGHFact(AH, AL, AF, VStore, KStore, res, sol, true, residterm)
     else
-        MPF = MPHFact(AH, AL, AF, res, sol, true)
+        MPF = MPHFact(AH, AL, AF, res, sol, true, residterm)
     end
 end
 
@@ -204,5 +216,5 @@ end
 # for CI.
 #
 function mphlu!(MPH::MPHArray)
-    MPF = mpglu!(MPH; gmresok = false)
+    MPF = mpglu!(MPH; gmresok = false, residterm=residtermdefault)
 end

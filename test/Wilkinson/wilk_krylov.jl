@@ -23,7 +23,7 @@ promdiffg = norm(xp-mgout.sol,Inf)
 # I want to see somewhere between 2 and 4 iterations
 # and an error < 10^{-13}
 #
-gmresok= (3 <= lmg <= 5) && (promdiffg < 1.e-13)
+gmresok= (4 <= lmg <= 7) && (promdiffg < 1.e-13)
 #println(lmg,"  ",promdiffg,"  ",gmresok)
 gmresok || println("IRGMRES error. lmg=$lmg, promdiffg=$promdiffg")
 ABG=mpblu(A; TR=Float64)

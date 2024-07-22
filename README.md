@@ -8,8 +8,11 @@
 
 # MultiPrecisionArrays.jl v0.1.3
 
-##  v0.1.3 will have new features but no breaking changes from v0.1.2, the current release.
-
+##  v0.1.3 will have better performance but no breaking changes from v0.1.2, the current release. Performance fix in the works. Here is a list ...
+- The termination criteria will change and I will add some options to make it more/less expensive. Computing __opnorm(A,Inf)__ for the termination criteria costs as much as a couple IR iterations. So that will become an option and terminating on small residuals will be the default. I will also use $\| A \|_1$ because
+it is the least expensive norm to compute. Further economy will be in v0.1.4.
+- The AppleAccelerate BLAS and Open BLAS can perform differently on Apple M* machines. It is not clear which is best and that may depend on number of cores, BLAS threads, version of Julia ... Play with this if you see poor performane in the solve phase of IR.   
+  
 ## [C. T. Kelley](https://ctk.math.ncsu.edu)
 
 This package provides data structures and solvers for several variants of iterative refinement (IR). It will become much more useful when half precision (aka ```Float16```) is fully supported in LAPACK/BLAS. For now, its only general-purpose
@@ -43,6 +46,8 @@ __The half precision LU for Float16 in this package is much faster (more than 10
    - Krylov-IR for high precision residuals
 
 - v0.1.3: Still better docs and ..
+   - Fixing a performance bug.
+   - Add options to termination criterion. Change default to small residuals.
 
 ##  Can I complain about this package?
 
@@ -168,6 +173,11 @@ Now we will see how the results look. In this example we compare the result with
 As you can see the results are equally good. Note that the factorization object ```MPF``` is the
 output of ```mplu```. This is analogous to ```AF=lu(A)``` in LAPACK.
 
+You may not get exactly the same results for this example on
+different hardware, BLAS, number of cores, versions of Julia/OS/MulitPrecisionArrays.
+I am still playing with the termination criteria and the iteration
+count could grow or shrink as I do that as could the residual for the converged result.
+
 ```
 julia> using MultiPrecisionArrays
 
@@ -192,7 +202,7 @@ julia> ze=norm(z-x,Inf); zr=norm(b-A*z,Inf)/norm(b,Inf);
 julia> we=norm(w-x,Inf); wr=norm(b-A*w,Inf)/norm(b,Inf);
 
 julia> println("Errors: $ze, $we. Residuals: $zr, $wr")
-Errors: 1.33227e-15, 7.41629e-14. Residuals: 1.33243e-15, 7.40609e-14
+Errors: 2.22045e-16, 6.71685e-14. Residuals: 2.22045e-16, 6.71685e-14
 ```
 
 So the results are equally good.
@@ -206,10 +216,10 @@ is 50% more than ```lu```.
 
 ```
 julia> @belapsed mplu($A)
-8.60945e-02
+8.59528e-02
 
 julia> @belapsed lu!(AC) setup=(AC=copy($A))
-1.42840e-01
+1.42112e-01
 
 ```
 It is no surprise that the factorization in single precision took roughly half as long as the one in double. In the double-single precision case, iterative refinement is a great
@@ -219,10 +229,10 @@ The advantages of IR increase as the dimension increases. IR is less impressive 
 julia> N=30; A=I + Gmat(N); 
 
 julia> @belapsed mplu($A)
-4.19643e-06
+5.22217e-06
 
 julia> @belapsed lu!(AC) setup=(AC=copy($A))
-3.70825e-06
+3.64062e-06
 ```
 
 ### A few details
@@ -230,6 +240,7 @@ julia> @belapsed lu!(AC) setup=(AC=copy($A))
 Look at the docs for things like
 - [Memory allocation costs](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/#Memory-Allocations-for-mplu)
 - [Terminating the while loop](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Details/Termination/)
+- [Is O(N^2) work really negligible?](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Details/N2Work)
 - [Options and data structures for mplu](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/#Options-and-data-structures-for-mplu)
 
 
@@ -270,22 +281,23 @@ julia> # Use \ with reporting=true
 julia> mpout=\(MPF, b; reporting=true);
 
 julia> norm(b-A*mpout.sol, Inf)
-1.33227e-15
+2.22045e-16
 
 julia> # Now look at the residual history
 
 julia> mpout.rhist
-5-element Vector{Float64}:
- 9.99878e-01
- 1.21892e-04
- 5.25805e-11
- 2.56462e-14
- 1.33227e-15
+6-element Vector{Float64}:
+ 1.00000e+00
+ 1.89553e-05
+ 4.56056e-11
+ 3.08642e-14
+ 4.44089e-16
+ 2.22045e-16
 ```
 As you can see, IR does well for this problem. The package uses an initial
 iterate of $x = 0$ and so the initial residual is simply $r = b$
 and the first entry in the residual history is $|| b ||_\infty$. The
-iteration terminates successfully after four matrix-vector products.
+iteration terminates successfully after five matrix-vector products.
 
 You may wonder why the residual after the first iteration was so much
 larger than single precision roundoff. The reason is that the default 
@@ -297,18 +309,23 @@ One can enable interprecision transfers on the fly and see the difference.
  ```
 julia> MPF2=mplu(A; onthefly=true);
 
+julia> @belapsed $MPF2\$b
+2.47693e-02
+
 julia> mpout2=\(MPF2, b; reporting=true);
 
 julia> mpout2.rhist
 5-element Vector{Float64}:
- 9.99878e-01
- 6.17721e-07
- 3.84581e-13
- 7.99361e-15
- 8.88178e-16
+ 5-element Vector{Float64}:
+ 1.00000e+00
+ 6.29385e-07
+ 3.98570e-13
+ 5.21805e-15
+ 2.22045e-16
 ```
-So the second iteration is much better, but the iteration terminated after
-four iterations in both cases.
+So the second iteration took fewer iterations but a bit more time.
+
+
 
 There are more examples for this in the [paper](https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/main/Publications_and_Presentations/MPArray.pdf).
 

@@ -43,6 +43,11 @@ is a structure. ```mpout.sol``` is the solution. ```mpout.rhist```
 is the residual history. mpout also contains the datatypes TW for
 high precision and TF for low precision.
 
+You may not get exactly the same results for this example on
+different hardware, BLAS, versions of Julia or this package. 
+I am still playing with the termination criteria and the iteration
+count could grow or shrink as I do that.
+
 ## Example
 ```jldoctest
 julia> using MultiPrecisionArrays.Examples
@@ -55,12 +60,12 @@ julia> mout=\\(MPF, b; reporting=true);
 
 julia> mout.rhist
 6-element Vector{Float64}:
- 1.00000e+00
- 5.36483e-02
- 1.57977e-05
- 5.10232e-09
- 7.76756e-12
- 9.90008e-12
+ 9.90000e+01
+ 3.65823e-03
+ 6.17917e-07
+ 8.74678e-11
+ 2.04636e-12
+ 2.03215e-12
 
 # Stagnation after four IR iterations
 
@@ -121,7 +126,9 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     # What kind of problem are we dealing with?
     #
     mpdebug = false
+    N=length(b)
     normtype = Inf
+#    normtype = 1
     TB = eltype(b)
     MPStats = getStats(AF)
     TF = MPStats.TF
@@ -152,7 +159,15 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     # the residual norms stagnate (res_old > .9 res_new)
     #
     (TW == TB) || error("inconsistent precisions; A and b must have same type")
-    tolf = eps(TR)*TR.(.9)
+    residterm = AF.residterm
+    term_data=termination_settings(TR, residterm)
+    tolf = term_data.tolf
+    AD=AF.AH
+    residterm ?  anrm = 0.0 : anrm = opnorm(AD, 1)
+#    residterm ? tf=10.0 : tf=.5
+#    tolf = eps(TR)*tf
+#    tolf = eps(TR)*TR.(.9)
+#    tolf = eps(TR)*10.0
     #
     # Keep the records and accumulate the statistics. 
     #
@@ -166,10 +181,13 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     #
     AD = AF.AH
     bnrm = norm(b, normtype) 
-    anrm = opnorm(AD, normtype)
+#
+#   I'm using the L1 norm because it's much faster.
+#
+#    residterm=AF.residterm
+#    residterm ?  anrm = 0.0 : anrm = opnorm(AD, 1)
     bsc = b
     AFS = AF.AF
-    bS = TFact.(bsc)
     #
     # Initialize the iteration. I initialize to zero. That makes the
     # iteration count the same as the high precision matvec and the 
@@ -182,7 +200,8 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     #
     r .= b 
     tol = tolf
-    rs = bS
+    onthefly ? (rs=ones(TF,1)) : (rs=zeros(TF,size(b)))
+     
 #
 #   Keep the books. Test for excessive residual precision.
 #  
@@ -190,7 +209,7 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     HiRes ? (THist = TR) : (THist=Float64)
     rhist = Vector{THist}()
     rnrm = TR(norm(r, normtype))
-    rnrmx = rnrm * TR(2.0)
+    rnrmx = rnrm * 1.e6
     oneb = TR(1.0)
     itc = 0
     #
@@ -200,15 +219,16 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     # Store r and x in the residual precision if TR is not TW
     HiRes ? rloop=TR.(r) : rloop=r
     HiRes ? xloop=TR.(x) : xloop=x
+    rrf=.5
     # Solve loop
-    # while (rnrm > tol) && (rnrm <= .9*rnrmx)
-    while (rnrm > (anrm * xnrm + bnrm) *tolf) && (rnrm <= .9*rnrmx)
+    while (rnrm > (anrm * xnrm + bnrm) *tolf) && (rnrm <= rrf*rnrmx)
         #
         # Scale the residual
         #
         rloop ./= rnrm
         #
         # Use the low-precision factorization
+        # The residual is overwritten with the correction here.
         #
         rloop .= IRTriangle!(AF, rloop, rs, verbose)
         #
@@ -220,19 +240,26 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
         #
         xloop .+= rloop
         mul!(rloop, AD, xloop)
+        #
+        # After mul! the residual is overwritten with Ax
+        #
         rloop .*= -oneb
         axpy!(oneb, bsc, rloop)
+        #
+        # and now the residual is b-Ax like it needs to be
+        #
         rnrmx = rnrm
         rnrm = norm(rloop, normtype)
         itc += 1
         push!(rhist, rnrm)
+        xnrm=norm(xloop,normtype)
+        tol = tolf*(anrm * xnrm + bnrm)
         mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol")
         #
         # If the residual norm increased, complain.
         #
 #        complain_resid = (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
 #        complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
-         xnrm=norm(xloop,normtype)
     end
     x = xloop
     verbose && println("Residual history = $rhist")

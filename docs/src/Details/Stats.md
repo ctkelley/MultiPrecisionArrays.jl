@@ -5,6 +5,11 @@ __reporting__ keyword argument to the solvers. The easiest way
 to do this is with the backslash command. When you use this option you
 get a data structure with the solution and the residual history.
 
+You may not get exactly the same results for this example on
+different hardware, BLAS, versions of Julia or this package.
+I am still playing with the termination criteria and the iteration
+count could grow or shrink as I do that.
+
 ```
 julia> using MultiPrecisionArrays
 

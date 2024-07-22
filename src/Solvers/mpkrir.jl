@@ -68,6 +68,11 @@ which does the BiCGSTAB-IR solve.
 
 You can also use the ```\\``` operator to harvest iteration statistics.
 
+You may not get exactly the same results for this example on
+different hardware, BLAS, versions of Julia or this package. 
+I am still playing with the termination criteria and the iteration
+count could grow or shrink as I do that.
+
 ## Example
 ```jldoctest
 julia> using MultiPrecisionArrays.Examples
@@ -81,25 +86,23 @@ julia> solout=\\(AF, b; reporting=true);
 # Correct result?
 
 julia> x=solout.sol; norm(b-A*x,Inf)
-9.12193e-12
+9.45199e-12
 
 # Look at the residual history
 
 julia> solout.rhist
-5-element Vector{Float64}:
+4-element Vector{Float64}:
  1.00000e+00
- 1.16784e-10
- 8.47566e-12
- 7.95053e-12
- 9.12193e-12
-# Stagnation after the 3rd iteration. Now the Krylovs/iteration
+ 1.27149e-10
+ 9.00036e-12
+ 9.45199e-12
+# Stagnation after the 2nd iteration. Now the Krylovs/iteration
 
 julia> solout.khist
-4-element Vector{Int64}:
+3-element Vector{Int64}:
  4
  5
  4
- 5
 # 4-5 Krylovs per iteration.
 
 BiCGSTAB works the same way.
@@ -119,7 +122,14 @@ function mpkrir(AF::MPKFact, b; reporting = false,
     TR = eltype(x)
     x .*= TR(0.0)
     # remember that eps(TR) = 2 * unit roundoff
-    tolf = TR(0.5)*eps(TR)
+    residterm=AF.residterm
+    term_data=termination_settings(TR, residterm)
+    tolf = term_data.tolf
+    AD=AF.AH
+    residterm ?  anrm = 0.0 : anrm = opnorm(AD, 1)
+#    anrm = term_data.anrm
+#    residterm ? tf=1.0 : tf=.9
+#    tolf = tf*eps(TR)
     n = length(b)
     onetb = TR(1.0)
     bsc = copy(b)
@@ -129,13 +139,15 @@ function mpkrir(AF::MPKFact, b; reporting = false,
     #
     AFS = AF.AF
     AD = AF.AH
-    anorm = opnorm(AD,normtype)
+#    residterm ?  anrm = 0.0 : anrm = opnorm(AD, 1)
+#    anorm = opnorm(AD,normtype)
     #
     # Initialize Krylov-IR
     #
     r = AF.residual
     r .= b
     rnrm = norm(r, normtype)
+    bnrm = norm(b, normtype)
     rnrmx = rnrm * TR(2.0)
     rhist = Vector{TR}()
     khist = Vector{Int64}()
@@ -150,8 +162,9 @@ function mpkrir(AF::MPKFact, b; reporting = false,
     kl_store = AF.KStore
     atvd=copy(r)
     MP_Data = (MPF = AF, atv = atvd)
-    tol = tolf *(bnorm + anorm *xnorm)
-    while (rnrm > tol) && ( rnrm <= .9 * rnrmx )
+    tol = tolf *(bnorm + anrm *xnorm)
+    rrf = .5
+    while (rnrm > tol) && ( rnrm <= rrf * rnrmx )
         x0 = zeros(TR, n)
         #
         # Scale the residual 
@@ -207,7 +220,7 @@ function mpkrir(AF::MPKFact, b; reporting = false,
         (rnrm >= rnrmx) && (normdec = false)
         ~normdec && mpdebug && (rnrm >= rnrmx) && println("Residual norm increased")
     xnorm=norm(x,normtype)
-    tol = tolf *(bnorm + anorm *xnorm)
+    tol = tolf *(bnorm + anrm *xnorm)
     end
     verbose && println("Residual history = $rhist")
     if reporting

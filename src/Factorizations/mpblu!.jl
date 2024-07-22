@@ -10,7 +10,7 @@ storage for the things BiCGSTAB needs.
 You get a factorization
 object as output and can use ```\\``` to solve linear systems.
 """
-function mpblu!(MPBA::MPBArray)
+function mpblu!(MPBA::MPBArray; residterm=residtermdefault)
 AL=MPBA.AL
 AH=MPBA.AH
 VStore=MPBA.VStore
@@ -19,7 +19,7 @@ res=MPBA.residual
 sol=MPBA.sol
 TF=eltype(AL)
 (TF == Float16) ? ALF = hlu!(AL) : ALF = lu!(AL)
-MPF=MPBFact(AH, AL, ALF, VStore, KStore, res, sol, true)
+MPF=MPBFact(AH, AL, ALF, VStore, KStore, res, sol, true, residterm)
 return MPF
 end
 
@@ -58,14 +58,16 @@ AL .= TF.(A)
 MPG.AF.ipiv .= AF.ipiv
 VStore=MPG.VStore 
 KStore=MPG.KStore
-MPG=MPBFact(AH, AL, AF, VStore, KStore, MPG.residual, MPG.sol, true)
+residterm=MPG.residterm 
+MPG=MPBFact(AH, AL, AF, VStore, KStore, MPG.residual, MPG.sol, true, residterm)
 return MPG
 end
 
 
 
 """
-mpblu(A::AbstractArray{TW,2}; TF=Float32, TR=nothing) where TW <: Real
+mpblu(A::AbstractArray{TW,2}; TF=Float32, TR=nothing, i
+          residterm=residtermdefault) where TW <: Real
 
 Combines the constructor of the multiprecision BiCGSTAB-ready array with the
 factorization.
@@ -81,6 +83,11 @@ did with mpglu, we will run through some examples. The difference here
 is that there is no Kylov basis to store. 
 
 Here's the example from ```mpglu```
+
+You may not get exactly the same results for this example on
+different hardware, BLAS, versions of Julia or this package. 
+I am still playing with the termination criteria and the iteration
+count could grow or shrink as I do that.
 
 #Example
 ```jldoctest
@@ -143,10 +150,10 @@ julia> xp=Float64.(A)\\b; norm(xp-mout3.sol,Inf)
 ```
 
 """
-function mpblu(A::AbstractArray{TW,2}; 
+function mpblu(A::AbstractArray{TW,2}; residterm=residtermdefault,
           TF=Float32, TR=nothing) where TW <: Real
 (TW==Float32) ? TF=Float16 : TF=TF
 MPBA=MPBArray(A; TF=TF, TR=TR)
-MPBF=mpblu!(MPBA)
+MPBF=mpblu!(MPBA; residterm=residterm)
 return MPBF
 end

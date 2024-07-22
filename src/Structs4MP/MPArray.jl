@@ -19,7 +19,7 @@ The constructor just builds an MPArray with TW=Float64. Set TF=Float16
 to get double/half IR.
 """
 function MPArray(AH::AbstractArray{Float64,2}; 
-             TR=nothing, TF = Float32, onthefly=nothing)
+      TR=nothing, TF = Float32, onthefly=nothing)
     AL = TF.(AH)
     TH = eltype(AH)
 # Default is interprecision on the fly if TF = Float32

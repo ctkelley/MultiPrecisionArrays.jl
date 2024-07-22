@@ -1,5 +1,5 @@
 """
-mplu!(MPA::MPArray)
+mplu!(MPA::MPArray; residterm=residtermdefault)
 
 Plain vanilla MPArray factorization: Factor the low precision copy
 and leave the high precision matrix alone. You get a factorization
@@ -22,11 +22,16 @@ before the solve and avoids N^2 interprecision transfers.
 
   ```onthefly == nothing``` means you take the defaults.
 
+The kwarg ```residterm``` sets the termination criterion. 
+```residterm == true``` (default) terminates the iteration on 
+small residuals.  ```residterm == false``` terminates the iteration on
+small normwise backward errors. Look at the docs for details.
+
 If you want to use static arrays with this stuff, use the 
 mutable @MArray constructor
 
 """
-function mplu!(MPA::MPArray)
+function mplu!(MPA::MPArray; residterm=residtermdefault)
     AH = MPA.AH
     AL = MPA.AL
     TF = eltype(AL)
@@ -35,7 +40,7 @@ function mplu!(MPA::MPArray)
     (TF == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
     # For the MPEArray
     on_the_fly=MPA.onthefly
-    MPF = MPLFact(AH, AL, AF, residual, sol, on_the_fly)
+    MPF = MPLFact(AH, AL, AF, residual, sol, on_the_fly,residterm)
     return MPF
 end
 
@@ -76,14 +81,15 @@ AL=MPF.AL
 AL .= TF.(A)
 (TF == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
 MPF.AF.ipiv .= AF.ipiv
-MPF = MPLFact(A, AL, AF, MPF.residual, MPF.sol, MPF.onthefly)
+residterm=MPF.residterm
+MPF = MPLFact(A, AL, AF, MPF.residual, MPF.sol, MPF.onthefly, residterm)
 return MPF
 end
 
 
 
 """
-mplu(A::AbstractArray{TW,2}; TF=nothing, TR=nothing,
+mplu(A::AbstractArray{TW,2}; TF=nothing, TR=nothing, residterm=residtermdefault,
                     onthefly=nothing) where TW <: Real
 
 Combines the constructor of the multiprecision array with the
@@ -119,6 +125,16 @@ I do not think this is a good deal unless A is seriously ill-conditioned.
 My support for this is through ```mplu```. To do this you must put the
 ```TR``` kwarg explicitly in your call to ```mplu```.   
 
+The kwarg ```residterm``` sets the termination criterion.
+```residterm == true``` (default) terminates the iteration on
+small residuals.  ```residterm == false``` terminates the iteration on
+small normwise backward errors. Look at the docs for details.
+
+You may not get exactly the same results for this example on
+different hardware, BLAS, versions of Julia or this package. 
+I am still playing with the termination criteria and the iteration
+count could grow or shrink as I do that.
+
 ## Example
 ```jldoctest
 julia> using MultiPrecisionArrays.Examples
@@ -138,12 +154,14 @@ julia> AF = mplu(A; TF=Float32, TR=Float64, onthefly=true);
 # Solve and save the iteration history
 
 julia> mout = \\(AF, b; reporting=true);
+
 julia> mout.rhist
-4-element Vector{Float64}:
+5-element Vector{Float64}:
  1.12500e+00
- 1.17299e-07
- 1.42109e-14
- 4.44089e-16
+ 1.74765e-07
+ 3.10862e-14
+ 6.66134e-16
+ 2.22045e-16
 
 # What does this mean. I'll solve the promoted problem. TR.(A) x = b
 
@@ -152,15 +170,15 @@ julia> AD=Float64.(A);
 julia> xd = AD\\b;
 
 julia> norm(xd - mout.sol,Inf)
-8.88178e-16
+1.11022e-15
 
 # So IR with TR > TW solves a promoted problem.
 ```
 
 
 """
-function mplu(A::AbstractArray{TW,2}; TF=nothing, TR=nothing,
-                      onthefly=nothing) where TW <: Real
+function mplu(A::AbstractArray{TW,2}; TF=nothing, TR=nothing, 
+       residterm=residtermdefault, onthefly=nothing) where TW <: Real
 #
 # If the high precision matrix is single, the low precision must be half
 # unless you're planning on using a high-precision residual where TR > TW
@@ -187,6 +205,6 @@ MPA=MPArray(A; TF=TF, TR=TR, onthefly=onthefly)
 #
 # Factor the low precision copy to get the factorization object MPF
 #
-MPF=mplu!(MPA)
+MPF=mplu!(MPA; residterm=residterm)
 return MPF
 end
