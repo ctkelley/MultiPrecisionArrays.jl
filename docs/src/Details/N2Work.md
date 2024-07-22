@@ -6,12 +6,17 @@ commands $mplu$ and $\backslash$
 
 The operator is $A = I - G(N)$. We tabulate
 
-LU: time for ```AF=lu!(A)```
-TS: time for ```ldiv!(AF,b)```
-TOTL = LU+TS
-MPLU: time for ```MPF=mplu(A)```
-MPS: time for ```MPF\\b```
-TOT: MPLU+MPS
+ - LU: time for ```AF=lu!(A)```
+
+ - TS: time for ```ldiv!(AF,b)```
+
+ - TOTL = LU+TS
+
+ - MPLU: time for ```MPF=mplu(A)```
+
+ - MPS: time for ```MPF\b```
+
+ - TOT: MPLU+MPS
 
 
 openBLAS
