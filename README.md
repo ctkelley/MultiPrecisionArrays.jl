@@ -240,6 +240,7 @@ julia> @belapsed lu!(AC) setup=(AC=copy($A))
 Look at the docs for things like
 - [Memory allocation costs](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/#Memory-Allocations-for-mplu)
 - [Terminating the while loop](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Details/Termination/)
+- [Is O(N^2) work really negligible?](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Details/N2Work)
 - [Options and data structures for mplu](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/#Options-and-data-structures-for-mplu)
 
 
