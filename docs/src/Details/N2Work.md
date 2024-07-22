@@ -11,10 +11,9 @@ is $O(N^2)$ work. It's worth looking to this.
 We will use the old-fashioned defintion of a FLOP as an add, a multiply
 and a bit of address computation. So we have $N^2$ flops for any of
 
- - matrix-vector multiply $\ma \vx$,
- - the two triangular solves with the LU factors $(\ml \mU)^{-1} \vb$, and
- - computaion of the $\ell^1$ or $\ell^\infty$ matrix operator norms
-$\| \ma \|_{1,\infty}$.
+ - matrix-vector multiply $A x$,
+ - the two triangular solves with the LU factors $(LU)^{-1} b$, and
+ - computation of the $\ell^1$ or $\ell^\infty$ matrix operator norms $|| A ||_{1,\infty}$.
 
 A linear solve with an LU factorization and the standard triangular
 solve has a cost of $(N^3/3) + N^2$ TR-FLOPS. The factorization for IR
@@ -24,15 +23,15 @@ A single IR iteration costs a matrix-vector product in precision TR
 and a triangular solve in precision TF for a total of
 $3 N^2/2$ TR-FLOPS. Hence a linear solve with IR that needs $n_I$ iterations
 costs
-\[
+```math
 \frac{N^3}{6} + 3 n_I N^2/2
-\]
+```
 TR-FLOPS if one terminates on small residuals and an extra $N^2$ TR-FLOPS
 if one computes the norm of $\ma$ in precision TR.
 
 IR will clearly be better for large values of $N$. How large is that?
 In this example we compare the cost of factorization and solve
-using $lu!$ and $ldiv$ (cols 2-4) with the equivalent multiprecision
+using ```lu!``` and ```ldiv``` (cols 2-4) with the equivalent multiprecision
 commands $mplu$ and $\backslash$
 
 The operator is ```A = I - Gmat(N)```. We tabulate
