@@ -6,12 +6,7 @@
 <!--- [![MultiPrecisionArrays Downloads](https://shields.io/endpoint?url=https://pkgs.genieframework.com/api/v1/badge/MultiPrecisionArrays)](https://pkgs.genieframework.com?packages=MultiPrecisionArrays) --->
 
 
-# MultiPrecisionArrays.jl v0.1.3
-
-##  v0.1.3 will have better performance but no breaking changes from v0.1.2, the current release. Performance fix in the works. Here is a list ...
-- The termination criteria will change and I will add some options to make it more/less expensive. Computing __opnorm(A,Inf)__ for the termination criteria costs as much as a couple IR iterations. So that will become an option and terminating on small residuals will be the default. I will also use $\| A \|_1$ because
-it is the least expensive norm to compute. Further economy will be in v0.1.4.
-- The AppleAccelerate BLAS and Open BLAS can perform differently on Apple M* machines. It is not clear which is best and that may depend on number of cores, BLAS threads, version of Julia ... Play with this if you see poor performance in the solve phase of IR.   
+# MultiPrecisionArrays.jl v0.1.3 
   
 ## [C. T. Kelley](https://ctk.math.ncsu.edu)
 
@@ -27,6 +22,7 @@ __The half precision LU for Float16 in this package is much faster (more than 10
 
 - Using [```mplu```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mplu/) and [```mplu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mplu!/) to cut your factorization time in half for double precision matrices is simple and works well.
 - The API for [harvesting iteration statistics](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Details/Stats/) is stable.
+- [Using extended precision for IR](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Details/Extended) works the way Wilksinson said it did. It's fun (but slow) to play with ```TR=Float64, TW=Float32, TF=Float16```.
 - If you're a half precision person,
    - GMRES-IR works with [```mpglu```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpglu/) and [```mpglu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpglu!/)
    - BiCGSTAB-IR works with  [```mpblu```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpblu/) and [```mpblu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpblu!/)
@@ -126,7 +122,8 @@ multiplies and that can affect the performance in a significant way, even though
 
 Herewith, the world's most simple example to show how iterative refinement works. We will follow that with some benchmarking on the cost of factorizations.
 
-The results here, in the docs, and in the paper use Julia 1.10.x and OPENBLAS (the default) for LAPACK and the BLAS. You should consider trying MKL (Intel machines) or [AppleAccelerate](https://github.com/JuliaLinearAlgebra/AppleAccelerate.jl). I have switched to AppleAccelerate myself. It gets faster with every new OS release.
+The results in this README use Julia 1.10.4 and openBLAS. You should consider trying MKL (Intel machines) or [AppleAccelerate](https://github.com/JuliaLinearAlgebra/AppleAccelerate.jl). I have switched to AppleAccelerate myself. It gets faster with every new OS release, but the triangular solvers are still slower than openBLAS. The performance (iteration counts and timings) of IR depend on versions of OS/Julia/MultiPrecsionArrays and hour choice of BLAS. I have used several different versions in the docs and the ArXiV paper and you should try the
+examples in your own environment.
 
 The functions we use are __MPArray__ to create the structure and __mplu!__ to factor the low precision copy. In this example high precision is ```Float64``` and low
 precision is ```Float32```. The matrix is the sum of the identity and a constant multiple of the trapezoid rule discretization of the Greens operator for $-d^2/dx^2$ on $[0,1]$
