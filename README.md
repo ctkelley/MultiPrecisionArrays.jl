@@ -34,21 +34,17 @@ __The half precision LU for Float16 in this package is much faster (more than 10
 
 ## What's new?
 
- - v0.1.0: Better docs and ...
-   - I no longer export the constructors and the MPArray factorizations. You should only be using mplu, mplu!, mpglu, mpglu!, ...
-   - Notation and variable name change to conform with standard practice (TH --> TW for working precision, TL --> TF for factorization precision etc). If you just use the multiprecision factorizations with no options, you will not notice this.
-   - Explanation for why I am not excited about evaluating the residual in extended precision + a bit of support for that anyhow
-   - Replacing Polyester with [OhMyThreads](https://github.com/JuliaFolds2/OhMyThreads.jl) v0.5 or later. I am worried about [this](https://discourse.julialang.org/t/why-is-loopvectorization-deprecated/109547/74).
-  
- - v0.1.1: Better docs and updated termination criterion (normwise backward error)
-   
- - v0.1.2: Even better docs and ...
+ - v0.1.2: Better docs and ...
    - Krylov-IR for high precision residuals
 
 - v0.1.3: Still better docs and ..
    - Fixing a performance bug.
-   - Add options to termination criterion. Change default to small residuals.
+   - Add options to termination criterion. __Change default back to small residuals.__
 
+ - v0.1.4: Continuous improvement for the docs and ...
+    - Enable fine control of termination criteria parameters __(XXX! Adults only!)__
+
+      
 ##  Can I complain about this package?
 
 Yes, but ...
@@ -117,6 +113,10 @@ To solve a linear system $A x = b$ in $R^N$ with IR,
 one incurs the storage penalty of making a low
 precision copy of $A$ and reaps the benefit of only having to
 factor the low precision copy.
+
+While you might think this is a good idea for all problems, it is not so good for smaller problems. The reason is that IR swaps the factoriation cost for
+a matrix-vector multiply and the two triangular solves for LU __in each IR iteration__. Triangular solves do not thread as well as factorizations or matrix-vector
+multiplies and that can affect the performance in a significant way, even though it is only $N^2$ work. The details are [in the docs](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Details/N2Work).
 
 
 
