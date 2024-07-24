@@ -212,6 +212,11 @@ is that both ```mplu``` and ```lu!``` do not allocate storage for a new high pre
 but ```mplu``` allocates for a low precision copy, so the memory and allocation cost for ```mplu```
 is 50% more than ```lu```. 
 
+One issue with smaller problems is that the triangular solve
+does not parallelize as well as the factorization, so does not exploit
+multi-core processor as well. We can see this in the IR solver times because
+each iteration of IR needs a matrix-vector multiply and a triangular solve.
+
 ```
 julia> @belapsed mplu($A)
 8.59528e-02
@@ -219,10 +224,12 @@ julia> @belapsed mplu($A)
 julia> @belapsed lu!(AC) setup=(AC=copy($A))
 1.42112e-01
 
+# And now for the solve times.
+
 ```
 It is no surprise that the factorization in single precision took roughly half as long as the one in double. In the double-single precision case, iterative refinement is a great
 example of a time/storage tradeoff. You have to store a low precision copy of $A$, so the storage burden increases by 50\% and the factorization time is cut in half.
-The advantages of IR increase as the dimension increases. IR is less impressive for smaller problems and can even be slower
+The advantages of IR increase as the dimension increases. IR is less impressive for smaller problems and can even be slower for the factorization.
 ```
 julia> N=30; A=I + Gmat(N); 
 
