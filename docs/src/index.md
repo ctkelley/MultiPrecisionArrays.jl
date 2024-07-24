@@ -192,7 +192,7 @@ julia> ze=norm(z-x,Inf); zr=norm(b-A*z,Inf)/norm(b,Inf);
 julia> we=norm(w-x,Inf); wr=norm(b-A*w,Inf)/norm(b,Inf);
 
 julia> println("Errors: $ze, $we. Residuals: $zr, $wr")
-Errors: 2.22045e-16, 6.71685e-14. Residuals: 2.22045e-16, 6.71685e-14
+Errors: 5.55112e-16, 6.68354e-14. Residuals: 6.66134e-16, 6.68354e-14
 
 ```
 
@@ -213,7 +213,16 @@ julia> @belapsed mplu($A)
 julia> @belapsed lu!(AC) setup=(AC=copy($A))
 1.42840e-01
 
+# And now for the solve times.
+
+julia> @belapsed ldiv!($AF,bb) setup=(bb = copy($b))
+4.79117e-03
+
+julia> @belapsed $MPF\$b
+2.01195e-02
 ```
+So the total solve time is less, but the $O(N^2)$ work is not zero.
+
 It is no surprise that the factorization in single precision took roughly half as long as the one in double. In the double-single precision case, iterative refinement is a great
 example of a time/storage tradeoff. You have to store a low precision copy of $A$, so the storage burden increases by 50% and the factorization time is cut in half.
 The advantages of IR increase as the dimension increases. IR is less impressive for smaller problems and can even be slower
