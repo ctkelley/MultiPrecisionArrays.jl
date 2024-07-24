@@ -36,9 +36,10 @@ __The half precision LU for Float16 in this package is much faster (more than 10
 - v0.1.3: Still better docs and ..
    - Fixing a performance bug.
    - Add options to termination criterion. __Change default back to small residuals.__
-
+ 
  - v0.1.4: Continuous improvement for the docs and ...
     - Enable fine control of termination criteria parameters 
+
 
       
 ##  Can I complain about this package?
