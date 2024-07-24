@@ -104,7 +104,7 @@ GMRES and Bi-CGSTAB solvers for Krylov-IR methods are taken from
 
 Here is a simple example to show how ```mplu``` works. 
 We will follow that with some benchmarking on the cost of factorizations.
-The computations were done with Julia 1.10.2 
+The computations were done with Julia 1.10.4 
 on an Apple Mac Mini with an M2 pro processor and 32GB RAM. We used
 OPENBLAS for LAPACK and the BLAS for this example. Other choices, such as the 
 [AppleAccelerate](https://github.com/JuliaLinearAlgebra/AppleAccelerate.jl)
@@ -198,7 +198,10 @@ neither ```mplu``` nor ```lu!```
 allocate storage for a new high precision array, 
 but mplu allocates for a low precision copy, 
 so the memory and allocation cost for mplu is 
-50\% more than lu.
+50\% more than lu. One issue with smaller problems is that the triangular solve
+does not parallelize as well as the factorization, so does not exploit 
+multi-core processor as well. We can see this in the IR solver times because
+each iteration of IR needs a matrix-vector multiply and a triangular solve.
 
 ```
 julia> using BenchmarkTools
@@ -208,6 +211,11 @@ julia> @belapsed mplu($A)
 
 julia> @belapsed lu!(AC) setup=(AC=copy($A))
 1.42840e-01
+
+# And now for the solve times
+
+
+
 ```
 
 # A Few Subtleties
