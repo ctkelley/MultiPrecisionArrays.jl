@@ -38,7 +38,7 @@ __The half precision LU for Float16 in this package is much faster (more than 10
    - Add options to termination criterion. __Change default back to small residuals.__
 
  - v0.1.4: Continuous improvement for the docs and ...
-    - Enable fine control of termination criteria parameters __(XXX! Adults only!)__
+    - Enable fine control of termination criteria parameters 
 
       
 ##  Can I complain about this package?
