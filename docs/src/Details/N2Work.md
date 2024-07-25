@@ -1,7 +1,7 @@
 # Is O(N^2) work negligible?
 
-In this sectiion ```TR = TW = Float64``` and
-```TF = TS = Float32```, which means that the iterprecision transfers
+In this section ```TR = TW = Float64``` and
+```TF = TS = Float32```, which means that the interprecision transfers
 in the triangular solvers are done in-place. We terminate on small residuals.
 
 The premise behind IR is that reducing the $O(N^3)$ cost of the
