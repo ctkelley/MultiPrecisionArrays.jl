@@ -271,7 +271,8 @@ a preconditioner for GMRES. The call looks like ```MPGF=mpglu(A)```. You solve $
 
 ## Evaluating residuals in higher precision than the working precision.
 
-This is the classical application. __MultiPrecisionArrays.jl__ supports that to a limited degree. It's all explained, but not encouraged, [here](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Details/Extended/) in the docs.
+This is the classical application. __MultiPrecisionArrays.jl__ supports that. It's all explained [here](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Details/Extended/) in the docs. Doing this can solve some ill-conditioning problems, 
+but it is not something you should do routinely.
 
 ## Harvesting Iteration Statistics
 
