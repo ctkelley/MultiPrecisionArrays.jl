@@ -214,9 +214,15 @@ julia> @belapsed lu!(AC) setup=(AC=copy($A))
 
 # And now for the solve times
 
+julia> @belapsed ldiv!($AF,bb) setup=(bb = copy($b))
+4.79117e-03
 
-
+julia> @belapsed $MPF\$b
+2.01195e-02
 ```
+
+So the total solve time (factorization and solve) is less for IR 
+by roughly 40%.
 
 # A Few Subtleties
 
