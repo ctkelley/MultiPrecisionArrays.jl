@@ -1,6 +1,6 @@
 # Terminating the while loop
 
-Todays values are
+Today's values are
 ```math
 C_e = 1.0, C_r = 20.0, r_{max} = .1
 ```
