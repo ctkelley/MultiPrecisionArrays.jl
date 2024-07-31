@@ -180,12 +180,12 @@ function mpkrir(AF::MPKFact, b; reporting = false,
         kout = kl_bicgstab(x0, r, MPhatv, VF, eta, MPhptv;
                pdata = MP_Data, side = "left", kl_store=kl_store)
         end
-        #
-        # Make some noise
-        #
         push!(khist,length(kout.reshist))
         itcp1 = itc + 1
         winner = kout.idid ? " $ktype converged" : " $ktype failed"
+        #
+        # Make some noise
+        #
         verbose && (println(
             "Krylov stats: Iteration $itcp1 :",
             length(kout.reshist),
