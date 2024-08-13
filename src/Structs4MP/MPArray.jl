@@ -2,7 +2,7 @@
 MPArray(AH::AbstractArray{Float64,2}; TF = Float32, onthefly=false)
 Default constructor for MPArray. 
 
-C. T. Kelley 2023
+C. T. Kelley 2024
 
 The MPArray data structure is
 
@@ -23,7 +23,7 @@ function MPArray(AH::AbstractArray{Float64,2};
     AL = TF.(AH)
     TH = eltype(AH)
 # Default is interprecision on the fly if TF = Float32
-    (onthefly==nothing) && (onthefly = (TF==Float16))
+    (onthefly==nothing) && (onthefly = (TF==Float32))
 # If TR = nothing, that's a signal to set TR=TH
     (TR==nothing) ? TRR=TH : TRR=TR
     (m,n)=size(AH); res=ones(TRR,n); sol=zeros(TRR,n)
