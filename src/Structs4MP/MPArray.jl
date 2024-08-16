@@ -2,7 +2,7 @@
 MPArray(AH::AbstractArray{Float64,2}; TF = Float32, onthefly=false)
 Default constructor for MPArray. 
 
-C. T. Kelley 2023
+C. T. Kelley 2024
 
 The MPArray data structure is
 
