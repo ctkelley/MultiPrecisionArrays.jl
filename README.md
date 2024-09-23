@@ -181,8 +181,7 @@ julia> using MultiPrecisionArrays
 
 julia> using MultiPrecisionArrays.Examples
 
-julia> using BenchmarkTools, LinearAlgebra
-
+julia> using BenchmarkTools
 julia> N=4096;
 
 julia> G=Gmat(N);
@@ -350,10 +349,13 @@ There are more examples for this in the [paper](https://github.com/ctkelley/Mult
 As of now these packages are the only direct dependencies
 
 - OhMyThreads
+- Reexport
 - SIAMFANLEquations
 
 as we use LinearAlgebra and SparseArrays from Base. I use the Krylov solvers and examples from SIAMFANLEquations. OhMyThreads is here because 
 threading with ```OhMyThreads.@tasks``` makes the LU for Float16 run much faster. Once LU for Float16 is in LAPACK/BLAS, I will eliminate that dependency.
+
+I use Reexport to make the identity ```I``` part of the Examples submodule. This makes it easier to run the examples in the docs.
 
 ## Endorsement
 
