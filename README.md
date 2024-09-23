@@ -347,12 +347,12 @@ There are more examples for this in the [paper](https://github.com/ctkelley/Mult
 
 ## Dependencies
 
-As of now you need to install these packages
+As of now these packages are the only direct dependencies
 
 - OhMyThreads
 - SIAMFANLEquations
 
-and use LinearAlgebra and SparseArrays from Base. I use the Krylov solvers and examples from SIAMFANLEquations. OhMyThreads is here because 
+as we use LinearAlgebra and SparseArrays from Base. I use the Krylov solvers and examples from SIAMFANLEquations. OhMyThreads is here because 
 threading with ```OhMyThreads.@tasks``` makes the LU for Float16 run much faster. Once LU for Float16 is in LAPACK/BLAS, I will eliminate that dependency.
 
 ## Endorsement
