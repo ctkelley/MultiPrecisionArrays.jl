@@ -181,7 +181,7 @@ julia> using MultiPrecisionArrays
 
 julia> using MultiPrecisionArrays.Examples
 
-julia> using BenchmarkTools
+julia> using BenchmarkTools, LinearAlgebra
 
 julia> N=4096;
 
