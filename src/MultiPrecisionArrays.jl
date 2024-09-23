@@ -172,6 +172,7 @@ include("Factorizations/mpblu!.jl")
 module Examples
 using MultiPrecisionArrays
 using LinearAlgebra: LinearAlgebra
+using Reexport; @reexport import LinearAlgebra.I
 #using LinearAlgebra: BLAS
 
 export Gmat
