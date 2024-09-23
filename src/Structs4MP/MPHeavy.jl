@@ -6,8 +6,8 @@ struct MPGEFact
     AH::AbstractArray
     AL::AbstractArray
     AF::Factorization
-    VStore:: Array
-    KStore:: NTuple
+    VStore::Array
+    KStore::NTuple
     residual::Vector
     sol::Vector
     onthefly::Bool
@@ -40,8 +40,8 @@ struct MPGHFact
     AH::AbstractArray
     AL::AbstractArray
     AF::Factorization
-    VStore:: Array
-    KStore:: NTuple
+    VStore::Array
+    KStore::NTuple
     residual::Vector
     sol::Vector
     onthefly::Bool
@@ -51,15 +51,17 @@ end
 function MPHArray(AH::AbstractArray{Float64,2}; TF = Float32)
     AStore = copy(AH)
     AL = TF.(AH)
-    (m,n)=size(AH); res=ones(eltype(AH),n)
-    sol=ones(eltype(AH),n)
+    (m, n) = size(AH)
+    res = ones(eltype(AH), n)
+    sol = ones(eltype(AH), n)
     MPH = MPHArray(AH, AStore, AL, res, sol, true)
 end
 
 function MPHArray(AH::AbstractArray{Float32,2}; TF = Float16)
     AStore = copy(AH)
     AL = TF.(AH)
-    (m,n)=size(AH); res=ones(eltype(AH),n)
-    sol=ones(eltype(AH),n)
+    (m, n) = size(AH)
+    res = ones(eltype(AH), n)
+    sol = ones(eltype(AH), n)
     MPH = MPHArray(AH, AStore, AL, res, sol, true)
 end

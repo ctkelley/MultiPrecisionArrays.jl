@@ -15,17 +15,17 @@ The kwarg ```residterm``` sets the termination criterion.
 small residuals.  ```residterm == false``` terminates the iteration on
 small normwise backward errors. Look at the docs for details.
 """
-function mpglu!(MPGA::MPGArray; residterm=residtermdefault)
-AL=MPGA.AL
-AH=MPGA.AH
-VStore=MPGA.VStore
-KStore=MPGA.KStore
-res=MPGA.residual
-sol=MPGA.sol
-TF=eltype(AL)
-(TF == Float16) ? ALF = hlu!(AL) : ALF = lu!(AL)
-MPF=MPGEFact(AH, AL, ALF, VStore, KStore, res, sol, true,residterm)
-return MPF
+function mpglu!(MPGA::MPGArray; residterm = residtermdefault)
+    AL = MPGA.AL
+    AH = MPGA.AH
+    VStore = MPGA.VStore
+    KStore = MPGA.KStore
+    res = MPGA.residual
+    sol = MPGA.sol
+    TF = eltype(AL)
+    (TF == Float16) ? ALF = hlu!(AL) : ALF = lu!(AL)
+    MPF = MPGEFact(AH, AL, ALF, VStore, KStore, res, sol, true, residterm)
+    return MPF
 end
 
 """
@@ -51,21 +51,21 @@ structure is immutable and MPF.AF.info cannot be changed.
 Reassigning MPG works and resuses almost all of the storage in the
 original array
 """
-function mpglu!(MPG::MPGEFact, A::AbstractArray{TW,2}) where TW <: Real
-TF=eltype(MPG.AH)
-(TF == TW) || error("Precision error in mplu!")
-AH=MPG.AH
-AH = A
-TF = eltype(MPG.AL)
-AL=MPG.AL
-AL .= TF.(A)
-(TF == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
-MPG.AF.ipiv .= AF.ipiv
-VStore=MPG.VStore 
-KStore=MPG.KStore
-residterm=MPG.residterm
-MPG=MPGEFact(AH, AL, AF, VStore, KStore, MPG.residual, MPG.sol, true, residterm)
-return MPG
+function mpglu!(MPG::MPGEFact, A::AbstractArray{TW,2}) where {TW<:Real}
+    TF = eltype(MPG.AH)
+    (TF == TW) || error("Precision error in mplu!")
+    AH = MPG.AH
+    AH = A
+    TF = eltype(MPG.AL)
+    AL = MPG.AL
+    AL .= TF.(A)
+    (TF == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
+    MPG.AF.ipiv .= AF.ipiv
+    VStore = MPG.VStore
+    KStore = MPG.KStore
+    residterm = MPG.residterm
+    MPG = MPGEFact(AH, AL, AF, VStore, KStore, MPG.residual, MPG.sol, true, residterm)
+    return MPG
 end
 
 
@@ -170,12 +170,17 @@ julia> xp=Float64.(A)\\b; norm(xp-mout3.sol,Inf)
 
 ```
 """
-function mpglu(A::AbstractArray{TW,2}; TF=Float32, TR=nothing, 
-          residterm=residtermdefault, basissize=10) where TW <: Real
-(TW==Float32) ? TF=Float16 : TF=TF
-MPGA=MPGArray(A; basissize=basissize, TF=TF, TR=TR)
-MPGF=mpglu!(MPGA; residterm=residterm)
-return MPGF
+function mpglu(
+    A::AbstractArray{TW,2};
+    TF = Float32,
+    TR = nothing,
+    residterm = residtermdefault,
+    basissize = 10,
+) where {TW<:Real}
+    (TW == Float32) ? TF = Float16 : TF = TF
+    MPGA = MPGArray(A; basissize = basissize, TF = TF, TR = TR)
+    MPGF = mpglu!(MPGA; residterm = residterm)
+    return MPGF
 end
 
 
@@ -183,13 +188,12 @@ end
 # Factor a heavy MPArray and set it up for GMRES with \
 # If you want to use it with IR (why?) then set gmresok=false
 #
-function mpglu!(MPH::MPHArray; gmresok = true, basissize=10, 
-              residterm=residtermdefault)
+function mpglu!(MPH::MPHArray; gmresok = true, basissize = 10, residterm = residtermdefault)
     AH = MPH.AH
     TD = eltype(AH)
     res = MPH.residual
     sol = MPH.sol
-    n=length(res)
+    n = length(res)
     AStore = MPH.AStore
     AL = MPH.AL
     TF = eltype(AL)
@@ -203,8 +207,8 @@ function mpglu!(MPH::MPHArray; gmresok = true, basissize=10,
     AStore .= TD.(AL)
     AF = LU(AStore, ALF.ipiv, ALF.info)
     if gmresok
-        VStore=zeros(TD, n, basissize)
-        KStore=kstore(n,"gmres")
+        VStore = zeros(TD, n, basissize)
+        KStore = kstore(n, "gmres")
         MPF = MPGHFact(AH, AL, AF, VStore, KStore, res, sol, true, residterm)
     else
         MPF = MPHFact(AH, AL, AF, res, sol, true, residterm)
@@ -216,5 +220,5 @@ end
 # for CI.
 #
 function mphlu!(MPH::MPHArray)
-    MPF = mpglu!(MPH; gmresok = false, residterm=residtermdefault)
+    MPF = mpglu!(MPH; gmresok = false, residterm = residtermdefault)
 end

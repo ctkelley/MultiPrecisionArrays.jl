@@ -77,11 +77,11 @@ julia> [mout.TW mout.TF]
 
 """
 function mpgeslir(MPA::MPArray, b; reporting = false, verbose = true)
-# Factor MPA and return Factorization object
-MPF=mplu!(MPA)
-# Call mpgeslir for the solve
-xi=\(MPF, b; reporting=reporting, verbose=verbose)
-return xi
+    # Factor MPA and return Factorization object
+    MPF = mplu!(MPA)
+    # Call mpgeslir for the solve
+    xi = \(MPF, b; reporting = reporting, verbose = verbose)
+    return xi
 end
 
 """
@@ -126,9 +126,9 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     # What kind of problem are we dealing with?
     #
     mpdebug = false
-    N=length(b)
+    N = length(b)
     normtype = Inf
-#    normtype = 1
+    #    normtype = 1
     TB = eltype(b)
     MPStats = getStats(AF)
     TF = MPStats.TF
@@ -137,21 +137,21 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     TR = eltype(AF.sol)
     x = AF.sol
     x .*= TR(0.0)
-#    xa = AF.sol .* TRA(0.0)
-#    xr = AF.sol .* TR(0.0)
-#    x=xr
-    onthefly=AF.onthefly
+    #    xa = AF.sol .* TRA(0.0)
+    #    xr = AF.sol .* TR(0.0)
+    #    x=xr
+    onthefly = AF.onthefly
     # If I'm computing a high precision residual, TS=TR
     # and I must do interprecision transfers on the fly.
     HiRes = (eps(TR) < eps(TW))
-    HiRes && (onthefly=true)
+    HiRes && (onthefly = true)
     #
     # TFact is the precision of the factors; should be TF
     # unless we're dealing with a heavy MPArray for CI
     #
     TFact = MPStats.TFact
     TFok = ((TF == TFact) || (typeof(AF) == MPHFact))
-    TFok  || error("TF is supposed to be TFact")
+    TFok || error("TF is supposed to be TFact")
     #
     # Are the precisions consistent? If not, I have a bug somewhere.
     # Otherwise, set the tolerance on the iteration to 10*eps.
@@ -160,32 +160,32 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     #
     (TW == TB) || error("inconsistent precisions; A and b must have same type")
     residterm = AF.residterm
-    term_data=termination_settings(TR, residterm)
+    term_data = termination_settings(TR, residterm)
     tolf = term_data.tolf
-    AD=AF.AH
-    residterm ?  anrm = 0.0 : anrm = opnorm(AD, 1)
-#    residterm ? tf=10.0 : tf=.5
-#    tolf = eps(TR)*tf
-#    tolf = eps(TR)*TR.(.9)
-#    tolf = eps(TR)*10.0
+    AD = AF.AH
+    residterm ? anrm = 0.0 : anrm = opnorm(AD, 1)
+    #    residterm ? tf=10.0 : tf=.5
+    #    tolf = eps(TR)*tf
+    #    tolf = eps(TR)*TR.(.9)
+    #    tolf = eps(TR)*10.0
     #
     # Keep the records and accumulate the statistics. 
     #
     Meth = MPStats.Meth
     verbose && println(
         Meth,
-        ": High precision = $TW, Low precision = $TF, Factorization storage precision = $TFact, Residual precision = $TR"
+        ": High precision = $TW, Low precision = $TF, Factorization storage precision = $TFact, Residual precision = $TR",
     )
     #
     # Showtime!
     #
     AD = AF.AH
-    bnrm = norm(b, normtype) 
-#
-#   I'm using the L1 norm because it's much faster.
-#
-#    residterm=AF.residterm
-#    residterm ?  anrm = 0.0 : anrm = opnorm(AD, 1)
+    bnrm = norm(b, normtype)
+    #
+    #   I'm using the L1 norm because it's much faster.
+    #
+    #    residterm=AF.residterm
+    #    residterm ?  anrm = 0.0 : anrm = opnorm(AD, 1)
     bsc = b
     AFS = AF.AF
     #
@@ -193,20 +193,20 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     # iteration count the same as the high precision matvec and the 
     # triangular sovles
     #
-#    x = zeros(TR, size(b))
+    #    x = zeros(TR, size(b))
     xnrm = norm(x, normtype)
     #
     # Initial residual
     #
-    r .= b 
+    r .= b
     tol = tolf
-    onthefly ? (rs=ones(TF,1)) : (rs=zeros(TF,size(b)))
-     
-#
-#   Keep the books. Test for excessive residual precision.
-#  
+    onthefly ? (rs = ones(TF, 1)) : (rs = zeros(TF, size(b)))
+
+    #
+    #   Keep the books. Test for excessive residual precision.
+    #  
     ERes = (eps(TR) < eps(Float64))
-    HiRes ? (THist = TR) : (THist=Float64)
+    HiRes ? (THist = TR) : (THist = Float64)
     rhist = Vector{THist}()
     rnrm = TR(norm(r, normtype))
     rnrmx = rnrm * 1.e6
@@ -217,11 +217,11 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     #
     push!(rhist, rnrm)
     # Store r and x in the residual precision if TR is not TW
-    HiRes ? rloop=TR.(r) : rloop=r
-    HiRes ? xloop=TR.(x) : xloop=x
-    rrf=.5
+    HiRes ? rloop = TR.(r) : rloop = r
+    HiRes ? xloop = TR.(x) : xloop = x
+    rrf = 0.5
     # Solve loop
-    while (rnrm > (anrm * xnrm + bnrm) *tolf) && (rnrm <= rrf*rnrmx)
+    while (rnrm > (anrm * xnrm + bnrm) * tolf) && (rnrm <= rrf * rnrmx)
         #
         # Scale the residual
         #
@@ -252,14 +252,14 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
         rnrm = norm(rloop, normtype)
         itc += 1
         push!(rhist, rnrm)
-        xnrm=norm(xloop,normtype)
-        tol = tolf*(anrm * xnrm + bnrm)
+        xnrm = norm(xloop, normtype)
+        tol = tolf * (anrm * xnrm + bnrm)
         mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol")
         #
         # If the residual norm increased, complain.
         #
-#        complain_resid = (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
-#        complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
+        #        complain_resid = (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
+        #        complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
     end
     x = xloop
     verbose && println("Residual history = $rhist")
@@ -273,9 +273,9 @@ end
 function getTF(AF::MPFact)
     TF = eltype(AF.AL)
     if is_heavy(AF)
-    TFact = eltype(AF.AH)
+        TFact = eltype(AF.AH)
     else
-    TFact = eltype(AF.AL)
+        TFact = eltype(AF.AL)
     end
     return (TF, TFact)
 end

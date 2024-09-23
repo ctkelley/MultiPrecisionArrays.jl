@@ -10,17 +10,17 @@ storage for the things BiCGSTAB needs.
 You get a factorization
 object as output and can use ```\\``` to solve linear systems.
 """
-function mpblu!(MPBA::MPBArray; residterm=residtermdefault)
-AL=MPBA.AL
-AH=MPBA.AH
-VStore=MPBA.VStore
-KStore=MPBA.KStore
-res=MPBA.residual
-sol=MPBA.sol
-TF=eltype(AL)
-(TF == Float16) ? ALF = hlu!(AL) : ALF = lu!(AL)
-MPF=MPBFact(AH, AL, ALF, VStore, KStore, res, sol, true, residterm)
-return MPF
+function mpblu!(MPBA::MPBArray; residterm = residtermdefault)
+    AL = MPBA.AL
+    AH = MPBA.AH
+    VStore = MPBA.VStore
+    KStore = MPBA.KStore
+    res = MPBA.residual
+    sol = MPBA.sol
+    TF = eltype(AL)
+    (TF == Float16) ? ALF = hlu!(AL) : ALF = lu!(AL)
+    MPF = MPBFact(AH, AL, ALF, VStore, KStore, res, sol, true, residterm)
+    return MPF
 end
 
 """
@@ -46,21 +46,21 @@ structure is immutable and MPF.AF.info cannot be changed.
 Reassigning MPG works and resuses almost all of the storage in the
 original array.
 """
-function mpblu!(MPG::MPBFact, A::AbstractArray{TW,2}) where TW <: Real
-TF=eltype(MPG.AH)
-(TF == TW) || error("Precision error in mplu!")
-AH=MPG.AH
-AH = A
-TF = eltype(MPG.AL)
-AL=MPG.AL
-AL .= TF.(A)
-(TF == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
-MPG.AF.ipiv .= AF.ipiv
-VStore=MPG.VStore 
-KStore=MPG.KStore
-residterm=MPG.residterm 
-MPG=MPBFact(AH, AL, AF, VStore, KStore, MPG.residual, MPG.sol, true, residterm)
-return MPG
+function mpblu!(MPG::MPBFact, A::AbstractArray{TW,2}) where {TW<:Real}
+    TF = eltype(MPG.AH)
+    (TF == TW) || error("Precision error in mplu!")
+    AH = MPG.AH
+    AH = A
+    TF = eltype(MPG.AL)
+    AL = MPG.AL
+    AL .= TF.(A)
+    (TF == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
+    MPG.AF.ipiv .= AF.ipiv
+    VStore = MPG.VStore
+    KStore = MPG.KStore
+    residterm = MPG.residterm
+    MPG = MPBFact(AH, AL, AF, VStore, KStore, MPG.residual, MPG.sol, true, residterm)
+    return MPG
 end
 
 
@@ -150,10 +150,14 @@ julia> xp=Float64.(A)\\b; norm(xp-mout3.sol,Inf)
 ```
 
 """
-function mpblu(A::AbstractArray{TW,2}; residterm=residtermdefault,
-          TF=Float32, TR=nothing) where TW <: Real
-(TW==Float32) ? TF=Float16 : TF=TF
-MPBA=MPBArray(A; TF=TF, TR=TR)
-MPBF=mpblu!(MPBA; residterm=residterm)
-return MPBF
+function mpblu(
+    A::AbstractArray{TW,2};
+    residterm = residtermdefault,
+    TF = Float32,
+    TR = nothing,
+) where {TW<:Real}
+    (TW == Float32) ? TF = Float16 : TF = TF
+    MPBA = MPBArray(A; TF = TF, TR = TR)
+    MPBF = mpblu!(MPBA; residterm = residterm)
+    return MPBF
 end

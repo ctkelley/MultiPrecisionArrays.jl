@@ -25,7 +25,7 @@ include("Structs4MP/MPHeavy.jl")
 
 MPFact = Union{MPLFact,MPHFact}
 MPLFacts = Union{MPLFact}
-MPGFact = Union{MPGEFact, MPGHFact}
+MPGFact = Union{MPGEFact,MPGHFact}
 MPKFact = Union{MPGFact,MPBFact}
 
 #export MPGFact
@@ -60,14 +60,14 @@ function \(AF::MPFact, b; verbose = false, reporting = false)
     return xi
 end
 
-function \(AF::MPGFact, b; verbose = false, reporting = false, mpdebug=false) 
-    xi = mpkrir(AF, b; verbose = verbose, reporting = reporting, mpdebug=mpdebug)
+function \(AF::MPGFact, b; verbose = false, reporting = false, mpdebug = false)
+    xi = mpkrir(AF, b; verbose = verbose, reporting = reporting, mpdebug = mpdebug)
     return xi
 end
 
-function \(MPA::Union{MPArray}, b; verbose=false, reporting=false)
-          xi = mpgeslir(MPA, b; verbose = verbose, reporting = reporting)
-          return xi
+function \(MPA::Union{MPArray}, b; verbose = false, reporting = false)
+    xi = mpgeslir(MPA, b; verbose = verbose, reporting = reporting)
+    return xi
 end
 
 function \(AF::MPBFact, b; verbose = false, reporting = false)
@@ -98,8 +98,8 @@ export mpblu
 export mpblu!
 export mpglu!
 export mpglu
-export mpqr!
-export mpcholesky!
+#export mpqr!
+#export mpcholesky!
 #
 # The solvers are mpgeslir (iterative refinement) and mpkrir (IR-Krylov).
 # I'm not working on more than that right now. I have overloaded

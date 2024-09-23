@@ -18,16 +18,22 @@ end
 The constructor just builds an MPArray with TW=Float64. Set TF=Float16
 to get double/half IR.
 """
-function MPArray(AH::AbstractArray{Float64,2}; 
-      TR=nothing, TF = Float32, onthefly=nothing)
+function MPArray(
+    AH::AbstractArray{Float64,2};
+    TR = nothing,
+    TF = Float32,
+    onthefly = nothing,
+)
     AL = TF.(AH)
     TH = eltype(AH)
-# Default is interprecision on the fly if TF = Float32
-    (onthefly==nothing) && (onthefly = (TF==Float16))
-# If TR = nothing, that's a signal to set TR=TH
-    (TR==nothing) ? TRR=TH : TRR=TR
-    (m,n)=size(AH); res=ones(TRR,n); sol=zeros(TRR,n)
-    MPA = MPArray(AH, AL, res, sol, onthefly) 
+    # Default is interprecision on the fly if TF = Float32
+    (onthefly == nothing) && (onthefly = (TF == Float16))
+    # If TR = nothing, that's a signal to set TR=TH
+    (TR == nothing) ? TRR = TH : TRR = TR
+    (m, n) = size(AH)
+    res = ones(TRR, n)
+    sol = zeros(TRR, n)
+    MPA = MPArray(AH, AL, res, sol, onthefly)
 end
 """
 MPArray(AH::AbstractArray{Float32,2}; 
@@ -46,14 +52,13 @@ Data structures etc are the same as in the
 double-single/half case, but you don't have the option to go lower than
 half.
 """
-function MPArray(AH::AbstractArray{Float32,2}; 
-               TR=nothing, TF = Float16, onthefly=true)
+function MPArray(AH::AbstractArray{Float32,2}; TR = nothing, TF = Float16, onthefly = true)
     AL = TF.(AH)
     TH = eltype(AH)
-# If TR = nothing, that's a signal to set TR=TH
-    (TR==nothing) ? TRR=TH : TRR=TR
-    (m,n)=size(AH); res=ones(TRR,n); sol=zeros(TRR,n)
+    # If TR = nothing, that's a signal to set TR=TH
+    (TR == nothing) ? TRR = TH : TRR = TR
+    (m, n) = size(AH)
+    res = ones(TRR, n)
+    sol = zeros(TRR, n)
     MPA = MPArray(AH, AL, res, sol, onthefly)
 end
-
-

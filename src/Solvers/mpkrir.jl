@@ -109,12 +109,11 @@ BiCGSTAB works the same way.
 
 
 """
-function mpkrir(AF::MPKFact, b; reporting = false, 
-                verbose = false, mpdebug = false)
+function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = false)
     #
     # Which Krylov method are we talking about?
-    ktype=kmeth(AF)
-    krylov_ok = (ktype=="GMRES") || (ktype=="BiCGSTAB")
+    ktype = kmeth(AF)
+    krylov_ok = (ktype == "GMRES") || (ktype == "BiCGSTAB")
     krylov_ok || error("$ktype is not supported")
     #
     normtype = Inf
@@ -122,25 +121,25 @@ function mpkrir(AF::MPKFact, b; reporting = false,
     TR = eltype(x)
     x .*= TR(0.0)
     # remember that eps(TR) = 2 * unit roundoff
-    residterm=AF.residterm
-    term_data=termination_settings(TR, residterm)
+    residterm = AF.residterm
+    term_data = termination_settings(TR, residterm)
     tolf = term_data.tolf
-    AD=AF.AH
-    residterm ?  anrm = 0.0 : anrm = opnorm(AD, 1)
-#    anrm = term_data.anrm
-#    residterm ? tf=1.0 : tf=.9
-#    tolf = tf*eps(TR)
+    AD = AF.AH
+    residterm ? anrm = 0.0 : anrm = opnorm(AD, 1)
+    #    anrm = term_data.anrm
+    #    residterm ? tf=1.0 : tf=.9
+    #    tolf = tf*eps(TR)
     n = length(b)
     onetb = TR(1.0)
     bsc = copy(b)
-#    x = zeros(TR, size(b))
+    #    x = zeros(TR, size(b))
     bnorm = norm(b, normtype)
     xnorm = TR(0.0)
     #
     AFS = AF.AF
     AD = AF.AH
-#    residterm ?  anrm = 0.0 : anrm = opnorm(AD, 1)
-#    anorm = opnorm(AD,normtype)
+    #    residterm ?  anrm = 0.0 : anrm = opnorm(AD, 1)
+    #    anorm = opnorm(AD,normtype)
     #
     # Initialize Krylov-IR
     #
@@ -157,14 +156,14 @@ function mpkrir(AF::MPKFact, b; reporting = false,
     # Krylov-IR loop
     #
     itc = 0
-    VF=AF.VStore
+    VF = AF.VStore
     normdec = true
     kl_store = AF.KStore
-    atvd=copy(r)
+    atvd = copy(r)
     MP_Data = (MPF = AF, atv = atvd)
-    tol = tolf *(bnorm + anrm *xnorm)
-    rrf = .5
-    while (rnrm > tol) && ( rnrm <= rrf * rnrmx )
+    tol = tolf * (bnorm + anrm * xnorm)
+    rrf = 0.5
+    while (rnrm > tol) && (rnrm <= rrf * rnrmx)
         x0 = zeros(TR, n)
         #
         # Scale the residual 
@@ -173,14 +172,32 @@ function mpkrir(AF::MPKFact, b; reporting = false,
         #
         # Solve the correction equation with a Krylov method
         #
-        if ktype=="GMRES"
-        kout = kl_gmres(x0, r, MPhatv, VF, eta, MPhptv; 
-               pdata = MP_Data, side = "left", kl_store=kl_store)
-        elseif ktype=="BiCGSTAB"
-        kout = kl_bicgstab(x0, r, MPhatv, VF, eta, MPhptv;
-               pdata = MP_Data, side = "left", kl_store=kl_store)
+        if ktype == "GMRES"
+            kout = kl_gmres(
+                x0,
+                r,
+                MPhatv,
+                VF,
+                eta,
+                MPhptv;
+                pdata = MP_Data,
+                side = "left",
+                kl_store = kl_store,
+            )
+        elseif ktype == "BiCGSTAB"
+            kout = kl_bicgstab(
+                x0,
+                r,
+                MPhatv,
+                VF,
+                eta,
+                MPhptv;
+                pdata = MP_Data,
+                side = "left",
+                kl_store = kl_store,
+            )
         end
-        push!(khist,length(kout.reshist))
+        push!(khist, length(kout.reshist))
         itcp1 = itc + 1
         winner = kout.idid ? " $ktype converged" : " $ktype failed"
         #
@@ -219,15 +236,14 @@ function mpkrir(AF::MPKFact, b; reporting = false,
         #
         (rnrm >= rnrmx) && (normdec = false)
         ~normdec && mpdebug && (rnrm >= rnrmx) && println("Residual norm increased")
-    xnorm=norm(x,normtype)
-    tol = tolf *(bnorm + anrm *xnorm)
+        xnorm = norm(x, normtype)
+        tol = tolf * (bnorm + anrm * xnorm)
     end
     verbose && println("Residual history = $rhist")
     if reporting
         TF = eltype(AF.AL)
         TW = eltype(AF.AH)
-        return (rhist = rhist, khist = khist,
-               sol = x, TW = TW, TF = TF)
+        return (rhist = rhist, khist = khist, sol = x, TW = TW, TF = TF)
     else
         return x
     end
@@ -245,4 +261,3 @@ function MPhptv(x, pdata)
     ldiv!(pdata.MPF.AF, x)
     return x
 end
-
