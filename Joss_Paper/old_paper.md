@@ -100,6 +100,130 @@ GMRES and Bi-CGSTAB solvers for Krylov-IR methods are taken from
 [SIAMFANL.jl](https://github.com/ctkelley/SIAMFANLEquations.jl)
 [@kelley:2022b].
 
+# Example
+
+Here is a simple example to show how ```mplu``` works. 
+We will follow that with some benchmarking on the cost of factorizations.
+The computations were done with Julia 1.10.4 
+on an Apple Mac Mini with an M2 pro processor and 32GB RAM. We used
+OPENBLAS for LAPACK and the BLAS for this example. Other choices, such as the 
+[AppleAccelerate](https://github.com/JuliaLinearAlgebra/AppleAccelerate.jl)
+framework would work equally well.
+
+In this example high (working)
+precision is double, ```Float64```, and low (factorization)
+precision is single, ```Float32```. 
+The matrix is the sum of the identity and a constant multiple of the trapezoid rule discretization of the Greens operator for $-d^2/dx^2$ on $[0,1]$
+
+$$
+G u(x) = \int_0^1 g(x,y) u(y) \, dy 
+$$
+
+where
+
+$$
+g(x,y) = \min(x,y) ( 1 - \max(x,y) ).
+$$
+
+The discretization for an $N$-point discretization is the $N \times N$
+maatrix
+$$
+G_{ij} = g(x_i, x_j) /(N+1) 
+$$
+where $x_i = i/(N+1)$. 
+
+
+The code for construction $G$ is in the __/src/Examples__ directory. The file is __Gmat.jl__. You need to do 
+```
+using MultiPrecisionArrays
+using MultiPrecisionArrays.Examples
+```
+to use ```mplu``` and ```Gmat```.
+
+Now we will see how the results look. In this example we compare the result with iterative refinement with ```A\b```, which is LAPACK's LU. 
+As you can see the results are equally good.
+Note that a factorization object ```MPF``` is the
+output of ```mplu```. This is analogous to ```AF=lu(A)``` in LAPACK.
+
+```
+julia> using MultiPrecisionArrays
+
+julia> using MultiPrecisionArrays.Examples
+
+julia> using BenchmarkTools
+
+julia> N=4096;
+
+julia> # Build G on an N x N grid
+
+julia> G=Gmat(N);
+
+julia> # The operator is I - G
+
+julia> A = I - G;
+
+julia> # Create a test problem where the solution is x = ones(N)
+
+julia> x=ones(N); b=A*x;
+
+julia> # Compute the mplu and lu factorizations of A
+
+julia> MPF=mplu(A); AF=lu(A);
+
+julia> # Solve A x = b with both factorizations
+
+julia> z=MPF\b; w=AF\b;
+
+julia> # Compute relative errors and residuals for mplu
+
+julia> mpluerr=norm(z-x,Inf); mpluresid=norm(b-A*z,Inf)/norm(b,Inf);
+
+julia> # Compute relative errors and residuals for lu
+
+julia> luerr=norm(w-x,Inf); luresid=norm(b-A*w,Inf)/norm(b,Inf);
+
+julia> # Print the results
+
+julia> println("Errors: $mpluerr, $luerr. Residuals: $mpluresid, $luresid")
+Errors: 4.44089e-16, 6.68354e-14. Residuals: 4.44089e-16, 6.68354e-14
+```
+
+So the results are equally good.
+
+The compute time for ```mplu``` should be roughly half that of ```lu```.
+A fair comparison is with ```lu!```, which does not allocate new storage
+for the factorization. ```mplu``` factors a low precision array, 
+so the factorization cost is cut in half. Memory is a different story because 
+neither ```mplu``` nor ```lu!``` 
+allocate storage for a new high precision array, 
+but mplu allocates for a low precision copy, 
+so the memory and allocation cost for mplu is 
+50\% more than lu. One issue with smaller problems is that the triangular solve
+does not parallelize as well as the factorization, so does not exploit 
+multi-core processor as well. We can see this in the IR solver times because
+each iteration of IR needs a matrix-vector multiply and a triangular solve.
+
+```
+julia> using BenchmarkTools
+
+julia> @belapsed mplu($A)
+8.60945e-02
+
+julia> @belapsed lu!(AC) setup=(AC=copy($A))
+1.42840e-01
+
+# And now for the solve times
+
+julia> @belapsed ldiv!($AF,bb) setup=(bb = copy($b))
+4.79117e-03
+
+julia> @belapsed $MPF\$b
+2.01195e-02
+```
+
+So the total solve time (factorization and solve) is less for IR 
+by roughly 40%.
+
 # A Few Subtleties
 
 Within the algorithm one has to determine what the line
