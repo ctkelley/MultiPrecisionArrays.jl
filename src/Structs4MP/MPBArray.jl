@@ -41,16 +41,16 @@ and a few other things BiCGSTAB needs. If the high precision
 matrix is double, the low precision is single by default. Half is an option
 which you get with TF=Float16.
 """
-function MPBArray(AH::AbstractArray{Float64,2}; TF=Float32, TR=nothing)
-AL=TF.(AH)
-TW=eltype(AH)
-(m,n)=size(AH)
-(TR == nothing) && (TR = TW)
-res=ones(TR,n)
-sol=ones(TR,n)
-VStore=copy(res)
-KStore=KIRstore(n,"bicgstab")
-MPBA=MPBArray(AH, AL, VStore, KStore, res, sol, true)
+function MPBArray(AH::AbstractArray{Float64,2}; TF = Float32, TR = nothing)
+    AL = TF.(AH)
+    TW = eltype(AH)
+    (m, n) = size(AH)
+    (TR == nothing) && (TR = TW)
+    res = ones(TR, n)
+    sol = ones(TR, n)
+    VStore = copy(res)
+    KStore = KIRstore(n, "bicgstab")
+    MPBA = MPBArray(AH, AL, VStore, KStore, res, sol, true)
 end
 
 
@@ -62,17 +62,17 @@ and a few other things BiCGSTAB needs. Since High precision is
 single, low is half. I'm leaving the kwarg for TF in there because it makes
 is easier to cut/paste calls to MPBArray different precisions into a CI loop.
 """
-function MPBArray(AH::AbstractArray{Float32,2}; TF=Float16, TR=nothing)
-AL=TF.(AH)
-(m,n)=size(AH)
-TW=eltype(AH)
-(TR == nothing) && (TR = TW)
-res=ones(TR,n)
-sol=ones(TR,n)
-VStore=copy(res)
-KStore=KIRstore(n,"bicgstab")
-MPBA=MPBArray(AH, AL, VStore, KStore, res, sol, true)
-return MPBA
+function MPBArray(AH::AbstractArray{Float32,2}; TF = Float16, TR = nothing)
+    AL = TF.(AH)
+    (m, n) = size(AH)
+    TW = eltype(AH)
+    (TR == nothing) && (TR = TW)
+    res = ones(TR, n)
+    sol = ones(TR, n)
+    VStore = copy(res)
+    KStore = KIRstore(n, "bicgstab")
+    MPBA = MPBArray(AH, AL, VStore, KStore, res, sol, true)
+    return MPBA
 end
 
 struct MPBFact
@@ -80,10 +80,9 @@ struct MPBFact
     AL::AbstractArray
     AF::Factorization
     VStore::Vector
-    KStore:: NTuple
+    KStore::NTuple
     residual::Vector
     sol::Vector
     onthefly::Bool
     residterm::Bool
 end
-

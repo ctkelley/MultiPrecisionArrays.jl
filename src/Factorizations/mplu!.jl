@@ -31,16 +31,16 @@ If you want to use static arrays with this stuff, use the
 mutable @MArray constructor
 
 """
-function mplu!(MPA::MPArray; residterm=residtermdefault)
+function mplu!(MPA::MPArray; residterm = residtermdefault)
     AH = MPA.AH
     AL = MPA.AL
     TF = eltype(AL)
-    residual=MPA.residual
-    sol=MPA.sol
+    residual = MPA.residual
+    sol = MPA.sol
     (TF == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
     # For the MPEArray
-    on_the_fly=MPA.onthefly
-    MPF = MPLFact(AH, AL, AF, residual, sol, on_the_fly,residterm)
+    on_the_fly = MPA.onthefly
+    MPF = MPLFact(AH, AL, AF, residual, sol, on_the_fly, residterm)
     return MPF
 end
 
@@ -71,19 +71,19 @@ original array.
 If you want to use static arrays with this stuff, use the 
 mutable @MArray constructor
 """
-function mplu!(MPF::MPLFact,A::AbstractArray{TW,2}) where TW
-TH=eltype(MPF.AH)
-(TH == TW) || error("Precision error in mplu!")
-AH=MPF.AH
-AH = A
-TF = eltype(MPF.AL)
-AL=MPF.AL
-AL .= TF.(A)
-(TF == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
-MPF.AF.ipiv .= AF.ipiv
-residterm=MPF.residterm
-MPF = MPLFact(A, AL, AF, MPF.residual, MPF.sol, MPF.onthefly, residterm)
-return MPF
+function mplu!(MPF::MPLFact, A::AbstractArray{TW,2}) where {TW}
+    TH = eltype(MPF.AH)
+    (TH == TW) || error("Precision error in mplu!")
+    AH = MPF.AH
+    AH = A
+    TF = eltype(MPF.AL)
+    AL = MPF.AL
+    AL .= TF.(A)
+    (TF == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
+    MPF.AF.ipiv .= AF.ipiv
+    residterm = MPF.residterm
+    MPF = MPLFact(A, AL, AF, MPF.residual, MPF.sol, MPF.onthefly, residterm)
+    return MPF
 end
 
 
@@ -177,34 +177,39 @@ julia> norm(xd - mout.sol,Inf)
 
 
 """
-function mplu(A::AbstractArray{TW,2}; TF=nothing, TR=nothing, 
-       residterm=residtermdefault, onthefly=nothing) where TW <: Real
-#
-# If the high precision matrix is single, the low precision must be half
-# unless you're planning on using a high-precision residual where TR > TW
-# and also factoring in the working precision, so TW == TF.
-#
-#
-(TR == nothing) && (TR = TW)
-TFdef = Float32
-(TW == Float32) && (TFdef = Float16)
-(TF == nothing) && (TF = TFdef)
-#
-# Unless you tell me otherwise, onthefly is true if low precision is half
-# and false if low precision is single.
-#
-(onthefly == nothing ) && (onthefly = (TF==Float16))
-#
-# IF TF = TW then something funny is happening with the residual precision.
-#
-(TF == TW) && (onthefly=true)
-#
-# Build the multiprecision array MPA
-#
-MPA=MPArray(A; TF=TF, TR=TR, onthefly=onthefly)
-#
-# Factor the low precision copy to get the factorization object MPF
-#
-MPF=mplu!(MPA; residterm=residterm)
-return MPF
+function mplu(
+    A::AbstractArray{TW,2};
+    TF = nothing,
+    TR = nothing,
+    residterm = residtermdefault,
+    onthefly = nothing,
+) where {TW<:Real}
+    #
+    # If the high precision matrix is single, the low precision must be half
+    # unless you're planning on using a high-precision residual where TR > TW
+    # and also factoring in the working precision, so TW == TF.
+    #
+    #
+    (TR == nothing) && (TR = TW)
+    TFdef = Float32
+    (TW == Float32) && (TFdef = Float16)
+    (TF == nothing) && (TF = TFdef)
+    #
+    # Unless you tell me otherwise, onthefly is true if low precision is half
+    # and false if low precision is single.
+    #
+    (onthefly == nothing) && (onthefly = (TF == Float16))
+    #
+    # IF TF = TW then something funny is happening with the residual precision.
+    #
+    (TF == TW) && (onthefly = true)
+    #
+    # Build the multiprecision array MPA
+    #
+    MPA = MPArray(A; TF = TF, TR = TR, onthefly = onthefly)
+    #
+    # Factor the low precision copy to get the factorization object MPF
+    #
+    MPF = mplu!(MPA; residterm = residterm)
+    return MPF
 end
