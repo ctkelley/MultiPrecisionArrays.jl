@@ -163,11 +163,10 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     term_data = termination_settings(TR, residterm)
     tolf = term_data.tolf
     AD = AF.AH
+    #
+    #   I'm using the L1 norm because it's much faster.
+    #
     residterm ? anrm = 0.0 : anrm = opnorm(AD, 1)
-    #    residterm ? tf=10.0 : tf=.5
-    #    tolf = eps(TR)*tf
-    #    tolf = eps(TR)*TR.(.9)
-    #    tolf = eps(TR)*10.0
     #
     # Keep the records and accumulate the statistics. 
     #
@@ -181,11 +180,6 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     #
     AD = AF.AH
     bnrm = norm(b, normtype)
-    #
-    #   I'm using the L1 norm because it's much faster.
-    #
-    #    residterm=AF.residterm
-    #    residterm ?  anrm = 0.0 : anrm = opnorm(AD, 1)
     bsc = b
     AFS = AF.AF
     #
@@ -193,7 +187,6 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     # iteration count the same as the high precision matvec and the 
     # triangular sovles
     #
-    #    x = zeros(TR, size(b))
     xnrm = norm(x, normtype)
     #
     # Initial residual
@@ -201,7 +194,6 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     r .= b
     tol = tolf
     onthefly ? (rs = ones(TF, 1)) : (rs = zeros(TF, size(b)))
-
     #
     #   Keep the books. Test for excessive residual precision.
     #  
@@ -258,8 +250,8 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
         #
         # If the residual norm increased, complain.
         #
-        #        complain_resid = (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
-        #        complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
+        complain_resid = mpdebug && (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
+        complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
     end
     x = xloop
     verbose && println("Residual history = $rhist")
