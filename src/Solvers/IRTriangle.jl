@@ -17,9 +17,6 @@ function IRTriangle!(AF::Union{MPLFact,MPHFact}, r, rs, verbose)
     if on_the_fly
         ldiv!(AFS, r)
     else
-        #        TFact = eltype(AFS)
-        #        TW = eltype(r)
-        #        rs .= TFact.(r)
         rs .= r
         ldiv!(AFS, rs)
         r .= rs

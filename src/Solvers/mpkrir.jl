@@ -157,7 +157,6 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
     #
     itc = 0
     VF = AF.VStore
-    normdec = true
     kl_store = AF.KStore
     atvd = copy(r)
     MP_Data = (MPF = AF, atv = atvd)
@@ -234,8 +233,8 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
         #
         # If the residual norm increased, complain.
         #
-        (rnrm >= rnrmx) && (normdec = false)
-        ~normdec && mpdebug && (rnrm >= rnrmx) && println("Residual norm increased")
+        complain_resid = mpdebug && (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
+        complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")  
         xnorm = norm(x, normtype)
         tol = tolf * (bnorm + anrm * xnorm)
     end
