@@ -44,13 +44,6 @@ function hlu!(A::AbstractMatrix{T}) where {T}
                         amax = absi
                     end
                 end
-                #            elseif pivot === RowNonZero()
-                #                for i = k:m
-                #                    if !iszero(A[i, k])
-                #                        kp = i
-                #                        break
-                #                    end
-                #                end
             end
             ipiv[k] = kp
             if !iszero(A[kp, k])
