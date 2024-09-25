@@ -22,7 +22,7 @@ bibliography: paper.bib
 [@kelley:2024a; @kelley:2024b] provides data structures and
 solvers for several variations of iterative refinement (IR). IR can speed up an LU matrix factorization for solving linear systems of equations by
 factoring a low precision copy of the matrix and using that 
-low precision factorization in an iteration loop to solve the system.
+low precision factorization in an iteration to solve the system.
 For example, if high precision is double and low precision is single,
 then the factorization time is cut in half.
 The additional storage cost is the low precision copy, 
