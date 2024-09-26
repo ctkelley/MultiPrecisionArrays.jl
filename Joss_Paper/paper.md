@@ -19,7 +19,7 @@ bibliography: paper.bib
 # Summary
 
 [MultiPrecisionArrays.jl](https://github.com/ctkelley/MultiPrecisionArrays.jl),
-[@kelley:2024a; @kelley:2024b] provides data structures and
+[@kelley:2024b] provides data structures and
 solvers for several variations of iterative refinement (IR). IR can speed up an LU matrix factorization for solving linear systems of equations by
 factoring a low precision copy of the matrix and using that 
 low precision factorization in an iteration to solve the system.
