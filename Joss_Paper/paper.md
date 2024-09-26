@@ -98,7 +98,7 @@ The factorization in half precision (Float16) uses
 [OhMyThreads.jl](https://github.com/JuliaFolds2/OhMyThreads.jl). The
 GMRES and Bi-CGSTAB solvers for Krylov-IR methods are taken from
 [SIAMFANL.jl](https://github.com/ctkelley/SIAMFANLEquations.jl)
-[@kelley:2022b].
+[@kelley:2022c].
 
 # A Few Subtleties
 
