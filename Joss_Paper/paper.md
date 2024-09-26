@@ -141,7 +141,7 @@ This package was motivated by
 the use of low-precision factorizations in Newton's method
 [@kelley:2022a, @kelley:2022b] and the interface between 
 a preliminary version of this
-package and the solvers from [@kelley:2022c] was reported in
+package and the solvers from [@kelley:2022b, @kelley:2022c] was reported in
 [@kelley:2023].  That paper used a three 
 precision form of IR (TF=half, TW=single, nonlinear residual
 computed in double) and required direct use of multiprecision
