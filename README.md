@@ -1,7 +1,7 @@
 [![][docs-stable-img]][docs-stable-url] [![][docs-dev-img]][docs-dev-url]
 [![][build-status-img]][build-status-url]
 [![][codecov-img]][codecov-url]
-<!--- [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7521427.svg)](https://doi.org/10.5281/zenodo.7521427) --->
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7521427.svg)](https://doi.org/10.5281/zenodo.7521427)
 
 <!--- [![MultiPrecisionArrays Downloads](https://shields.io/endpoint?url=https://pkgs.genieframework.com/api/v1/badge/MultiPrecisionArrays)](https://pkgs.genieframework.com?packages=MultiPrecisionArrays) --->
 
