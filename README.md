@@ -7,7 +7,7 @@
 <!--- [![MultiPrecisionArrays Downloads](https://shields.io/endpoint?url=https://pkgs.genieframework.com/api/v1/badge/MultiPrecisionArrays)](https://pkgs.genieframework.com?packages=MultiPrecisionArrays) --->
 
 
-# MultiPrecisionArrays.jl v0.1.3 
+# MultiPrecisionArrays.jl v0.1.4
   
 ## [C. T. Kelley](https://ctk.math.ncsu.edu)
 
@@ -31,17 +31,15 @@ __The half precision LU for Float16 in this package is much faster (more than 10
 
 ## What's new?
 
- - v0.1.2: Better docs and ...
-   - Krylov-IR for high precision residuals
-
 - v0.1.3: Still better docs and ..
    - Fixing a performance bug.
    - Add options to termination criterion. __Change default back to small residuals.__
+   - v0.1.3 is the version for the __JOSS paper__. Archive is the v0.1.3-joss tag
  
  - v0.1.4: Continuous improvement for the docs and ...
     - Enable fine control of termination criteria parameters 
 
-
+ - v0.1.5: QR and linear least squares
       
 ##  Can I complain about this package?
 
