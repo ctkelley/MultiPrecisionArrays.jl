@@ -18,29 +18,29 @@ bibliography: paper.bib
 
 # Summary
 
-[MultiPrecisionArrays.jl](https://github.com/ctkelley/MultiPrecisionArrays.jl),
+[MultiPrecisionArrays.jl](https://github.com/ctkelley/MultiPrecisionArrays.jl)
 [@kelley:2024b] provides data structures and
-solvers for several variations of iterative refinement (IR). IR can speed up an LU matrix factorization for solving linear systems of equations by
+solvers for several variations of iterative refinement (IR). IR can speed up LU matrix factorization for solving linear systems of equations by
 factoring a low precision copy of the matrix and using that 
 low precision factorization in an iteration to solve the system.
 For example, if high precision is double and low precision is single,
 then the factorization time is cut in half.
 The additional storage cost is the low precision copy, 
-so IR is at time vs storage trade off. IR has a long history
-and a good account of the classical theory is in [@higham:1996].
+so IR is a time vs storage trade off. IR has a long history,
+and a good account of the classical theory is in @higham:1996.
 
 # Statement of need
 
 The solution of linear systems of equations is a ubiquitous task
 in computational science and engineering. A common method for dense
-systems is Gaussian elimination done via an LU factorization,
+systems is Gaussian elimination done via LU factorization,
 [@higham:1996].  Iterative refinement is a way to reduce the factorization
 time at the cost of additional storage. 
 [MultiPrecisionArrays.jl](https://github.com/ctkelley/MultiPrecisionArrays.jl)
 enables IR with a simple interface in Julia [@Juliasirev:17] with an
 IR factorization object that one uses in the same way as the one for LU.
 The package offers several variants of IR, both classical
-[@Wilkinson:48; @higham:1996], and some from the recent literature
+[@Wilkinson:48; @higham:1996] and some from the recent literature
 [@CarsonHigham:2017; @amestoy:2024].
 
 # Algorithm
@@ -124,16 +124,16 @@ Krylov-IR methods. One should also know that LAPACK and the BLAS do not yet
 support half precision arrays, so working in Float16 will be slower than
 using Float64. 
 
-The classic algorithm from [@Wilkinson:48] and its recent extension
-[@CarsonHigham:2017] evaluate the residual in a higher precision
+The classic algorithm from @Wilkinson:48 and its recent extension
+from @CarsonHigham:2017 evaluate the residual in a higher precision
 that the working precision. This can give improved accuracy for
 ill-conditioned problems at a cost of the interprecision transfers
 in the residual computation. This needs to be implemented with some
-care and [@demmel:06] has an excellent account of the details.
+care and @demmel:06 has an excellent account of the details.
 
 __MultiPrecisionArrays.jl__ provides
 infrastructure to manage these things and we refer the reader to
-[@kelley:2024b] for the details.
+@kelley:2024b for the details.
 
 # Projects using __MultiPrecisionArrays.jl__.
 
@@ -141,14 +141,14 @@ This package was motivated by
 the use of low-precision factorizations in Newton's method
 [@kelley:2022a; @kelley:2022b] and the interface between 
 a preliminary version of this
-package and the solvers from [@kelley:2022b; @kelley:2022c] was reported in
-[@kelley:2023].  That paper used a three 
+package and the solvers from @kelley:2022b and @kelley:2022c was reported in
+@kelley:2023.  That paper used a three 
 precision form of IR (TF=half, TW=single, nonlinear residual
 computed in double) and required direct use of multiprecision
 constructors that we do not export in __MultiPrecisionArrays.jl__.
 We will fully support the application to nonlinear solvers in
 a future version. We give a detailed account of interprecision
-transfers in [@kelley:2024c] and use 
+transfers in @kelley:2024c and use 
 __MultiPrecisionArrays.jl__ to generate the table in that paper.
 
 
@@ -157,11 +157,11 @@ __MultiPrecisionArrays.jl__ to generate the table in that paper.
 The package
 [IterativeRefinement.jl](https://github.com/RalphAS/IterativeRefinement.jl)
 is an implementation of the IR method from
-[@dongarra:1983]. It has not been updated in four years.
+@dongarra:1983. It has not been updated in four years.
 
 The unregistered
 package [Itref.jl](https://github.com/bvieuble/Itref.jl) implements
-IR and the GMRES-IR method from [@amestoy:2024] and was used to obtain
+IR and the GMRES-IR method from @amestoy:2024 and was used to obtain
 the numerical results in that paper. It does not provide the
 data structures for preallocation that we do and does not seem to have
 been updated lately.
