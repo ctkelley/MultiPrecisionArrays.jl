@@ -64,8 +64,7 @@ Since log(version number) < 0, you can expect changes in API, internal structure
 - The [docs for the package](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev)
 - [The ArXiv paper for v0.1.2](https://arxiv.org/pdf/2311.14616.pdf)
 - [The working paper for v0.1.3](https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/main/Publications_and_Presentations/MPArray.pdf) 
-
-
+- [The JOSS paper](https://joss.theoj.org/papers/10.21105/joss.06698)
 ## Readme Contents:
 
 - [Algorithms](#algorithms)
@@ -376,6 +375,9 @@ I just submitted a paper about interprecison transfers and used MulitPrecisionAr
 
 - (Kel24a) C. T. Kelley, [__Interprecision transfers in iterative refinement__](https://arxiv.org/pdf/2407.00827)
 
+Here's a new JOSS paper about the package.
+
+- (Kel24b) C. T. Kelley, [__MultiPrecisionArrays.jl: A Julia package for iterative refinement__](https://joss.theoj.org/papers/10.21105/joss.06698)
 
 ## __Interprecision transfers__:
 
