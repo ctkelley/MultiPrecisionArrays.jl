@@ -2,6 +2,7 @@
 [![][build-status-img]][build-status-url]
 [![][codecov-img]][codecov-url]
 [![DOI](https://zenodo.org/badge/462014459.svg)](https://doi.org/10.5281/zenodo.13851500)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.06698/status.svg)](https://doi.org/10.21105/joss.06698)
 
 
 <!--- [![MultiPrecisionArrays Downloads](https://shields.io/endpoint?url=https://pkgs.genieframework.com/api/v1/badge/MultiPrecisionArrays)](https://pkgs.genieframework.com?packages=MultiPrecisionArrays) --->
