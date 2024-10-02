@@ -15,7 +15,7 @@
 This package provides data structures and solvers for several variants of iterative refinement (IR). It will become much more useful when half precision (aka ```Float16```) is fully supported in LAPACK/BLAS. 
 
 For now, its only general-purpose
-applications are classical iterative refinement with double precision equations and single precision factorizations or, for you Wilkinsonian ill-conditioned problem conniseurs, single precision equations and factorizations with double precision residuals.
+applications are classical iterative refinement with double precision equations and single precision factorizations or, for you Wilkinsonian ill-conditioned problem connisseurs, single precision equations and factorizations with double precision residuals.
 
 The half precision stuff is good for those of us doing research in this field. Half precision performance has progressed to the point where you can actually get things done. On an Apple M2-Pro, a half precision LU only costs 3--8 times
 what a double precision LU costs. This may be as good as it gets unless someone wants to duplicate the LAPACK implementation and get the benefits from blocking, recursion, and clever cache management.
@@ -26,7 +26,7 @@ __The half precision LU for Float16 in this package is much faster (more than 10
 
 - Using [```mplu```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mplu/) and [```mplu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mplu!/) to cut your factorization time in half for double precision matrices is simple and works well.
 - The API for [harvesting iteration statistics](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Details/Stats/) is stable.
-- [Using extended precision for IR](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Details/Extended) works the way Wilksinson said it did. It's fun (but slow) to play with ```TR=Float64, TW=Float32, TF=Float16```.
+- [Using extended precision for IR](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Details/Extended) works the way Wilksinson said it did. It's fun (but slow) to play with ```TR=Float64, TW=Float32, TF=Float16```. The old-time religion works with "TW=TF=Float32" and "TR= Float64". You might try "TW=TF=Float64" and "TR=Double64" to see what happens. 
 - If you're a half precision person,
    - GMRES-IR works with [```mpglu```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpglu/) and [```mpglu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpglu!/)
    - BiCGSTAB-IR works with  [```mpblu```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpblu/) and [```mpblu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpblu!/)
