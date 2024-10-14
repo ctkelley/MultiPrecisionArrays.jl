@@ -19,8 +19,8 @@ function termination_settings(TR, residterm)
     #
     Cr = 10.0
     Ce = 0.5
-    Rr = 0.1
-    Re = 0.1
+    Rr = 0.5
+    Re = 0.5
     residterm ? redmax = Rr : redmax = Re
     residterm ? tf = Cr : tf = Ce
     tolf = eps(TR) * tf

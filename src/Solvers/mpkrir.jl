@@ -124,6 +124,7 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
     residterm = AF.residterm
     term_data = termination_settings(TR, residterm)
     tolf = term_data.tolf
+    rrf = term_data.redmax
     AD = AF.AH
     residterm ? anrm = 0.0 : anrm = opnorm(AD, 1)
     #    anrm = term_data.anrm
@@ -161,7 +162,8 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
     atvd = copy(r)
     MP_Data = (MPF = AF, atv = atvd)
     tol = tolf * (bnorm + anrm * xnorm)
-    rrf = 0.5
+#    rrf = 0.5
+#    rrf = term_data.redmax
     while (rnrm > tol) && (rnrm <= rrf * rnrmx)
         x0 = zeros(TR, n)
         #

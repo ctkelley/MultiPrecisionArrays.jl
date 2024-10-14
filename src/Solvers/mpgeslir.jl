@@ -156,12 +156,13 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     # Are the precisions consistent? If not, I have a bug somewhere.
     # Otherwise, set the tolerance on the iteration to 10*eps.
     # If the iteration can't meet the tolerance, terminate when
-    # the residual norms stagnate (res_old > .9 res_new)
+    # the residual norms stagnate (res_old > rrf * res_new)
     #
     (TW == TB) || error("inconsistent precisions; A and b must have same type")
     residterm = AF.residterm
     term_data = termination_settings(TR, residterm)
     tolf = term_data.tolf
+    rrf = term_data.redmax
     AD = AF.AH
     #
     #   I'm using the L1 norm because it's much faster.
@@ -211,7 +212,8 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     # Store r and x in the residual precision if TR is not TW
     HiRes ? rloop = TR.(r) : rloop = r
     HiRes ? xloop = TR.(x) : xloop = x
-    rrf = 0.5
+#    rrf = 0.5
+#    rrf = term_data.redmax
     # Solve loop
     while (rnrm > (anrm * xnrm + bnrm) * tolf) && (rnrm <= rrf * rnrmx)
         #
