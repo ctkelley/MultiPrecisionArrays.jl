@@ -20,6 +20,7 @@ include("DetailsTest/slashtest.jl")
 include("DetailsTest/mplu_test.jl")
 include("DetailsTest/AbsArray.jl")
 include("DetailsTest/static_test.jl")
+include("DetailsTest/term_test.jl")
 include("Krylov-IRTest/mpgmtest.jl")
 include("Krylov-IRTest/mpbctest.jl")
 include("Krylov-IRTest/hvse.jl")
@@ -47,6 +48,7 @@ end
     @test mpblu_test()
     @test AbsArray()
     @test static_test()
+    @test term_test()
 end
 
 @testset "Krylov-IR" begin

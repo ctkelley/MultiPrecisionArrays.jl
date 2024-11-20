@@ -85,4 +85,5 @@ struct MPBFact
     sol::Vector
     onthefly::Bool
     residterm::Bool
+    anrm::AbstractFloat
 end

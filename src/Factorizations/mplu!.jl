@@ -40,7 +40,8 @@ function mplu!(MPA::MPArray; residterm = residtermdefault)
     (TF == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
     # For the MPEArray
     on_the_fly = MPA.onthefly
-    MPF = MPLFact(AH, AL, AF, residual, sol, on_the_fly, residterm)
+    anrm=TF.(0.0)
+    MPF = MPLFact(AH, AL, AF, residual, sol, on_the_fly, residterm, anrm)
     return MPF
 end
 
@@ -82,7 +83,9 @@ function mplu!(MPF::MPLFact, A::AbstractArray{TW,2}) where {TW}
     (TF == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
     MPF.AF.ipiv .= AF.ipiv
     residterm = MPF.residterm
-    MPF = MPLFact(A, AL, AF, MPF.residual, MPF.sol, MPF.onthefly, residterm)
+    anrm=TF.(0.0)
+    MPF = MPLFact(A, AL, AF, MPF.residual, MPF.sol, MPF.onthefly, 
+          residterm, anrm)
     return MPF
 end
 

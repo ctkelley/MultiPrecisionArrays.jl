@@ -24,7 +24,9 @@ function mpglu!(MPGA::MPGArray; residterm = residtermdefault)
     sol = MPGA.sol
     TF = eltype(AL)
     (TF == Float16) ? ALF = hlu!(AL) : ALF = lu!(AL)
-    MPF = MPGEFact(AH, AL, ALF, VStore, KStore, res, sol, true, residterm)
+    anrm=TF.(0.0)
+    MPF = MPGEFact(AH, AL, ALF, VStore, KStore, res, sol, true, 
+                 residterm, anrm)
     return MPF
 end
 
@@ -64,7 +66,8 @@ function mpglu!(MPG::MPGEFact, A::AbstractArray{TW,2}) where {TW<:Real}
     VStore = MPG.VStore
     KStore = MPG.KStore
     residterm = MPG.residterm
-    MPG = MPGEFact(AH, AL, AF, VStore, KStore, MPG.residual, MPG.sol, true, residterm)
+    anrm = MPG.anrm
+    MPG = MPGEFact(AH, AL, AF, VStore, KStore, MPG.residual, MPG.sol, true, residterm, anrm)
     return MPG
 end
 
@@ -206,12 +209,14 @@ function mpglu!(MPH::MPHArray; gmresok = true, basissize = 10, residterm = resid
     #
     AStore .= TD.(AL)
     AF = LU(AStore, ALF.ipiv, ALF.info)
+    anrm = TF(0.0)
     if gmresok
         VStore = zeros(TD, n, basissize)
         KStore = kstore(n, "gmres")
-        MPF = MPGHFact(AH, AL, AF, VStore, KStore, res, sol, true, residterm)
+        MPF = MPGHFact(AH, AL, AF, VStore, KStore, res, sol, true, 
+               residterm,anrm)
     else
-        MPF = MPHFact(AH, AL, AF, res, sol, true, residterm)
+        MPF = MPHFact(AH, AL, AF, res, sol, true, residterm,anrm)
     end
 end
 

@@ -18,4 +18,5 @@ struct MPLFact{TW<:AbstractFloat,TF<:AbstractFloat,TR<:AbstractFloat,ATF<:Factor
     sol::Vector{TR}
     onthefly::Bool
     residterm::Bool
+    anrm::TF
 end
