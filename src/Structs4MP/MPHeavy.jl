@@ -1,20 +1,7 @@
 #
 # MPEArray factorization for GMRES-IR
-# This stuff is only used for CI
+# The heavy stuff is only used for CI
 #
-struct MPGEFact
-    AH::AbstractArray
-    AL::AbstractArray
-    AF::Factorization
-    VStore::Array
-    KStore::NTuple
-    residual::Vector
-    sol::Vector
-    onthefly::Bool
-    residterm::Bool
-    anrm::AbstractFloat
-end
-
 struct MPHArray
     AH::AbstractArray
     AStore::AbstractArray

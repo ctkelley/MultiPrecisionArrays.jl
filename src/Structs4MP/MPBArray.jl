@@ -74,16 +74,3 @@ function MPBArray(AH::AbstractArray{Float32,2}; TF = Float16, TR = nothing)
     MPBA = MPBArray(AH, AL, VStore, KStore, res, sol, true)
     return MPBA
 end
-
-struct MPBFact
-    AH::AbstractArray
-    AL::AbstractArray
-    AF::Factorization
-    VStore::Vector
-    KStore::NTuple
-    residual::Vector
-    sol::Vector
-    onthefly::Bool
-    residterm::Bool
-    anrm::AbstractFloat
-end
