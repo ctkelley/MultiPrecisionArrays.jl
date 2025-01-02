@@ -17,14 +17,15 @@ small normwise backward errors. Look at the docs for details.
 """
 function mpglu!(MPGA::MPGArray; residterm = residtermdefault)
     AL = MPGA.AL
+    TF = eltype(AL)
     AH = MPGA.AH
+    residterm ? anrm=TF.(0.0) : anrm=norm(AL,1)
     VStore = MPGA.VStore
     KStore = MPGA.KStore
     res = MPGA.residual
     sol = MPGA.sol
-    TF = eltype(AL)
     (TF == Float16) ? ALF = hlu!(AL) : ALF = lu!(AL)
-    anrm=TF.(0.0)
+#    anrm=TF.(0.0)
     MPF = MPGEFact(AH, AL, ALF, VStore, KStore, res, sol, true, 
                  residterm, anrm)
     return MPF

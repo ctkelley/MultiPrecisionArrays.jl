@@ -167,7 +167,8 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     #
     #   I'm using the L1 norm because it's much faster.
     #
-    residterm ? anrm = 0.0 : anrm = opnorm(AD, 1)
+    anrm = AF.anrm
+#    residterm ? anrm = 0.0 : anrm = opnorm(AD, 1)
     #
     # Keep the records and accumulate the statistics. 
     #

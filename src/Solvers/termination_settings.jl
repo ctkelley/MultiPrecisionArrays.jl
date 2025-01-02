@@ -25,7 +25,8 @@ function termination_settings(TR, residterm)
     residterm ? tf = Cr : tf = Ce
     tolf = eps(TR) * tf
     #
-    anrm = 0.0
-    term_out = (tolf = tolf, anrm = anrm, redmax = redmax)
+#    anrm = 0.0
+#    term_out = (tolf = tolf, anrm = anrm, redmax = redmax)
+    term_out = (tolf = tolf, redmax = redmax)
     return term_out
 end

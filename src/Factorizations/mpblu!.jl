@@ -13,13 +13,14 @@ object as output and can use ```\\``` to solve linear systems.
 function mpblu!(MPBA::MPBArray; residterm = residtermdefault)
     AL = MPBA.AL
     AH = MPBA.AH
+    TF = eltype(AL)
+    residterm ? anrm=TF.(0.0) : anrm=norm(AL,1)
     VStore = MPBA.VStore
     KStore = MPBA.KStore
     res = MPBA.residual
     sol = MPBA.sol
-    TF = eltype(AL)
     (TF == Float16) ? ALF = hlu!(AL) : ALF = lu!(AL)
-    anrm=TF(0.0)
+#    anrm=TF(0.0)
     MPF = MPBFact(AH, AL, ALF, VStore, KStore, res, sol, true, 
                  residterm, anrm)
     return MPF

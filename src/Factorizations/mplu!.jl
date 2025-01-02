@@ -35,12 +35,13 @@ function mplu!(MPA::MPArray; residterm = residtermdefault)
     AH = MPA.AH
     AL = MPA.AL
     TF = eltype(AL)
+    residterm ? anrm=TF.(0.0) : anrm=norm(AL,1)
     residual = MPA.residual
     sol = MPA.sol
     (TF == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
     # For the MPEArray
     on_the_fly = MPA.onthefly
-    anrm=TF.(0.0)
+#    anrm=TF.(0.0)
     MPF = MPLFact(AH, AL, AF, residual, sol, on_the_fly, residterm, anrm)
     return MPF
 end
