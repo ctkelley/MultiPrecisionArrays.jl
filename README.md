@@ -85,7 +85,7 @@ Since log(version number) < 0, you can expect changes in API, internal structure
 
 ### What is iterative refinement?
 
-This package will make solving dense systems of linear equations faster by using the LU factorization and IR. It is limited to LU for now. A very generic description of this for solving a linear system $A x = b$ is
+This package will make solving dense systems of linear equations faster or more accurate by using the LU factorization and IR. It is limited to LU for now. A very generic description of this for solving a linear system $A x = b$ faster is
 
 __IR(A, b)__
 - $x = 0$
