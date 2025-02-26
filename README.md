@@ -24,7 +24,7 @@ __The half precision LU for Float16 in this package is much faster (more than 10
 
 ## What parts of MultiPrecisionArrays.jl are ready for prime time?
 
-- Using [```mplu```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mplu/) and [```mplu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mplu!/) to cut your factorization time in half for double precision matrices is simple and works well.
+- Using [```mplu```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mplu/) and [```mplu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mplu!/) to cut your factorization time in half for double precision matrices is simple and works well. This is a good deal for well-conditoned matrices where very few IR iterations are needed for convergence. The story for ill-conditioned matrices is more complicated.
 - The API for [harvesting iteration statistics](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Details/Stats/) is stable.
 - [Using extended precision for IR](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Details/Extended) works the way Wilksinson said it did. It's fun (but slow) to play with ```TR=Float64, TW=Float32, TF=Float16```. The old-time religion works with "TW=TF=Float32" and "TR= Float64". You might try "TW=TF=Float64" and "TR=Double64" to see what happens. 
 - If you're a half precision person,
