@@ -70,7 +70,7 @@ openBLAS
   8192  1.10e+00  2.01e-02  1.12e+00  5.98e-01  6.89e-02  6.67e-01  5.83e-02 
 ```
 
-AppleAcclerateBLAS
+AppleAccelerateBLAS
 ```
    N        LU        TS       TOTL      MPLU       MPS       TOT    OPNORM  
    512  7.86e-04  1.10e-04  8.96e-04  4.76e-04  3.58e-04  8.35e-04  1.65e-04 
