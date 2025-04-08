@@ -17,8 +17,9 @@ function termination_settings(TR, residterm)
     # I also stop when I see stagnation, ie
     # || r_new || > redmax || r_old ||
     #
-    Cr = 10.0
-    Ce = 0.5
+    Cr = 20.0
+    Ce = 1.0
+#    Ce = 0.5
     Rr = 0.5
     Re = 0.5
     residterm ? redmax = Rr : redmax = Re
