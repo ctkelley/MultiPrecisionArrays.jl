@@ -2,7 +2,7 @@
 
 Today's values are
 ```math
-C_e = 1.0, C_r = 20.0, r_{max} = .1
+C_e = 1.0, C_r = 20.0, r_{max} = .5
 ```
 
 Floating point roundoff is 

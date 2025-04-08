@@ -38,6 +38,9 @@ MPKFact = Union{MPGFact,MPBFact}
 # Termination criteria defaults
 #
 const residtermdefault = true
+const termparms = (Cr = 20.0, Ce = 1.0, Rmax= 0.5)
+termdata() = termparms
+export termdata
 
 is_heavy(x::MPHFact) = true
 is_heavy(x::MPLFact) = false
