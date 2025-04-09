@@ -1,5 +1,6 @@
 using Test, MultiPrecisionArrays
 using MultiPrecisionArrays.Examples: Gmat
+import MultiPrecisionArrays: TERM
 using LinearAlgebra: I, lu!, norm
 using SIAMFANLEquations: nsol
 using SIAMFANLEquations.TestProblems: heqinit, heqf!, heqJ!
@@ -49,6 +50,7 @@ end
     @test AbsArray()
     @test static_test()
     @test term_test()
+    @test test_term_parms()
 end
 
 @testset "Krylov-IR" begin

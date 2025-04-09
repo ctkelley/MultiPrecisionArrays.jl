@@ -127,7 +127,7 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
     rrf = term_data.redmax
     AD = AF.AH
     anrm = AF.anrm
-#    residterm ? anrm = 0.0 : anrm = opnorm(AD, 1)
+    #    residterm ? anrm = 0.0 : anrm = opnorm(AD, 1)
     #    anrm = term_data.anrm
     #    residterm ? tf=1.0 : tf=.9
     #    tolf = tf*eps(TR)
@@ -163,8 +163,8 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
     atvd = copy(r)
     MP_Data = (MPF = AF, atv = atvd)
     tol = tolf * (bnorm + anrm * xnorm)
-#    rrf = 0.5
-#    rrf = term_data.redmax
+    #    rrf = 0.5
+    #    rrf = term_data.redmax
     while (rnrm > tol) && (rnrm <= rrf * rnrmx)
         x0 = zeros(TR, n)
         #
@@ -237,7 +237,7 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
         # If the residual norm increased, complain.
         #
         complain_resid = mpdebug && (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
-        complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")  
+        complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
         xnorm = norm(x, normtype)
         tol = tolf * (bnorm + anrm * xnorm)
     end

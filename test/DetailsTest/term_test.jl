@@ -30,4 +30,37 @@ termtestok || println("term_test failure in $fname")
 return termtestok
 end
 
+function test_term_parms(N=100, TF=Float32)
+N=100; G=Gmat(N); A=I - 9.0*G;
+AF=mplu(A); b=ones(N);
+restore_default_parms()
+plain_out = \(AF, b; reporting=true);
+rhist1=plain_out.rhist;
+lhist1=length(rhist1)
+update_parms(; Cr=400.0);
+swap_out = \(AF, b; reporting=true);
+rhist2=swap_out.rhist;
+lhist2=length(rhist2)
+restore_default_parms()
+swapok = (lhist1 > lhist2)
+swapok || println("Error in test_term_parms", lhist1,"  ",lhist2)
+return swapok
+end
+
+function swap_test()
+update_parms(; Cr=100.0, Ce=10.0, Rmax=.01)
+swap1ok = terms_the_same(term_parms_default, term_parms)
+restore_default_parms()
+swap2ok = terms_the_same(term_parms_default, term_parms)
+swap_working = swap2ok && ~swap1ok
+return swap_working
+end
+
+function terms_the_same(term1::TERM, term2::TERM)
+CrOK = (term1.Cr == term2.Cr)
+CeOK = (term1.Ce == term2.Ce)
+RmaxOK = (term1.Rmax == term2.Rmax)
+sameOK = (CrOK && CeOK && RmaxOK)
+return sameOK
+end
 

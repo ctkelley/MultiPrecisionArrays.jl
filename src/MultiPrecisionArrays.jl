@@ -38,9 +38,23 @@ MPKFact = Union{MPGFact,MPBFact}
 # Termination criteria defaults
 #
 const residtermdefault = true
-const termparms = (Cr = 20.0, Ce = 1.0, Rmax= 0.5)
-termdata() = termparms
-export termdata
+#
+# The termparms live in the module and termparms 
+# is therefore global. Don't change this outside
+# of the main thread.
+#
+mutable struct TERM
+       Cr::Real
+       Ce::Real
+       Rmax::Real
+end
+const term_parms_default=TERM(20.0, 1.0, .5)
+term_parms=TERM(20.0, 1.0, .5)
+termdata() = ( Cr=term_parms.Cr, Ce=term_parms.Ce, redmax=term_parms.Rmax)
+
+
+export termdata, term_parms_default, term_parms, update_parms
+export restore_default_parms
 
 is_heavy(x::MPHFact) = true
 is_heavy(x::MPLFact) = false

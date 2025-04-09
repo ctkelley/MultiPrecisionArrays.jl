@@ -168,7 +168,7 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     #   I'm using the L1 norm because it's much faster.
     #
     anrm = AF.anrm
-#    residterm ? anrm = 0.0 : anrm = opnorm(AD, 1)
+    #    residterm ? anrm = 0.0 : anrm = opnorm(AD, 1)
     #
     # Keep the records and accumulate the statistics. 
     #
@@ -213,8 +213,8 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     # Store r and x in the residual precision if TR is not TW
     HiRes ? rloop = TR.(r) : rloop = r
     HiRes ? xloop = TR.(x) : xloop = x
-#    rrf = 0.5
-#    rrf = term_data.redmax
+    #    rrf = 0.5
+    #    rrf = term_data.redmax
     # Solve loop
     while (rnrm > (anrm * xnrm + bnrm) * tolf) && (rnrm <= rrf * rnrmx)
         #
