@@ -216,7 +216,8 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     #    rrf = 0.5
     #    rrf = term_data.redmax
     # Solve loop
-    while (rnrm > (anrm * xnrm + bnrm) * tolf) && (rnrm <= rrf * rnrmx)
+    tol=(anrm * xnrm + bnrm) * tolf
+    while (rnrm > tol) && (rnrm <= rrf*rnrmx)
         #
         # Scale the residual
         #

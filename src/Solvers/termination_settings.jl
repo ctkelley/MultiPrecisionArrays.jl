@@ -38,10 +38,12 @@ function restore_default_parms(t::TERM = term_parms)
     t.Cr = term_parms_default.Cr
     t.Ce = term_parms_default.Ce
     t.Rmax = term_parms_default.Rmax
+    t.litmax = term_parms_default.litmax
     return t
 end
 
-function update_parms(t::TERM = term_parms; Cr = 20.0, Ce = 1.0, Rmax = 0.5)
+function update_parms(t::TERM = term_parms; Cr = 20.0, Ce = 1.0, 
+         Rmax = 0.5, litmax=1000)
     #
     # The parameters live in a mutable struct term_parms in 
     # MultiPrecisionArrays.jl and are initialized to the default values. 
@@ -49,5 +51,6 @@ function update_parms(t::TERM = term_parms; Cr = 20.0, Ce = 1.0, Rmax = 0.5)
     t.Cr = Cr
     t.Ce = Ce
     t.Rmax = Rmax
+    t.litmax = litmax
     return t
 end

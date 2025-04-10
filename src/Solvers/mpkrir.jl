@@ -162,9 +162,9 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
     kl_store = AF.KStore
     atvd = copy(r)
     MP_Data = (MPF = AF, atv = atvd)
-    tol = tolf * (bnorm + anrm * xnorm)
     #    rrf = 0.5
     #    rrf = term_data.redmax
+    tol = tolf * (bnorm + anrm * xnorm)
     while (rnrm > tol) && (rnrm <= rrf * rnrmx)
         x0 = zeros(TR, n)
         #

@@ -47,10 +47,12 @@ mutable struct TERM
        Cr::Real
        Ce::Real
        Rmax::Real
+       litmax::Int
 end
-const term_parms_default=TERM(20.0, 1.0, .5)
-term_parms=TERM(20.0, 1.0, .5)
-termdata() = ( Cr=term_parms.Cr, Ce=term_parms.Ce, redmax=term_parms.Rmax)
+const term_parms_default=TERM(20.0, 1.0, .5, 1000)
+term_parms=TERM(20.0, 1.0, .5, 1000)
+termdata() = ( Cr=term_parms.Cr, Ce=term_parms.Ce, 
+redmax=term_parms.Rmax, litmax=term_parms.litmax)
 
 
 export termdata, term_parms_default, term_parms, update_parms
