@@ -40,7 +40,7 @@ __The half precision LU for Float16 in this package is much faster (more than 10
    - v0.1.3 is the version for the [__JOSS paper__](https://joss.theoj.org/papers/10.21105/joss.06698). I gave that version the v0.1.3-joss tag.
  
  - v0.1.4: Continuous improvement for the docs and ...
-    - Enable fine control of termination criteria parameters or understand why they don't matter much and leave them alone
+    - Enable fine control of termination criteria parameters, but I discourage messing with this.
     - Document the results of the bullet above + why I use || AF ||_1 in the termination criterion
 
  - v0.1.5: QR and linear least squares
