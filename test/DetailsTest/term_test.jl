@@ -41,10 +41,14 @@ update_parms(; Cr=400.0);
 swap_out = \(AF, b; reporting=true);
 rhist2=swap_out.rhist;
 lhist2=length(rhist2)
-restore_default_parms()
 swapok = (lhist1 > lhist2)
 swapok || println("Error in test_term_parms", lhist1,"  ",lhist2)
-return swapok
+lmsx_out = update_parms(; litmax=2)
+new_out=\(AF, b; reporting=true);
+lhist3=length(new_out.rhist)
+lhistok=(lhist3 < lhist1)
+restore_default_parms()
+return swapok && lhistok
 end
 
 function swap_test()

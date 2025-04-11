@@ -163,6 +163,7 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     term_data = termination_settings(TR, residterm)
     tolf = term_data.tolf
     rrf = term_data.redmax
+    litmax = term_data.litmax
     AD = AF.AH
     #
     #   I'm using the L1 norm because it's much faster.
@@ -217,7 +218,7 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     #    rrf = term_data.redmax
     # Solve loop
     tol=(anrm * xnrm + bnrm) * tolf
-    while (rnrm > tol) && (rnrm <= rrf*rnrmx)
+    while (rnrm > tol) && (rnrm <= rrf*rnrmx) && (itc < litmax)
         #
         # Scale the residual
         #

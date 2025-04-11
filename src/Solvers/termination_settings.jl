@@ -1,6 +1,10 @@
 function termination_settings(TR, residterm)
     #
-    # I am continually tweaking this stuff
+    # I am continually tweaking this stuff. 
+    # I do not export this and do not encourage you to play with it.
+    # If you want to mess with it anyway, the functions in this file
+    # and the ***Termination criteria defaults*** in MultiPrecisionArrays.jl
+    # will let you get started.
     #
     # I will terminate IR using either small relative residual
     # (residterm = true, the default)
@@ -23,10 +27,10 @@ function termination_settings(TR, residterm)
     # within the module. Take care with changing the parameters while
     # using the solvers in a multi-threaded code. 
     #
-    (Cr, Ce, Rmax) = termdata()
+    (Cr, Ce, Rmax, litmax) = termdata()
     residterm ? tf = Cr : tf = Ce
     tolf = eps(TR) * tf
-    term_out = (tolf = tolf, redmax = Rmax)
+    term_out = (tolf = tolf, redmax = Rmax, litmax=litmax)
     return term_out
 end
 

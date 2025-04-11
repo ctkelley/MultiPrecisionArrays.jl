@@ -125,6 +125,7 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
     term_data = termination_settings(TR, residterm)
     tolf = term_data.tolf
     rrf = term_data.redmax
+    litmax = term_data.litmax
     AD = AF.AH
     anrm = AF.anrm
     #    residterm ? anrm = 0.0 : anrm = opnorm(AD, 1)
@@ -165,7 +166,7 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
     #    rrf = 0.5
     #    rrf = term_data.redmax
     tol = tolf * (bnorm + anrm * xnorm)
-    while (rnrm > tol) && (rnrm <= rrf * rnrmx)
+    while (rnrm > tol) && (rnrm <= rrf * rnrmx) && (itc < litmax)
         x0 = zeros(TR, n)
         #
         # Scale the residual 
