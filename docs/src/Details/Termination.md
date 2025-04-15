@@ -23,7 +23,8 @@ Termination on small residual is the default because computing $\| A \|$
 is $N^2$ work and is more expensive that a few IR iterations. I am using
 $\| A \|_1$ because that takes less time (data locality) than 
 $\| A \|_\infty$ but it is still a pain. I also compute $\| A \|_1$
-in TF if $TF = Float32$ or $TF = Float64$. Otherwise I use $TW$. 
+in ```TF``` if ```TF = Float32``` or ```TF = Float64```. 
+Otherwise I use ```TW```. 
 LAPACK does not support half precision so that's out.
 
 The reason $C_r > C_e$ is
