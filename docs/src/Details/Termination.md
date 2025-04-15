@@ -2,7 +2,7 @@
 
 Today's values are
 ```math
-C_e = 1.0, C_r = 20.0, r_{max} = .5
+C_e = 1.0, C_r = 20.0, r_{max} = .5, litmax = 1000
 ```
 
 Floating point roundoff is 
@@ -38,12 +38,15 @@ also terminate the iteration if
 ```math
 \| r_{new} \| \ge r_{max} \| r_{old} \|
 ```
-even if the small residual condition is not satisfied.
+even if the small residual condition is not satisfied. You can also 
+limit the number of IR iterations to manage stagnation. 
+Higham [higham97]@cite recomments a limit of ```litmax = 5```. Our default
+is ```litmax = 1000``, which is essentially infinite in this context.
 
 I am still playing with the termination criteria and the iteration
 counts and timings could grow or shrink as I do that. 
 
-You can use the ```update_parms``` to
+You can use the __update_parms__ command to
 change $C_r$, $C_e$ and $r_{max}$ if you must. I do not advise that.
 Anyhow, here are the docstrings.
 ```
