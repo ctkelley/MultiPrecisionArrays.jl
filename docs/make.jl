@@ -51,6 +51,8 @@ makedocs(
           Any["Details/Stats.md",],
         "Solvers"=>
              Any["functions/mpgeslir.md", "functions/mpkrir.md"],
+        "Termination"=>
+             Any["functions/termination_settings.md"],
         "References" => ["References.md",],
 ],
 ; plugins=[bib]
