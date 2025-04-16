@@ -56,7 +56,7 @@ redmax=term_parms.Rmax, litmax=term_parms.litmax)
 
 
 export termdata, term_parms_default, term_parms, update_parms
-export restore_default_parms, termination_settings
+export restore_default_parms, update_parms
 
 is_heavy(x::MPHFact) = true
 is_heavy(x::MPLFact) = false
@@ -182,6 +182,7 @@ include("Solvers/mpkrir.jl")
 include("Solvers/mpgeslir.jl")
 include("Solvers/IRTriangle.jl")
 include("Solvers/termination_settings.jl")
+include("Solvers/update_parms.jl")
 include("Structs4MP/MPStats.jl")
 include("Factorizations/hlu!.jl")
 include("Factorizations/mplu!.jl")

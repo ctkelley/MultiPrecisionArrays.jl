@@ -52,7 +52,7 @@ makedocs(
         "Solvers"=>
              Any["functions/mpgeslir.md", "functions/mpkrir.md"],
         "Termination"=>
-             Any["functions/termination_settings.md"],
+             Any["functions/update_parms.md"],
         "References" => ["References.md",],
 ],
 ; plugins=[bib]
