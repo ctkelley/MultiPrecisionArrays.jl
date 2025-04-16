@@ -56,7 +56,7 @@ redmax=term_parms.Rmax, litmax=term_parms.litmax)
 
 
 export termdata, term_parms_default, term_parms, update_parms
-export restore_default_parms, update_parms
+export restore_default_parms, update_parms, TERM
 
 is_heavy(x::MPHFact) = true
 is_heavy(x::MPLFact) = false

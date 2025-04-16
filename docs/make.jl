@@ -11,6 +11,7 @@ import MultiPrecisionArrays.MPGEFact
 import MultiPrecisionArrays.MPFact
 import MultiPrecisionArrays.mpgeslir
 import MultiPrecisionArrays.mpkrir
+import MultiPrecisionArrays.TERM
 
 
 mathengine = MathJax3(Dict(:loader => Dict("load" => ["[tex]/require", "[tex]/mathtools"]),
