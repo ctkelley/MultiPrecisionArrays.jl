@@ -1,6 +1,6 @@
 # multiprecisionarrays.jl v0.1.4
 
-[C. T. Kelley](https://ctk.math.ncsu.edu)
+[C. T. Kelley](https://ctkelley.github.io)
 
 [MultiPrecisionArrays.jl](https://github.com/ctkelley/MultiPrecisionArrays.jl) 
 [ctk:mparrays](@cite)
