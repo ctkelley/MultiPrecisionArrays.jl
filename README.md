@@ -374,7 +374,7 @@ A new paper exploits most of the package. I use the examples in that paper for C
 - (KEL23a) C. T. Kelley, [__Newton's method in three precisions__](https://arxiv.org/abs/2307.16051) To appear in Pacific Journal of Optimization.
   - This paper has a [repo](https://github.com/ctkelley/N3Presults) for reproducing the results with an early version of this package.
 
-I just submitted a paper about interprecison transfers and used MulitPrecisionArrays.jl for the computations.
+This preprint about interprecison transfers uses MulitPrecisionArrays.jl for the computations.
 
 - (Kel24a) C. T. Kelley, [__Interprecision transfers in iterative refinement__](https://arxiv.org/pdf/2407.00827)
 
