@@ -31,6 +31,7 @@ __The half precision LU for Float16 in this package is much faster (more than 10
    - GMRES-IR works with [```mpglu```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpglu/) and [```mpglu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpglu!/)
    - BiCGSTAB-IR works with  [```mpblu```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpblu/) and [```mpblu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/mpblu!/)
    - the new half precision LU factorization [```hlu!```](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/functions/hlu!/) is __only__ 3-5x slower than a double precision ```lu```.
+- You can [adjust the parameters in the while loop](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev/Details/Termination/).
 
 ## What's new?
 
