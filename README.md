@@ -44,7 +44,8 @@ __The half precision LU for Float16 in this package is much faster (more than 10
     - Enable fine control of termination criteria parameters, but I discourage messing with this.
     - Document the results of the bullet above + why I use || AF ||_1 in the termination criterion
 
- - v0.1.5: QR and linear least squares
+ - v0.1.5: Docs get better and ...
+    - QR and linear least squares
       
 ##  Can I complain about this package?
 
