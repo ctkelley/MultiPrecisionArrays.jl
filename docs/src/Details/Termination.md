@@ -48,7 +48,7 @@ I am still playing with the termination criteria and the iteration
 counts and timings could grow or shrink as I do that. 
 
 You can use the __update_parms__ command to
-change $C_r$, $C_e$ and $r_{max}$ if you must. I do not advise that.
+change $C_r$, $C_e$, $r_{max}$, and $litmax$ if you must. I do not advise that.
 Anyhow, here are the docstrings.
 ```
   update_parms(t::TERM = term_parms; Cr = 20.0, Ce = 1.0,
