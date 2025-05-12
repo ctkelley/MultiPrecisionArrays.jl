@@ -28,10 +28,16 @@ The idea is to solve $Ax=b$ in high precision (the __working precision__)
 ```TW``` with a factorization
 in lower precision (the __factorization precision__) ```TF```.
 
-IR is a perfect example of a storage/time tradeoff. To solve a linear system  
+One way to view IR is as 
+a perfect example of a storage/time tradeoff. To solve a linear system  
 $Ax=b$ with IR, one incurs the storage penalty of making a low 
 precision copy of  and reaps the benefit of only having to factor the 
 low precision copy.
+
+IR is also used to address very poor conitioning. IR was invented
+[Wilkinson48](@cite) with this in mind. Here one stores and factors $A$
+in one precision but evaluates the residual in a higher precision.
+
 
 Here is the textbook 
 version [higham](@cite) using the LU factorization.
