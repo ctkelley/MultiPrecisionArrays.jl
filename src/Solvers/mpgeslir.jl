@@ -235,7 +235,9 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
         #
         # Update the solution and residual
         #
-        xloop .+= rloop
+        x .+= rloop
+        xloop .= TR.(x)
+#        xloop .+= rloop
         mul!(rloop, AD, xloop)
         #
         # After mul! the residual is overwritten with Ax
@@ -258,7 +260,7 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
         complain_resid = mpdebug && (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
         complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
     end
-    x = xloop
+#    x = xloop
     verbose && println("Residual history = $rhist")
     if reporting
         return (rhist = rhist, sol = x, TW = TW, TF = TF, TFact = TFact)
