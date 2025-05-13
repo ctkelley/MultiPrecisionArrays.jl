@@ -6,7 +6,7 @@ struct MPArray{TW<:AbstractFloat,TF<:AbstractFloat,TR<:AbstractFloat}
     AH::AbstractArray{TW,2}
     AL::AbstractArray{TF,2}
     residual::Vector{TR}
-    sol::Vector{TR}
+    sol::Vector{TW}
     onthefly::Bool
 end
 
@@ -17,7 +17,7 @@ struct MPLFact{TW<:AbstractFloat,TF<:AbstractFloat,TR<:AbstractFloat,ATF<:Factor
     AL::AbstractArray{TF,2}
     AF::ATF
     residual::Vector{TR}
-    sol::Vector{TR}
+    sol::Vector{TW}
     onthefly::Bool
     residterm::Bool
     anrm::TF

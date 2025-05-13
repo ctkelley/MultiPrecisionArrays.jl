@@ -134,9 +134,9 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     TF = MPStats.TF
     TW = MPStats.TW
     r = AF.residual
-    TR = eltype(AF.sol)
+    TR = eltype(r)
     x = AF.sol
-    x .*= TR(0.0)
+    x .*= TW(0.0)
     #    xa = AF.sol .* TRA(0.0)
     #    xr = AF.sol .* TR(0.0)
     #    x=xr
@@ -166,10 +166,10 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     litmax = term_data.litmax
     AD = AF.AH
     #
-    #   I'm using the L1 norm because it's much faster.
+    # I compute the norm of AF if needed in single
+    # Half is still to slow.
     #
     anrm = AF.anrm
-    #    residterm ? anrm = 0.0 : anrm = opnorm(AD, 1)
     #
     # Keep the records and accumulate the statistics. 
     #

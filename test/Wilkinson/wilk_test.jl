@@ -23,7 +23,7 @@ mout = hires_sol(A, b)
 lres=length(mout.rhist)
 ndel=norm(mout.sol - xe,Inf)
 l1ok=(lres <= 4)
-s1ok=(ndel < 1.e-10);
+s1ok=(ndel < 1.e-7);
 A1ok=l1ok && s1ok
 A1ok || println("32-32 Failure for alpha=$alpha:   ", lres,"  ",ndel)
 # high precision residual, TF=Float16
@@ -33,7 +33,7 @@ lres=length(mout.rhist)
 ndel=norm(mout.sol - xe,Inf)
 (alpha < 500.0) ? lt=7 : lt=9
 l2ok=(lres <= lt) 
-s2ok=(ndel < 1.e-10);
+s2ok=(ndel < 1.e-7);
 A2ok=l2ok && s1ok
 A2ok || println("32-16 Failure for alpha=$alpha:   ", lres,"  ",ndel)
 BF=mplu(A; onthefly=true);

@@ -11,7 +11,7 @@ struct MPArray{TW<:AbstractFloat,TF<:AbstractFloat,TR<:AbstractFloat}
     AH::AbstractArray{TW,2}
     AL::AbstractArray{TF,2}
     residual::Vector{TR}
-    sol::Vector{TR}
+    sol::Vector{TW}
     onthefly::Bool
 end
 ```
@@ -32,7 +32,8 @@ function MPArray(
     (TR == nothing) ? TRR = TH : TRR = TR
     (m, n) = size(AH)
     res = ones(TRR, n)
-    sol = zeros(TRR, n)
+#    sol = zeros(TRR, n)
+    sol = zeros(TH, n)
     MPA = MPArray(AH, AL, res, sol, onthefly)
 end
 """
@@ -59,6 +60,7 @@ function MPArray(AH::AbstractArray{Float32,2}; TR = nothing, TF = Float16, onthe
     (TR == nothing) ? TRR = TH : TRR = TR
     (m, n) = size(AH)
     res = ones(TRR, n)
-    sol = zeros(TRR, n)
+    sol = zeros(TH, n)
+#    sol = zeros(TRR, n)
     MPA = MPArray(AH, AL, res, sol, onthefly)
 end
