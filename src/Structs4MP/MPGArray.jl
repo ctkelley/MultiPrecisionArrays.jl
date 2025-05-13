@@ -15,7 +15,7 @@ struct MPGArray{TW<:AbstractFloat,TF<:AbstractFloat,TR<:AbstractFloat}
     VStore::AbstractArray{TR,2}
     KStore::NTuple
     residual::Vector{TR}
-    sol::Vector{TR}
+    sol::Vector{TW}
     onthefly::Bool
 end
 ```
@@ -29,7 +29,7 @@ struct MPGArray{TW<:AbstractFloat,TF<:AbstractFloat,TR<:AbstractFloat}
     VStore::AbstractArray{TR,2}
     KStore::NTuple
     residual::Vector{TR}
-    sol::Vector{TR}
+    sol::Vector{TW}
     onthefly::Bool
 end
 
@@ -43,10 +43,11 @@ which you get with TF=Float16.
 """
 function MPGArray(AH::AbstractArray{Float64,2}; TR = nothing, basissize = 10, TF = Float32)
     AL = TF.(AH)
+    TH = eltype(AH)
     (m, n) = size(AH)
     (TR == nothing) ? TRR = eltype(AH) : TRR = TR
     res = ones(TRR, n)
-    sol = ones(TRR, n)
+    sol = ones(TH, n)
     VStore = zeros(TRR, n, basissize)
     KStore = KIRstore(n, "gmres")
     MPGA = MPGArray(AH, AL, VStore, KStore, res, sol, true)
@@ -63,10 +64,11 @@ is easier to cut/paste calls to MPGArray different precisions into a CI loop.
 """
 function MPGArray(AH::AbstractArray{Float32,2}; basissize = 10, TF = Float16, TR = nothing)
     AL = TF.(AH)
+    TH = eltype(AH)
     (m, n) = size(AH)
     (TR == nothing) ? TRR = eltype(AH) : TRR = TR
     res = ones(TRR, n)
-    sol = ones(TRR, n)
+    sol = ones(TH, n)
     VStore = zeros(TRR, n, basissize)
     KStore = KIRstore(n, "gmres")
     MPGA = MPGArray(AH, AL, VStore, KStore, res, sol, true)
