@@ -118,15 +118,16 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
     #
     normtype = Inf
     x = AF.sol
-    TR = eltype(x)
-    x .*= TR(0.0)
+    AD = AF.AH
+    TR = eltype(AF.residual)
+    TW = eltype(x)
+    x .*= TW(0.0)
     # remember that eps(TR) = 2 * unit roundoff
     residterm = AF.residterm
     term_data = termination_settings(TR, residterm)
     tolf = term_data.tolf
     rrf = term_data.redmax
     litmax = term_data.litmax
-    AD = AF.AH
     anrm = AF.anrm
     #    residterm ? anrm = 0.0 : anrm = opnorm(AD, 1)
     #    anrm = term_data.anrm
@@ -134,7 +135,7 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
     #    tolf = tf*eps(TR)
     n = length(b)
     onetb = TR(1.0)
-    bsc = copy(b)
+    bsc = TR.(b)
     #    x = zeros(TR, size(b))
     bnorm = norm(b, normtype)
     xnorm = TR(0.0)
@@ -147,7 +148,7 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
     # Initialize Krylov-IR
     #
     r = AF.residual
-    r .= b
+    r .= TR.(b)
     rnrm = norm(r, normtype)
     bnrm = norm(b, normtype)
     rnrmx = rnrm * TR(2.0)
@@ -162,6 +163,7 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
     VF = AF.VStore
     kl_store = AF.KStore
     atvd = copy(r)
+    xloop=copy(r)
     MP_Data = (MPF = AF, atv = atvd)
     #    rrf = 0.5
     #    rrf = term_data.redmax
@@ -225,7 +227,8 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
         # Update the solution and residual
         #
         x .+= r
-        mul!(r, AD, x)
+        xloop=TR.(x)
+        mul!(r, AD, xloop)
         r .*= -onetb
         axpy!(1.0, bsc, r)
         rnrmx = rnrm
