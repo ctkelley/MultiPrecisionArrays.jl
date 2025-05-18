@@ -140,7 +140,7 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
     bnorm = norm(b, normtype)
     xnorm = TR(0.0)
     #
-    AFS = AF.AF
+#    AFS = AF.AF
     AD = AF.AH
     #    residterm ?  anrm = 0.0 : anrm = opnorm(AD, 1)
     #    anorm = opnorm(AD,normtype)
@@ -225,6 +225,8 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
         r .*= rnrm
         #
         # Update the solution and residual
+        # xloop is in the residual precision to get a
+        # high precision residual.
         #
         x .+= r
         xloop=TR.(x)
@@ -235,7 +237,7 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
         rnrm = norm(r, normtype)
         itc += 1
         push!(rhist, rnrm)
-        tol = tolf * bnorm
+#        tol = tolf * bnorm
         mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol")
         #
         # If the residual norm increased, complain.

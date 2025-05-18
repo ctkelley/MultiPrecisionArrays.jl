@@ -15,7 +15,7 @@ struct MPBArray{TW<:AbstractFloat,TF<:AbstractFloat, TR<:AbstractFloat}
     VStore::Vector
     KStore::NTuple
     residual::Vector{TR}
-    sol::Vector{TR}
+    sol::Vector{TW}
     onthefly::Bool
 end
 ```
@@ -29,7 +29,7 @@ struct MPBArray{TW<:AbstractFloat,TF<:AbstractFloat,TR<:AbstractFloat}
     VStore::Vector
     KStore::NTuple
     residual::Vector{TR}
-    sol::Vector{TR}
+    sol::Vector{TW}
     onthefly::Bool
 end
 
@@ -47,9 +47,9 @@ function MPBArray(AH::AbstractArray{Float64,2}; TF = Float32, TR = nothing)
     (m, n) = size(AH)
     (TR == nothing) && (TR = TW)
     res = ones(TR, n)
-    sol = ones(TR, n)
+    sol = ones(TW, n)
     VStore = copy(res)
-    KStore = KIRstore(n, "bicgstab")
+    KStore = KIRstore(n, "bicgstab", TW)
     MPBA = MPBArray(AH, AL, VStore, KStore, res, sol, true)
 end
 
@@ -68,9 +68,9 @@ function MPBArray(AH::AbstractArray{Float32,2}; TF = Float16, TR = nothing)
     TW = eltype(AH)
     (TR == nothing) && (TR = TW)
     res = ones(TR, n)
-    sol = ones(TR, n)
+    sol = ones(TW, n)
     VStore = copy(res)
-    KStore = KIRstore(n, "bicgstab")
+    KStore = KIRstore(n, "bicgstab", TW)
     MPBA = MPBArray(AH, AL, VStore, KStore, res, sol, true)
     return MPBA
 end

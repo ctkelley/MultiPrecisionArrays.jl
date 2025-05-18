@@ -34,7 +34,7 @@ end
 """
 mpglu!(MPG::MPGEFact, A::AbstractArray{TW,2}) where TW <: Real
 Overwrite a multiprecision factorization MPF to reuse the
-storage to make a multiprecision of a new matrix A.
+storage to make a multiprecision array with a new matrix A.
 
 This will, of course, trash the original factorization.
 
@@ -159,16 +159,15 @@ julia> mout3=\\(GF, b; reporting=true);
 julia> mout3.rhist
 6-element Vector{Float64}:
  9.88750e+01
- 2.23211e-04
- 9.61252e-09
- 1.26477e-12
- 8.10019e-13
- 8.66862e-13
+ 4.44609e-03
+ 4.98088e-05
+ 1.20093e-07
+ 9.07988e-08
 
 # Shazam! Did we get the solution of the promoted problem?
 
 julia> xp=Float64.(A)\\b; norm(xp-mout3.sol,Inf)
-9.43157e-12
+1.24236e-07
 
 # Yup.
 
@@ -213,7 +212,7 @@ function mpglu!(MPH::MPHArray; gmresok = true, basissize = 10, residterm = resid
     anrm = TF(0.0)
     if gmresok
         VStore = zeros(TD, n, basissize)
-        KStore = kstore(n, "gmres")
+        KStore = KIRstore(n, "gmres",TD)
         MPF = MPGHFact(AH, AL, AF, VStore, KStore, res, sol, true, 
                residterm,anrm)
     else

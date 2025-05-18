@@ -197,6 +197,10 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     r .= b
     tol = tolf
     onthefly ? (rs = ones(TF, 1)) : (rs = zeros(TF, size(b)))
+#
+# If TR > TW then do the solve in TW after computing r in TR
+#
+    (TR == TW) || (rs = zeros(TW,size(b)))
     #
     #   Keep the books. Test for excessive residual precision.
     #  
