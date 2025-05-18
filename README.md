@@ -42,10 +42,14 @@ __The half precision LU for Float16 in this package is much faster (more than 10
  
  - v0.1.4: Continuous improvement for the docs and ...
     - Enable fine control of termination criteria parameters, but I discourage messing with this.
-    - Document the results of the bullet above + why I use || AF ||_1 in the termination criterion
-    - Fixing a scholarship bug and putting the solution in the working precision when using extended precision residuals. 
-
- - v0.1.5: Docs get better and ...
+    - Document the results of the bullet above + why I use the factorization precision and || A ||_1 in the termination criterion.
+    - Fixing a scholarship bug and putting the solution in the working precision when using extended precision residuals.
+       - Of course, this tiny change means that the docs and tests need more changes than I planned for
+       - At least 0.1.4 will not break too many things.
+ - v0.1.5: Large scale refactoring, better docs, and ...
+    - Putting the estmated error in the termination criterion and the iteration stats
+    - Setting myself up for v0.1.6 so I can avoid the code bloat I'm trying to fix in v0.1.5
+ - v0.1.6: Docs get better and ...
     - QR and linear least squares
       
 ##  Can I complain about this package?
