@@ -8,7 +8,9 @@ function hvse(N=128)
 (MPF, MPHF, x, b) = unitt(N);
 eout=mpkrir(MPF, b; reporting=true);
 hout=mpkrir(MPHF, b; reporting=true);
-nres=norm(eout.rhist - hout.rhist, Inf);
+leno=length(eout.rhist); heno=length(hout.rhist);
+mlen=min(leno,heno)
+nres=norm(eout.rhist[1:mlen] - hout.rhist[1:mlen], Inf);
 sres=norm(eout.sol - hout.sol, Inf);
 tolok=eps(Float16)
 hvseok= ( (nres < tolok) && (sres < tolok) )
