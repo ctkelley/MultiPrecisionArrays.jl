@@ -2,6 +2,7 @@ function mpgmtest(n = 100)
     normok = true
     for TA in [Float64, Float32]
         normok = normok && get_gmir_results(n, TA)
+println(normok,"  ",TA)
     end
     normok = normok && get_gmir_results(n, Float64; test6416 = true)
     return normok

@@ -67,10 +67,14 @@ end
 
 @testset "Krylov-IR" begin
     @test mpbctest(1000)
+end
 #
 # Using MPHArray for CI only. This may go soon.
 #
+@testset "Krylov-IR2" begin
     @test mpgmtest(1000)
+end
+@testset "Krylov-IR3" begin
     @test hvse(128)
 end
 
