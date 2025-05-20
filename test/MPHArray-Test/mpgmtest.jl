@@ -2,9 +2,11 @@ function mpgmtest(n = 100)
     normok = true
     for TA in [Float64, Float32]
         normok = normok && get_gmir_results(n, TA)
-println(normok,"  ",TA)
+        normok || println("mpgm failure TA = $TA")
     end
-    normok = normok && get_gmir_results(n, Float64; test6416 = true)
+    ok6416 = get_gmir_results(n, Float64; test6416 = true)
+    ok6416 || println("6416 failure")
+    normok = normok && ok6416
     return normok
 end
 
