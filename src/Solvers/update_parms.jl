@@ -1,5 +1,5 @@
 """
-    update_parms(t::TERM = term_parms; Cr = 20.0, Ce = 1.0,
+    update_parms(t::TERM = term_parms; Cr = 1.0, Ce = 1.0,
            Rmax = 0.5, litmax=1000
 )
 
@@ -28,7 +28,7 @@ end
 where the fields are the parameters. The parameters we use in 
 the solvers are in a global TERM structure defined in the main module.
 ```
-term_parms=TERM(20.0, 1.0, .5, 1000)
+term_parms=TERM(1.0, 1.0, .5, 1000)
 ```
 As you can see, I start with the defaults. When you make changes, you
 write into this structure and it is your job to keep track of what you
@@ -37,27 +37,29 @@ did.
 To query the parameters type the name of the structure
 ```
 julia> term_parms
-MultiPrecisionArrays.TERM(2.00000e+01, 1.00000e+00, 5.00000e-01, 1000)
+TERM(1.00000e+00, 1.00000e+00, 5.00000e-01, 1000)
 ```
-To change Cr from 20 to 40 type
+To change Cr from 1 to 40 type
 ```
 julia> update_parms(; Cr=40.0)
-MultiPrecisionArrays.TERM(4.00000e+01, 1.00000e+00, 5.00000e-01, 1000)
+TERM(4.00000e+01, 1.00000e+00, 5.00000e-01, 1000)
 ```
 To change Ce to 5 and revert Cr back to the default
 ```
 julia> update_parms(; Ce=5.0)
-MultiPrecisionArrays.TERM(2.00000e+01, 5.00000e+00, 5.00000e-01, 1000)
+TERM(1.00000e+00, 5.00000e+00, 5.00000e-01, 1000)
+
 ```
 Finally, to get the defaults back, enter no changes.
 ```
 julia> update_parms(;)
-MultiPrecisionArrays.TERM(2.00000e+01, 1.00000e+00, 5.00000e-01, 1000)
+TERM(1.00000e+00, 1.00000e+00, 5.00000e-01, 1000)
+
 ```
 
 
 """
-function update_parms(t::TERM = term_parms; Cr = 20.0, Ce = 1.0,
+function update_parms(t::TERM = term_parms; Cr = 1.0, Ce = 1.0,
          Rmax = 0.5, litmax=1000)
     #
     # The parameters live in a mutable struct term_parms in

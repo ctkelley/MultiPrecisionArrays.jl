@@ -11,7 +11,7 @@ G=Gmat(n, Float32);
 # alpha=1.0 = well conditioned
 # alpha=800.0 = moderately ill conditioned
 #
-alpha=Float32(a)
+alpha=Float32(a);
 A=I + alpha*G;
 b=ones(Float32,n);
 AD=Float64.(A);

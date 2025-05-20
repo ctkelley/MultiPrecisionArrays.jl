@@ -2,21 +2,21 @@
 
 Today's values are
 ```math
-C_e = 1.0, C_r = 20.0, r_{max} = .5, litmax = 1000
+C_e = 1.0, C_r = 1.0, r_{max} = .5, litmax = 1000
 ```
 
 Floating point roundoff is 
 ```math
-u_r = 0.5 * eps(TR)
+u_w = 0.5 * eps(TW)
 ```
 
 We can terminate on a small residual
 ```math
-\| r \| < C_r u_r \| b \|
+\| r \| < C_r u_w \| b \|
 ```
 or a small relative normwise backward error
 ```math
-\| r \| < C_e u_r (\| b \| + \| A \| \| x \|)
+\| r \| < C_e u_w (\| b \| + \| A \| \| x \|)
 ```
 
 Termination on small residual is the default because computing $\| A \|$
@@ -26,10 +26,6 @@ $\| A \|_\infty$ but it is still a pain. I also compute $\| A \|_1$
 in ```TF``` if ```TF = Float32``` or ```TF = Float64```. 
 Otherwise I use ```TW```. 
 LAPACK does not support half precision so that's out.
-
-The reason $C_r > C_e$ is
-that putting $\| A \|$ in the termination criterion is very useful
-and making $C_r$ large helps compensate for that.
 
 The problem with these criteria is
 that IR can stagnate, especially for ill-conditioned problems, before
@@ -51,7 +47,7 @@ You can use the __update_parms__ command to
 change $C_r$, $C_e$, $r_{max}$, and $litmax$ if you must. I do not advise that.
 Anyhow, here are the docstrings.
 ```
-  update_parms(t::TERM = term_parms; Cr = 20.0, Ce = 1.0,
+  update_parms(t::TERM = term_parms; Cr = 1.0, Ce = 1.0,
          Rmax = 0.5, litmax=1000
 
   )
@@ -81,7 +77,7 @@ Anyhow, here are the docstrings.
   where the fields are the parameters. The parameters we use in the solvers
   are in a global TERM structure defined in the main module.
 
-  term_parms=TERM(20.0, 1.0, .5, 1000)
+  term_parms=TERM(1.0, 1.0, .5, 1000)
 
   As you can see, I start with the defaults. When you make changes, you write
   into this structure and it is your job to keep track of what you did.
@@ -89,20 +85,21 @@ Anyhow, here are the docstrings.
   To query the parameters type the name of the structure
 
   julia> term_parms
-  MultiPrecisionArrays.TERM(2.00000e+01, 1.00000e+00, 5.00000e-01, 1000)
+  TERM(1.00000e+00, 1.00000e+00, 5.00000e-01, 1000)
 
-  To change Cr from 20 to 40 type
+  To change Cr from 1 to 40 type
 
   julia> update_parms(; Cr=40.0)
+  
   MultiPrecisionArrays.TERM(4.00000e+01, 1.00000e+00, 5.00000e-01, 1000)
 
   To change Ce to 5 and revert Cr back to the default
 
   julia> update_parms(; Ce=5.0)
-  MultiPrecisionArrays.TERM(2.00000e+01, 5.00000e+00, 5.00000e-01, 1000)
+  TERM(1.00000e+00, 5.00000e+00, 5.00000e-01, 1000)
 
   Finally, to get the defaults back, enter no changes.
 
   julia> update_parms(;)
-  MultiPrecisionArrays.TERM(2.00000e+01, 1.00000e+00, 5.00000e-01, 1000)
+  TERM(1.00000e+00, 1.00000e+00, 5.00000e-01, 1000)
 ```

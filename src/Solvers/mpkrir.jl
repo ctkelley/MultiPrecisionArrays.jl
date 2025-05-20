@@ -124,7 +124,7 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
     x .*= TW(0.0)
     # remember that eps(TR) = 2 * unit roundoff
     residterm = AF.residterm
-    term_data = termination_settings(TR, residterm)
+    term_data = termination_settings(TW, residterm)
     tolf = term_data.tolf
     rrf = term_data.redmax
     litmax = term_data.litmax

@@ -1,18 +1,18 @@
-function termination_settings(TR, residterm)
+function termination_settings(TW, residterm)
     #
     # I am continually tweaking this stuff. 
-    # I do not export this and do not encourage you to play with it.
+    # I do not encourage you to play with it.
     # If you want to mess with it anyway, the functions in this file
     # and the ***Termination criteria defaults*** in MultiPrecisionArrays.jl
     # will let you get started.
     #
     # I will terminate IR using either small relative residual
     # (residterm = true, the default)
-    # || r || < Cr eps(TR) || b || 
+    # || r || < Cr eps(TW) || b || 
     #
     # or small normwise backward error
     # (residterm = false)
-    # || r || < Ce eps(TR) (|| A || || x || + || b ||) 
+    # || r || < Ce eps(TW) (|| A || || x || + || b ||) 
     #
     # I use the L1 norm for A because that is less expensive that 
     # Linfty.  || A || is as expensive as a few IR iterations, 
@@ -29,7 +29,7 @@ function termination_settings(TR, residterm)
     #
     (Cr, Ce, Rmax, litmax) = termdata()
     residterm ? tf = Cr : tf = Ce
-    tolf = eps(TR) * tf
+    tolf = eps(TW) * tf
     term_out = (tolf = tolf, redmax = Rmax, litmax=litmax)
     return term_out
 end
