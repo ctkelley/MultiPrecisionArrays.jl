@@ -22,16 +22,24 @@ include("DetailsTest/mplu_test.jl")
 include("DetailsTest/AbsArray.jl")
 include("DetailsTest/static_test.jl")
 include("DetailsTest/term_test.jl")
-include("Krylov-IRTest/mpgmtest.jl")
 include("Krylov-IRTest/mpbctest.jl")
-include("Krylov-IRTest/hvse.jl")
 include("Wilkinson/wilk_test.jl")
 include("Wilkinson/wilk_krylov.jl")
+#
+# Using MPHArray for CI only. This may go soon.
+#
+include("MPHArray-Test/gtesth.jl")
+include("MPHArray-Test/mpgmtest.jl")
+include("MPHArray-Test/hvse.jl")
+include("MPHArray-Test/precision_testH.jl")
 
 println("starting")
 
 @testset "Greens Functions" begin
     @test greensok()
+#
+# Using MPHArray for CI only. This may go soon.
+#
     @test greensHok()
     @test greensEvsH()
 end
@@ -51,11 +59,18 @@ end
     @test static_test()
     @test term_test()
     @test test_term_parms()
+#
+# Using MPHArray for CI only. This may go soon.
+#
+    @test precision_testH()
 end
 
 @testset "Krylov-IR" begin
-    @test mpgmtest(1000)
     @test mpbctest(1000)
+#
+# Using MPHArray for CI only. This may go soon.
+#
+    @test mpgmtest(1000)
     @test hvse(128)
 end
 

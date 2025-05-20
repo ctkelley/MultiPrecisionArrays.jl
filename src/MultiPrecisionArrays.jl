@@ -21,18 +21,16 @@ include("Structs4MP/MPBase.jl")
 include("Structs4MP/MPArray.jl")
 include("Structs4MP/MPGArray.jl")
 include("Structs4MP/MPBArray.jl")
-include("Structs4MP/MPHeavy.jl")
+#
+# MPHArrays may go away soon. They are only used for CI>
+include("CI_Only/MPHeavy.jl")
+is_heavy(x::MPHFact) = true
+is_heavy(x::MPLFact) = false
 
 MPFact = Union{MPLFact,MPHFact}
-MPLFacts = Union{MPLFact}
 MPGFact = Union{MPGEFact,MPGHFact}
+MPLFacts = Union{MPLFact}
 MPKFact = Union{MPGFact,MPBFact}
-
-#export MPGFact
-#export MPBFact
-#export MPKFact
-
-#MPIRArray = Union{MPArray,MPHArray}
 
 #
 # Termination criteria defaults
@@ -58,8 +56,6 @@ redmax=term_parms.Rmax, litmax=term_parms.litmax)
 export termdata, term_parms_default, term_parms, update_parms
 export restore_default_parms, update_parms, TERM
 
-is_heavy(x::MPHFact) = true
-is_heavy(x::MPLFact) = false
 
 kmeth(x::MPGFact) = "GMRES"
 kmeth(x::MPBFact) = "BiCGSTAB"
@@ -116,6 +112,7 @@ export mphlu!
 export mpblu
 export mpblu!
 export mpglu!
+export mpghlu!
 export mpglu
 #export mpqr!
 #export mpcholesky!
@@ -141,43 +138,14 @@ export mpglu
 # and I may stop exporting them. 
 #
 # For IR-GMRES, it's more subtle.  The cost of Heavy IR with MPHArray
-# and MPGHFact is an extra high precision matrix. If you can afford 
-# the storage and communication burden, it's a reasonable thing to do. 
-# If you can't, on-the-fly is your only option. The differences in time
-# become less significant as the problem size gets large and the O(N^2)
-# interprecision transfer cost is completely dominated by the O(N^3) 
-# factorization cost. 
-#
-#export MPArray
-#export MPHArray
-#
-#
-#
-#export MPLFact
-#export MPGHFact
-#export MPGEFact
-#export MPFact
-#
-#
-#
-#export MPEArray
-#export MPFArray
-#export MPGArray
-#export MPBArray
-#export MPHFact
-#export MPBFact
-# export MPhatv
-# export MPhptv
+# and MPGHFact is an extra high precision matrix. I only use this for CI
+# and am thinking about removing this stuff. 
 #
 # The data structures for statistics are almost surely not 
-# interesting to anyone but me. I will document how one can
-# use the solvers to get the stats sooner or later.
+# interesting to anyone but me. Look at "Harvesting Iteration Statistics"
+# in the docs for details. 
 #
-#export MPGStats
-#export MPIRStats
 
-#include("Solvers/mpgmir.jl")
-#include("Solvers/mpbcir.jl")
 include("Solvers/mpkrir.jl")
 include("Solvers/mpgeslir.jl")
 include("Solvers/IRTriangle.jl")
@@ -188,12 +156,12 @@ include("Factorizations/hlu!.jl")
 include("Factorizations/mplu!.jl")
 include("Factorizations/mpglu!.jl")
 include("Factorizations/mpblu!.jl")
+include("CI_Only/mpghlu!.jl")
 
 module Examples
 using MultiPrecisionArrays
 using LinearAlgebra: LinearAlgebra
 using Reexport; @reexport import LinearAlgebra.I
-#using LinearAlgebra: BLAS
 
 export Gmat
 
