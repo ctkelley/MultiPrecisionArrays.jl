@@ -64,8 +64,10 @@ function hlu!(A::AbstractMatrix{T}) where {T}
                 info = k
             end
             # Update the rest
+            ntdiv=nthreads()
             ntasks = min(nthreads(), 1 + floor(Int, (n - k) / 8))
-            tforeach(k+1:n; ntasks = ntasks) do j
+            tforeach(k+1:n) do j
+#            tforeach(k+1:n; ntasks = ntasks) do j
                 Akj = -A[k, j]
                 @inbounds @simd ivdep for i = k+1:m
                     A[i, j] += A[i, k] * Akj
