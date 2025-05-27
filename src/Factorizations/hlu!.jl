@@ -13,7 +13,7 @@ to only MaxRow.
 
 All I did in the factorization
 was thread the critical loop with OhMyThreads:tforeach and
-put @simd in the inner loop. For larger problems (n > 128)
+put @simd in the inner loop. For larger problems (n >= 1000)
 these changes got me a 2-10x speedup
 on my Mac M2 Pro with 8 performance cores. I'm happy.
 
@@ -25,7 +25,7 @@ function hlu!(A::AbstractMatrix{T}) where {T}
     # Extract values and make sure the problem is square
     m, n = size(A)
     # Small n? Revert to normal lu
-    (n < 128) && (AF = lu!(A); return AF)
+    (n < 512) && (AF = lu!(A); return AF)
     minmn = min(m, n)
     # Initialize variables
     info = 0
@@ -66,8 +66,8 @@ function hlu!(A::AbstractMatrix{T}) where {T}
             # Update the rest
             ntdiv=nthreads()
             ntasks = min(nthreads(), 1 + floor(Int, (n - k) / 8))
-            tforeach(k+1:n) do j
-#            tforeach(k+1:n; ntasks = ntasks) do j
+#            tforeach(k+1:n) do j
+            tforeach(k+1:n; ntasks = ntasks) do j
                 Akj = -A[k, j]
                 @inbounds @simd ivdep for i = k+1:m
                     A[i, j] += A[i, k] * Akj
