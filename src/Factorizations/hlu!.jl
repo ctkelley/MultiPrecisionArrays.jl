@@ -25,7 +25,9 @@ function hlu!(A::AbstractMatrix{T}) where {T}
     # Extract values and make sure the problem is square
     m, n = size(A)
     # Small n? Revert to normal lu
-    (n < 512) && (AF = lu!(A); return AF)
+#    (n < 512) && (AF = lu!(A); return AF)
+    ntasks = 1
+#
     minmn = min(m, n)
     # Initialize variables
     info = 0
@@ -64,9 +66,10 @@ function hlu!(A::AbstractMatrix{T}) where {T}
                 info = k
             end
             # Update the rest
-            ntdiv=nthreads()
-            ntasks = min(nthreads(), 1 + floor(Int, (n - k) / 8))
+#            ntdiv=nthreads()
+#            ntasks = min(nthreads(), 1 + floor(Int, (n - k) / 8))
 #            tforeach(k+1:n) do j
+            (n > 1024) && (ntasks = task_num(n,k))
             tforeach(k+1:n; ntasks = ntasks) do j
                 Akj = -A[k, j]
                 @inbounds @simd ivdep for i = k+1:m
@@ -83,6 +86,11 @@ function hlu(A)
     C = copy(A)
     AF = hlu!(C)
     return AF
+end
+
+function task_num(n, k)
+tnum = min(nthreads(), 1 + floor(Int, (n - k) / 8))
+return tnum
 end
 
 # More stuff I got from Base
