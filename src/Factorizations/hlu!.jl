@@ -66,13 +66,13 @@ function hlu!(A::AbstractMatrix{T}) where {T}
                 info = k
             end
             # Update the rest
-#            ntdiv=nthreads()
-#            ntasks = min(nthreads(), 1 + floor(Int, (n - k) / 8))
-#            tforeach(k+1:n) do j
-            (n > 1024) && (ntasks = task_num(n,k))
+             ntasks = task_num(n,k)
+#            ((n-k) >= 512) ? (ntasks = task_num(n,k)) : ntasks=1
             tforeach(k+1:n; ntasks = ntasks) do j
                 Akj = -A[k, j]
                 @inbounds @simd ivdep for i = k+1:m
+#                    aik = A[i,k]
+#                    A[i, j] += aik * Akj
                     A[i, j] += A[i, k] * Akj
                 end # i loop
             end #j loop
@@ -89,7 +89,10 @@ function hlu(A)
 end
 
 function task_num(n, k)
-tnum = min(nthreads(), 1 + floor(Int, (n - k) / 8))
+#ndiv=8
+ndiv=256
+tnum = min(nthreads(), 1 + floor(Int, (n - k) / ndiv))
+((n-k) < 512) && (tnum = 1)
 return tnum
 end
 
