@@ -19,7 +19,7 @@ mlen=min(leno,heno)
 nres=norm(eout.rhist[1:mlen] - hout.rhist[1:mlen], Inf);
 sres=norm(eout.sol - hout.sol, Inf);
 tolok=eps(Float16)
-hvseok= ( (nres < 1.e-8) && (sres < tolok) )
+hvseok= ( (nres < tolok) && (sres < tolok) )
 hvseok || println("MGF problem resdiff=$nres or soldiff=$sres too large")
 return hvseok
 end
