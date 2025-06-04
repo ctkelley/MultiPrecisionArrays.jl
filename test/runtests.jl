@@ -13,6 +13,7 @@ import MultiPrecisionArrays.MPBArray
 import MultiPrecisionArrays.MPLFact
 import MultiPrecisionArrays.mpkrir
 
+include("Tools/testnorm.jl")
 include("Greens/gtest.jl")
 include("NLTest/nltest.jl")
 include("DetailsTest/precision_test.jl")
