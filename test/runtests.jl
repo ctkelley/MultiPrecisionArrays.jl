@@ -29,7 +29,7 @@ include("Wilkinson/wilk_krylov.jl")
 #
 # Using MPHArray for CI only. This may go soon.
 #
-include("MPHArray-Test/gtesth.jl")
+include("MPHArray-Test/gtestH.jl")
 include("MPHArray-Test/mpgmtest.jl")
 include("MPHArray-Test/hvse.jl")
 include("MPHArray-Test/precision_testH.jl")
