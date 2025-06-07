@@ -13,17 +13,17 @@ end
 function get_gmir_results(n, TA; test6416 = false, debug = false)
     TAok = true
     for alpha in [1.0, 10.0, 800.0]
-        AD = TA.(I - alpha * Gmat(n))
-        xs = ones(TA, n)
-        b = AD * xs
+        AD = TA.(I - alpha * Gmat(n));
+        xs = ones(TA, n);
+        b = AD * xs;
         if test6416
-            ADM = MPHArray(AD; TF = Float16)
+            ADM = MPHArray(AD; TF = Float16);
         else
-            ADM = MPHArray(AD)
+            ADM = MPHArray(AD);
         end
-        ADF = mpglu!(ADM)
-        zt = mpkrir(ADF, b; reporting = true)
-        z = zt.sol
+        ADF = mpglu!(ADM);
+        zt = mpkrir(ADF, b; reporting = true);
+        z = zt.sol;
         delnorm = norm(z - xs, Inf)
         if debug
             its = length(zt.rhist)
@@ -31,6 +31,7 @@ function get_gmir_results(n, TA; test6416 = false, debug = false)
             println("alpha=$alpha, delnorm=$delnorm, rnorm=$rnorm, its = $its")
         end
         TAok = TAok && testnorm(delnorm, TA, alpha)
+        TAok || println("delnorm = $delnorm")
     end
     return TAok
 end

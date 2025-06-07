@@ -121,6 +121,7 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
     AD = AF.AH
     TR = eltype(AF.residual)
     TW = eltype(x)
+    TF = eltype(AF.AL);
     x .*= TW(0.0)
     # remember that eps(TR) = 2 * unit roundoff
     residterm = AF.residterm
@@ -164,7 +165,7 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
     kl_store = AF.KStore
     atvd = copy(r)
     xloop=copy(r)
-    MP_Data = (MPF = AF, atv = atvd)
+    MP_Data = (MPF = AF, atv = atvd, TF=TF, TW=TW)
     #    rrf = 0.5
     #    rrf = term_data.redmax
     tol = tolf * (bnorm + anrm * xnorm)
@@ -249,8 +250,7 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
     end
     verbose && println("Residual history = $rhist")
     if reporting
-        TF = eltype(AF.AL)
-        TW = eltype(AF.AH)
+#        TF = eltype(AF.AL); TW = eltype(AF.AH);
         return (rhist = rhist, khist = khist, sol = x, TW = TW, TF = TF)
     else
         return x
@@ -266,6 +266,15 @@ end
 
 # Preconditioner-vector product for Krylov-IR
 function MPhptv(x, pdata)
+    TF=pdata.TF
+    TW=pdata.TW
+#
+# ldiv! is not doing well for one case, so I hide from it.
+#
+    if (TF == Float16) && (TW == Float32)
+    x .= pdata.MPF.AF\x;
+    else 
     ldiv!(pdata.MPF.AF, x)
+    end
     return x
 end
