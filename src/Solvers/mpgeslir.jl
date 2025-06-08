@@ -40,7 +40,8 @@ or
 mout = \\(MPF,b; reporting=true)
 ```
 is a structure. ```mpout.sol``` is the solution. ```mpout.rhist```
-is the residual history. mpout also contains the datatypes TW for
+is the residual history. ```mpout.dhist``` is the history of the
+norms of the corrections.  mpout also contains the datatypes TW for
 high precision and TF for low precision.
 
 You may not get exactly the same results for this example on
@@ -59,15 +60,27 @@ julia> MPF=mplu(A);
 julia> mout=\\(MPF, b; reporting=true);
 
 julia> mout.rhist
-6-element Vector{Float64}:
- 9.90000e+01
- 3.65823e-03
- 6.17917e-07
- 8.74678e-11
- 2.04636e-12
- 2.03215e-12
+7-element Vector{Float64}:
+ 1.00000e+00
+ 4.24311e-02
+ 9.03500e-05
+ 9.59277e-08
+ 6.12346e-11
+ 9.75675e-12
+ 8.49343e-12
 
-# Stagnation after four IR iterations
+# Stagnation after six IR iterations
+
+julia> mout.dhist
+6-element Vector{Float64}:
+ 2.00420e+02
+ 3.15198e-01
+ 4.48500e-04
+ 4.57912e-07
+ 5.88713e-10
+ 3.62408e-11
+
+# No correction for the final itertation.
 
 julia> [mout.TW mout.TF]
 1×2 Matrix{DataType}:
@@ -207,6 +220,7 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     ERes = (eps(TR) < eps(Float64))
     HiRes ? (THist = TR) : (THist = Float64)
     rhist = Vector{THist}()
+    dhist = Vector{TW}()
     rnrm = TR(norm(r, normtype))
     rnrmx = rnrm * 1.e6
     oneb = TR(1.0)
@@ -239,6 +253,8 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
         #
         # Update the solution and residual
         #
+        dnorm = norm(rloop, normtype)
+        push!(dhist, dnorm)
         x .+= rloop
         xloop .= TR.(x)
 #        xloop .+= rloop
@@ -267,7 +283,8 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
 #    x = xloop
     verbose && println("Residual history = $rhist")
     if reporting
-        return (rhist = rhist, sol = x, TW = TW, TF = TF, TFact = TFact)
+        return (rhist = rhist, dhist=dhist, 
+              sol = x, TW = TW, TF = TF, TFact = TFact)
     else
         return x
     end

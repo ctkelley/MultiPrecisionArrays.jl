@@ -27,7 +27,7 @@ The kwarg ```residterm``` sets the termination criterion.
 small residuals.  ```residterm == false``` terminates the iteration on
 small normwise backward errors. Look at the docs for details.
 
-If you want to use static arrays with this stuff, use the 
+If you want to use static arrays with this stuff, import the 
 mutable @MArray constructor
 
 """
@@ -155,17 +155,17 @@ julia> b = A*ones(Float32,n);
 
 julia> AF = mplu(A; TF=Float32, TR=Float64, onthefly=true);
 
-# Solve and save the iteration history
+# Solve and save the iteration history. Set the kwarg reporting
+# to true and get iteration statistics. Look at the docs for
+# details.
 
 julia> mout = \\(AF, b; reporting=true);
 
 julia> mout.rhist
-5-element Vector{Float64}:
+3-element Vector{Float64}:
  1.12500e+00
- 1.74765e-07
- 3.10862e-14
- 6.66134e-16
- 2.22045e-16
+ 2.66437e-07
+ 5.61655e-08
 
 # What does this mean. I'll solve the promoted problem. TR.(A) x = b
 
@@ -174,9 +174,9 @@ julia> AD=Float64.(A);
 julia> xd = AD\\b;
 
 julia> norm(xd - mout.sol,Inf)
-1.11022e-15
+5.62965e-08
 
-# So IR with TR > TW solves a promoted problem.
+# So IR with TR > TW solves a promoted problem to TW roundoff.
 ```
 
 

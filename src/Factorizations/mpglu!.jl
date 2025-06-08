@@ -25,7 +25,6 @@ function mpglu!(MPGA::MPGArray; residterm = residtermdefault)
     res = MPGA.residual
     sol = MPGA.sol
     (TF == Float16) ? ALF = hlu!(AL) : ALF = lu!(AL)
-#    anrm=TF.(0.0)
     MPF = MPGEFact(AH, AL, ALF, VStore, KStore, res, sol, true, 
                  residterm, anrm)
     return MPF
@@ -129,12 +128,11 @@ julia> xe=ones(Float32,N); b=A*xe; AF=mplu(A);
 julia> mout=\\(AF, b; reporting=true);
 
 julia> mout.rhist
-5-element Vector{Float64}:
+4-element Vector{Float64}:
  9.88750e+01
  3.92435e+00
  3.34373e-01
  2.02045e-01
- 2.24720e-01
 
 # That does not look like convergence. What about TR=Float64?
 
@@ -144,32 +142,31 @@ julia> mout2=\\(BF, b; reporting=true);
 
 julia> mout2.rhist
 5-element Vector{Float64}:
+4-element Vector{Float64}:
  9.88750e+01
- 3.92614e+00
- 3.34301e-01
- 2.01975e-01
- 2.24576e-01
+ 3.92451e+00
+ 3.34292e-01
+ 2.02204e-01
 
-# Can Float16 be saved? How 'bout IR-GMRES?
+# Can Float16 be saved? How 'bout IR-GMRES with a generous basissize.
 
-julia> GF=mpglu(A; TR=Float64);
+julia> GF=mpglu(A; TR=Float64, basissize=20);
 
-julia> mout3=\\(GF, b; reporting=true);
+julia> mout3=\\(GF, b; reporting=true)
 
 julia> mout3.rhist
-6-element Vector{Float64}:
+4-element Vector{Float64}:
  9.88750e+01
- 4.44609e-03
- 4.98088e-05
- 1.20093e-07
- 9.07988e-08
+ 7.59075e-03
+ 1.48842e-05
+ 2.17281e-07
 
 # Shazam! Did we get the solution of the promoted problem?
 
 julia> xp=Float64.(A)\\b; norm(xp-mout3.sol,Inf)
-1.24236e-07
+9.02494e-06
 
-# Yup.
+# Maybe. 
 
 ```
 """

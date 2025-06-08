@@ -2,34 +2,13 @@
 mpkrir(AF::MPKFact, b; reporting=false, 
                                verbose=false, mpdebug=false)
 
+Krylov-IR solver 
+
 I do not export this function. The idea is that you use ```mpglu```
 and do not touch either the constructor or the solver directly.
 
 Use a multi-precision factorization to solve a linear system with
-plain vanilla iterative refinement.
-
-This version is analogous to ```A\\b``` and combines the factorization
-and the solve. You start with MPA=MPArray(A) and then pass MPA
-to mpgeslir and combine the factorization and the solve. 
-
-You can also get the multiprecision factorization directly with
-```
-MPF=mplu(A)
-```
-and then pass ```MPF``` to mpgeslir.
-
-I use this to get some timing results and it's also convenient
-if you want to do factor and solve in one statement. 
-
-You can also get this with ```x = MPA\\b```.
-
-If you set the kwarg ```reporting``` to true you can get the IR
-residual history. The output of 
-```
-x = MPA\\b
-```
-
-Krylov-IR solver 
+IR-Krylov metods
 
 This is the generic solver used by GMRES-IR and BiCGSTAB-IR. You use
 the correct MPKFact = Union{MPGFact,MPBFact} structure and mpkrir
@@ -86,23 +65,34 @@ julia> solout=\\(AF, b; reporting=true);
 # Correct result?
 
 julia> x=solout.sol; norm(b-A*x,Inf)
-9.45199e-12
+8.20877e-12
 
 # Look at the residual history
 
 julia> solout.rhist
+
 4-element Vector{Float64}:
  1.00000e+00
- 1.27149e-10
- 9.00036e-12
- 9.45199e-12
+ 1.25881e-10
+ 8.58902e-12
+ 8.20877e-12
+
+# and the correction norm history. No correction for the final iteration.
+
+julia> solout.dhist
+3-element Vector{Float64}:
+ 2.00129e+02
+ 1.05241e-10
+ 2.28629e-11
+
+
 # Stagnation after the 2nd iteration. Now the Krylovs/iteration
 
 julia> solout.khist
 3-element Vector{Int64}:
  4
  5
- 4
+ 5
 # 4-5 Krylovs per iteration.
 
 BiCGSTAB works the same way.
@@ -154,6 +144,7 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
     bnrm = norm(b, normtype)
     rnrmx = rnrm * TR(2.0)
     rhist = Vector{TR}()
+    dhist = Vector{TW}()
     khist = Vector{Int64}()
     push!(rhist, rnrm)
     eta = tolf
@@ -230,6 +221,8 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
         # high precision residual.
         #
         x .+= r
+        dnorm=norm(r, normtype)
+        push!(dhist,dnorm)
         xloop=TR.(x)
         mul!(r, AD, xloop)
         r .*= -onetb
@@ -251,7 +244,8 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
     verbose && println("Residual history = $rhist")
     if reporting
 #        TF = eltype(AF.AL); TW = eltype(AF.AH);
-        return (rhist = rhist, khist = khist, sol = x, TW = TW, TF = TF)
+        return (rhist = rhist, dhist=dhist, 
+              khist = khist, sol = x, TW = TW, TF = TF)
     else
         return x
     end
