@@ -39,15 +39,15 @@ __The half precision LU for Float16 in this package is much faster (more than 10
    - Fixing a performance bug.
    - Add options to termination criterion. __Change default back to small residuals.__
    - v0.1.3 is the version for the [__JOSS paper__](https://joss.theoj.org/papers/10.21105/joss.06698). I gave that version the v0.1.3-joss tag.
- 
  - v0.1.4: Continuous improvement for the docs and ...
     - Enable fine control of termination criteria parameters, but I discourage messing with this.
     - Document the results of the bullet above + why I use the factorization precision and || A ||_1 in the termination criterion.
+    - Putting the norm of the correction in the iteration stats.
     - Fixing a scholarship bug and putting the solution in the working precision when using extended precision residuals.
        - Of course, this tiny change means that the docs and tests need more changes than I planned for
        - At least 0.1.4 will not break too many things.
  - v0.1.5: Large scale refactoring, better docs, and ...
-    - Putting the estmated error in the termination criterion and the iteration stats
+    - Putting the estmated error in the termination criterion
     - Setting myself up for v0.1.6 so I can avoid the code bloat I'm trying to fix in v0.1.5
  - v0.1.6: Docs get better and ...
     - QR and linear least squares
@@ -381,11 +381,11 @@ A new paper exploits most of the package. I use the examples in that paper for C
 - (KEL23a) C. T. Kelley, [__Newton's method in three precisions__](https://arxiv.org/abs/2307.16051) To appear in Pacific Journal of Optimization.
   - This paper has a [repo](https://github.com/ctkelley/N3Presults) for reproducing the results with an early version of this package.
 
-This preprint about interprecison transfers uses MulitPrecisionArrays.jl for the computations.
+This preprint about interprecison transfers uses MulitPrecisionArrays.jl for the computations. I am revising it and will put up a new version sometime in 2025.
 
 - (Kel24a) C. T. Kelley, [__Interprecision transfers in iterative refinement__](https://arxiv.org/pdf/2407.00827)
 
-Here's a new JOSS paper about the package.
+Here's a new JOSS paper about the package. v0.1.3 is the version for the paper. I gave that version the v0.1.3-joss tag.
 
 - (Kel24b) C. T. Kelley, [__MultiPrecisionArrays.jl: A Julia package for iterative refinement__](https://joss.theoj.org/papers/10.21105/joss.06698)
 
