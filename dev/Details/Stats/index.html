@@ -12,24 +12,32 @@ julia&gt; # Use \ with reporting=true
 julia&gt; mpout=\(MPF, b; reporting=true);
 
 julia&gt; norm(b-A*mpout.sol, Inf)
-1.33227e-15
+2.22045e-16
 
 julia&gt; # Now look at the residual history
 
 julia&gt; mpout.rhist
+6-element Vector{Float64}:
+ 1.00000e+00
+ 1.64859e-05
+ 1.02649e-10
+ 6.35048e-14
+ 4.44089e-16
+ 2.22045e-16</code></pre><p>As you can see, IR does well for this problem. The package uses an initial iterate of <span>$x = 0$</span> and so the initial residual is simply <span>$r = b$</span> and the first entry in the residual history is <span>$|| b ||_\infty$</span>. The iteration terminates successfully after five matrix-vector products.</p><p>You can also look at the norm of the defect.</p><pre><code class="nohighlight hljs">julia&gt; mpout.dhist
 5-element Vector{Float64}:
- 9.99878e-01
- 1.21892e-04
- 5.25805e-11
- 2.56462e-14
- 1.33227e-15</code></pre><p>As you can see, IR does well for this problem. The package uses an initial iterate of <span>$x = 0$</span> and so the initial residual is simply <span>$r = b$</span> and the first entry in the residual history is <span>$|| b ||_\infty$</span>. The iteration terminates successfully after four matrix-vector products.</p><p>You may wonder why the residual after the first iteration was so much larger than single precision roundoff. The reason is that the default  when the low precision is single is to downcast the residual to single before  the solve (onthefly=false). One can enable interprecision transfers on the fly and see the difference.</p><pre><code class="nohighlight hljs">julia&gt; MPF2=mplu(A; onthefly=true);
+ 1.00002e+00
+ 1.62124e-05
+ 1.02649e-10
+ 6.35100e-14
+ 4.45650e-16</code></pre><p>You may wonder why the residual after the first iteration was so much larger than single precision roundoff. The reason is that the default  when the low precision is single is to downcast the residual to single before  the solve (onthefly=false). One can enable interprecision transfers on the fly and see the difference.</p><pre><code class="nohighlight hljs">julia&gt; MPF2=mplu(A; onthefly=true);
 
 julia&gt; mpout2=\(MPF2, b; reporting=true);
 
 julia&gt; mpout2.rhist
-5-element Vector{Float64}:
- 9.99878e-01
- 6.17721e-07
- 3.84581e-13
- 7.99361e-15
- 8.88178e-16</code></pre><p>So the second iteration is much better, but the iteration terminated after four iterations in both cases.</p><p>There are more examples for this in (<a href="../../References/#ctk:mparraysdocs">Kelley, 2024</a>).</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../functions/mpblu/">« mpblu: Combine MPBArray construction and factorization</a><a class="docs-footer-nextpage" href="../../functions/mpgeslir/">mpgeslir: IR solver »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.12.0 on <span class="colophon-date" title="Sunday 8 June 2025 17:09">Sunday 8 June 2025</span>. Using Julia version 1.10.9.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+6-element Vector{Float64}:
+ 1.00000e+00
+ 3.10192e-06
+ 1.04403e-11
+ 6.13953e-14
+ 4.44089e-16
+ 2.22045e-16</code></pre><p>So the second iteration is somewhat better, but the iteration terminated after five iterations in both cases.</p><p>There are more examples for this in (<a href="../../References/#ctk:mparraysdocs">Kelley, 2024</a>).</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../functions/mpblu/">« mpblu: Combine MPBArray construction and factorization</a><a class="docs-footer-nextpage" href="../../functions/mpgeslir/">mpgeslir: IR solver »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.12.0 on <span class="colophon-date" title="Wednesday 11 June 2025 15:22">Wednesday 11 June 2025</span>. Using Julia version 1.10.9.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
