@@ -20,7 +20,7 @@ struct MPLFact{TW<:AbstractFloat,TF<:AbstractFloat,TR<:AbstractFloat,ATF<:Factor
     sol::Vector{TW}
     onthefly::Bool
     residterm::Bool
-    anrm::TF
+    anrm::AbstractFloat
 end
 
 struct MPGEFact

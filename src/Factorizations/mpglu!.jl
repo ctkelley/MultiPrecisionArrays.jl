@@ -19,7 +19,8 @@ function mpglu!(MPGA::MPGArray; residterm = residtermdefault)
     AL = MPGA.AL
     TF = eltype(AL)
     AH = MPGA.AH
-    residterm ? anrm=TF.(0.0) : anrm=norm(AL,1)
+    (TF == Float16) ? AX=AH : AX=AL
+    residterm ? anrm=TF.(0.0) : anrm=opnorm(AX,1)
     VStore = MPGA.VStore
     KStore = MPGA.KStore
     res = MPGA.residual

@@ -14,7 +14,8 @@ function mpblu!(MPBA::MPBArray; residterm = residtermdefault)
     AL = MPBA.AL
     AH = MPBA.AH
     TF = eltype(AL)
-    residterm ? anrm=TF.(0.0) : anrm=norm(AL,1)
+    (TF == Float16) ? AX=AH : AX=AL
+    residterm ? anrm=TF.(0.0) : anrm=opnorm(AX,1)
     VStore = MPBA.VStore
     KStore = MPBA.KStore
     res = MPBA.residual

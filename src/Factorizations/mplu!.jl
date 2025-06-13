@@ -35,7 +35,8 @@ function mplu!(MPA::MPArray; residterm = residtermdefault)
     AH = MPA.AH
     AL = MPA.AL
     TF = eltype(AL)
-    residterm ? anrm=TF.(0.0) : anrm=norm(AL,1)
+    (TF == Float16) ? AX=AH : AX=AL
+    residterm ? anrm=TF.(0.0) : anrm=opnorm(AX,1)
     residual = MPA.residual
     sol = MPA.sol
     (TF == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
