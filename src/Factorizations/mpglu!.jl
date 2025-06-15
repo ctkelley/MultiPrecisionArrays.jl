@@ -142,7 +142,6 @@ julia> BF=mplu(A; TR=Float64);
 julia> mout2=\\(BF, b; reporting=true);
 
 julia> mout2.rhist
-5-element Vector{Float64}:
 4-element Vector{Float64}:
  9.88750e+01
  3.92451e+00
@@ -150,24 +149,30 @@ julia> mout2.rhist
  2.02204e-01
 
 # Can Float16 be saved? How 'bout IR-GMRES with a generous basissize.
+# Keep in mind that we terminate on small correction norms
+# in this case, so may well take some extra iterations
 
 julia> GF=mpglu(A; TR=Float64, basissize=20);
 
-julia> mout3=\\(GF, b; reporting=true)
+julia> mout3=\\(GF, b; reporting=true);
 
 julia> mout3.rhist
-4-element Vector{Float64}:
+8-element Vector{Float64}:
  9.88750e+01
  7.59075e-03
  1.48842e-05
  2.17281e-07
+ 8.60429e-08
+ 7.45077e-08
+ 7.91866e-08
+ 7.53089e-08
 
 # Shazam! Did we get the solution of the promoted problem?
 
-julia> xp=Float64.(A)\\b; norm(xp-mout3.sol,Inf)
-9.02494e-06
+julia> xp=Float64.(A)\\b; norm(xp-mout3.sol,Inf);
+5.95829e-08
 
-# Maybe. 
+# Yes.
 
 ```
 """

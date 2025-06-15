@@ -1,5 +1,5 @@
 """
-mpgeslir(MPA::MPArray, b; reporting = false, verbose = true)
+mpgeslir(MPA::MPArray, b; reporting = false, verbose = false)
 
 I do not export this function. The idea is that you use ```mpglu```
 and do not touch either the constructor or the solver directly.
@@ -89,7 +89,7 @@ julia> [mout.TW mout.TF]
 ```
 
 """
-function mpgeslir(MPA::MPArray, b; reporting = false, verbose = true)
+function mpgeslir(MPA::MPArray, b; reporting = false, verbose = false)
     # Factor MPA and return Factorization object
     MPF = mplu!(MPA)
     # Call mpgeslir for the solve
@@ -98,7 +98,7 @@ function mpgeslir(MPA::MPArray, b; reporting = false, verbose = true)
 end
 
 """
-mpgeslir(AF::MPFact, b; reporting=false, verbose=true)
+mpgeslir(AF::MPFact, b; reporting=false, verbose=false)
 
 I do not export this function. The idea is that you use ```mplu```
 and do not touch either the constructor or the solver directly.
@@ -134,7 +134,7 @@ MPFact is a union of all the MultiPrecision factorizations in the package.
 The triangular solver will dispatch on the various types depending on
 how the interprecision transfers get done.
 """
-function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
+function mpgeslir(AF::MPFact, b; reporting = false, verbose = false)
     #
     # What kind of problem are we dealing with?
     #
@@ -236,7 +236,9 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
     #    rrf = term_data.redmax
     # Solve loop
     tol=(anrm * xnrm + bnrm) * tolf
-    while (rnrm > tol) && (rnrm <= rrf*rnrmx) && (itc < litmax)
+    dnormold=1.0
+    etest=true
+    while (rnrm > tol) && (rnrm <= rrf*rnrmx) && (itc < litmax) || etest
         #
         # Scale the residual
         #
@@ -255,6 +257,10 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = true)
         #
         dnorm = norm(rloop, normtype)
         push!(dhist, dnorm)
+        drat=dnorm/dnormold
+        dnormold=dnorm
+# High precision residual? Use ||d|| in termination.
+        etest = (eps(TR) < eps(TW) ) && (drat < .5) || (itc==0)
         x .+= rloop
         xloop .= TR.(x)
 #        xloop .+= rloop

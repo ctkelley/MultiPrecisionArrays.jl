@@ -20,13 +20,13 @@ mgout=\(AFG, b; reporting=true);
 lmg=length(mgout.rhist)
 promdiffg = norm(xp-mgout.sol,Inf)
 #
-# I want to see somewhere between 2 and 4 iterations
+# I want to see somewhere between 3 and 7 iterations
 # and an error < 10^{-7}
 #
 gmresok= (3 <= lmg <= 7) && (promdiffg < 1.e-7)
 #println(lmg,"  ",promdiffg,"  ",gmresok)
 gmresok || println("IRGMRES error. lmg=$lmg, promdiffg=$promdiffg")
-ABG=mpblu(A; TR=Float64)
+ABG=mpblu(A; TR=Float64);
 mbout=\(ABG, b; reporting=true);
 #
 # BiCGSTAB will convege to the defect so you'll need only one iteration.
@@ -35,7 +35,7 @@ mbout=\(ABG, b; reporting=true);
 #
 lmb=length(mbout.rhist)
 promdiffb = norm(xp-mbout.sol,Inf)
-bicgstabok= (1 <= lmb <= 3) && (promdiffb < 1.e-7)
+bicgstabok= (1 <= lmb <= 5) && (promdiffb < 1.e-7)
 bicgstabok || println("IRBiCGSTAB error. lmb=$lmb, promdiffb=$promdiffb")
 #println(lmb,"  ",promdiffb,"  ",bicgstabok)
 #results=(mgout=mgout, mbout=mbout)

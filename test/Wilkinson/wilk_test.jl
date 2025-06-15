@@ -22,7 +22,7 @@ mout = hires_sol(A, b)
 #
 lres=length(mout.rhist)
 ndel=norm(mout.sol - xe,Inf)
-l1ok=(lres <= 4)
+l1ok=(lres <= 7)
 s1ok=(ndel < 1.e-7);
 A1ok=l1ok && s1ok
 A1ok || println("32-32 Failure for alpha=$alpha:   ", lres,"  ",ndel)

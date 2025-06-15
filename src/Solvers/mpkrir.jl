@@ -160,7 +160,9 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
     #    rrf = 0.5
     #    rrf = term_data.redmax
     tol = tolf * (bnorm + anrm * xnorm)
-    while (rnrm > tol) && (rnrm <= rrf * rnrmx) && (itc < litmax)
+    dnormold=1.0
+    etest=true
+    while (rnrm > tol) && (rnrm <= rrf * rnrmx) && (itc < litmax) || etest
         x0 = zeros(TR, n)
         #
         # Scale the residual 
@@ -222,7 +224,11 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
         #
         x .+= r
         dnorm=norm(r, normtype)
+        drat=dnorm/dnormold
+        dnormold=dnorm
         push!(dhist,dnorm)
+# High precision residual? Use ||d|| in termination.
+        etest = (eps(TR) < eps(TW) ) && (drat < .5) || (itc==0)
         xloop=TR.(x)
         mul!(r, AD, xloop)
         r .*= -onetb
