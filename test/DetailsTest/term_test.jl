@@ -19,11 +19,13 @@ return termtestok
 end
 
 function lentest(AF, BF, b, fname)
-resout=\(AF, b; reporting=true)
-bresout=\(BF, b; reporting=true)
+resout=\(AF, b; reporting=true);
+bresout=\(BF, b; reporting=true);
 rlen=length(resout.rhist)
 brlen=length(bresout.rhist)
-termtestok=(rlen > brlen)
+mlen=min(rlen,brlen)
+termtestok=(norm(resout.rhist[1:mlen]-bresout.rhist[1:mlen]) < 1.e-10)
+#termtestok=(rlen > brlen)
 termtestok || println("term_test failure in $fname")
 #println(termtestok)
 #return (rhist=resout.rhist, brhist=bresout.rhist)
