@@ -30,7 +30,6 @@ julia&gt; BF=mplu(A; TR=Float64);
 julia&gt; mout2=\(BF, b; reporting=true);
 
 julia&gt; mout2.rhist
-5-element Vector{Float64}:
 4-element Vector{Float64}:
  9.88750e+01
  3.92451e+00
@@ -38,22 +37,28 @@ julia&gt; mout2.rhist
  2.02204e-01
 
 # Can Float16 be saved? How &#39;bout IR-GMRES with a generous basissize.
+# Keep in mind that we terminate on small correction norms
+# in this case, so may well take some extra iterations
 
 julia&gt; GF=mpglu(A; TR=Float64, basissize=20);
 
-julia&gt; mout3=\(GF, b; reporting=true)
+julia&gt; mout3=\(GF, b; reporting=true);
 
 julia&gt; mout3.rhist
-4-element Vector{Float64}:
+8-element Vector{Float64}:
  9.88750e+01
  7.59075e-03
  1.48842e-05
  2.17281e-07
+ 8.60429e-08
+ 7.45077e-08
+ 7.91866e-08
+ 7.53089e-08
 
 # Shazam! Did we get the solution of the promoted problem?
 
-julia&gt; xp=Float64.(A)\b; norm(xp-mout3.sol,Inf)
-9.02494e-06
+julia&gt; xp=Float64.(A)\b; norm(xp-mout3.sol,Inf);
+5.95829e-08
 
-# Maybe. 
-</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/08e4b71db6becff740492e52633eb0f6c8f0ef9c/src/Factorizations/mpglu!.jl#L77-L173">source</a></section></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../mpglu!/">« mpglu!: Factor a MPGArray and set it up for GMRES by allocating room for Krylov vectors etc</a><a class="docs-footer-nextpage" href="../mpblu!/">mpblu!: Factor a MPBArray and set it up for BiCGSTAB by allocating room for a few vectors »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.12.0 on <span class="colophon-date" title="Friday 13 June 2025 21:12">Friday 13 June 2025</span>. Using Julia version 1.10.9.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+# Yes.
+</code></pre></div><a class="docs-sourcelink" target="_blank" href="https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/e536302e5ab755d29645a62f85d9f84c7d3f3391/src/Factorizations/mpglu!.jl#L77-L178">source</a></section></article></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../mpglu!/">« mpglu!: Factor a MPGArray and set it up for GMRES by allocating room for Krylov vectors etc</a><a class="docs-footer-nextpage" href="../mpblu!/">mpblu!: Factor a MPBArray and set it up for BiCGSTAB by allocating room for a few vectors »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.12.0 on <span class="colophon-date" title="Sunday 15 June 2025 18:39">Sunday 15 June 2025</span>. Using Julia version 1.10.9.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
