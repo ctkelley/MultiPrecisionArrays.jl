@@ -1,5 +1,6 @@
 """
-mpgeslir(MPA::MPArray, b; reporting = false, verbose = false)
+mpgeslir(MPA::MPArray, b; reporting = false, verbose = false,
+         term_parms=term_parms_default)
 
 I do not export this function. The idea is that you use ```mpglu```
 and do not touch either the constructor or the solver directly.
@@ -53,8 +54,8 @@ count could grow or shrink as I do that.
 ```jldoctest
 julia> using MultiPrecisionArrays.Examples
 
-julia> N=4096; A = I - 800.0 * Gmat(N); b=ones(N);
 
+julia> N=4096; A = I - 800.0 * Gmat(N); b=ones(N);
 julia> MPF=mplu(A);
 
 julia> mout=\\(MPF, b; reporting=true);
@@ -89,7 +90,8 @@ julia> [mout.TW mout.TF]
 ```
 
 """
-function mpgeslir(MPA::MPArray, b; reporting = false, verbose = false)
+function mpgeslir(MPA::MPArray, b; reporting = false, verbose = false,
+         term_parms=term_parms_default)
     # Factor MPA and return Factorization object
     MPF = mplu!(MPA)
     # Call mpgeslir for the solve
@@ -98,7 +100,8 @@ function mpgeslir(MPA::MPArray, b; reporting = false, verbose = false)
 end
 
 """
-mpgeslir(AF::MPFact, b; reporting=false, verbose=false)
+mpgeslir(AF::MPFact, b; reporting=false, verbose=false, 
+         term_parms=term_parms_default)
 
 I do not export this function. The idea is that you use ```mplu```
 and do not touch either the constructor or the solver directly.
@@ -134,7 +137,8 @@ MPFact is a union of all the MultiPrecision factorizations in the package.
 The triangular solver will dispatch on the various types depending on
 how the interprecision transfers get done.
 """
-function mpgeslir(AF::MPFact, b; reporting = false, verbose = false)
+function mpgeslir(AF::MPFact, b; reporting = false, verbose = false,
+    term_parms=term_parms_default)
     #
     # What kind of problem are we dealing with?
     #
@@ -173,10 +177,10 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = false)
     #
     (TW == TB) || error("inconsistent precisions; A and b must have same type")
     residterm = AF.residterm
-    term_data = termination_settings(TW, residterm)
+    term_data = termination_settings(TW, term_parms, residterm)
     tolf = term_data.tolf
-    Rmax = term_data.Rmax
-    litmax = term_data.litmax
+    Rmax = term_parms.Rmax
+    litmax = term_parms.litmax
     AD = AF.AH
     #
     # I compute the norm of AF if needed in single

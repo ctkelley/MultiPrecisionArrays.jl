@@ -41,7 +41,7 @@ const residtermdefault = true
 # is therefore global. Don't change this outside
 # of the main thread.
 #
-mutable struct TERM
+struct TERM
        Cr::Real
        Ce::Real
        Rmax::Real
@@ -51,15 +51,12 @@ const Rmax_default = .5
 const Cr_default = 1.0
 const Ce_default = 1.0
 const litmax_default = 10
-const term_parms_default=TERM(Cr_default, Ce_default, Rmax_default,
+term_parms_default=TERM(Cr_default, Ce_default, Rmax_default,
 litmax_default)
-term_parms=TERM(Cr_default, Ce_default, Rmax_default, litmax_default)
-termdata() = ( Cr=term_parms.Cr, Ce=term_parms.Ce, 
-Rmax=term_parms.Rmax, litmax=term_parms.litmax)
 
 
 export termdata, term_parms_default, term_parms, update_parms
-export restore_default_parms, update_parms, TERM
+export update_parms, TERM
 
 
 kmeth(x::MPGFact) = "GMRES"
@@ -75,23 +72,31 @@ function eltype(MP::Union{MPArray,MPHArray,MPGArray,MPBArray})
 end
 
 import Base.\
-function \(AF::MPFact, b; verbose = false, reporting = false)
-    xi = mpgeslir(AF, b; verbose = verbose, reporting = reporting)
+function \(AF::MPFact, b; verbose = false, reporting = false,
+        term_parms=term_parms_default)
+    xi = mpgeslir(AF, b; verbose = verbose, reporting = reporting,
+        term_parms=term_parms)
     return xi
 end
 
-function \(AF::MPGFact, b; verbose = false, reporting = false, mpdebug = false)
-    xi = mpkrir(AF, b; verbose = verbose, reporting = reporting, mpdebug = mpdebug)
+function \(AF::MPGFact, b; verbose = false, reporting = false, 
+mpdebug = false, term_parms=term_parms_default)
+    xi = mpkrir(AF, b; verbose = verbose, reporting = reporting, 
+     mpdebug = false, term_parms=term_parms)
     return xi
 end
 
-function \(MPA::Union{MPArray}, b; verbose = false, reporting = false)
-    xi = mpgeslir(MPA, b; verbose = verbose, reporting = reporting)
+function \(MPA::Union{MPArray}, b; verbose = false, reporting = false,
+     term_parms=term_parms_default)
+    xi = mpgeslir(MPA, b; verbose = verbose, reporting = reporting,
+        term_parms=term_parms)
     return xi
 end
 
-function \(AF::MPBFact, b; verbose = false, reporting = false)
-    xi = mpkrir(AF, b; verbose = verbose, reporting = reporting)
+function \(AF::MPBFact, b; verbose = false, reporting = false,
+term_parms=term_parms_default)
+    xi = mpkrir(AF, b; verbose = verbose, reporting = reporting,
+      term_parms=term_parms)
     return xi
 end
 

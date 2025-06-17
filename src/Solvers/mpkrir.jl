@@ -1,6 +1,6 @@
 """
-mpkrir(AF::MPKFact, b; reporting=false, 
-                               verbose=false, mpdebug=false)
+mpkrir(AF::MPKFact, b; reporting=false, verbose=false, 
+           mpdebug=false, term_parms=term_parms_default)
 
 Krylov-IR solver 
 
@@ -99,7 +99,8 @@ BiCGSTAB works the same way.
 
 
 """
-function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = false)
+function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, 
+      mpdebug = false, term_parms=term_parms_default)
     #
     # Which Krylov method are we talking about?
     ktype = kmeth(AF)
@@ -115,10 +116,10 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, mpdebug = fa
     x .*= TW(0.0)
     # remember that eps(TR) = 2 * unit roundoff
     residterm = AF.residterm
-    term_data = termination_settings(TW, residterm)
+    term_data = termination_settings(TW, term_parms, residterm)
     tolf = term_data.tolf
-    Rmax = term_data.Rmax
-    litmax = term_data.litmax
+    Rmax = term_parms.Rmax
+    litmax = term_parms.litmax
     anrm = AF.anrm
     #    residterm ? anrm = 0.0 : anrm = opnorm(AD, 1)
     #    anrm = term_data.anrm

@@ -35,21 +35,19 @@ end
 function test_term_parms(N=100, TF=Float32)
 N=100; G=Gmat(N); A=I - 9.0*G;
 AF=mplu(A); b=ones(N);
-restore_default_parms()
 plain_out = \(AF, b; reporting=true);
 rhist1=plain_out.rhist;
 lhist1=length(rhist1)
-update_parms(; Cr=400.0);
-swap_out = \(AF, b; reporting=true);
+tparms2=update_parms(; Cr=400.0);
+swap_out = \(AF, b; reporting=true, term_parms=tparms2);
 rhist2=swap_out.rhist;
 lhist2=length(rhist2)
 swapok = (lhist1 > lhist2)
 swapok || println("Error in test_term_parms", lhist1,"  ",lhist2)
-lmsx_out = update_parms(; litmax=2)
-new_out=\(AF, b; reporting=true);
+lmsx_out = update_parms(; litmax=2, Cr=400.0)
+new_out=\(AF, b; reporting=true, term_parms=lmsx_out);
 lhist3=length(new_out.rhist)
 lhistok=(lhist3 < lhist1)
-restore_default_parms()
 return swapok && lhistok
 end
 
