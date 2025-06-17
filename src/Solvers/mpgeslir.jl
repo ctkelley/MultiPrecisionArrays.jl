@@ -177,8 +177,9 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = false,
     #
     (TW == TB) || error("inconsistent precisions; A and b must have same type")
     residterm = AF.residterm
-    term_data = termination_settings(TW, term_parms, residterm)
-    tolf = term_data.tolf
+#    term_data = termination_settings(TW, term_parms, residterm)
+#    tolf = term_data.tolf
+    tolf = termination_settings(TW, term_parms, residterm)
     Rmax = term_parms.Rmax
     litmax = term_parms.litmax
     AD = AF.AH

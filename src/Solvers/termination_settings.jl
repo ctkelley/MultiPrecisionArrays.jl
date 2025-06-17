@@ -33,24 +33,10 @@ function termination_settings(TW, term_parms, residterm)
     # within the module. Take care with changing the parameters while
     # using the solvers in a multi-threaded code.
     #
-
 Cr=term_parms.Cr
 Ce=term_parms.Ce
-Rmax=term_parms.Rmax
-litmax=term_parms.litmax
 residterm ? tf = Cr : tf = Ce
 tolf = eps(TW) * tf
-term_out = (tolf = tolf, Rmax = Rmax, litmax=litmax)
-end
-
-function restore_default_parms(t::TERM = term_parms)
-    #
-    # The default parameters are stored as a constant mutable struct
-    # term_parms_default in MultiPrecisionArrays.jl
-    #
-    t.Cr = term_parms_default.Cr
-    t.Ce = term_parms_default.Ce
-    t.Rmax = term_parms_default.Rmax
-    t.litmax = term_parms_default.litmax
-    return t
+#term_out = (tolf = tolf, Rmax = Rmax, litmax=litmax)
+return tolf
 end

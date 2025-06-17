@@ -28,7 +28,7 @@ end
 ```
 
 and that is passed to the solvers. So, if AF is a multiprecision
-you use the optional argument term_parms.
+you use the optional argument term_parms. 
 
 
 """
