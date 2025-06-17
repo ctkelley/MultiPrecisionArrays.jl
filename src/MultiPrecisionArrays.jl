@@ -22,7 +22,7 @@ include("Structs4MP/MPArray.jl")
 include("Structs4MP/MPGArray.jl")
 include("Structs4MP/MPBArray.jl")
 #
-# MPHArrays may go away soon. They are only used for CI>
+# MPHArrays may go away soon. They are only used for CI
 include("CI_Only/MPHeavy.jl")
 is_heavy(x::MPHFact) = true
 is_heavy(x::MPLFact) = false
@@ -47,8 +47,13 @@ mutable struct TERM
        Rmax::Real
        litmax::Int
 end
-const term_parms_default=TERM(1.0, 1.0, .5, 10)
-term_parms=TERM(1.0, 1.0, .5, 10)
+const Rmax_default = .5
+const Cr_default = 1.0
+const Ce_default = 1.0
+const litmax_default = 10
+const term_parms_default=TERM(Cr_default, Ce_default, Rmax_default,
+litmax_default)
+term_parms=TERM(Cr_default, Ce_default, Rmax_default, litmax_default)
 termdata() = ( Cr=term_parms.Cr, Ce=term_parms.Ce, 
 Rmax=term_parms.Rmax, litmax=term_parms.litmax)
 
