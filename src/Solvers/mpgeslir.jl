@@ -169,13 +169,13 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = false)
     # Are the precisions consistent? If not, I have a bug somewhere.
     # Otherwise, set the tolerance on the iteration to 10*eps.
     # If the iteration can't meet the tolerance, terminate when
-    # the residual norms stagnate (res_old > rrf * res_new)
+    # the residual norms stagnate (res_old > Rmax * res_new)
     #
     (TW == TB) || error("inconsistent precisions; A and b must have same type")
     residterm = AF.residterm
     term_data = termination_settings(TW, residterm)
     tolf = term_data.tolf
-    rrf = term_data.redmax
+    Rmax = term_data.Rmax
     litmax = term_data.litmax
     AD = AF.AH
     #
@@ -232,13 +232,11 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = false)
     # Store r and x in the residual precision if TR is not TW
     HiRes ? rloop = TR.(r) : rloop = r
     HiRes ? xloop = TR.(x) : xloop = x
-    #    rrf = 0.5
-    #    rrf = term_data.redmax
     # Solve loop
     tol=(anrm * xnrm + bnrm) * tolf
     dnormold=1.0
     etest=true
-    while (rnrm > tol) && (rnrm <= rrf*rnrmx) && (itc < litmax) || etest
+    while (rnrm > tol) && (rnrm <= Rmax*rnrmx) && (itc < litmax) || etest
         #
         # Scale the residual
         #
@@ -260,7 +258,7 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = false)
         drat=dnorm/dnormold
         dnormold=dnorm
 # High precision residual? Use ||d|| in termination.
-        etest = (eps(TR) < eps(TW) ) && (drat < .5) || (itc==0)
+        etest = (eps(TR) < eps(TW) ) && (drat < Rmax) || (itc==0)
         x .+= rloop
         xloop .= TR.(x)
 #        xloop .+= rloop

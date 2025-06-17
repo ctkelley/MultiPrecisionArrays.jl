@@ -2,7 +2,7 @@
 
 Today's values are
 ```math
-C_e = 1.0, C_r = 1.0, r_{max} = .5, litmax = 1000
+C_e = 1.0, C_r = 1.0, R_{max} = .5, litmax = 10
 ```
 
 Floating point roundoff is 
@@ -33,22 +33,34 @@ the termination criterion is attained. We detect stagnation by looking
 for a unacceptable decrease (or increase) in the residual norm. So we will
 also terminate the iteration if
 ```math
-\| r_{new} \| \ge r_{max} \| r_{old} \|
+\| r_{new} \| \ge R_{max} \| r_{old} \|
 ```
 even if the small residual condition is not satisfied. You can also 
 limit the number of IR iterations to manage stagnation. 
 Higham [higham97]@cite recomments a limit of ```litmax = 5```. Our default
-is ```litmax = 1000``, which is essentially infinite in this context.
+is ```litmax = 10``, which I may change at any time.
+
+If ```TR > TW``` then I assume you are trying to address extreme
+ill-coditioning. In that case I terminate when the norm of the
+correction seems to stagnate. 
+```
+\| d_{new} \| \ge R_{max} \| d_{old} \|
+```
+This approach may take one more iteration than the one
+recommended in [demmelir](@cite) but is simpler and will 
+get you to the theoretical error bould of working precision if
+$u_r = u_w^2$.
 
 I am still playing with the termination criteria and the iteration
 counts and timings could grow or shrink as I do that. 
 
 You can use the __update_parms__ command to
-change $C_r$, $C_e$, $r_{max}$, and $litmax$ if you must. I do not advise that.
-Anyhow, here are the docstrings.
+change $C_r$, $C_e$, $R_{max}$, and $litmax$ if you must. 
+I do not advise that and the interface for this may change at any
+time.  Anyhow, here are the docstrings.
 ```
   update_parms(t::TERM = term_parms; Cr = 1.0, Ce = 1.0,
-         Rmax = 0.5, litmax=1000
+         Rmax = 0.5, litmax=10
 
   )
 

@@ -30,7 +30,7 @@ function termination_settings(TW, residterm)
     (Cr, Ce, Rmax, litmax) = termdata()
     residterm ? tf = Cr : tf = Ce
     tolf = eps(TW) * tf
-    term_out = (tolf = tolf, redmax = Rmax, litmax=litmax)
+    term_out = (tolf = tolf, Rmax = Rmax, litmax=litmax)
     return term_out
 end
 
