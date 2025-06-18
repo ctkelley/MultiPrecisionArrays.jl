@@ -14,12 +14,11 @@ julia&gt; cond(AD,Inf)
 
 julia&gt; A = Float32.(AD); xe=ones(Float32,N); b=A*xe;
 
-# Make sure TF and TR are what they need to be for this example
+# Make sure TF is what it needs to be for this example
 
 julia&gt; AF = mplu(A; TF=Float32, TR=Float64);
 
-# Use the multiprecision array to solve the problem
-
+# Use the multiprecision array to solve the problem, set TR.
 julia&gt; mrout = \(AF, b; reporting=true);
 
 # look at the residual history
@@ -27,11 +26,11 @@ julia&gt; mrout = \(AF, b; reporting=true);
 julia&gt; mrout.rhist
 6-element Vector{Float64}:
  9.88750e+01
- 1.60117e-05
- 7.38538e-11
- 9.52127e-13
- 8.10019e-13
- 8.66862e-13
+ 3.94930e-03
+ 7.66242e-07
+ 1.13667e-07
+ 7.53089e-08
+ 7.53089e-08
 
 # Compare results with LU and the exact(?) solution
 
@@ -39,56 +38,77 @@ julia&gt; xr=Float32.(mrout.sol); xs = A\b;
 
 julia&gt; [norm(b - A*xr, Inf) norm(b - A*xs, Inf)]
 1×2 Matrix{Float32}:
- 1.44958e-04  1.86920e-03
+ 1.69373e-03  2.53296e-03
 
-# So the residual is better. What about the difference from xe?
+# So the residual is bit better. What about the difference from xe?
 
 julia&gt; [norm(xr - xe, Inf) norm(xs - xe, Inf)]
 1×2 Matrix{Float32}:
- 8.87573e-04  1.45426e-02
+ 2.27022e-03  7.20143e-03
 
-# So we got roughly a factor of ten. Is that worth the storage hit?
+# Nothing very exciting here. You have to wonder what this all means.
 # Finally, how did we do with the promoted problem?
 
 julia&gt; AP=Float64.(A);
 
 julia&gt; norm(b - AP*mrout.sol, Inf)
-6.67910e-13
+7.53089e-08
 
-# Which is what I said it was above.</code></pre><p>So, is the solution to the promoted problem better than the exact solution I used to build the problem?</p><p>The reader might try this with <code>TF=Float16</code>, the default when <code>TW = Float32</code>. All that you&#39;ll need to do is replace</p><pre><code class="nohighlight hljs">AF = mplu(A; TF=Float32, TR=Float64);</code></pre><p>with</p><pre><code class="nohighlight hljs">AF = mplu(A; TR=Float64);</code></pre><p>What goes wrong and why? Fixup to follow.</p><p>The advantages of evaluating the residual in extended precision grow when <span>$A$</span> is extremely ill-conditioned. Of course, in this case the factorization in the factorization precision could be so inaccurate that IR will fail to converge. One approach to respond to this, as you might expect, is to use the factorization as a preconditioner and not a solver (<a href="../../References/#amestoy_2024">Amestoy <em>et al.</em>, 2024</a>). We will support this in a later version of <strong>MultiPrecisionArrays.jl</strong>.</p><h2 id="IR-Krylov-with-high-precision-residuals"><a class="docs-heading-anchor" href="#IR-Krylov-with-high-precision-residuals">IR-Krylov with high precision residuals</a><a id="IR-Krylov-with-high-precision-residuals-1"></a><a class="docs-heading-anchor-permalink" href="#IR-Krylov-with-high-precision-residuals" title="Permalink"></a></h2><p>Half precision factorizations can lead to failure in IR. IR-Krylov methods try to fix this by using the low precision factorization as a preconditioner, not a solver. <strong>MultiPrecisionArrays.jl</strong> has two IR-Krylov methods and one can adjust the residual precision just as one does with <code>mplu</code>. Here is an example of this using the two  multiprecision IR-Krylov factorizations <code>mpglu</code> (GMRES) and  <code>mpblu</code> (BiCGSTAB).</p><p>Using the same example, we examine the results.</p><pre><code class="nohighlight hljs">julia&gt; AF = mplu(A; TR=Float64);
+# Which is consistent with theory.</code></pre><p>So, is the solution to the promoted problem better than the exact solution I used to build the problem?</p><p>The reader might try this with <code>TF=Float16</code>, the default when <code>TW = Float32</code>. All that you&#39;ll need to do is replace</p><pre><code class="nohighlight hljs">AF = mplu(A; TF=Float32, TR=Float64);</code></pre><p>with</p><pre><code class="nohighlight hljs">AF = mplu(A; TR=Float64);</code></pre><p>What goes wrong and why? Fixup to follow.</p><p>The advantages of evaluating the residual in extended precision grow when <span>$A$</span> is extremely ill-conditioned. Of course, in this case the factorization in the factorization precision could be so inaccurate that IR will fail to converge. One approach to respond to this, as you might expect, is to use the factorization as a preconditioner and not a solver (<a href="../../References/#amestoy_2024">Amestoy <em>et al.</em>, 2024</a>). We will support this in a later version of <strong>MultiPrecisionArrays.jl</strong>.</p><h2 id="IR-Krylov-with-high-precision-residuals"><a class="docs-heading-anchor" href="#IR-Krylov-with-high-precision-residuals">IR-Krylov with high precision residuals</a><a id="IR-Krylov-with-high-precision-residuals-1"></a><a class="docs-heading-anchor-permalink" href="#IR-Krylov-with-high-precision-residuals" title="Permalink"></a></h2><p>Half precision factorizations can lead to failure in IR. IR-Krylov methods try to fix this by using the low precision factorization as a preconditioner, not a solver. <strong>MultiPrecisionArrays.jl</strong> has two IR-Krylov methods and one can adjust the residual precision just as one does with <code>mplu</code>. Here is an example of this using the two  multiprecision IR-Krylov factorizations <code>mpglu</code> (GMRES) and  <code>mpblu</code> (BiCGSTAB).</p><p>Using the same example, we examine the results.</p><pre><code class="nohighlight hljs">julia&gt; AF = mplu(A; TR=Float64);
 
 julia&gt; mout16=\(AF, b; reporting=true);
 
 julia&gt; mout16.rhist
-5-element Vector{Float64}:
+4-element Vector{Float64}:
  9.88750e+01
- 3.92614e+00
- 3.34301e-01
- 2.01975e-01
- 2.24576e-01</code></pre><p>so plain vanilla IR with <code>TF=Float16</code>, <code>TW=Float32</code>, and <code>TR=Float64</code> fails to converge. </p><pre><code class="nohighlight hljs">julia&gt; GF = mpglu(A; TR=Float64);
+ 3.92451e+00
+ 3.34292e-01
+ 2.02204e-01</code></pre><p>so plain vanilla IR with <code>TF=Float16</code>, <code>TW=Float32</code>, and <code>TR=Float64</code> fails to converge. </p><p>We support both IR-GMRES and IR-BiCGSTAB for <code>TR &gt; TW</code>. You get this to work just like in {\tt mplu} by using the keyword argument {\tt TR}. We will continue with the example in this section and do that. For this example the default basis size of <span>$10$</span> is not enough, so we use 20.</p><pre><code class="nohighlight hljs">julia&gt; GF = mpglu(A; TR=Float64, basissize=20);
 
 julia&gt; moutG = \(GF, b; reporting=true);
 
 julia&gt; moutG.rhist
-6-element Vector{Float64}:
+8-element Vector{Float64}:
  9.88750e+01
- 2.23211e-04
- 9.61252e-09
- 1.26477e-12
- 8.10019e-13
- 8.66862e-13</code></pre><p>You need several iterations because the default is 10 Krylov vectors and we got the solution to the promoted problem...</p><pre><code class="nohighlight hljs">julia&gt; xp = Float64.(A)\b;
+ 7.59075e-03
+ 1.48842e-05
+ 2.17281e-07
+ 8.60429e-08
+ 7.45077e-08
+ 7.91866e-08
+ 7.53089e-08
+
+julia&gt; moutG.dhist
+7-element Vector{Float32}:
+ 1.03306e+00
+ 3.23734e-02
+ 2.83073e-04
+ 8.92629e-06
+ 1.55432e-07
+ 6.05685e-08
+ 5.96633e-08
+
+julia&gt; xp = Float64.(A)\b;
 
 julia&gt; norm(xp-moutG.sol, Inf)
-6.52844e-12</code></pre><p>IR-BiCGSTAB should take fewer iterations because there&#39;s no storage issue. But remember that BiCGSTAB has a higher cost per linear iteration.</p><pre><code class="nohighlight hljs">julia&gt; BF = mpblu(A; TR=Float64);
+5.95825e-08</code></pre><p>IR-BiCGSTAB whould take fewer iterations than IR-GMRES had we used the default basis size because there&#39;s no storage issue. But remember that BiCGSTAB has a higher cost per linear iteration.</p><pre><code class="nohighlight hljs">julia&gt; BF = mpblu(A; TR=Float64);
 
 julia&gt; moutB = \(BF, b; reporting=true);
 
 julia&gt; moutB.rhist
-4-element Vector{Float64}:
+5-element Vector{Float64}:
  9.88750e+01
- 2.16858e-11
- 8.38440e-13
- 8.81073e-13
+ 1.86437e-07
+ 7.53089e-08
+ 7.53089e-08
+ 7.53089e-08
+
+julia&gt; moutB.dhist
+4-element Vector{Float32}:
+ 1.00227e+00
+ 2.05457e-06
+ 5.95821e-08
+ 5.95821e-08
 
 julia&gt; norm(xp - moutB.sol, Inf)
-1.36534e-11</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../Interprecision_1/">« Interprecision Transfers: Part I</a><a class="docs-footer-nextpage" href="../../functions/MPArray/">MPArray: constructor »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.12.0 on <span class="colophon-date" title="Tuesday 17 June 2025 21:20">Tuesday 17 June 2025</span>. Using Julia version 1.10.9.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+5.95825e-08</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../Interprecision_1/">« Interprecision Transfers: Part I</a><a class="docs-footer-nextpage" href="../../functions/MPArray/">MPArray: constructor »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.12.0 on <span class="colophon-date" title="Wednesday 18 June 2025 20:23">Wednesday 18 June 2025</span>. Using Julia version 1.10.9.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
