@@ -26,9 +26,13 @@ for __hlu!.jl__.
 
 The idea is to solve $Ax=b$ in high precision (the __working precision__)
 ```TW``` with a factorization
-in lower precision (the __factorization precision__) ```TF```.
+in lower precision (the __factorization precision__) ```TF``` and a
+residual computed in precision (the __residual precision__) ```TR```.
 
-One way to view IR is as 
+
+In the case where the working precision and the residual precision
+are the same, one can
+view IR as 
 a perfect example of a storage/time tradeoff. To solve a linear system  
 $Ax=b$ with IR, one incurs the storage penalty of making a low 
 precision copy of  and reaps the benefit of only having to factor the 
@@ -47,7 +51,7 @@ __IR(A, b)__
 - Initialize: $x = 0$,  $r = b$
 - Factor $A = LU$ in a lower precision
 - While $\| r \|$ is too large
-  - Compute the defect $d = (LU)^{-1} r$
+  - Compute the defect (correction) $d = (LU)^{-1} r$
   - Correct the solution $x = x + d$
   - Update the residual $r = b - Ax$
 - end
@@ -95,7 +99,8 @@ function IR(A, b)
 end
 ```
 
-As written in the function, the defect uses ```ldiv!``` to compute
+As written in the function, the computation of the defect
+uses ```ldiv!``` to compute
 ```AF\r```. This means that the two triangular factors are stored in
 single precision and interprecision transfers are done with each
 step in the factorization. While that ```on the fly``` interprecision 

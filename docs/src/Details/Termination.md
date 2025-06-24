@@ -54,64 +54,104 @@ $u_r = u_w^2$.
 I am still playing with the termination criteria and the iteration
 counts and timings could grow or shrink as I do that. 
 
-You can use the __update_parms__ command to
-change $C_r$, $C_e$, $R_{max}$, and $litmax$ if you must. 
-I do not advise that and the interface for this may change at any
-time.  Anyhow, here are the docstrings.
+We store the parameters in a TERM structure, which define in the main file
+for __MultiPrecisionArrays.jl__.
+``` 
+struct TERM  
+       Cr::Real
+       Ce::Real
+       Rmax::Real
+       litmax::Int
+end
 ```
-  update_parms(t::TERM = term_parms; Cr = 1.0, Ce = 1.0,
-         Rmax = 0.5, litmax=10
+We create one ```TERM``` structure for the defaults
+```term_parms_default```. The solvers take a ```TERM``` structure
+as a kwarg, with ```term_parms_default```
+as the default.
 
-  )
 
-  C. T. Kelley, 2025
+To change the parameters use the __update_parms__ function.
+This function makes a TERM structure for you to pass to the solvers.
+Herewith the docstrings
+```
+"""
+update_parms(; Cr=Cr_default, Ce=Ce_default,
+      Rmax=Rmax_default, litmax=litmax_default)
 
-  Update the termination parameters in MultiPrecisionArrays.
+C. T. Kelley 2025
 
-  This changes the values of the parameters. I do not recommend that you mess
-  with this unless you have a good reason. One such reason might be that the
-  default limit on the number of iterations (1000, essentially infinite) is
-  giving you many iterations that make very little progress. Changing Rmax is
-  probably a better way to control this.
+Update the termination parameters in MultiPrecisionArrays.
 
-  Note that the default values for the kwargs are the defaults, so unless you
-  specify otherwise, any parameter will take its default value.
+This creates a new TERM data structure that you send to the solver
+as a kwarg.
 
-  We store the parameters in a mutable structure TERM
+This changes the values of the parameters. I do not recommend that
+you mess with this unless you have a good reason. One such reason
+might be that the default limit on the number of iterations (10)
+is not working for you.
 
-  mutable struct TERM
-         Cr::Real
-         Ce::Real
-         Rmax::Real
-         litmax::Int
-  end
+I start with the default values, so
+unless you specify otherwise, any parameter will take its default value.
 
-  where the fields are the parameters. The parameters we use in the solvers
-  are in a global TERM structure defined in the main module.
+We store the parameters in a mutable structure TERM
+```
+mutable struct TERM
+       Cr::Real
+       Ce::Real
+       Rmax::Real
+       litmax::Int
+end
+```
 
-  term_parms=TERM(1.0, 1.0, .5, 1000)
+and that is passed to the solvers. So, if AF is a multiprecision
+you use the optional argument term_parms.
 
-  As you can see, I start with the defaults. When you make changes, you write
-  into this structure and it is your job to keep track of what you did.
 
-  To query the parameters type the name of the structure
+"""
+function update_parms(; Cr=Cr_default, Ce=Ce_default,
+      Rmax=Rmax_default, litmax=litmax_default)
+term_parms=TERM(Cr, Ce, Rmax, litmax)
+return term_parms
+end
+```
 
-  julia> term_parms
-  TERM(1.00000e+00, 1.00000e+00, 5.00000e-01, 1000)
+Here is an example with the ill-conditioned problem we've been using
+in other examples. In this example we decrease Rmax and see that the
+solve takes fewer iterations with no change in the residual quality.
 
-  To change Cr from 1 to 40 type
+```
+julia> using MultiPrecisionArrays
 
-  julia> update_parms(; Cr=40.0)
-  
-  MultiPrecisionArrays.TERM(4.00000e+01, 1.00000e+00, 5.00000e-01, 1000)
+julia> using MultiPrecisionArrays.Examples
 
-  To change Ce to 5 and revert Cr back to the default
+julia> N=512; A=I - 799.0*Gmat(N); AF=mplu(A);
 
-  julia> update_parms(; Ce=5.0)
-  TERM(1.00000e+00, 5.00000e+00, 5.00000e-01, 1000)
+julia> b=ones(N);
 
-  Finally, to get the defaults back, enter no changes.
+julia> mout=\(AF,b; reporting=true);
 
-  julia> update_parms(;)
-  TERM(1.00000e+00, 1.00000e+00, 5.00000e-01, 1000)
+# Termination on a residual norm increase.
+
+julia> mout.rhist
+6-element Vector{Float64}:
+ 1.00000e+00
+ 4.39096e-03
+ 2.85170e-07
+ 4.30167e-11
+ 6.05982e-12
+ 6.34648e-12
+
+julia> term_parms=update_parms(;Rmax=.1);
+
+julia> mout2=\(AF,b; reporting=true, term_parms=term_parms);
+
+# Termination on minimal decrease in the residual norm.
+
+julia> mout2.rhist
+5-element Vector{Float64}:
+ 1.00000e+00
+ 4.39096e-03
+ 2.85170e-07
+ 4.30167e-11
+ 6.05982e-12
 ```
