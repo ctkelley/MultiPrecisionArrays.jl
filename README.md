@@ -45,7 +45,7 @@ __The half precision LU for Float16 in this package is much faster (more than 10
     - Putting the norm of the correction in the iteration stats.
     - Fixing a scholarship bug and putting the solution in the working precision when using extended precision residuals.
        - Of course, this tiny change means that the docs and tests need more changes than I planned for
-       - At least 0.1.4 will not break too many things.
+       - At least 0.1.4 will not break things.
  - v0.1.5: Large scale refactoring, better docs, and ...
     - Putting the estmated error in the termination criterion
     - Setting myself up for v0.1.6 so I can avoid the code bloat I'm trying to fix in v0.1.5
