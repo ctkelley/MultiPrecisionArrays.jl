@@ -43,6 +43,7 @@ __The half precision LU for Float16 in this package is much faster (more than 10
     - Enable fine control of termination criteria parameters, but I discourage messing with this.
     - Document the results of the bullet above + why I use the factorization precision to compute || A ||_1 if I use the normwise backward error in the termination criterion.
     - Putting the norm of the correction in the iteration stats.
+    - I __may__ go back to __Polyester__ for threading the Float16 LU. It's showing much better than __OhMyThreads__ for both v1.12 and v1.13. 
     - Fixing a scholarship bug and putting the solution in the working precision when using extended precision residuals.
        - Of course, this tiny change means that the docs and tests need more changes than I planned for
        - At least 0.1.4 will not break things.
