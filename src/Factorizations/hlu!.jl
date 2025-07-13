@@ -67,7 +67,6 @@ function hlu!(A::AbstractMatrix{T}) where {T}
             end
             # Update the rest
              ntasks = task_num(n,k)
-#            ((n-k) >= 512) ? (ntasks = task_num(n,k)) : ntasks=1
             tforeach(k+1:n; ntasks = ntasks) do j
                 Akj = -A[k, j]
                 @inbounds @simd ivdep for i = k+1:m
@@ -90,7 +89,8 @@ end
 
 function task_num(n, k)
 #ndiv=8
-ndiv=256
+#ndiv=256
+ndiv=512
 tnum = min(nthreads(), 1 + floor(Int, (n - k) / ndiv))
 ((n-k) < 512) && (tnum = 1)
 return tnum
