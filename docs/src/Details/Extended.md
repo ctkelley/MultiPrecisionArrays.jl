@@ -32,6 +32,12 @@ different hardware, BLAS, versions of Julia or this package.
 I am still playing with the termination criteria and the iteration
 count could grow or shrink as I do that.
 
+The continuous problem is
+```math
+u - \alpha G u = 1 - alpha x (1 - x)/2
+```
+and the solution is $u \equiv 1$. 
+
 
 ```
 julia> using MultiPrecisionArrays
@@ -46,50 +52,66 @@ julia> cond(AD,Inf)
 2.35899e+05
 
 # Set up the single precision computation
+# and use the right side from the integral equation
 
-julia> A = Float32.(AD); xe=ones(Float32,N); b=A*xe;
+julia> h=1.0/(N-1); x=collect(0:h:1); bd = 1.0 .- alpha*x.*(1.0 .- x)*.5;
 
-# Make sure TF is what it needs to be for this example
+# Solving in double gives the accuracy you'd expect
+
+julia> u=AD\bd;
+
+julia> norm(u .- 1.0)
+3.16529e-10
+
+# Now move the problem to single precision
+
+julia> A = Float32.(AD); xe=ones(Float32,N); b=Float32.(bd)
+
+julia> # You can see the ill-conditioning
+
+julia> xs = A\b; norm(xs-xe,Inf)
+1.37073e-02
+
+julia> # The solution of the promoted problem is better.
+
+julia> xp = Float64.(A)\Float64.(b); norm(xp-xe,Inf)
+1.44238e-04
+
+julia> # Make sure TF is what it needs to be for this example
+
+julia> # Set TR in the call to mplu.
 
 julia> AF = mplu(A; TF=Float32, TR=Float64);
 
-# Use the multiprecision array to solve the problem, set TR.
+julia> # Use the multiprecision array to solve the problem.
+
 julia> mrout = \(AF, b; reporting=true);
 
-# look at the residual history
+julia> # look at the residual history
 
 julia> mrout.rhist
 6-element Vector{Float64}:
  9.88750e+01
- 3.94930e-03
- 7.66242e-07
- 1.13667e-07
- 7.53089e-08
- 7.53089e-08
+ 6.38567e-03
+ 1.24560e-06
+ 9.55874e-08
+ 8.49478e-08
+ 8.49478e-08
 
-# Compare results with LU and the exact(?) solution
+julia> # Compare the solution to the solution of the promoted problem
 
-julia> xr=Float32.(mrout.sol); xs = A\b;
+julia> norm(mrout.sol - xp,Inf)
+5.95629e-08
 
-julia> [norm(b - A*xr, Inf) norm(b - A*xs, Inf)]
-1×2 Matrix{Float32}:
- 1.69373e-03  2.53296e-03
+julia> # That's consistent with theory.
 
-# So the residual is bit better. What about the difference from xe?
+juila> # So the solution is ok?
 
-julia> [norm(xr - xe, Inf) norm(xs - xe, Inf)]
-1×2 Matrix{Float32}:
- 2.27022e-03  7.20143e-03
+julia> norm(mrout.sol - xe, Inf)
+1.44243e-04
 
-# Nothing very exciting here. You have to wonder what this all means.
-# Finally, how did we do with the promoted problem?
+julia> # Yes.
 
-julia> AP=Float64.(A);
-
-julia> norm(b - AP*mrout.sol, Inf)
-7.53089e-08
-
-# Which is consistent with theory.
 ```
 
 So, is the solution to the promoted problem better than the exact solution
@@ -179,7 +201,7 @@ julia> norm(xp-moutG.sol, Inf)
 5.95825e-08
 ```
 
-IR-BiCGSTAB whould take fewer iterations than IR-GMRES had we used
+IR-BiCGSTAB would take fewer iterations than IR-GMRES had we used
 the default basis size because there's no storage
 issue. But remember that BiCGSTAB has a higher cost per linear iteration.
 
