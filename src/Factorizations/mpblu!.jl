@@ -15,15 +15,14 @@ function mpblu!(MPBA::MPBArray; residterm = residtermdefault)
     AH = MPBA.AH
     TF = eltype(AL)
     (TF == Float16) ? AX=AH : AX=AL
-    residterm ? anrm=TF.(0.0) : anrm=opnorm(AX,1)
+    residterm ? anrm=TF.(0.0) : anrm=opnorm(AX, 1)
     VStore = MPBA.VStore
     KStore = MPBA.KStore
     res = MPBA.residual
     sol = MPBA.sol
     (TF == Float16) ? ALF = hlu!(AL) : ALF = lu!(AL)
-#    anrm=TF(0.0)
-    MPF = MPBFact(AH, AL, ALF, VStore, KStore, res, sol, true, 
-                 residterm, anrm)
+    #    anrm=TF(0.0)
+    MPF = MPBFact(AH, AL, ALF, VStore, KStore, res, sol, true, residterm, anrm)
     return MPF
 end
 
@@ -64,8 +63,7 @@ function mpblu!(MPG::MPBFact, A::AbstractArray{TW,2}) where {TW<:Real}
     KStore = MPG.KStore
     residterm = MPG.residterm
     anrm = MPG.anrm
-    MPG = MPBFact(AH, AL, AF, VStore, KStore, MPG.residual, MPG.sol, 
-                 true, residterm, anrm)
+    MPG = MPBFact(AH, AL, AF, VStore, KStore, MPG.residual, MPG.sol, true, residterm, anrm)
     return MPG
 end
 

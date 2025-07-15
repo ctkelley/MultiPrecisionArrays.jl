@@ -33,10 +33,10 @@ function termination_settings(TW, term_parms, residterm)
     # within the module. Take care with changing the parameters while
     # using the solvers in a multi-threaded code.
     #
-Cr=term_parms.Cr
-Ce=term_parms.Ce
-residterm ? tf = Cr : tf = Ce
-tolf = eps(TW) * tf
-#term_out = (tolf = tolf, Rmax = Rmax, litmax=litmax)
-return tolf
+    Cr=term_parms.Cr
+    Ce=term_parms.Ce
+    residterm ? tf = Cr : tf = Ce
+    tolf = eps(TW) * tf
+    #term_out = (tolf = tolf, Rmax = Rmax, litmax=litmax)
+    return tolf
 end

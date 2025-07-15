@@ -44,8 +44,7 @@ struct MPBFact
     KStore::NTuple
     residual::Vector
     sol::Vector
-    onthefly::Bool 
+    onthefly::Bool
     residterm::Bool
     anrm::AbstractFloat
 end
-

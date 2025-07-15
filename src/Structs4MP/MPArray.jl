@@ -32,7 +32,7 @@ function MPArray(
     (TR == nothing) ? TRR = TH : TRR = TR
     (m, n) = size(AH)
     res = ones(TRR, n)
-#    sol = zeros(TRR, n)
+    #    sol = zeros(TRR, n)
     sol = zeros(TH, n)
     MPA = MPArray(AH, AL, res, sol, onthefly)
 end
@@ -61,6 +61,6 @@ function MPArray(AH::AbstractArray{Float32,2}; TR = nothing, TF = Float16, onthe
     (m, n) = size(AH)
     res = ones(TRR, n)
     sol = zeros(TH, n)
-#    sol = zeros(TRR, n)
+    #    sol = zeros(TRR, n)
     MPA = MPArray(AH, AL, res, sol, onthefly)
 end

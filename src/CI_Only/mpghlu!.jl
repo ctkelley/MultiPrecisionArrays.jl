@@ -22,11 +22,10 @@ function mpglu!(MPH::MPHArray; gmresok = true, basissize = 10, residterm = resid
     anrm = TF(0.0)
     if gmresok
         VStore = zeros(TD, n, basissize)
-        KStore = KIRstore(n, "gmres",TD)
-        MPF = MPGHFact(AH, AL, AF, VStore, KStore, res, sol, true, 
-               residterm,anrm)
+        KStore = KIRstore(n, "gmres", TD)
+        MPF = MPGHFact(AH, AL, AF, VStore, KStore, res, sol, true, residterm, anrm)
     else
-        MPF = MPHFact(AH, AL, AF, res, sol, true, residterm,anrm)
+        MPF = MPHFact(AH, AL, AF, res, sol, true, residterm, anrm)
     end
 end
 

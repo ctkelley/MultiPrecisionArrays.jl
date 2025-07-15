@@ -90,8 +90,13 @@ julia> [mout.TW mout.TF]
 ```
 
 """
-function mpgeslir(MPA::MPArray, b; reporting = false, verbose = false,
-         term_parms=term_parms_default)
+function mpgeslir(
+    MPA::MPArray,
+    b;
+    reporting = false,
+    verbose = false,
+    term_parms = term_parms_default,
+)
     # Factor MPA and return Factorization object
     MPF = mplu!(MPA)
     # Call mpgeslir for the solve
@@ -137,8 +142,13 @@ MPFact is a union of all the MultiPrecision factorizations in the package.
 The triangular solver will dispatch on the various types depending on
 how the interprecision transfers get done.
 """
-function mpgeslir(AF::MPFact, b; reporting = false, verbose = false,
-    term_parms=term_parms_default)
+function mpgeslir(
+    AF::MPFact,
+    b;
+    reporting = false,
+    verbose = false,
+    term_parms = term_parms_default,
+)
     #
     # What kind of problem are we dealing with?
     #
@@ -177,8 +187,8 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = false,
     #
     (TW == TB) || error("inconsistent precisions; A and b must have same type")
     residterm = AF.residterm
-#    term_data = termination_settings(TW, term_parms, residterm)
-#    tolf = term_data.tolf
+    #    term_data = termination_settings(TW, term_parms, residterm)
+    #    tolf = term_data.tolf
     tolf = termination_settings(TW, term_parms, residterm)
     Rmax = term_parms.Rmax
     litmax = term_parms.litmax
@@ -215,10 +225,10 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = false,
     r .= b
     tol = tolf
     onthefly ? (rs = ones(TF, 1)) : (rs = zeros(TF, size(b)))
-#
-# If TR > TW then do the solve in TW after computing r in TR
-#
-    (TR == TW) || (rs = zeros(TW,size(b)))
+    #
+    # If TR > TW then do the solve in TW after computing r in TR
+    #
+    (TR == TW) || (rs = zeros(TW, size(b)))
     #
     #   Keep the books. Test for excessive residual precision.
     #  
@@ -262,11 +272,11 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = false,
         push!(dhist, dnorm)
         drat=dnorm/dnormold
         dnormold=dnorm
-# High precision residual? Use ||d|| in termination.
-        etest = (eps(TR) < eps(TW) ) && (drat < Rmax) || (itc==0)
+        # High precision residual? Use ||d|| in termination.
+        etest = (eps(TR) < eps(TW)) && (drat < Rmax) || (itc==0)
         x .+= rloop
         xloop .= TR.(x)
-#        xloop .+= rloop
+        #        xloop .+= rloop
         mul!(rloop, AD, xloop)
         #
         # After mul! the residual is overwritten with Ax
@@ -289,11 +299,10 @@ function mpgeslir(AF::MPFact, b; reporting = false, verbose = false,
         complain_resid = mpdebug && (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
         complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
     end
-#    x = xloop
+    #    x = xloop
     verbose && println("Residual history = $rhist")
     if reporting
-        return (rhist = rhist, dhist=dhist, 
-              sol = x, TW = TW, TF = TF, TFact = TFact)
+        return (rhist = rhist, dhist = dhist, sol = x, TW = TW, TF = TF, TFact = TFact)
     else
         return x
     end

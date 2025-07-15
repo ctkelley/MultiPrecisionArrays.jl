@@ -42,17 +42,16 @@ const residtermdefault = true
 # of the main thread.
 #
 struct TERM
-       Cr::Real
-       Ce::Real
-       Rmax::Real
-       litmax::Int
+    Cr::Real
+    Ce::Real
+    Rmax::Real
+    litmax::Int
 end
-const Rmax_default = .5
+const Rmax_default = 0.5
 const Cr_default = 1.0
 const Ce_default = 1.0
 const litmax_default = 10
-term_parms_default=TERM(Cr_default, Ce_default, Rmax_default,
-litmax_default)
+term_parms_default=TERM(Cr_default, Ce_default, Rmax_default, litmax_default)
 
 
 export termdata, term_parms_default, term_parms, update_parms
@@ -72,31 +71,55 @@ function eltype(MP::Union{MPArray,MPHArray,MPGArray,MPBArray})
 end
 
 import Base.\
-function \(AF::MPFact, b; verbose = false, reporting = false,
-        term_parms=term_parms_default)
-    xi = mpgeslir(AF, b; verbose = verbose, reporting = reporting,
-        term_parms=term_parms)
+function \(
+    AF::MPFact,
+    b;
+    verbose = false,
+    reporting = false,
+    term_parms = term_parms_default,
+)
+    xi = mpgeslir(AF, b; verbose = verbose, reporting = reporting, term_parms = term_parms)
     return xi
 end
 
-function \(AF::MPGFact, b; verbose = false, reporting = false, 
-mpdebug = false, term_parms=term_parms_default)
-    xi = mpkrir(AF, b; verbose = verbose, reporting = reporting, 
-     mpdebug = false, term_parms=term_parms)
+function \(
+    AF::MPGFact,
+    b;
+    verbose = false,
+    reporting = false,
+    mpdebug = false,
+    term_parms = term_parms_default,
+)
+    xi = mpkrir(
+        AF,
+        b;
+        verbose = verbose,
+        reporting = reporting,
+        mpdebug = false,
+        term_parms = term_parms,
+    )
     return xi
 end
 
-function \(MPA::Union{MPArray}, b; verbose = false, reporting = false,
-     term_parms=term_parms_default)
-    xi = mpgeslir(MPA, b; verbose = verbose, reporting = reporting,
-        term_parms=term_parms)
+function \(
+    MPA::Union{MPArray},
+    b;
+    verbose = false,
+    reporting = false,
+    term_parms = term_parms_default,
+)
+    xi = mpgeslir(MPA, b; verbose = verbose, reporting = reporting, term_parms = term_parms)
     return xi
 end
 
-function \(AF::MPBFact, b; verbose = false, reporting = false,
-term_parms=term_parms_default)
-    xi = mpkrir(AF, b; verbose = verbose, reporting = reporting,
-      term_parms=term_parms)
+function \(
+    AF::MPBFact,
+    b;
+    verbose = false,
+    reporting = false,
+    term_parms = term_parms_default,
+)
+    xi = mpkrir(AF, b; verbose = verbose, reporting = reporting, term_parms = term_parms)
     return xi
 end
 
@@ -171,7 +194,8 @@ include("CI_Only/mpghlu!.jl")
 module Examples
 using MultiPrecisionArrays
 using LinearAlgebra: LinearAlgebra
-using Reexport; @reexport import LinearAlgebra.I
+using Reexport;
+@reexport import LinearAlgebra.I
 
 export Gmat
 

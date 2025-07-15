@@ -99,8 +99,14 @@ BiCGSTAB works the same way.
 
 
 """
-function mpkrir(AF::MPKFact, b; reporting = false, verbose = false, 
-      mpdebug = false, term_parms=term_parms_default)
+function mpkrir(
+    AF::MPKFact,
+    b;
+    reporting = false,
+    verbose = false,
+    mpdebug = false,
+    term_parms = term_parms_default,
+)
     #
     # Which Krylov method are we talking about?
     ktype = kmeth(AF)
@@ -116,8 +122,8 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false,
     x .*= TW(0.0)
     # remember that eps(TR) = 2 * unit roundoff
     residterm = AF.residterm
-#    term_data = termination_settings(TW, term_parms, residterm)
-#    tolf = term_data.tolf
+    #    term_data = termination_settings(TW, term_parms, residterm)
+    #    tolf = term_data.tolf
     tolf = termination_settings(TW, term_parms, residterm)
     Rmax = term_parms.Rmax
     litmax = term_parms.litmax
@@ -133,7 +139,7 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false,
     bnorm = norm(b, normtype)
     xnorm = TR(0.0)
     #
-#    AFS = AF.AF
+    #    AFS = AF.AF
     AD = AF.AH
     #    residterm ?  anrm = 0.0 : anrm = opnorm(AD, 1)
     #    anorm = opnorm(AD,normtype)
@@ -158,7 +164,7 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false,
     kl_store = AF.KStore
     atvd = copy(r)
     xloop=copy(r)
-    MP_Data = (MPF = AF, atv = atvd, TF=TF, TW=TW)
+    MP_Data = (MPF = AF, atv = atvd, TF = TF, TW = TW)
     #    rrf = 0.5
     #    rrf = term_data.Rmax
     tol = tolf * (bnorm + anrm * xnorm)
@@ -228,9 +234,9 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false,
         dnorm=norm(r, normtype)
         drat=dnorm/dnormold
         dnormold=dnorm
-        push!(dhist,dnorm)
-# High precision residual? Use ||d|| in termination.
-        etest = (eps(TR) < eps(TW) ) && (drat < Rmax) || (itc==0)
+        push!(dhist, dnorm)
+        # High precision residual? Use ||d|| in termination.
+        etest = (eps(TR) < eps(TW)) && (drat < Rmax) || (itc==0)
         xloop=TR.(x)
         mul!(r, AD, xloop)
         r .*= -onetb
@@ -239,7 +245,7 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false,
         rnrm = norm(r, normtype)
         itc += 1
         push!(rhist, rnrm)
-#        tol = tolf * bnorm
+        #        tol = tolf * bnorm
         mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol")
         #
         # If the residual norm increased, complain.
@@ -251,9 +257,8 @@ function mpkrir(AF::MPKFact, b; reporting = false, verbose = false,
     end
     verbose && println("Residual history = $rhist")
     if reporting
-#        TF = eltype(AF.AL); TW = eltype(AF.AH);
-        return (rhist = rhist, dhist=dhist, 
-              khist = khist, sol = x, TW = TW, TF = TF)
+        #        TF = eltype(AF.AL); TW = eltype(AF.AH);
+        return (rhist = rhist, dhist = dhist, khist = khist, sol = x, TW = TW, TF = TF)
     else
         return x
     end
@@ -270,13 +275,13 @@ end
 function MPhptv(x, pdata)
     TF=pdata.TF
     TW=pdata.TW
-#
-# ldiv! is not doing well for one case, so I hide from it.
-#
+    #
+    # ldiv! is not doing well for one case, so I hide from it.
+    #
     if (TF == Float16) && (TW == Float32)
-    x .= pdata.MPF.AF\x;
-    else 
-    ldiv!(pdata.MPF.AF, x)
+        x .= pdata.MPF.AF\x;
+    else
+        ldiv!(pdata.MPF.AF, x)
     end
     return x
 end

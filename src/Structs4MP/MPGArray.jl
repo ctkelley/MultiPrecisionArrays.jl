@@ -27,7 +27,7 @@ to get double/half IR.
 struct MPGArray{TW<:AbstractFloat,TF<:AbstractFloat,TR<:AbstractFloat}
     AH::AbstractArray{TW,2}
     AL::AbstractArray{TF,2}
-#    VStore::AbstractArray{TR,2}
+    #    VStore::AbstractArray{TR,2}
     VStore::AbstractArray{TW,2}
     KStore::NTuple
     residual::Vector{TR}
@@ -51,7 +51,7 @@ function MPGArray(AH::AbstractArray{Float64,2}; TR = nothing, basissize = 10, TF
     res = ones(TRR, n)
     sol = ones(TH, n)
     VStore = zeros(TH, n, basissize)
-#    VStore = zeros(TRR, n, basissize)
+    #    VStore = zeros(TRR, n, basissize)
     KStore = KIRstore(n, "gmres", TH)
     MPGA = MPGArray(AH, AL, VStore, KStore, res, sol, true)
 end
@@ -73,7 +73,7 @@ function MPGArray(AH::AbstractArray{Float32,2}; basissize = 10, TF = Float16, TR
     res = ones(TRR, n)
     sol = ones(TH, n)
     VStore = zeros(TH, n, basissize)
-#    VStore = zeros(TRR, n, basissize)
+    #    VStore = zeros(TRR, n, basissize)
     KStore = KIRstore(n, "gmres", TH)
     MPGA = MPGArray(AH, AL, VStore, KStore, res, sol, true)
     return MPGA
