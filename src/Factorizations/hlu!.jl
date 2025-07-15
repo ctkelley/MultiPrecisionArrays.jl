@@ -18,7 +18,7 @@ https://github.com/JuliaLang/LinearAlgebra.jl/blob/master/src/lu.jl
 All I did in the factorization
 was thread the critical loop with OhMyThreads:tforeach and
 put @simd in the inner loop. For larger problems (n >= 1000)
-these changes got me a 2-10x speedup
+these changes got me a 4-15x speedup over Julia's generic lu
 on my Mac M2 Pro with 8 performance cores. I'm happy.
 
 """
@@ -71,11 +71,9 @@ function hlu!(A::AbstractMatrix{T}) where {T}
             end
             # Update the rest
             ntasks = task_num(n, k)
-            tforeach((k+1):n; ntasks = ntasks) do j
+            tforeach((k+1):n; scheduler=:static, ntasks = ntasks) do j
                 Akj = -A[k, j]
                 @inbounds @simd ivdep for i = (k+1):m
-                    #                    aik = A[i,k]
-                    #                    A[i, j] += aik * Akj
                     A[i, j] += A[i, k] * Akj
                 end # i loop
             end #j loop
@@ -92,8 +90,6 @@ function hlu(A)
 end
 
 function task_num(n, k)
-    #ndiv=8
-    #ndiv=256
     ndiv=512
     tnum = min(nthreads(), 1 + floor(Int, (n - k) / ndiv))
     ((n-k) < 512) && (tnum = 1)
