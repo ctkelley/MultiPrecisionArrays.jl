@@ -72,10 +72,14 @@ function hlu!(A::AbstractMatrix{T}) where {T}
             # Update the rest
             ntasks = task_num(n, k)
             tforeach((k+1):n; scheduler=:static, ntasks = ntasks) do j
+#                @batch minbatch=128 for j=(k+1):n 
+             @inbounds begin
                 Akj = -A[k, j]
-                @inbounds @simd ivdep for i = (k+1):m
+                @simd ivdep for i = (k+1):m
+#                @inbounds @simd ivdep for i = (k+1):m
                     A[i, j] += A[i, k] * Akj
                 end # i loop
+             end # inner @inbounds
             end #j loop
         end #k loop
     end #outer @inbounds
