@@ -72,11 +72,14 @@ function hlu!(A::AbstractMatrix{T}) where {T}
             # Update the rest
             ntasks = task_num(n, k)
             tforeach((k+1):n; scheduler=:static, ntasks = ntasks) do j
+#
+# Polyester works great on 1.11 and 1.12 and is flaky and performs poorly
+# on 1.13
 #                @batch minbatch=128 for j=(k+1):n 
+#                @batch for j=(k+1):n 
              @inbounds begin
                 Akj = -A[k, j]
                 @simd ivdep for i = (k+1):m
-#                @inbounds @simd ivdep for i = (k+1):m
                     A[i, j] += A[i, k] * Akj
                 end # i loop
              end # inner @inbounds
@@ -95,8 +98,10 @@ end
 
 function task_num(n, k)
     ndiv=512
+#    ndiv=128
+#    ndiv=16
     tnum = min(nthreads(), 1 + floor(Int, (n - k) / ndiv))
-    ((n-k) < 512) && (tnum = 1)
+#    ((n-k) < 512) && (tnum = 1)
     return tnum
 end
 
