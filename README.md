@@ -46,11 +46,10 @@ __The half precision LU for Float16 in this package is much faster (more than 10
     - Fixing a scholarship bug and putting the solution in the working precision when using extended precision residuals.
        - Of course, this tiny change means that the docs and tests need more changes than I planned for
        - At least 0.1.4 will not break things.
-   - __Polyester.jl__ is a dependency because I am still experimenting with it. If you want to use it, edit the file __hlu!.jl__ in __src/Factorizaitons__. 
  - v0.1.5: Large scale refactoring, better docs, and ...
     - Putting the estmated error in the termination criterion
     - Setting myself up for v0.1.6 so I can avoid the code bloat I'm trying to fix in v0.1.5
- - v0.1.6: Docs get better and ...
+    - I will start experimenting with __Polyester.jl__ again. It works great on v1.1.12 and not well at all on 1.1.13.
     - QR and linear least squares
       
 ##  Can I complain about this package?
