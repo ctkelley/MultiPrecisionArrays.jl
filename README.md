@@ -385,7 +385,7 @@ This preprint about interprecison transfers uses MulitPrecisionArrays.jl for the
 
 - (Kel24a) C. T. Kelley, [__Interprecision transfers in iterative refinement__](https://arxiv.org/pdf/2407.00827)
 
-Here's a new JOSS paper about the package. v0.1.3 is the version for the paper. I gave that version the v0.1.3-joss tag.
+Here's a new JOSS paper about the package. v0.1.3 is the version for the paper. I gave that version the [v0.1.3-joss](https://github.com/ctkelley/MultiPrecisionArrays.jl/releases/tag/v0.1.3-joss) tag.
 
 - (Kel24b) C. T. Kelley, [__MultiPrecisionArrays.jl: A Julia package for iterative refinement__](https://joss.theoj.org/papers/10.21105/joss.06698)
 
