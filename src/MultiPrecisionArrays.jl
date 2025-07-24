@@ -25,13 +25,18 @@ include("Structs4MP/MPBArray.jl")
 # MPHArrays may go away soon. They are only used for CI
 include("CI_Only/MPHeavy.jl")
 is_heavy(x::MPHFact) = true
+is_heavy(x::MPGHFact) = true
 is_heavy(x::MPLFact) = false
+is_heavy(x::MPBFact) = false
+is_heavy(x::MPGEFact) = false
 
+MPSFact = Union{MPLFact,MPHFact,MPGEFact,MPGHFact}
 MPFact = Union{MPLFact,MPHFact}
 MPGFact = Union{MPGEFact,MPGHFact}
 MPLFacts = Union{MPLFact}
 MPKFact = Union{MPGFact,MPBFact}
-
+MPHHFact = Union{MPGHFact,MPHFact}
+is_heavy(x::MPHHFact) = true
 #
 # Termination criteria defaults
 #
@@ -147,6 +152,8 @@ export mpblu!
 export mpglu!
 export mpghlu!
 export mpglu
+export IR_Init
+#export MPStats
 #export mpqr!
 #export mpcholesky!
 #
@@ -184,7 +191,8 @@ include("Solvers/mpgeslir.jl")
 include("Solvers/IRTriangle.jl")
 include("Solvers/termination_settings.jl")
 include("Solvers/update_parms.jl")
-include("Structs4MP/MPStats.jl")
+include("Solvers/IR_Init.jl")
+#include("Structs4MP/MPStats.jl")
 include("Factorizations/hlu!.jl")
 include("Factorizations/mplu!.jl")
 include("Factorizations/mpglu!.jl")

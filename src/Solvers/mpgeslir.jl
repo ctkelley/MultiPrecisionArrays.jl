@@ -156,14 +156,15 @@ function mpgeslir(
     N = length(b)
     normtype = Inf
     #    normtype = 1
-    TB = eltype(b)
-    MPStats = getStats(AF)
-    TF = MPStats.TF
-    TW = MPStats.TW
-    r = AF.residual
-    TR = eltype(r)
-    x = AF.sol
-    x .*= TW(0.0)
+#    TB = eltype(b)
+#    MPStats = getStats(AF)
+#    TF = MPStats.TF
+#    TW = MPStats.TW
+    (x, r, TB, TW, TF, TR, TFact) = IR_Init(AF,b,normtype)
+#    r = AF.residual
+#    TR = eltype(r)
+#    x = AF.sol
+#    x .*= TW(0.0)
     #    xa = AF.sol .* TRA(0.0)
     #    xr = AF.sol .* TR(0.0)
     #    x=xr
@@ -173,19 +174,13 @@ function mpgeslir(
     HiRes = (eps(TR) < eps(TW))
     HiRes && (onthefly = true)
     #
-    # TFact is the precision of the factors; should be TF
-    # unless we're dealing with a heavy MPArray for CI
-    #
-    TFact = MPStats.TFact
-    TFok = ((TF == TFact) || (typeof(AF) == MPHFact))
-    TFok || error("TF is supposed to be TFact")
     #
     # Are the precisions consistent? If not, I have a bug somewhere.
     # Otherwise, set the tolerance on the iteration to 10*eps.
     # If the iteration can't meet the tolerance, terminate when
     # the residual norms stagnate (res_old > Rmax * res_new)
     #
-    (TW == TB) || error("inconsistent precisions; A and b must have same type")
+#    (TW == TB) || error("inconsistent precisions; A and b must have same type")
     residterm = AF.residterm
     #    term_data = termination_settings(TW, term_parms, residterm)
     #    tolf = term_data.tolf
@@ -201,10 +196,8 @@ function mpgeslir(
     #
     # Keep the records and accumulate the statistics. 
     #
-    Meth = MPStats.Meth
     verbose && println(
-        Meth,
-        ": High precision = $TW, Low precision = $TF, Factorization storage precision = $TFact, Residual precision = $TR",
+        "High precision = $TW, Low precision = $TF, Factorization storage precision = $TFact, Residual precision = $TR"
     )
     #
     # Showtime!
@@ -216,7 +209,7 @@ function mpgeslir(
     #
     # Initialize the iteration. I initialize to zero. That makes the
     # iteration count the same as the high precision matvec and the 
-    # triangular sovles
+    # triangular solves
     #
     xnrm = norm(x, normtype)
     #
@@ -306,21 +299,4 @@ function mpgeslir(
     else
         return x
     end
-end
-
-function getTF(AF::MPFact)
-    TF = eltype(AF.AL)
-    if is_heavy(AF)
-        TFact = eltype(AF.AH)
-    else
-        TFact = eltype(AF.AL)
-    end
-    return (TF, TFact)
-end
-
-function getStats(AF)
-    TW = eltype(AF.AH)
-    (TF, TFact) = getTF(AF)
-    MPStats = MPIRStats(TW, TF, TFact)
-    return MPStats
 end

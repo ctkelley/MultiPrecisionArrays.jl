@@ -11,6 +11,7 @@ import MultiPrecisionArrays.MPHArray
 import MultiPrecisionArrays.MPGArray
 import MultiPrecisionArrays.MPBArray
 import MultiPrecisionArrays.MPLFact
+import MultiPrecisionArrays.MPHHFact
 import MultiPrecisionArrays.mpkrir
 
 include("Tools/testnorm.jl")

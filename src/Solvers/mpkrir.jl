@@ -114,12 +114,13 @@ function mpkrir(
     krylov_ok || error("$ktype is not supported")
     #
     normtype = Inf
-    x = AF.sol
+    (x, r, TB, TW, TF, TR, TFact) = IR_Init(AF,b,normtype)
+#    x = AF.sol
     AD = AF.AH
-    TR = eltype(AF.residual)
-    TW = eltype(x)
-    TF = eltype(AF.AL);
-    x .*= TW(0.0)
+#    TR = eltype(AF.residual)
+#    TW = eltype(x)
+#    TF = eltype(AF.AL);
+#    x .*= TW(0.0)
     # remember that eps(TR) = 2 * unit roundoff
     residterm = AF.residterm
     #    term_data = termination_settings(TW, term_parms, residterm)
@@ -127,26 +128,22 @@ function mpkrir(
     tolf = termination_settings(TW, term_parms, residterm)
     Rmax = term_parms.Rmax
     litmax = term_parms.litmax
+    #
+    # I compute the norm of AF if needed in single
+    # Half is still too slow.
+    #
     anrm = AF.anrm
-    #    residterm ? anrm = 0.0 : anrm = opnorm(AD, 1)
-    #    anrm = term_data.anrm
-    #    residterm ? tf=1.0 : tf=.9
-    #    tolf = tf*eps(TR)
+    #
     n = length(b)
     onetb = TR(1.0)
     bsc = TR.(b)
-    #    x = zeros(TR, size(b))
     bnorm = norm(b, normtype)
     xnorm = TR(0.0)
-    #
-    #    AFS = AF.AF
     AD = AF.AH
-    #    residterm ?  anrm = 0.0 : anrm = opnorm(AD, 1)
-    #    anorm = opnorm(AD,normtype)
     #
     # Initialize Krylov-IR
     #
-    r = AF.residual
+#    r = AF.residual
     r .= TR.(b)
     rnrm = norm(r, normtype)
     bnrm = norm(b, normtype)
