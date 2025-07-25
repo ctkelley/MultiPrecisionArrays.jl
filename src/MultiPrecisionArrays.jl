@@ -36,7 +36,7 @@ MPGFact = Union{MPGEFact,MPGHFact}
 MPLFacts = Union{MPLFact}
 MPKFact = Union{MPGFact,MPBFact}
 MPHHFact = Union{MPGHFact,MPHFact}
-is_heavy(x::MPHHFact) = true
+#is_heavy(x::MPHHFact) = true
 #
 # Termination criteria defaults
 #

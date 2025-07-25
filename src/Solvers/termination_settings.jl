@@ -41,23 +41,23 @@ function termination_settings(TW, term_parms, residterm)
     return tolf
 end
 
-function init_IR(AF, b, normtype=Inf)
-    x = AF.sol
-    AD = AF.AH
-    TR = eltype(AF.residual)
-    TW = eltype(x)
-    TF = eltype(AF.AL);
-    x .*= TW(0.0)
-    # remember that eps(TR) = 2 * unit roundoff
-    residterm = AF.residterm
-    tolf = termination_settings(TW, term_parms, residterm)
-    Rmax = term_parms.Rmax
-    litmax = term_parms.litmax
+#function Xinit_IR(AF, b, normtype=Inf)
+#    x = AF.sol
+#    AD = AF.AH
+#    TR = eltype(AF.residual)
+#    TW = eltype(x)
+#    TF = eltype(AF.AL);
+#    x .*= TW(0.0)
+#    # remember that eps(TR) = 2 * unit roundoff
+#    residterm = AF.residterm
+#    tolf = termination_settings(TW, term_parms, residterm)
+#    Rmax = term_parms.Rmax
+#    litmax = term_parms.litmax
     #
     # I compute the norm of AF if needed in single
     # Half is still to slow.
     #
-    anrm = AF.anrm
-end
+#    anrm = AF.anrm
+#end
 
 
