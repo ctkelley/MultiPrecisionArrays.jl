@@ -114,17 +114,11 @@ function mpkrir(
     krylov_ok || error("$ktype is not supported")
     #
     normtype = Inf
-    (x, r, TB, TW, TF, TR, TFact) = IR_Init(AF,b,normtype)
-#    x = AF.sol
+    (x, r, TB, TW, TF, TR, TFact) = IR_Init(AF, b, normtype)
+    #    x = AF.sol
     AD = AF.AH
-#    TR = eltype(AF.residual)
-#    TW = eltype(x)
-#    TF = eltype(AF.AL);
-#    x .*= TW(0.0)
     # remember that eps(TR) = 2 * unit roundoff
     residterm = AF.residterm
-    #    term_data = termination_settings(TW, term_parms, residterm)
-    #    tolf = term_data.tolf
     tolf = termination_settings(TW, term_parms, residterm)
     Rmax = term_parms.Rmax
     litmax = term_parms.litmax
@@ -143,7 +137,7 @@ function mpkrir(
     #
     # Initialize Krylov-IR
     #
-#    r = AF.residual
+    #    r = AF.residual
     r .= TR.(b)
     rnrm = norm(r, normtype)
     bnrm = norm(b, normtype)

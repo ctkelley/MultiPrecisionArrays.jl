@@ -155,35 +155,18 @@ function mpgeslir(
     mpdebug = false
     N = length(b)
     normtype = Inf
-    #    normtype = 1
-#    TB = eltype(b)
-#    MPStats = getStats(AF)
-#    TF = MPStats.TF
-#    TW = MPStats.TW
-    (x, r, TB, TW, TF, TR, TFact) = IR_Init(AF,b,normtype)
-#    r = AF.residual
-#    TR = eltype(r)
-#    x = AF.sol
-#    x .*= TW(0.0)
-    #    xa = AF.sol .* TRA(0.0)
-    #    xr = AF.sol .* TR(0.0)
-    #    x=xr
+    (x, r, TB, TW, TF, TR, TFact) = IR_Init(AF, b, normtype)
     onthefly = AF.onthefly
     # If I'm computing a high precision residual, TS=TR
     # and I must do interprecision transfers on the fly.
     HiRes = (eps(TR) < eps(TW))
     HiRes && (onthefly = true)
     #
-    #
-    # Are the precisions consistent? If not, I have a bug somewhere.
-    # Otherwise, set the tolerance on the iteration to 10*eps.
+    # Set the tolerance on the iteration to 10*eps.
     # If the iteration can't meet the tolerance, terminate when
     # the residual norms stagnate (res_old > Rmax * res_new)
     #
-#    (TW == TB) || error("inconsistent precisions; A and b must have same type")
     residterm = AF.residterm
-    #    term_data = termination_settings(TW, term_parms, residterm)
-    #    tolf = term_data.tolf
     tolf = termination_settings(TW, term_parms, residterm)
     Rmax = term_parms.Rmax
     litmax = term_parms.litmax
@@ -197,7 +180,7 @@ function mpgeslir(
     # Keep the records and accumulate the statistics. 
     #
     verbose && println(
-        "High precision = $TW, Low precision = $TF, Factorization storage precision = $TFact, Residual precision = $TR"
+        "High precision = $TW, Low precision = $TF, Factorization storage precision = $TFact, Residual precision = $TR",
     )
     #
     # Showtime!

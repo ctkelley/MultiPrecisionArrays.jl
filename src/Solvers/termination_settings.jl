@@ -53,11 +53,9 @@ end
 #    tolf = termination_settings(TW, term_parms, residterm)
 #    Rmax = term_parms.Rmax
 #    litmax = term_parms.litmax
-    #
-    # I compute the norm of AF if needed in single
-    # Half is still to slow.
-    #
+#
+# I compute the norm of AF if needed in single
+# Half is still to slow.
+#
 #    anrm = AF.anrm
 #end
-
-
