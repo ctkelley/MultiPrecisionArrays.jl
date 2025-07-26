@@ -115,9 +115,9 @@ function mpkrir(
     #
     normtype = Inf
     (TW, TF, TR, TFact) = Types_IR_Init(AF, b, normtype)
-    (x, r, rs, anrm, onthefly, HiRes) = Solver_IR_Init(AF,b)
+    (x, r, rs, xnrm, bnrm, anrm) = Solver_IR_Init(AF,b,normtype)
     #    x = AF.sol
-    AD = AF.AH
+#    AD = AF.AH
     # remember that eps(TR) = 2 * unit roundoff
     residterm = AF.residterm
     tolf = termination_settings(TW, term_parms, residterm)
@@ -132,16 +132,17 @@ function mpkrir(
     n = length(b)
     onetb = TR(1.0)
     bsc = TR.(b)
-    bnorm = norm(b, normtype)
-    xnorm = TR(0.0)
+#    bnorm = norm(b, normtype)
+#    xnorm = TR(0.0)
     AD = AF.AH
     #
     # Initialize Krylov-IR
     #
     #    r = AF.residual
     #   r .= TR.(b)
-    rnrm = norm(r, normtype)
-    bnrm = norm(b, normtype)
+#    rnrm = norm(r, normtype)
+#    bnrm = norm(b, normtype)
+    rnrm = bnrm
     rnrmx = rnrm * TR(2.0)
     rhist = Vector{TR}()
     dhist = Vector{TW}()
@@ -159,17 +160,21 @@ function mpkrir(
     MP_Data = (MPF = AF, atv = atvd, TF = TF, TW = TW)
     #    rrf = 0.5
     #    rrf = term_data.Rmax
-    tol = tolf * (bnorm + anrm * xnorm)
+    tol = tolf * (bnrm + anrm * xnrm)
     dnormold=1.0
     etest=true
     while (rnrm > tol) && (rnrm <= Rmax * rnrmx) && (itc < litmax) || etest
-        x0 = zeros(TR, n)
+#        x0 = zeros(TR, n)
+        x0 = zeros(TW, n)
         #
         # Scale the residual 
         #
         r ./= rnrm
         # Solve the correction equation
-        kout = IRKsolve(x0, r, MPhatv, AF, eta, MP_Data, ktype)
+        # If TR > TW, then rs = TW.(r) and I use that as the rhs
+        # for the working precision solve.
+        #
+        kout = IRKsolve(x0, r, rs, MPhatv, AF, eta, MP_Data, ktype)
         # Manage the results and keep the books
         push!(khist, length(kout.reshist))
         itcp1 = itc + 1
@@ -212,15 +217,15 @@ function mpkrir(
         rnrm = norm(r, normtype)
         itc += 1
         push!(rhist, rnrm)
-        #        tol = tolf * bnorm
+        #        tol = tolf * bnrm
         mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol")
         #
         # If the residual norm increased, complain.
         #
         complain_resid = mpdebug && (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
         complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
-        xnorm = norm(x, normtype)
-        tol = tolf * (bnorm + anrm * xnorm)
+        xnrm = norm(x, normtype)
+        tol = tolf * (bnrm + anrm * xnrm)
     end
     verbose && println("Residual history = $rhist")
     if reporting

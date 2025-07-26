@@ -14,13 +14,15 @@ function Types_IR_Init(AF, b, normtype = Inf)
     return (TW, TF, TR, TFact)
 end
 
-function Solver_IR_Init(AF, b)
+function Solver_IR_Init(AF, b, normtype)
     r = AF.residual
     TR=eltype(r)
     TW=eltype(b)
     r .= TR.(b)
     x = AF.sol
     x .*= TW(0.0)
+    xnrm = norm(x, normtype)
+    bnrm = norm(b, normtype)
     TF=eltype(AF.AF)
     onthefly = AF.onthefly
     HiRes = (eps(TR) < eps(TW))
@@ -31,7 +33,7 @@ function Solver_IR_Init(AF, b)
     # If TR > TW then do the solve in TW after computing r in TR
     #
     (TR == TW) || (rs = zeros(TW, size(b)))
-    return (x, r, rs, anrm, onthefly, HiRes)
+    return (x, r, rs, xnrm, bnrm, anrm)
 end
 
 

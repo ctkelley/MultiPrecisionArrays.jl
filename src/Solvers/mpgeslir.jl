@@ -156,27 +156,21 @@ function mpgeslir(
     N = length(b)
     normtype = Inf
     (TW, TF, TR, TFact) = Types_IR_Init(AF, b, normtype)
-    (x, r, rs, anrm, onthefly, HiRes) = Solver_IR_Init(AF, b)
-    #onthefly = AF.onthefly
-    # If I'm computing a high precision residual, TS=TR
-    # and I must do interprecision transfers on the fly.
-    #HiRes = (eps(TR) < eps(TW))
-    #HiRes && (onthefly = true)
     #
-    # Set the tolerance on the iteration to 10*eps.
-    # If the iteration can't meet the tolerance, terminate when
-    # the residual norms stagnate (res_old > Rmax * res_new)
+    # Initialize the iteration. I initialize to zero. That makes the
+    # iteration count the same as the high precision matvec and the 
+    # triangular solves
+    #
+    (x, r, rs, xnrm, bnrm, anrm) = Solver_IR_Init(AF, b, normtype)
+    rnrm = bnrm
+    #
+    #  get the termination data 
     #
     residterm = AF.residterm
     tolf = termination_settings(TW, term_parms, residterm)
     Rmax = term_parms.Rmax
     litmax = term_parms.litmax
     AD = AF.AH
-    #
-    # I compute the norm of AF if needed in single
-    # Half is still to slow.
-    #
-    #anrm = AF.anrm
     #
     # Keep the records and accumulate the statistics. 
     #
@@ -187,33 +181,13 @@ function mpgeslir(
     # Showtime!
     #
     AD = AF.AH
-    bnrm = norm(b, normtype)
     bsc = b
-    #AFS = AF.AF
-    #
-    # Initialize the iteration. I initialize to zero. That makes the
-    # iteration count the same as the high precision matvec and the 
-    # triangular solves
-    #
-    xnrm = norm(x, normtype)
-    #
-    # Initial residual
-    #
-    r .= b
     tol = tolf
-    #    onthefly ? (rs = ones(TF, 1)) : (rs = zeros(TF, size(b)))
     #
-    # If TR > TW then do the solve in TW after computing r in TR
-    #
-    #    (TR == TW) || (rs = zeros(TW, size(b)))
-    #
-    #   Keep the books. Test for excessive residual precision.
+    #   Keep the books. 
     #  
-    ERes = (eps(TR) < eps(Float64))
-    HiRes ? (THist = TR) : (THist = Float64)
-    rhist = Vector{THist}()
+    rhist = Vector{TR}()
     dhist = Vector{TW}()
-    rnrm = TR(norm(r, normtype))
     rnrmx = rnrm * 1.e6
     oneb = TR(1.0)
     itc = 0
@@ -222,8 +196,8 @@ function mpgeslir(
     #
     push!(rhist, rnrm)
     # Store r and x in the residual precision if TR is not TW
-    HiRes ? rloop = TR.(r) : rloop = r
-    HiRes ? xloop = TR.(x) : xloop = x
+    (TR == TW) ? rloop = r : rloop = TR.(r)
+    (TR == TW) ? xloop = x : xloop = TR.(x)
     # Solve loop
     tol=(anrm * xnrm + bnrm) * tolf
     dnormold=1.0
@@ -236,6 +210,8 @@ function mpgeslir(
         #
         # Use the low-precision factorization
         # The residual is overwritten with the correction here.
+        # If TR > TW, then rs = TW.(r) and I use that as the rhs
+        # for the working precision solve.
         #
         rloop .= IRTriangle!(AF, rloop, rs, verbose)
         #

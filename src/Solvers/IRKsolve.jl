@@ -1,13 +1,17 @@
-function IRKsolve(x0, r, MPhatv, AF, eta, MP_Data, ktype)
+function IRKsolve(x0, r, rs, MPhatv, AF, eta, MP_Data, ktype)
     #
-    # Solve the correction equation with a Krylov method
+    # Solve the correction equation in working precision with a Krylov method
+    #
+    TR = eltype(r)
+    TW = eltype(AF.sol)
+    (TR == TW) ? zs=r : (rs .= r; zs = rs)
     #
     VF = AF.VStore
     kl_store = AF.KStore
     if ktype == "GMRES"
         kout = kl_gmres(
             x0,
-            r,
+            zs,
             MPhatv,
             VF,
             eta,
@@ -19,7 +23,7 @@ function IRKsolve(x0, r, MPhatv, AF, eta, MP_Data, ktype)
     elseif ktype == "BiCGSTAB"
         kout = kl_bicgstab(
             x0,
-            r,
+            zs,
             MPhatv,
             VF,
             eta,

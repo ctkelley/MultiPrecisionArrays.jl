@@ -22,7 +22,6 @@ function IRTriangle!(AF::Union{MPLFact,MPHFact}, r, rs, verbose)
         rs .= r
         ldiv!(AFS, rs)
         r .= rs
-        #r .= TW.(AFS\rs)
     end
     return r
 end
