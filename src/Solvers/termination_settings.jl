@@ -14,6 +14,8 @@ function termination_settings(TW, term_parms, residterm)
     # (residterm = false)
     # || r || < Ce eps(TW) (|| A || || x || + || b ||)
     #
+    # or if the solve takes litmax IR iterations.
+    #
     # I use the L1 norm for A because that is less expensive that
     # Linfty.  || A || is as expensive as a few IR iterations,
     # so it's not the default.
@@ -27,11 +29,8 @@ function termination_settings(TW, term_parms, residterm)
     # norm of the correction, ie
     # || d_new || > Rmax || d_old ||
     #
-    # Cr, Ce, and Rmax are set in the main module MultiPrecisionArrays.jl
-    # as fields in a mutable struct. You can change them, but if you do
-    # that (not recommended) understand that the parameters are global
-    # within the module. Take care with changing the parameters while
-    # using the solvers in a multi-threaded code.
+    # You can change the termination parameters with the function 
+    # update_parms. I do not recommend that.
     #
     Cr=term_parms.Cr
     Ce=term_parms.Ce
@@ -40,22 +39,3 @@ function termination_settings(TW, term_parms, residterm)
     #term_out = (tolf = tolf, Rmax = Rmax, litmax=litmax)
     return tolf
 end
-
-#function Xinit_IR(AF, b, normtype=Inf)
-#    x = AF.sol
-#    AD = AF.AH
-#    TR = eltype(AF.residual)
-#    TW = eltype(x)
-#    TF = eltype(AF.AL);
-#    x .*= TW(0.0)
-#    # remember that eps(TR) = 2 * unit roundoff
-#    residterm = AF.residterm
-#    tolf = termination_settings(TW, term_parms, residterm)
-#    Rmax = term_parms.Rmax
-#    litmax = term_parms.litmax
-#
-# I compute the norm of AF if needed in single
-# Half is still to slow.
-#
-#    anrm = AF.anrm
-#end

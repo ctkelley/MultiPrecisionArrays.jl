@@ -115,7 +115,7 @@ function mpkrir(
     #
     normtype = Inf
     (TW, TF, TR, TFact) = Types_IR_Init(AF, b, normtype)
-    (x, r, rs, anrm, onthefly, HiRes) = Solver_IR_Init(AF,b)
+    (x, r, rs, anrm, onthefly, HiRes) = Solver_IR_Init(AF, b)
     #    x = AF.sol
     AD = AF.AH
     # remember that eps(TR) = 2 * unit roundoff
@@ -127,7 +127,7 @@ function mpkrir(
     # I compute the norm of AF if needed in single
     # Half is still too slow.
     #
-    # anrm = AF.anrm
+    anrm = AF.anrm
     #
     n = length(b)
     onetb = TR(1.0)
@@ -139,7 +139,7 @@ function mpkrir(
     # Initialize Krylov-IR
     #
     #    r = AF.residual
-    #   r .= TR.(b)
+    r .= TR.(b)
     rnrm = norm(r, normtype)
     bnrm = norm(b, normtype)
     rnrmx = rnrm * TR(2.0)
@@ -152,8 +152,8 @@ function mpkrir(
     # Krylov-IR loop
     #
     itc = 0
-    #VF = AF.VStore
-    #kl_store = AF.KStore
+    VF = AF.VStore
+    kl_store = AF.KStore
     atvd = copy(r)
     xloop=copy(r)
     MP_Data = (MPF = AF, atv = atvd, TF = TF, TW = TW)
@@ -168,9 +168,34 @@ function mpkrir(
         # Scale the residual 
         #
         r ./= rnrm
-        # Solve the correction equation
-        kout = IRKsolve(x0, r, MPhatv, AF, eta, MP_Data, ktype)
-        # Manage the results and keep the books
+        #
+        # Solve the correction equation with a Krylov method
+        #
+        if ktype == "GMRES"
+            kout = kl_gmres(
+                x0,
+                r,
+                MPhatv,
+                VF,
+                eta,
+                MPhptv;
+                pdata = MP_Data,
+                side = "left",
+                kl_store = kl_store,
+            )
+        elseif ktype == "BiCGSTAB"
+            kout = kl_bicgstab(
+                x0,
+                r,
+                MPhatv,
+                VF,
+                eta,
+                MPhptv;
+                pdata = MP_Data,
+                side = "left",
+                kl_store = kl_store,
+            )
+        end
         push!(khist, length(kout.reshist))
         itcp1 = itc + 1
         winner = kout.idid ? " $ktype converged" : " $ktype failed"
@@ -204,7 +229,7 @@ function mpkrir(
         push!(dhist, dnorm)
         # High precision residual? Use ||d|| in termination.
         etest = (eps(TR) < eps(TW)) && (drat < Rmax) || (itc==0)
-        xloop .= TR.(x)
+        xloop=TR.(x)
         mul!(r, AD, xloop)
         r .*= -onetb
         axpy!(1.0, bsc, r)
@@ -229,4 +254,26 @@ function mpkrir(
     else
         return x
     end
+end
+
+# Matrix-vector product for Krylov-IR
+function MPhatv(x, pdata)
+    atv = pdata.atv
+    mul!(atv, pdata.MPF.AH, x)
+    return atv
+end
+
+# Preconditioner-vector product for Krylov-IR
+function MPhptv(x, pdata)
+    TF=pdata.TF
+    TW=pdata.TW
+    #
+    # ldiv! is not doing well for one case, so I hide from it.
+    #
+    if (TF == Float16) && (TW == Float32)
+        x .= pdata.MPF.AF\x;
+    else
+        ldiv!(pdata.MPF.AF, x)
+    end
+    return x
 end

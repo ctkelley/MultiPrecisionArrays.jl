@@ -152,7 +152,7 @@ export mpblu!
 export mpglu!
 export mpghlu!
 export mpglu
-export IR_Init
+export Types_IR_Init
 #export MPStats
 #export mpqr!
 #export mpcholesky!
@@ -191,7 +191,8 @@ include("Solvers/mpgeslir.jl")
 include("Solvers/IRTriangle.jl")
 include("Solvers/termination_settings.jl")
 include("Solvers/update_parms.jl")
-include("Solvers/IR_Init.jl")
+include("Solvers/Solvers_IR_Init.jl")
+include("Solvers/IRKsolve.jl")
 #include("Structs4MP/MPStats.jl")
 include("Factorizations/hlu!.jl")
 include("Factorizations/mplu!.jl")
