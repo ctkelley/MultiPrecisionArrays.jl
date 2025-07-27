@@ -1,5 +1,5 @@
 """
-IRTriangle!(AF::Union{MPLFact,MPHFact}, r, rs, verbose)
+IRTriangle!(AF::Union{MPLFact,MPHFact}, r, rs)
 This is the solve phase using the factorization object (AFS) you get
 from a multiprecision LU factorization.
 
@@ -11,7 +11,7 @@ precision.
 
 The solve overwrites the residual with the defect if TR=TW.
 """
-function IRTriangle!(AF::Union{MPLFact,MPHFact}, r, rs, verbose)
+function IRTriangle!(AF::Union{MPLFact,MPHFact}, r, rs)
     AFS = AF.AF
     on_the_fly = AF.onthefly
     TR=eltype(r)

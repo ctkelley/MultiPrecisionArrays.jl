@@ -1,4 +1,4 @@
-function termination_settings(TW, term_parms, residterm)
+function termination_settings(AF, term_parms)
     #
     # I am continually tweaking this stuff.
     # I do not encourage you to play with it.
@@ -34,7 +34,9 @@ function termination_settings(TW, term_parms, residterm)
     #
     Cr=term_parms.Cr
     Ce=term_parms.Ce
+    residterm = AF.residterm
     residterm ? tf = Cr : tf = Ce
+    TW = eltype(AF.sol)
     tolf = eps(TW) * tf
     #term_out = (tolf = tolf, Rmax = Rmax, litmax=litmax)
     return tolf

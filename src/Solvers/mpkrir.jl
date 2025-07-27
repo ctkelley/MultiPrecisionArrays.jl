@@ -115,57 +115,45 @@ function mpkrir(
     #
     normtype = Inf
     (TW, TF, TR, TFact) = Types_IR_Init(AF, b, normtype)
+    # 
+    # Initialize the iteration. I initialize to zero. That makes the
+    # iteration count the same as the high precision matvec and the
+    # solves for the defect
+    #
     (x, r, rs, xnrm, bnrm, anrm) = Solver_IR_Init(AF,b,normtype)
-    #    x = AF.sol
-#    AD = AF.AH
-    # remember that eps(TR) = 2 * unit roundoff
-    residterm = AF.residterm
-    tolf = termination_settings(TW, term_parms, residterm)
+    rnrm = bnrm
+    rnrmx = rnrm * 1.e6
+    itc = 0
+    #
+    #  get the termination data
+    #
+    tolf = termination_settings(AF, term_parms)
     Rmax = term_parms.Rmax
     litmax = term_parms.litmax
-    #
-    # I compute the norm of AF if needed in single
-    # Half is still too slow.
-    #
-    # anrm = AF.anrm
-    #
-    n = length(b)
-    onetb = TR(1.0)
-    bsc = TR.(b)
-#    bnorm = norm(b, normtype)
-#    xnorm = TR(0.0)
     AD = AF.AH
+    bsc = TR.(b)
     #
     # Initialize Krylov-IR
     #
-    #    r = AF.residual
-    #   r .= TR.(b)
-#    rnrm = norm(r, normtype)
-#    bnrm = norm(b, normtype)
-    rnrm = bnrm
-    rnrmx = rnrm * TR(2.0)
     rhist = Vector{TR}()
     dhist = Vector{TW}()
+    onetb = TR(1.0)
     khist = Vector{Int64}()
     push!(rhist, rnrm)
-    eta = tolf
     #
     # Krylov-IR loop
     #
     itc = 0
-    #VF = AF.VStore
-    #kl_store = AF.KStore
     atvd = copy(r)
     xloop=copy(r)
-    MP_Data = (MPF = AF, atv = atvd, TF = TF, TW = TW)
-    #    rrf = 0.5
-    #    rrf = term_data.Rmax
+    x0 = zeros(TW, size(b))
+    eta = tolf
+    MP_Data = (MPF = AF, atv = atvd, x0 = x0,
+                ktype = ktype, eta = eta)
     tol = tolf * (bnrm + anrm * xnrm)
     dnormold=1.0
     etest=true
     while (rnrm > tol) && (rnrm <= Rmax * rnrmx) && (itc < litmax) || etest
-#        x0 = zeros(TR, n)
-        x0 = zeros(TW, n)
         #
         # Scale the residual 
         #
@@ -174,21 +162,22 @@ function mpkrir(
         # If TR > TW, then rs = TW.(r) and I use that as the rhs
         # for the working precision solve.
         #
-        kout = IRKsolve(x0, r, rs, MPhatv, AF, eta, MP_Data, ktype)
+        kout = IRKsolve!(AF, r, rs; MP_Data = MP_Data)
         # Manage the results and keep the books
         push!(khist, length(kout.reshist))
         itcp1 = itc + 1
-        winner = kout.idid ? " $ktype converged" : " $ktype failed"
+#        winner = kout.idid ? " $ktype converged" : " $ktype failed"
         #
         # Make some noise
         #
-        verbose && (println(
-            "Krylov stats: Iteration $itcp1 :",
-            length(kout.reshist),
-            " iterations",
-            "  ",
-            winner,
-        ))
+        irk_msg(itcp1, kout, ktype, verbose)
+#        verbose && (println(
+#            "Krylov stats: Iteration $itcp1 :",
+#            length(kout.reshist),
+#            " iterations",
+#            "  ",
+#            winner,
+#        ))
         #
         # Overwrite the residual with the correction
         #
@@ -235,3 +224,16 @@ function mpkrir(
         return x
     end
 end
+
+function irk_msg(itcp1, kout, ktype, verbose)
+winner = kout.idid ? " $ktype converged" : " $ktype failed"
+verbose && (println(
+            "Krylov stats: Iteration $itcp1 :",
+            length(kout.reshist),
+            " iterations",
+            "  ",
+            winner,
+        ))
+end
+
+

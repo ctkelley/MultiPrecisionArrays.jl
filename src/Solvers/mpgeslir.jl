@@ -163,34 +163,30 @@ function mpgeslir(
     #
     (x, r, rs, xnrm, bnrm, anrm) = Solver_IR_Init(AF, b, normtype)
     rnrm = bnrm
+    rnrmx = rnrm * 1.e6
+    itc = 0
     #
     #  get the termination data 
     #
     residterm = AF.residterm
-    tolf = termination_settings(TW, term_parms, residterm)
+    tolf = termination_settings(AF, term_parms)
     Rmax = term_parms.Rmax
     litmax = term_parms.litmax
-    AD = AF.AH
     #
-    # Keep the records and accumulate the statistics. 
-    #
-    verbose && println(
-        "High precision = $TW, Low precision = $TF, Factorization storage precision = $TFact, Residual precision = $TR",
-    )
+    # Tell 'em more than they need to know. 
+    #   
+    ir_vmsg(TW, TF, TFact, TR, verbose)
     #
     # Showtime!
     #
     AD = AF.AH
     bsc = b
-    tol = tolf
     #
     #   Keep the books. 
     #  
     rhist = Vector{TR}()
     dhist = Vector{TW}()
-    rnrmx = rnrm * 1.e6
     oneb = TR(1.0)
-    itc = 0
     #
     # Put initial residual norm into the history and iterate.
     #
@@ -213,7 +209,7 @@ function mpgeslir(
         # If TR > TW, then rs = TW.(r) and I use that as the rhs
         # for the working precision solve.
         #
-        rloop .= IRTriangle!(AF, rloop, rs, verbose)
+        rloop .= IRTriangle!(AF, rloop, rs)
         #
         # Undo the scaling
         #
@@ -245,12 +241,10 @@ function mpgeslir(
         push!(rhist, rnrm)
         xnrm = norm(xloop, normtype)
         tol = tolf * (anrm * xnrm + bnrm)
-        mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol")
         #
-        # If the residual norm increased, complain.
+        # Debugging? Report iteration data
         #
-        complain_resid = mpdebug && (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
-        complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
+        ir_debug_msg(mpdebug, itc, tol, rnrm, rnrmx)
     end
     #    x = xloop
     verbose && println("Residual history = $rhist")
@@ -260,3 +254,15 @@ function mpgeslir(
         return x
     end
 end
+
+function ir_vmsg(TW, TF, TFact, TR, verbose)
+    verbose && println(
+        "High precision = $TW, Low precision = $TF, Factorization storage precision = $TFact, Residual precision = $TR",)
+end
+
+function ir_debug_msg(mpdebug, itc, tol, rnrm, rnrmx)
+mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol")
+complain_resid = mpdebug && (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
+complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
+end
+

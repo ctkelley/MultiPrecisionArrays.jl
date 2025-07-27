@@ -1,4 +1,5 @@
-function IRKsolve(x0, r, rs, MPhatv, AF, eta, MP_Data, ktype)
+function IRKsolve!(AF::Union{MPKFact,MPGHFact}, r, rs ; MP_Data =[])
+#function IRKsolve!(AF::Union{MPKFact,MPGHFact}, r, rs, x0, eta, MP_Data, ktype)
     #
     # Solve the correction equation in working precision with a Krylov method
     #
@@ -6,6 +7,9 @@ function IRKsolve(x0, r, rs, MPhatv, AF, eta, MP_Data, ktype)
     TW = eltype(AF.sol)
     (TR == TW) ? zs=r : (rs .= r; zs = rs)
     #
+    ktype = MP_Data.ktype
+    eta = MP_Data.eta
+    x0 = MP_Data.x0
     VF = AF.VStore
     kl_store = AF.KStore
     if ktype == "GMRES"
@@ -45,8 +49,8 @@ end
 
 # Preconditioner-vector product for Krylov-IR
 function MPhptv(x, pdata)
-    TF=pdata.TF
-    TW=pdata.TW
+    TW = eltype(pdata.x0)
+    TF = eltype(pdata.MPF.AF)
     #
     # ldiv! is not doing well for one case, so I hide from it.
     #
