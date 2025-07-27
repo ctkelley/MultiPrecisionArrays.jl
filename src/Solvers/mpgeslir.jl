@@ -153,7 +153,7 @@ function mpgeslir(
     # What kind of problem are we dealing with?
     #
     mpdebug = false
-    N = length(b)
+#    N = length(b)
     normtype = Inf
     (TW, TF, TR, TFact) = Types_IR_Init(AF, b, normtype)
     #
@@ -168,7 +168,6 @@ function mpgeslir(
     #
     #  get the termination data 
     #
-    residterm = AF.residterm
     tolf = termination_settings(AF, term_parms)
     Rmax = term_parms.Rmax
     litmax = term_parms.litmax
@@ -179,8 +178,8 @@ function mpgeslir(
     #
     # Showtime!
     #
-    AD = AF.AH
-    bsc = b
+    # AD = AF.AH
+    bsc = TR.(b)
     #
     #   Keep the books. 
     #  
@@ -225,8 +224,8 @@ function mpgeslir(
         etest = (eps(TR) < eps(TW)) && (drat < Rmax) || (itc==0)
         x .+= rloop
         xloop .= TR.(x)
-        #        xloop .+= rloop
-        mul!(rloop, AD, xloop)
+        #
+        mul!(rloop, AF.AH, xloop)
         #
         # After mul! the residual is overwritten with Ax
         #

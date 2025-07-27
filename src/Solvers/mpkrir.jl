@@ -130,7 +130,7 @@ function mpkrir(
     tolf = termination_settings(AF, term_parms)
     Rmax = term_parms.Rmax
     litmax = term_parms.litmax
-    AD = AF.AH
+    # AD = AF.AH
     bsc = TR.(b)
     #
     # Initialize Krylov-IR
@@ -166,18 +166,10 @@ function mpkrir(
         # Manage the results and keep the books
         push!(khist, length(kout.reshist))
         itcp1 = itc + 1
-#        winner = kout.idid ? " $ktype converged" : " $ktype failed"
         #
         # Make some noise
         #
         irk_msg(itcp1, kout, ktype, verbose)
-#        verbose && (println(
-#            "Krylov stats: Iteration $itcp1 :",
-#            length(kout.reshist),
-#            " iterations",
-#            "  ",
-#            winner,
-#        ))
         #
         # Overwrite the residual with the correction
         #
@@ -199,7 +191,7 @@ function mpkrir(
         # High precision residual? Use ||d|| in termination.
         etest = (eps(TR) < eps(TW)) && (drat < Rmax) || (itc==0)
         xloop .= TR.(x)
-        mul!(r, AD, xloop)
+        mul!(r, AF.AH, xloop)
         r .*= -onetb
         axpy!(1.0, bsc, r)
         rnrmx = rnrm
