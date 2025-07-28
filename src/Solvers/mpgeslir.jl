@@ -199,20 +199,12 @@ function mpgeslir(
     etest=true
     while (rnrm > tol) && (rnrm <= Rmax*rnrmx) && (itc < litmax) || etest
         #
-        # Scale the residual
-        #
-        rloop ./= rnrm
-        #
         # Use the low-precision factorization
         # The residual is overwritten with the correction here.
         # If TR > TW, then rs = TW.(r) and I use that as the rhs
         # for the working precision solve.
         #
-        rloop .= IRTriangle!(AF, rloop, rs)
-        #
-        # Undo the scaling
-        #
-        rloop .*= rnrm
+        rloop .= IRTriangle!(AF, rloop, rs, rnrm)
         #
         # Update the solution and residual
         #

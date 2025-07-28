@@ -144,7 +144,8 @@ function mpkrir(
     # Krylov-IR loop
     #
     itc = 0
-    atvd = copy(r)
+#    atvd = copy(r)
+    atvd = copy(x)
     xloop=copy(r)
     x0 = zeros(TW, size(b))
     eta = tolf
@@ -155,41 +156,28 @@ function mpkrir(
     etest=true
     while (rnrm > tol) && (rnrm <= Rmax * rnrmx) && (itc < litmax) || etest
         #
-        # Scale the residual 
-        #
-        r ./= rnrm
-        # Solve the correction equation
         # If TR > TW, then rs = TW.(r) and I use that as the rhs
         # for the working precision solve.
         #
-        kout = IRKsolve!(AF, r, rs; MP_Data = MP_Data)
+        (r, kout) = IRKsolve!(AF, r, rs, rnrm; itc=itc, 
+             verbose=verbose, MP_Data = MP_Data)
+        #
         # Manage the results and keep the books
         push!(khist, length(kout.reshist))
-        itcp1 = itc + 1
+        dnorm=norm(r, normtype)
+        drat=dnorm/dnormold
+        dnormold=dnorm
+        push!(dhist, dnorm)
         #
-        # Make some noise
+        # High precision residual? Use ||d|| in termination.
         #
-        irk_msg(itcp1, kout, ktype, verbose)
-        #
-        # Overwrite the residual with the correction
-        #
-        r .= TR.(kout.sol)
-        #
-        # Undo the scaling
-        #
-        r .*= rnrm
+        etest = (eps(TR) < eps(TW)) && (drat < Rmax) || (itc==0)
         #
         # Update the solution and residual
         # xloop is in the residual precision to get a
         # high precision residual.
         #
         x .+= r
-        dnorm=norm(r, normtype)
-        drat=dnorm/dnormold
-        dnormold=dnorm
-        push!(dhist, dnorm)
-        # High precision residual? Use ||d|| in termination.
-        etest = (eps(TR) < eps(TW)) && (drat < Rmax) || (itc==0)
         xloop .= TR.(x)
         mul!(r, AF.AH, xloop)
         r .*= -onetb
@@ -198,7 +186,6 @@ function mpkrir(
         rnrm = norm(r, normtype)
         itc += 1
         push!(rhist, rnrm)
-        #        tol = tolf * bnrm
         mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol")
         #
         # If the residual norm increased, complain.
@@ -216,16 +203,3 @@ function mpkrir(
         return x
     end
 end
-
-function irk_msg(itcp1, kout, ktype, verbose)
-winner = kout.idid ? " $ktype converged" : " $ktype failed"
-verbose && (println(
-            "Krylov stats: Iteration $itcp1 :",
-            length(kout.reshist),
-            " iterations",
-            "  ",
-            winner,
-        ))
-end
-
-
