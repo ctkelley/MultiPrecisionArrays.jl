@@ -153,7 +153,7 @@ function mpgeslir(
     # What kind of problem are we dealing with?
     #
     mpdebug = false
-#    N = length(b)
+    #    N = length(b)
     normtype = Inf
     (TW, TF, TR, TFact) = Types_IR_Init(AF, b, normtype)
     #
@@ -248,12 +248,12 @@ end
 
 function ir_vmsg(TW, TF, TFact, TR, verbose)
     verbose && println(
-        "High precision = $TW, Low precision = $TF, Factorization storage precision = $TFact, Residual precision = $TR",)
+        "High precision = $TW, Low precision = $TF, Factorization storage precision = $TFact, Residual precision = $TR",
+    )
 end
 
 function ir_debug_msg(mpdebug, itc, tol, rnrm, rnrmx)
-mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol")
-complain_resid = mpdebug && (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
-complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
+    mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol")
+    complain_resid = mpdebug && (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
+    complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
 end
-

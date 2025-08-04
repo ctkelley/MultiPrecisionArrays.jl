@@ -1,9 +1,16 @@
-function IRKsolve!(AF::Union{MPKFact,MPGHFact}, r, rs, rnrm ; 
-            itc=0, verbose=false, MP_Data =[])
-#
-        # Scale the residual 
-        #
-        r ./= rnrm
+function IRKsolve!(
+    AF::Union{MPKFact,MPGHFact},
+    r,
+    rs,
+    rnrm;
+    itc = 0,
+    verbose = false,
+    MP_Data = [],
+)
+    #
+    # Scale the residual 
+    #
+    r ./= rnrm
     #
     # Solve the correction equation in working precision with a Krylov method
     #
@@ -41,13 +48,14 @@ function IRKsolve!(AF::Union{MPKFact,MPGHFact}, r, rs, rnrm ;
             kl_store = kl_store,
         )
     end
-#
-        # Undo the scaling
-        #
-r .= TR.(kout.sol)
-r .*= rnrm
-irk_msg(itc, kout, ktype, verbose)
-    return (r, kout)
+    #
+    # Undo the scaling
+    #
+#    r .= TR.(kout.sol)
+#    r .*= rnrm
+    irk_msg(itc, kout, ktype, verbose)
+#    return (r, kout)
+    return kout
 end
 
 # Matrix-vector product for Krylov-IR
@@ -73,13 +81,13 @@ function MPhptv(x, pdata)
 end
 
 function irk_msg(itc, kout, ktype, verbose)
-winner = kout.idid ? " $ktype converged" : " $ktype failed"
-itcp1 = itc+1
-verbose && (println(
-            "Krylov stats: Iteration $itcp1 :",
-            length(kout.reshist),
-            " iterations",
-            "  ",
-            winner,
-        ))
+    winner = kout.idid ? " $ktype converged" : " $ktype failed"
+    itcp1 = itc+1
+    verbose && (println(
+        "Krylov stats: Iteration $itcp1 :",
+        length(kout.reshist),
+        " iterations",
+        "  ",
+        winner,
+    ))
 end
