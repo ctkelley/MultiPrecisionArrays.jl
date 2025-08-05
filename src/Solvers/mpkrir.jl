@@ -158,8 +158,7 @@ function mpkrir(
         # If TR > TW, then rs = TW.(r) and I use that as the rhs
         # for the working precision solve.
         #
-        kout =
-            IRKsolve!(AF, r, rs, rnrm; itc = itc, verbose = verbose, MP_Data = MP_Data)
+        kout = IRKsolve!(AF, r, rs, rnrm; itc = itc, verbose = verbose, MP_Data = MP_Data)
         r .= TR.(kout.sol)*rnrm
         #
         # Manage the results and keep the books
@@ -181,9 +180,7 @@ function mpkrir(
         d .*= rnrm
         x .+= d
         xloop .= TR.(x)
-        mul!(r, AF.AH, xloop)
-        r .*= -onetb
-        axpy!(1.0, bsc, r)
+        r = Resid_IR(r, xloop, bsc, TR, AF)
         rnrmx = rnrm
         rnrm = norm(r, normtype)
         itc += 1

@@ -204,7 +204,7 @@ function mpgeslir(
         # If TR > TW, then rs = TW.(r) and I use that as the rhs
         # for the working precision solve.
         #
-        rloop .= IRTriangle!(AF, rloop, rs, rnrm)
+        rloop = IRTriangle!(AF, rloop, rs, rnrm)
         #
         # Update the solution and residual
         #
@@ -213,19 +213,12 @@ function mpgeslir(
         drat=dnorm/dnormold
         dnormold=dnorm
         # High precision residual? Use ||d|| in termination.
-        etest = (eps(TR) < eps(TW)) && (drat < Rmax) || (itc==0)
-        x .+= rloop
+        etest = ((eps(TR) < eps(TW)) && (drat < Rmax)) || (itc==0)
+        x .+= TW.(rloop)
+        #        x .+= rs
         xloop .= TR.(x)
-        #
-        mul!(rloop, AF.AH, xloop)
-        #
-        # After mul! the residual is overwritten with Ax
-        #
-        rloop .*= -oneb
-        axpy!(oneb, bsc, rloop)
-        #
-        # and now the residual is b-Ax like it needs to be
-        #
+        # residual update
+        rloop = Resid_IR(rloop, xloop, bsc, TR, AF)
         rnrmx = rnrm
         rnrm = norm(rloop, normtype)
         itc += 1

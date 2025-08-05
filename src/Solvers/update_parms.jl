@@ -17,9 +17,9 @@ is not working for you.
 I start with the default values, so
 unless you specify otherwise, any parameter will take its default value.
 
-We store the parameters in a mutable structure TERM
+We store the parameters in a struct TERM
 ```
-mutable struct TERM
+struct TERM
        Cr::Real
        Ce::Real
        Rmax::Real

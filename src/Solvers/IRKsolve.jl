@@ -51,10 +51,10 @@ function IRKsolve!(
     #
     # Undo the scaling
     #
-#    r .= TR.(kout.sol)
-#    r .*= rnrm
+    #    r .= TR.(kout.sol)
+    #    r .*= rnrm
     irk_msg(itc, kout, ktype, verbose)
-#    return (r, kout)
+    #    return (r, kout)
     return kout
 end
 
