@@ -114,7 +114,8 @@ function mpkrir(
     krylov_ok || error("$ktype is not supported")
     #
     normtype = Inf
-    (TW, TF, TR, TFact) = Types_IR_Init(AF, b, normtype)
+    # Harvest the types of everyhting
+    (TW, TF, TR, TFact) = Types_IR_Init(AF, b)
     # 
     # Initialize the iteration. I initialize to zero. That makes the
     # iteration count the same as the high precision matvec and the
@@ -133,32 +134,35 @@ function mpkrir(
     # AD = AF.AH
     bsc = TR.(b)
     #
-    # Initialize Krylov-IR
+    # Generic IR init
     #
     rhist = Vector{TR}()
     dhist = Vector{TW}()
-    onetb = TR(1.0)
-    khist = Vector{Int64}()
     push!(rhist, rnrm)
-    #
-    # Krylov-IR loop
-    #
-    itc = 0
-    #    atvd = copy(r)
-    atvd = copy(x)
+    tol = tolf * (bnrm + anrm * xnrm)
     xloop=copy(r)
+    itc = 0
+    #
+    # Initialize Krylov-IR
+    #
+    khist = Vector{Int64}()
+    atvd = copy(x)
     x0 = zeros(TW, size(b))
     eta = tolf
     MP_Data = (MPF = AF, atv = atvd, x0 = x0, ktype = ktype, eta = eta)
-    tol = tolf * (bnrm + anrm * xnrm)
+    # 
     dnormold=1.0
     etest=true
+    #
+    # Krylov-IR loop
+    #
     while (rnrm > tol) && (rnrm <= Rmax * rnrmx) && (itc < litmax) || etest
         #
         # If TR > TW, then rs = TW.(r) and I use that as the rhs
         # for the working precision solve.
         #
-        kout = IRKsolve!(AF, r, rs, rnrm; itc = itc, verbose = verbose, MP_Data = MP_Data)
+        kout = IRKsolve!(AF, r, rs, 
+             rnrm; itc = itc, verbose = verbose, MP_Data = MP_Data)
         r .= TR.(kout.sol)*rnrm
         #
         # Manage the results and keep the books
@@ -185,14 +189,18 @@ function mpkrir(
         rnrm = norm(r, normtype)
         itc += 1
         push!(rhist, rnrm)
-        mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol")
+        xnrm = norm(x, normtype)
+        tol = tolf * (bnrm + anrm * xnrm)
+        #
+        # Debugging? Report iteration data
+        #
+        ir_debug_msg(mpdebug, itc, tol, rnrm, rnrmx)
         #
         # If the residual norm increased, complain.
         #
-        complain_resid = mpdebug && (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
-        complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
-        xnrm = norm(x, normtype)
-        tol = tolf * (bnrm + anrm * xnrm)
+#        mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol")
+#        complain_resid = mpdebug && (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
+#        complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
     end
     verbose && println("Residual history = $rhist")
     if reporting

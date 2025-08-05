@@ -155,7 +155,7 @@ function mpgeslir(
     mpdebug = false
     #    N = length(b)
     normtype = Inf
-    (TW, TF, TR, TFact) = Types_IR_Init(AF, b, normtype)
+    (TW, TF, TR, TFact) = Types_IR_Init(AF, b)
     #
     # Initialize the iteration. I initialize to zero. That makes the
     # iteration count the same as the high precision matvec and the 
@@ -164,7 +164,6 @@ function mpgeslir(
     (x, r, rs, xnrm, bnrm, anrm) = Solver_IR_Init(AF, b, normtype)
     rnrm = bnrm
     rnrmx = rnrm * 1.e6
-    itc = 0
     #
     #  get the termination data 
     #
@@ -178,25 +177,26 @@ function mpgeslir(
     #
     # Showtime!
     #
-    # AD = AF.AH
     bsc = TR.(b)
     #
-    #   Keep the books. 
+    #   Generic IR init
     #  
     rhist = Vector{TR}()
     dhist = Vector{TW}()
-    oneb = TR(1.0)
+    push!(rhist, rnrm)
+    tol=(anrm * xnrm + bnrm) * tolf
+    xloop = copy(r)
+    itc = 0
     #
     # Put initial residual norm into the history and iterate.
     #
-    push!(rhist, rnrm)
     # Store r and x in the residual precision if TR is not TW
     (TR == TW) ? rloop = r : rloop = TR.(r)
-    (TR == TW) ? xloop = x : xloop = TR.(x)
-    # Solve loop
-    tol=(anrm * xnrm + bnrm) * tolf
     dnormold=1.0
     etest=true
+    #
+    # Solve loop
+    #
     while (rnrm > tol) && (rnrm <= Rmax*rnrmx) && (itc < litmax) || etest
         #
         # Use the low-precision factorization
@@ -245,8 +245,8 @@ function ir_vmsg(TW, TF, TFact, TR, verbose)
     )
 end
 
-function ir_debug_msg(mpdebug, itc, tol, rnrm, rnrmx)
-    mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol")
-    complain_resid = mpdebug && (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
-    complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
-end
+#function ir_debug_msg(mpdebug, itc, tol, rnrm, rnrmx)
+#    mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol")
+#    complain_resid = mpdebug && (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
+#    complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
+#end

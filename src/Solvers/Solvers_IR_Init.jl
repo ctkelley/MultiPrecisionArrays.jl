@@ -1,4 +1,4 @@
-function Types_IR_Init(AF, b, normtype = Inf)
+function Types_IR_Init(AF, b)
     TB=eltype(b)
     TF=eltype(AF.AF)
     TW=eltype(AF.AH)
@@ -28,11 +28,15 @@ function Solver_IR_Init(AF, b, normtype)
     HiRes = (eps(TR) < eps(TW))
     HiRes && (onthefly = true)
     anrm = AF.anrm
-    onthefly ? (rs = ones(TF, 1)) : (rs = zeros(TF, size(b)))
     #
-    # If TR > TW then do the solve in TW after computing r in TR
+    # rs goes into the triangular solve to compute the correction
+    # So if TW==TR and onthefly=true, you can use rs = r
+    # If TW==TR and onthefly=false, then rs = TF.(r)
+    # If TR > TW then rs = TW.(r) 
     #
-    (TR == TW) || (rs = zeros(TW, size(b)))
+    rs = r
+    (TR == TW) || (rs = TW.(r))
+    onthefly || (rs = TF.(r))
     return (x, r, rs, xnrm, bnrm, anrm)
 end
 
