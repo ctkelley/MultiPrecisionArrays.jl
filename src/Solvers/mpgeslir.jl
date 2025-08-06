@@ -161,37 +161,20 @@ function mpgeslir(
     # iteration count the same as the high precision matvec and the 
     # triangular solves
     #
-    (x, r, rs, xnrm, bnrm, anrm) = Solver_IR_Init(AF, b, normtype)
+    (x, r, rs, bnrm, anrm, rhist, dhist) = Solver_IR_Init(AF, b, normtype)
     rnrm = bnrm
     rnrmx = rnrm * 1.e6
-    #
-    #  get the termination data 
-    #
-    tolf = termination_settings(AF, term_parms)
-    Rmax = term_parms.Rmax
-    litmax = term_parms.litmax
+    (tolf, Rmax, litmax, tol) = Term_Init(AF, term_parms, bnrm)
+    # Copy x to the residual precision if TR is not TW
+    (TR == TW) ? xloop=x : xloop = copy(r)
     #
     # Tell 'em more than they need to know. 
     #   
     ir_vmsg(TW, TF, TFact, TR, verbose)
     #
-    # Showtime!
-    #
-    bsc = TR.(b)
-    #
-    #   Generic IR init
-    #  
-    rhist = Vector{TR}()
-    dhist = Vector{TW}()
-    push!(rhist, rnrm)
-    tol=(anrm * xnrm + bnrm) * tolf
-    xloop = copy(r)
-    itc = 0
-    #
     # Put initial residual norm into the history and iterate.
     #
-    # Store r and x in the residual precision if TR is not TW
-    (TR == TW) ? rloop = r : rloop = TR.(r)
+    itc = 0
     dnormold=1.0
     etest=true
     #
@@ -204,33 +187,34 @@ function mpgeslir(
         # If TR > TW, then rs = TW.(r) and I use that as the rhs
         # for the working precision solve.
         #
-        rloop = IRTriangle!(AF, rloop, rs, rnrm)
+        r = IRTriangle!(AF, r, rs, rnrm)
         #
         # Update the solution and residual
         #
-        dnorm = norm(rloop, normtype)
+        dnorm = norm(r, normtype)
         push!(dhist, dnorm)
         drat=dnorm/dnormold
         dnormold=dnorm
         # High precision residual? Use ||d|| in termination.
         etest = ((eps(TR) < eps(TW)) && (drat < Rmax)) || (itc==0)
-        x .+= TW.(rloop)
-        #        x .+= rs
-        xloop .= TR.(x)
+        # Correction = TW.(r)
+        x .+= TW.(r)
+        xnrm = norm(x, normtype)
+        #
         # residual update
-        rloop = Resid_IR(rloop, xloop, bsc, TR, AF)
+        (TR == TW) ? xloop=x : xloop .= TR.(x)
+        r = Resid_IR(r, xloop, b, AF)
         rnrmx = rnrm
-        rnrm = norm(rloop, normtype)
+        rnrm = norm(r, normtype)
         itc += 1
         push!(rhist, rnrm)
-        xnrm = norm(xloop, normtype)
+        xnrm = norm(x, normtype)
         tol = tolf * (anrm * xnrm + bnrm)
         #
         # Debugging? Report iteration data
         #
         ir_debug_msg(mpdebug, itc, tol, rnrm, rnrmx)
     end
-    #    x = xloop
     verbose && println("Residual history = $rhist")
     if reporting
         return (rhist = rhist, dhist = dhist, sol = x, TW = TW, TF = TF, TFact = TFact)
@@ -238,15 +222,3 @@ function mpgeslir(
         return x
     end
 end
-
-function ir_vmsg(TW, TF, TFact, TR, verbose)
-    verbose && println(
-        "High precision = $TW, Low precision = $TF, Factorization storage precision = $TFact, Residual precision = $TR",
-    )
-end
-
-#function ir_debug_msg(mpdebug, itc, tol, rnrm, rnrmx)
-#    mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol")
-#    complain_resid = mpdebug && (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
-#    complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
-#end

@@ -14,6 +14,21 @@ function Types_IR_Init(AF, b)
     return (TW, TF, TR, TFact)
 end
 
+function Term_Init(AF, term_parms, bnrm)
+    #   
+    #  get the termination data
+    #   
+    TR = eltype(AF.residual)
+    TW = eltype(bnrm)
+    tolf = termination_settings(AF, term_parms)
+    Rmax = term_parms.Rmax
+    litmax = term_parms.litmax
+    # norm(x) = 0 on initialization
+    tol = tolf * bnrm
+    return (tolf, Rmax, litmax, tol)
+end
+
+
 function Solver_IR_Init(AF, b, normtype)
     r = AF.residual
     TR=eltype(r)
@@ -37,7 +52,10 @@ function Solver_IR_Init(AF, b, normtype)
     rs = r
     (TR == TW) || (rs = TW.(r))
     onthefly || (rs = TF.(r))
-    return (x, r, rs, xnrm, bnrm, anrm)
+    rhist = Vector{TR}()
+    dhist = Vector{TW}()
+    push!(rhist, bnrm)
+    return (x, r, rs, bnrm, anrm, rhist, dhist)
 end
 
 

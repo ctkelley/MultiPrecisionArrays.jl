@@ -121,38 +121,30 @@ function mpkrir(
     # iteration count the same as the high precision matvec and the
     # solves for the defect
     #
-    (x, r, rs, xnrm, bnrm, anrm) = Solver_IR_Init(AF, b, normtype)
+    (x, r, rs, bnrm, anrm, rhist, dhist) = Solver_IR_Init(AF, b, normtype)
     rnrm = bnrm
     rnrmx = rnrm * 1.e6
-    itc = 0
     #
     #  get the termination data
     #
-    tolf = termination_settings(AF, term_parms)
-    Rmax = term_parms.Rmax
-    litmax = term_parms.litmax
-    # AD = AF.AH
-    bsc = TR.(b)
-    #
-    # Generic IR init
-    #
-    rhist = Vector{TR}()
-    dhist = Vector{TW}()
-    push!(rhist, rnrm)
-    tol = tolf * (bnrm + anrm * xnrm)
-    xloop=copy(r)
-    itc = 0
+    (tolf, Rmax, litmax, tol) = Term_Init(AF, term_parms, bnrm)
+    #   
+    # Tell 'em more than they need to know. 
+    #  
+    ir_vmsg(TW, TF, TFact, TR, verbose)
+    # Copy x to the residual precision if TR is not TW
+    (TR == TW) ? xloop=x : xloop = copy(r)
     #
     # Initialize Krylov-IR
     #
     khist = Vector{Int64}()
     atvd = copy(x)
     x0 = zeros(TW, size(b))
-    eta = tolf
-    MP_Data = (MPF = AF, atv = atvd, x0 = x0, ktype = ktype, eta = eta)
+    MP_Data = (MPF = AF, atv = atvd, x0 = x0, ktype = ktype, eta = tolf)
     # 
     dnormold=1.0
     etest=true
+    itc = 0
     #
     # Krylov-IR loop
     #
@@ -161,8 +153,7 @@ function mpkrir(
         # If TR > TW, then rs = TW.(r) and I use that as the rhs
         # for the working precision solve.
         #
-        kout = IRKsolve!(AF, r, rs, 
-             rnrm; itc = itc, verbose = verbose, MP_Data = MP_Data)
+        kout = IRKsolve!(AF, r, rs, rnrm; itc = itc, verbose = verbose, MP_Data = MP_Data)
         r .= TR.(kout.sol)*rnrm
         #
         # Manage the results and keep the books
@@ -183,13 +174,13 @@ function mpkrir(
         d=kout.sol
         d .*= rnrm
         x .+= d
-        xloop .= TR.(x)
-        r = Resid_IR(r, xloop, bsc, TR, AF)
+        xnrm = norm(x, normtype)
+        (TR == TW) ? xloop=x : xloop .= TR.(x)
+        r = Resid_IR(r, xloop, b, AF)
         rnrmx = rnrm
         rnrm = norm(r, normtype)
         itc += 1
         push!(rhist, rnrm)
-        xnrm = norm(x, normtype)
         tol = tolf * (bnrm + anrm * xnrm)
         #
         # Debugging? Report iteration data
@@ -198,9 +189,9 @@ function mpkrir(
         #
         # If the residual norm increased, complain.
         #
-#        mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol")
-#        complain_resid = mpdebug && (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
-#        complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
+        #        mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol")
+        #        complain_resid = mpdebug && (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
+        #        complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
     end
     verbose && println("Residual history = $rhist")
     if reporting
