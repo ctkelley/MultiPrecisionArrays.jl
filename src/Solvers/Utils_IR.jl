@@ -1,3 +1,19 @@
+#
+# closeout gathers the data for output if reporting=true
+#
+function closeout(AF::MPFact, rhist, dhist, x, TW, TF, verbose)
+    verbose && println("Residual history = $rhist")
+    return (rhist = rhist, dhist = dhist, sol = x, TW = TW, TF = TF)
+end
+#
+function closeout(AF::MPKFact, rhist, dhist, khist, x, TW, TF, verbose)
+    verbose && println("Residual history = $rhist")
+    return (rhist = rhist, dhist = dhist, khist = khist, sol = x, TW = TW, TF = TF)
+end
+#
+# These functions print various messages if
+# verbose or mpdebug are set to true.
+#
 function ir_debug_msg(mpdebug, itc, tol, rnrm, rnrmx)
     mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol")
     complain_resid = mpdebug && (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)

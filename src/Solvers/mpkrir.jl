@@ -133,7 +133,7 @@ function mpkrir(
     #  
     ir_vmsg(TW, TF, TFact, TR, verbose)
     # Copy x to the residual precision if TR is not TW
-#    (TR == TW) ? xres=x : xres = copy(r)
+    #    (TR == TW) ? xres=x : xres = copy(r)
     #
     # Initialize Krylov-IR
     #
@@ -186,16 +186,10 @@ function mpkrir(
         #
         ir_debug_msg(mpdebug, itc, tol, rnrm, rnrmx)
         #
-        # If the residual norm increased, complain.
-        #
-        #        mpdebug && println("Iteration $itc: rnorm = $rnrm, tol = $tol")
-        #        complain_resid = mpdebug && (rnrm >= rnrmx) && (rnrm > 1.e3 * tol)
-        #        complain_resid && println("IR Norm increased: $rnrm, $rnrmx, $tol")
     end
-    verbose && println("Residual history = $rhist")
+    outdat=closeout(AF, rhist, dhist, khist, x, TW, TF, verbose)
     if reporting
-        #        TF = eltype(AF.AL); TW = eltype(AF.AH);
-        return (rhist = rhist, dhist = dhist, khist = khist, sol = x, TW = TW, TF = TF)
+        return outdat
     else
         return x
     end

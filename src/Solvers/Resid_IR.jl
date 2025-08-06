@@ -13,10 +13,10 @@ function Resid_IR(r, x, xres, b, AF)
     TW = eltype(b)
     #
     if TR==TW
-    mul!(r, AF.AH, x)
+        mul!(r, AF.AH, x)
     else
-    xres .= TR.(x)
-    mul!(r, AF.AH, xres)
+        xres .= TR.(x)
+        mul!(r, AF.AH, xres)
     end
     #
     # After mul! the residual is overwritten with Ax 

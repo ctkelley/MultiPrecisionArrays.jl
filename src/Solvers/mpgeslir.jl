@@ -212,9 +212,9 @@ function mpgeslir(
         #
         ir_debug_msg(mpdebug, itc, tol, rnrm, rnrmx)
     end
-    verbose && println("Residual history = $rhist")
+    outdat = closeout(AF, rhist, dhist, x, TW, TF, verbose)
     if reporting
-        return (rhist = rhist, dhist = dhist, sol = x, TW = TW, TF = TF, TFact = TFact)
+        return outdat
     else
         return x
     end
