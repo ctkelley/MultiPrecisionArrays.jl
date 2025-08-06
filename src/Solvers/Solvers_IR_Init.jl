@@ -42,7 +42,6 @@ function Solver_IR_Init(AF, b, normtype)
     onthefly = AF.onthefly
     HiRes = (eps(TR) < eps(TW))
     HiRes && (onthefly = true)
-    anrm = AF.anrm
     #
     # rs goes into the triangular solve to compute the correction
     # So if TW==TR and onthefly=true, you can use rs = r
@@ -55,7 +54,10 @@ function Solver_IR_Init(AF, b, normtype)
     rhist = Vector{TR}()
     dhist = Vector{TW}()
     push!(rhist, bnrm)
-    return (x, r, rs, bnrm, anrm, rhist, dhist)
+    # Copy x to xres in the residual precision if TR is not TW
+    # No need to allocate room for the copy if TR = TW
+    (TR == TW) ? xres=[] : xres = copy(r)
+    return (x, xres, r, rs, bnrm, rhist, dhist)
 end
 
 

@@ -3,14 +3,21 @@
 Residual computation for MultiPrecisionArrays. AF is the multiprecision
 factorization. 
 
-rloop and xloop are the residual vector and TR.(current iteration). 
+xres is TR.(current iteration). I only allocate storage for this
+if TR > TW
 
-bsc = TR.(b), oneb = TR.(1.0)
+oneb = TR.(1.0)
 """
-function Resid_IR(r, xloop, bsc, AF)
+function Resid_IR(r, x, xres, b, AF)
     TR = eltype(r)
+    TW = eltype(b)
     #
-    mul!(r, AF.AH, xloop)
+    if TR==TW
+    mul!(r, AF.AH, x)
+    else
+    xres .= TR.(x)
+    mul!(r, AF.AH, xres)
+    end
     #
     # After mul! the residual is overwritten with Ax 
     #
@@ -18,7 +25,7 @@ function Resid_IR(r, xloop, bsc, AF)
     r .*= -oneb
     #
     # Now r = - Ax 
-    axpy!(oneb, bsc, r)
+    axpy!(oneb, b, r)
     # and now the residual is b-Ax like it needs to be
     #
     return r

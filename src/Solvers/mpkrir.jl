@@ -121,7 +121,7 @@ function mpkrir(
     # iteration count the same as the high precision matvec and the
     # solves for the defect
     #
-    (x, r, rs, bnrm, anrm, rhist, dhist) = Solver_IR_Init(AF, b, normtype)
+    (x, xres, r, rs, bnrm, rhist, dhist) = Solver_IR_Init(AF, b, normtype)
     rnrm = bnrm
     rnrmx = rnrm * 1.e6
     #
@@ -133,7 +133,7 @@ function mpkrir(
     #  
     ir_vmsg(TW, TF, TFact, TR, verbose)
     # Copy x to the residual precision if TR is not TW
-    (TR == TW) ? xloop=x : xloop = copy(r)
+#    (TR == TW) ? xres=x : xres = copy(r)
     #
     # Initialize Krylov-IR
     #
@@ -168,20 +168,19 @@ function mpkrir(
         etest = (eps(TR) < eps(TW)) && (drat < Rmax) || (itc==0)
         #
         # Update the solution and residual
-        # xloop is in the residual precision to get a
+        # xres is in the residual precision to get a
         # high precision residual.
         #
         d=kout.sol
         d .*= rnrm
         x .+= d
         xnrm = norm(x, normtype)
-        (TR == TW) ? xloop=x : xloop .= TR.(x)
-        r = Resid_IR(r, xloop, b, AF)
+        r = Resid_IR(r, x, xres, b, AF)
         rnrmx = rnrm
         rnrm = norm(r, normtype)
         itc += 1
         push!(rhist, rnrm)
-        tol = tolf * (bnrm + anrm * xnrm)
+        tol = tolf * (bnrm + AF.anrm * xnrm)
         #
         # Debugging? Report iteration data
         #

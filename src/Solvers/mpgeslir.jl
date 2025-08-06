@@ -161,18 +161,16 @@ function mpgeslir(
     # iteration count the same as the high precision matvec and the 
     # triangular solves
     #
-    (x, r, rs, bnrm, anrm, rhist, dhist) = Solver_IR_Init(AF, b, normtype)
+    (x, xres, r, rs, bnrm, rhist, dhist) = Solver_IR_Init(AF, b, normtype)
     rnrm = bnrm
     rnrmx = rnrm * 1.e6
     (tolf, Rmax, litmax, tol) = Term_Init(AF, term_parms, bnrm)
-    # Copy x to the residual precision if TR is not TW
-    (TR == TW) ? xloop=x : xloop = copy(r)
     #
     # Tell 'em more than they need to know. 
     #   
     ir_vmsg(TW, TF, TFact, TR, verbose)
     #
-    # Put initial residual norm into the history and iterate.
+    # Set up the iteration and go.
     #
     itc = 0
     dnormold=1.0
@@ -202,14 +200,13 @@ function mpgeslir(
         xnrm = norm(x, normtype)
         #
         # residual update
-        (TR == TW) ? xloop=x : xloop .= TR.(x)
-        r = Resid_IR(r, xloop, b, AF)
+        r = Resid_IR(r, x, xres, b, AF)
         rnrmx = rnrm
         rnrm = norm(r, normtype)
         itc += 1
         push!(rhist, rnrm)
         xnrm = norm(x, normtype)
-        tol = tolf * (anrm * xnrm + bnrm)
+        tol = tolf * (AF.anrm * xnrm + bnrm)
         #
         # Debugging? Report iteration data
         #
