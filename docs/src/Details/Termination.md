@@ -38,12 +38,12 @@ also terminate the iteration if
 even if the small residual condition is not satisfied. You can also 
 limit the number of IR iterations to manage stagnation. 
 Higham [higham97]@cite recomments a limit of ```litmax = 5```. Our default
-is ```litmax = 10``, which I may change at any time.
+is ```litmax = 10```, which I may change at any time.
 
 If ```TR > TW``` then I assume you are trying to address extreme
 ill-coditioning. In that case I terminate when the norm of the
 correction seems to stagnate. 
-```
+```math
 \| d_{new} \| \ge R_{max} \| d_{old} \|
 ```
 This approach may take one more iteration than the one
