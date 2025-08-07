@@ -184,7 +184,7 @@ function mpkrir(
         #
         # Debugging? Report iteration data
         #
-        ir_debug_msg(mpdebug, itc, tol, rnrm, rnrmx)
+        ir_debug_msg(mpdebug, itc, tol, rnrm, rnrmx, dnorm, drat)
         #
     end
     outdat=closeout(AF, rhist, dhist, khist, x, TW, TF, verbose)

@@ -182,8 +182,9 @@ function mpgeslir(
         #
         # Use the low-precision factorization
         # The residual is overwritten with the correction here.
-        # If TR > TW, then rs = TW.(r) and I use that as the rhs
-        # for the working precision solve.
+        # If TR > TW, then rs = TS.(r) and I use that as the rhs
+        # for the working precision solve. Here TS=TW if onthefly=true
+        # and TS=TF if onthefly=false.
         #
         r = IRTriangle!(AF, r, rs, rnrm)
         #
@@ -210,7 +211,7 @@ function mpgeslir(
         #
         # Debugging? Report iteration data
         #
-        ir_debug_msg(mpdebug, itc, tol, rnrm, rnrmx)
+        ir_debug_msg(mpdebug, itc, tol, rnrm, rnrmx, dnorm, drat)
     end
     outdat = closeout(AF, rhist, dhist, x, TW, TF, verbose)
     if reporting
