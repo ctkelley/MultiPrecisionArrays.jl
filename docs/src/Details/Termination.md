@@ -43,7 +43,6 @@ is ```litmax = 10```, which I may change at any time.
 If ```TR > TW``` then I assume you are trying to address extreme
 ill-conditioning. In that case I terminate when the norm of the
 correction seems to stagnate. 
-
 ```math
 \| d_{new} \| \ge R_{max} \| d_{old} \|
 ```
