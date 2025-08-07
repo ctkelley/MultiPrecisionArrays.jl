@@ -8,7 +8,7 @@
 <!--- [![MultiPrecisionArrays Downloads](https://shields.io/endpoint?url=https://pkgs.genieframework.com/api/v1/badge/MultiPrecisionArrays)](https://pkgs.genieframework.com?packages=MultiPrecisionArrays) --->
 
 
-# MultiPrecisionArrays.jl v0.1.4
+# MultiPrecisionArrays.jl v0.1.5
   
 ## [C. T. Kelley](https://ctk.math.ncsu.edu)
 
@@ -35,11 +35,7 @@ __The half precision LU for Float16 in this package is much faster (more than 10
 
 ## What's new?
 
-- v0.1.3: Still better docs and ..
-   - Fixing a performance bug.
-   - Add options to termination criterion. __Change default back to small residuals.__
-   - v0.1.3 is the version for the [__JOSS paper__](https://joss.theoj.org/papers/10.21105/joss.06698). I gave that version the v0.1.3-joss tag.
- - v0.1.4: Continuous improvement for the docs and ...
+ - v0.1.4 (current version): Continuous improvement for the docs and ...
     - Enable fine control of termination criteria parameters, but I discourage messing with this.
     - Document the results of the bullet above + why I use the factorization precision to compute || A ||_1 if I use the normwise backward error in the termination criterion.
     - Putting the norm of the correction in the iteration stats.
@@ -72,8 +68,8 @@ Since log(version number) < 0, you can expect changes in API, internal structure
 
 - This README file
 - The [docs for the package](https://ctkelley.github.io/MultiPrecisionArrays.jl/dev)
-- [The ArXiv paper for v0.1.3](https://arxiv.org/pdf/2311.14616.pdf)
-- [The working paper for v0.1.4](https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/main/Publications_and_Presentations/MPArray.pdf) 
+- [The ArXiv paper for v0.1.4](https://arxiv.org/pdf/2311.14616.pdf)
+- [The working paper for v0.1.5](https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/main/Publications_and_Presentations/MPArray.pdf) 
 - [The JOSS paper](https://joss.theoj.org/papers/10.21105/joss.06698)
 ## Readme Contents:
 
