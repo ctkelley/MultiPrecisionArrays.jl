@@ -41,11 +41,13 @@ Higham [higham97]@cite recomments a limit of ```litmax = 5```. Our default
 is ```litmax = 10```, which I may change at any time.
 
 If ```TR > TW``` then I assume you are trying to address extreme
-ill-coditioning. In that case I terminate when the norm of the
+ill-conditioning. In that case I terminate when the norm of the
 correction seems to stagnate. 
+
 ```math
 \| d_{new} \| \ge R_{max} \| d_{old} \|
 ```
+
 This approach may take one more iteration than the one
 recommended in [demmelir](@cite) but is simpler and will 
 get you to the theoretical error bould of working precision if
