@@ -44,7 +44,7 @@ __The half precision LU for Float16 in this package is much faster (more than 10
        - Of course, this tiny change means that the docs and tests need more changes than I planned for
        - At least 0.1.4 will not break things.
  - v0.1.5 (this repo): Much better docs, and ...
-    - Continue major refactoring with the factorizations
+    - Continue major refactoring
     - I will start experimenting with __Polyester.jl__ again. It works great on v1.1.12 and crashes on 1.1.13.
     - QR and linear least squares
       
