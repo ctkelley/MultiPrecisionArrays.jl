@@ -1,6 +1,6 @@
 name = "MultiPrecisionArrays"
 uuid = "e0585029-f0fd-471c-997a-b805c9f71f28"
-version = "0.1.4"
+version = "0.1.5"
 authors = ["C. T. (Tim) Kelley <tim_kelley@ncsu.edu>"]
 
 [deps]

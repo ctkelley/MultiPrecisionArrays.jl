@@ -1,4 +1,4 @@
-# multiprecisionarrays.jl v0.1.4
+# multiprecisionarrays.jl v0.1.5
 
 [C. T. Kelley](https://ctkelley.github.io)
 
