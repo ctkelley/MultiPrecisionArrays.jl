@@ -23,55 +23,16 @@ function nlhtest(n = 32, c = 0.999)
     x0 = ones(n)
     tol = 1.e-14
     hdata = heqinit(x0, c)
-    nout = nsol(
-        heqf!,
-        x0,
-        FV,
-        JV,
-        heqJ!;
-        rtol = tol,
-        atol = tol,
-        pdata = hdata,
-        sham = 1,
-        jfact = lu!,
-    )
-    mpnout = nsol(
-        heqf!,
-        x0,
-        FV,
-        JVMP,
-        jheqmp!;
-        rtol = tol,
-        atol = tol,
-        pdata = hdata,
-        sham = 1,
-        jfact = mplu!,
-    )
-    mphnout = nsol(
-        heqf!,
-        x0,
-        FV,
-        JVMPH,
-        jheqmp!;
-        rtol = tol,
-        atol = tol,
-        pdata = hdata,
-        sham = 1,
-        jfact = mpglu!,
-    )
-    mpgnout = nsol(
-        heqf!,
-        x0,
-        FV,
-        JVMPG,
-        jheqmp!;
-        rtol = tol,
-        atol = tol,
-        pdata = hdata,
-        sham = 1,
-        jfact = mpglu!,
-    )
-
+    test_data=(FV = FV, x0 = x0, tol = tol, hdata = hdata)
+    # Normal Newton
+    nout = nsol_test(JV, heqJ!, lu!, test_data)
+    # MPLU Newton
+    mpnout = nsol_test(JVMP, jheqmp!, mplu!, test_data)
+    # IR-G Heavy Newton
+    mphnout = nsol_test(JVMPH, jheqmp!, mpglu!, test_data)
+    # IR-G Newton
+    mpgnout = nsol_test(JVMPG, jheqmp!, mpglu!, test_data)
+    #
     llu = length(nout.history)
     lmp = length(mpnout.history)
     lmph = length(mphnout.history)
@@ -86,73 +47,25 @@ function nlhtest16(n = 32, c = 1.0)
     FV = zeros(n)
     JV = zeros(Float32, n, n)
     JV16 = zeros(Float16, n, n)
-    JVMP = MPArray(JV; onthefly=false)
-    JVME = MPArray(JV; onthefly=true)
+    JVMP = MPArray(JV; onthefly = false)
+    JVME = MPArray(JV; onthefly = true)
     JVMPG = MPGArray(JV)
     JVMPH = MPHArray(JV)
     x0 = ones(n)
     tol = 1.e-8
     hdata = heqinit(x0, c)
-    nout = nsol(
-        heqf!,
-        x0,
-        FV,
-        JV,
-        heqJ!;
-        rtol = tol,
-        atol = tol,
-        pdata = hdata,
-        sham = 1,
-        jfact = lu!,
-    )
-    nout16 = nsol(
-        heqf!,
-        x0,
-        FV,
-        JV16,
-        heqJ!;
-        rtol = tol,
-        atol = tol,
-        pdata = hdata,
-        sham = 1,
-        jfact = lu!,
-    )
-    mpnout = nsol(
-        heqf!,
-        x0,
-        FV,
-        JVMP,
-        jheqmp!;
-        rtol = tol,
-        atol = tol,
-        pdata = hdata,
-        sham = 1,
-        jfact = mplu!,
-    )
-    mphnout = nsol(
-        heqf!,
-        x0,
-        FV,
-        JVMPH,
-        jheqmp!;
-        rtol = tol,
-        atol = tol,
-        pdata = hdata,
-        sham = 1,
-        jfact = mpglu!,
-    )
-    mpgmeout = nsol(
-        heqf!,
-        x0,
-        FV,
-        JVMPG,
-        jheqmp!;
-        rtol = tol,
-        atol = tol,
-        pdata = hdata,
-        sham = 1,
-        jfact = mpglu!,
-    )
+    test_data=(FV = FV, x0 = x0, tol = tol, hdata = hdata)
+    # Normal Newton
+    nout = nsol_test(JV, heqJ!, lu!, test_data)
+    # Normal Newton F16 Jacobian
+    nout16 = nsol_test(JV16, heqJ!, lu!, test_data)
+    # MP Newton
+    mpnout = nsol_test(JVMP, jheqmp!, mplu!, test_data)
+    # MPH Newton
+    mphnout = nsol_test(JVMPH, jheqmp!, mpglu!, test_data)
+    # MPG Newton
+    mpgmeout = nsol_test(JVMPG, jheqmp!, mpglu!, test_data)
+    #
     llu = length(nout.history)
     ll16 = length(nout16.history)
     lmp = length(mpnout.history)
@@ -161,6 +74,28 @@ function nlhtest16(n = 32, c = 1.0)
     halfpass = (ll16 == 21) && (llu == lmph) && (lmp > llu) && (lmpge == llu)
     return halfpass
 end
+
+function nsol_test(JStore, jeval!, lsol!, test_data)
+    FV=test_data.FV
+    x0=test_data.x0
+    tol=test_data.tol
+    hdata=test_data.hdata
+    test_out = nsol(
+        heqf!,
+        x0,
+        FV,
+        JStore,
+        jeval!;
+        rtol = tol,
+        atol = tol,
+        pdata = hdata,
+        sham = 1,
+        jfact = lsol!,
+    )
+    return test_out
+end
+
+
 
 
 function jheqmp!(JVMP, FV, x, hdata)
