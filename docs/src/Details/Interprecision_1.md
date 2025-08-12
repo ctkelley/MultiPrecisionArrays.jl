@@ -3,7 +3,7 @@
 This default way to use the low precision factorization is to 
 simply do
 ```
-d = norm(r) *TW.( AF\(r /norm(r)))
+d = TW.( AF\r )
 ```
 Since ```AF``` is stored in ```TF``` and the residual is stored in
 precision ```TR```, an interprecision transfer happens during the triangular
@@ -14,7 +14,7 @@ solve (MPS).
 Another way to do this is to downcase the residual before the solve. In
 this low precision solve (LPS) case have
 ```
-d = norm(r) *TW.( AF\ TF.(r /norm(r))))
+d = TW.( norm(r) AF\ TF.(r /norm(r)))
 ```
 
 LPS saves $N^2$ interprecision transfers and one might think that
