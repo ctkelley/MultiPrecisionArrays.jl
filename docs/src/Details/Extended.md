@@ -34,7 +34,7 @@ count could grow or shrink as I do that.
 
 The continuous problem is
 ```math
-u - \alpha G u = 1 - alpha x (1 - x)/2
+u - \alpha G u = 1 - alpha \times (1 - x)/2
 ```
 and the solution is $u \equiv 1$. 
 
