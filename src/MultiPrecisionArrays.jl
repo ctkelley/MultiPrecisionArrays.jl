@@ -168,11 +168,10 @@ export Types_IR_Init
 #
 # Each MPArray data structure comes with a structure to store a factorization.
 # The differences are whether one does on-the-fly interprecision transfers
-# of not. For plain IR with high=double and low=single, I think the answer 
-# is clear (NO) and you should use MPArray with onthefly = false 
-# (the default).
-# and MPLEFact. If low precision is half, it's not so clear and the 
-# documentation has an example to illustrate that.
+# of not. Our latest testing says that on-the-fly is generally the 
+# way to go and it is now the default.
+#
+# If TW=Float64 and TF=Float32, onthefly = false may work best sometimes.
 #
 # The factorization structures should be invisible to most people 
 # and I may stop exporting them. 

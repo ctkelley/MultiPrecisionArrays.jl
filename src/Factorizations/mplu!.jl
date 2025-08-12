@@ -20,8 +20,6 @@ before the solve and avoids N^2 interprecision transfers.
   factorization as a preconditioner in IR-GMRES or you're working in 
   Float16 and the matrix is very ill-conditioned. 
 
-  ```onthefly == nothing``` means you take the defaults.
-
 The kwarg ```residterm``` sets the termination criterion. 
 ```residterm == true``` (default) terminates the iteration on 
 small residuals.  ```residterm == false``` terminates the iteration on
@@ -94,7 +92,7 @@ end
 
 """
 mplu(A::AbstractArray{TW,2}; TF=nothing, TR=nothing, residterm=residtermdefault,
-                    onthefly=nothing) where TW <: Real
+                    onthefly=true) where TW <: Real
 
 Combines the constructor of the multiprecision array with the
 factorization. 
@@ -186,7 +184,7 @@ function mplu(
     TF = nothing,
     TR = nothing,
     residterm = residtermdefault,
-    onthefly = nothing,
+    onthefly = true,
 ) where {TW<:Real}
     #
     # If the high precision matrix is single, the low precision must be half
@@ -198,15 +196,6 @@ function mplu(
     TFdef = Float32
     (TW == Float32) && (TFdef = Float16)
     (TF == nothing) && (TF = TFdef)
-    #
-    # Unless you tell me otherwise, onthefly is true if low precision is half
-    # and false if low precision is single.
-    #
-    (onthefly == nothing) && (onthefly = (TF == Float16))
-    #
-    # IF TF = TW then something funny is happening with the residual precision.
-    #
-    (TF == TW) && (onthefly = true)
     #
     # Build the multiprecision array MPA
     #

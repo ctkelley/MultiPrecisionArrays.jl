@@ -1,5 +1,5 @@
 """
-MPArray(AH::AbstractArray{Float64,2}; TF = Float32, onthefly=false)
+MPArray(AH::AbstractArray{Float64,2}; TF = Float32, onthefly=true)
 Default constructor for MPArray. 
 
 C. T. Kelley 2024
@@ -22,12 +22,11 @@ function MPArray(
     AH::AbstractArray{Float64,2};
     TR = nothing,
     TF = Float32,
-    onthefly = nothing,
+    onthefly = true,
 )
     AL = TF.(AH)
     TH = eltype(AH)
-    # Default is interprecision on the fly if TF = Float32
-    (onthefly == nothing) && (onthefly = (TF == Float16))
+    # Default is interprecision on the fly 
     # If TR = nothing, that's a signal to set TR=TH
     (TR == nothing) ? TRR = TH : TRR = TR
     (m, n) = size(AH)
