@@ -13,7 +13,7 @@ to only MaxRow.
 
 The latest version of the original code now lives at 
 
-https://github.com/JuliaLang/LinearAlgebra.jl/blob/master/src/lu.jl
+https://github.com/JuliaLang/LinearAlgebra.jl
 
 All I did in the factorization
 was thread the critical loop with OhMyThreads:tforeach and
