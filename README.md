@@ -46,7 +46,6 @@ __The half precision LU for Float16 in this package is much faster (more than 10
  - v0.1.5 (this repo): Much better docs, and ...
     - Continue major refactoring
     - onthefly = true is now the default for all triangular solves. I explain this in the last section of [the working paper for v0.1.5](https://github.com/ctkelley/MultiPrecisionArrays.jl/blob/main/Publications_and_Presentations/MPArray.pdf).
-    - I will start experimenting with __Polyester.jl__ again. It works great on v1.1.12 and will not compile on 1.1.13.
     - QR and linear least squares
       
 ##  Can I complain about this package?
