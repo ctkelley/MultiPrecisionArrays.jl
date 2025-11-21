@@ -17,10 +17,11 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          - '1.10' # LTS
-          - '1'   # Current stable release
-          - '~1.13.0-0'
-          - 'nightly'
+#          - '1.10' # LTS
+#          - '1'   # Current stable release
+#          - '~1.13.0-0'
+          - '1.13.0-alpha1
+#          - 'nightly'
         os:
 #          - ubuntu-latest
           - macOS-latest
