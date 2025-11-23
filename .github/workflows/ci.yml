@@ -17,8 +17,8 @@ jobs:
       fail-fast: false
       matrix:
         version:
-#          - '1.10' # LTS
-#          - '1'   # Current stable release
+          - '1.10' # LTS
+          - '1'   # Current stable release
 #          - '~1.13.0-0'
           - 'nightly'
         os:
