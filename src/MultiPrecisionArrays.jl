@@ -11,6 +11,11 @@ using SIAMFANLEquations: kstore
 using OhMyThreads: tforeach, @tasks
 using Base.Threads: nthreads
 
+#Stub for the day when Metal is ready
+#if Sys.isapple()
+#println("apple")
+#end
+
 #
 # This is MultiPrecisionArrays.jl
 # The package has data structures and algorithms to manage several
