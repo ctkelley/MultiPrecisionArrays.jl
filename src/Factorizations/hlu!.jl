@@ -6,7 +6,7 @@ C. T. Kelley, 2023
 
 This function is a hack of generic_lufact! which is part of
 
-https://github.com/JuliaLang/julia/blob/master/stdlib/LinearAlgebra/src/lu.jl
+https://github.com/JuliaLang/LinearAlgebra.jl/blob/master/src/lu.jl
 
 I "fixed" the code to be Float16 only and fixed pivoting
 to only MaxRow.
