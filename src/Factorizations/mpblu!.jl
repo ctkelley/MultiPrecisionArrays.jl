@@ -98,11 +98,11 @@ julia> using MultiPrecisionArrays
 
 julia> using MultiPrecisionArrays.Examples
 
-julia> N=4096; alpha=799.0; AD = I - alpha*Gmat(N); A = Float32.(AD);
+julia> N = 4096; alpha = 799.0; AD = I - alpha * Gmat(N); A = Float32.(AD);
 
 # Try vanilla IR with TF=Float16
 
-julia> xe=ones(Float32,N); b=A*xe; AF=mplu(A);
+julia> xe = ones(Float32, N); b = A * xe; AF = mplu(A);
 
 julia> mout=\\(AF, b; reporting=true);
 
@@ -116,7 +116,7 @@ julia> mout.rhist
 
 # That does not look like convergence. What about TR=Float64?
 
-julia> BF=mplu(A; TR=Float64);
+julia> BF = mplu(A; TR = Float64);
 
 julia> mout2=\\(BF, b; reporting=true);
 
@@ -130,7 +130,7 @@ julia> mout2.rhist
 
 # This is where we were in the docs for ```mpglu```. I'll try IR-BiCGSTAB
 
-julia> GF=mpblu(A; TR=Float64);
+julia> GF = mpblu(A; TR = Float64);
 
 julia> mout3=\\(GF, b; reporting=true);
 

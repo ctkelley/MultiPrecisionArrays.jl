@@ -55,8 +55,8 @@ count could grow or shrink as I do that.
 julia> using MultiPrecisionArrays.Examples
 
 
-julia> N=4096; A = I - 800.0 * Gmat(N); b=ones(N);
-julia> MPF=mplu(A);
+julia> N = 4096; A = I - 800.0 * Gmat(N); b = ones(N);
+julia> MPF = mplu(A);
 
 julia> mout=\\(MPF, b; reporting=true);
 
