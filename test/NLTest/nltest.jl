@@ -21,9 +21,9 @@ function nlhtest(n = 32, c = 0.999)
     JVMPH = MPHArray(JV)
     JVMPG = MPGArray(JVD)
     x0 = ones(n)
-    tol = 1.e-14
+    tol = 1.0e-14
     hdata = heqinit(x0, c)
-    test_data=(FV = FV, x0 = x0, tol = tol, hdata = hdata)
+    test_data = (FV = FV, x0 = x0, tol = tol, hdata = hdata)
     # Normal Newton
     nout = nsol_test(JV, heqJ!, lu!, test_data)
     # MPLU Newton
@@ -37,7 +37,7 @@ function nlhtest(n = 32, c = 0.999)
     lmp = length(mpnout.history)
     lmph = length(mphnout.history)
     lmpg = length(mpgnout.history)
-    hpass = (llu == lmp) && (lmph == lmp) && (lmp == lmpg)
+    return hpass = (llu == lmp) && (lmph == lmp) && (lmp == lmpg)
 end
 
 #
@@ -52,9 +52,9 @@ function nlhtest16(n = 32, c = 1.0)
     JVMPG = MPGArray(JV)
     JVMPH = MPHArray(JV)
     x0 = ones(n)
-    tol = 1.e-8
+    tol = 1.0e-8
     hdata = heqinit(x0, c)
-    test_data=(FV = FV, x0 = x0, tol = tol, hdata = hdata)
+    test_data = (FV = FV, x0 = x0, tol = tol, hdata = hdata)
     # Normal Newton
     nout = nsol_test(JV, heqJ!, lu!, test_data)
     # Normal Newton F16 Jacobian
@@ -76,10 +76,10 @@ function nlhtest16(n = 32, c = 1.0)
 end
 
 function nsol_test(JStore, jeval!, lsol!, test_data)
-    FV=test_data.FV
-    x0=test_data.x0
-    tol=test_data.tol
-    hdata=test_data.hdata
+    FV = test_data.FV
+    x0 = test_data.x0
+    tol = test_data.tol
+    hdata = test_data.hdata
     test_out = nsol(
         heqf!,
         x0,
@@ -94,8 +94,6 @@ function nsol_test(JStore, jeval!, lsol!, test_data)
     )
     return test_out
 end
-
-
 
 
 function jheqmp!(JVMP, FV, x, hdata)

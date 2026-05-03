@@ -39,9 +39,9 @@ println("starting")
 
 @testset "Greens Functions" begin
     @test greensok()
-#
-# Using MPHArray for CI only. This may go soon.
-#
+    #
+    # Using MPHArray for CI only. This may go soon.
+    #
     @test greensHok()
     @test greensEvsH()
 end
@@ -61,9 +61,9 @@ end
     @test static_test()
     @test term_test()
     @test test_term_parms()
-#
-# Using MPHArray for CI only. This may go soon.
-#
+    #
+    # Using MPHArray for CI only. This may go soon.
+    #
     @test precision_testH()
 end
 
@@ -81,6 +81,6 @@ end
 end
 
 @testset "High Residual Precision" begin
-   @test hi_precision_res()
-   @test wilk_krylov()
+    @test hi_precision_res()
+    @test wilk_krylov()
 end

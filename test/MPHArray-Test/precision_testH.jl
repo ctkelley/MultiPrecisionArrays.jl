@@ -39,5 +39,5 @@ function precision_testH()
     doubleok = (doubleok && okh6416)
     #
     #
-    precisionokH = (singleok && doubleok)
+    return precisionokH = (singleok && doubleok)
 end
