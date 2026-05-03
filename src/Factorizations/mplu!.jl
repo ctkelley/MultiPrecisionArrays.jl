@@ -33,8 +33,8 @@ function mplu!(MPA::MPArray; residterm = residtermdefault)
     AH = MPA.AH
     AL = MPA.AL
     TF = eltype(AL)
-    (TF == Float16) ? AX=AH : AX=AL
-    residterm ? anrm=TF.(0.0) : anrm=opnorm(AX, 1)
+    (TF == Float16) ? AX = AH : AX = AL
+    residterm ? anrm = TF.(0.0) : anrm = opnorm(AX, 1)
     residual = MPA.residual
     sol = MPA.sol
     (TF == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
@@ -72,7 +72,7 @@ original array.
 If you want to use static arrays with this stuff, use the 
 mutable @MArray constructor
 """
-function mplu!(MPF::MPLFact, A::AbstractArray{TW,2}) where {TW}
+function mplu!(MPF::MPLFact, A::AbstractArray{TW, 2}) where {TW}
     TH = eltype(MPF.AH)
     (TH == TW) || error("Precision error in mplu!")
     AH = MPF.AH
@@ -83,11 +83,10 @@ function mplu!(MPF::MPLFact, A::AbstractArray{TW,2}) where {TW}
     (TF == Float16) ? AF = hlu!(AL) : AF = lu!(AL)
     MPF.AF.ipiv .= AF.ipiv
     residterm = MPF.residterm
-    anrm=TF.(0.0)
+    anrm = TF.(0.0)
     MPF = MPLFact(A, AL, AF, MPF.residual, MPF.sol, MPF.onthefly, residterm, anrm)
     return MPF
 end
-
 
 
 """
@@ -180,12 +179,12 @@ julia> norm(xd - mout.sol,Inf)
 
 """
 function mplu(
-    A::AbstractArray{TW,2};
-    TF = nothing,
-    TR = nothing,
-    residterm = residtermdefault,
-    onthefly = true,
-) where {TW<:Real}
+        A::AbstractArray{TW, 2};
+        TF = nothing,
+        TR = nothing,
+        residterm = residtermdefault,
+        onthefly = true,
+    ) where {TW <: Real}
     #
     # If the high precision matrix is single, the low precision must be half
     # unless you're planning on using a high-precision residual where TR > TW

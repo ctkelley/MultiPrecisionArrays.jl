@@ -29,11 +29,11 @@ function termination_settings(AF, term_parms)
     # norm of the correction, ie
     # || d_new || > Rmax || d_old ||
     #
-    # You can change the termination parameters with the function 
+    # You can change the termination parameters with the function
     # update_parms. I do not recommend that.
     #
-    Cr=term_parms.Cr
-    Ce=term_parms.Ce
+    Cr = term_parms.Cr
+    Ce = term_parms.Ce
     residterm = AF.residterm
     residterm ? tf = Cr : tf = Ce
     TW = eltype(AF.sol)

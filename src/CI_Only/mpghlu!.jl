@@ -20,7 +20,7 @@ function mpglu!(MPH::MPHArray; gmresok = true, basissize = 10, residterm = resid
     AStore .= TD.(AL)
     AF = LU(AStore, ALF.ipiv, ALF.info)
     anrm = TF(0.0)
-    if gmresok
+    return if gmresok
         VStore = zeros(TD, n, basissize)
         KStore = KIRstore(n, "gmres", TD)
         MPF = MPGHFact(AH, AL, AF, VStore, KStore, res, sol, true, residterm, anrm)
@@ -34,5 +34,5 @@ end
 # for CI.
 #
 function mphlu!(MPH::MPHArray)
-    MPF = mpglu!(MPH; gmresok = false, residterm = residtermdefault)
+    return MPF = mpglu!(MPH; gmresok = false, residterm = residtermdefault)
 end

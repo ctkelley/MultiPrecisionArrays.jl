@@ -19,8 +19,8 @@ function mpglu!(MPGA::MPGArray; residterm = residtermdefault)
     AL = MPGA.AL
     TF = eltype(AL)
     AH = MPGA.AH
-    (TF == Float16) ? AX=AH : AX=AL
-    residterm ? anrm=TF.(0.0) : anrm=opnorm(AX, 1)
+    (TF == Float16) ? AX = AH : AX = AL
+    residterm ? anrm = TF.(0.0) : anrm = opnorm(AX, 1)
     VStore = MPGA.VStore
     KStore = MPGA.KStore
     res = MPGA.residual
@@ -53,7 +53,7 @@ structure is immutable and MPF.AF.info cannot be changed.
 Reassigning MPG works and resuses almost all of the storage in the
 original array
 """
-function mpglu!(MPG::MPGEFact, A::AbstractArray{TW,2}) where {TW<:Real}
+function mpglu!(MPG::MPGEFact, A::AbstractArray{TW, 2}) where {TW <: Real}
     TF = eltype(MPG.AH)
     (TF == TW) || error("Precision error in mplu!")
     AH = MPG.AH
@@ -70,7 +70,6 @@ function mpglu!(MPG::MPGEFact, A::AbstractArray{TW,2}) where {TW<:Real}
     MPG = MPGEFact(AH, AL, AF, VStore, KStore, MPG.residual, MPG.sol, true, residterm, anrm)
     return MPG
 end
-
 
 
 """
@@ -176,12 +175,12 @@ julia> xp=Float64.(A)\\b; norm(xp-mout3.sol,Inf);
 ```
 """
 function mpglu(
-    A::AbstractArray{TW,2};
-    TF = Float32,
-    TR = nothing,
-    residterm = residtermdefault,
-    basissize = 10,
-) where {TW<:Real}
+        A::AbstractArray{TW, 2};
+        TF = Float32,
+        TR = nothing,
+        residterm = residtermdefault,
+        basissize = 10,
+    ) where {TW <: Real}
     (TW == Float32) ? TF = Float16 : TF = TF
     MPGA = MPGArray(A; basissize = basissize, TF = TF, TR = TR)
     MPGF = mpglu!(MPGA; residterm = residterm)

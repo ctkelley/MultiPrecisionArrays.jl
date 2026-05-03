@@ -14,8 +14,8 @@ function mpblu!(MPBA::MPBArray; residterm = residtermdefault)
     AL = MPBA.AL
     AH = MPBA.AH
     TF = eltype(AL)
-    (TF == Float16) ? AX=AH : AX=AL
-    residterm ? anrm=TF.(0.0) : anrm=opnorm(AX, 1)
+    (TF == Float16) ? AX = AH : AX = AL
+    residterm ? anrm = TF.(0.0) : anrm = opnorm(AX, 1)
     VStore = MPBA.VStore
     KStore = MPBA.KStore
     res = MPBA.residual
@@ -49,7 +49,7 @@ structure is immutable and MPF.AF.info cannot be changed.
 Reassigning MPG works and resuses almost all of the storage in the
 original array.
 """
-function mpblu!(MPG::MPBFact, A::AbstractArray{TW,2}) where {TW<:Real}
+function mpblu!(MPG::MPBFact, A::AbstractArray{TW, 2}) where {TW <: Real}
     TF = eltype(MPG.AH)
     (TF == TW) || error("Precision error in mplu!")
     AH = MPG.AH
@@ -66,7 +66,6 @@ function mpblu!(MPG::MPBFact, A::AbstractArray{TW,2}) where {TW<:Real}
     MPG = MPBFact(AH, AL, AF, VStore, KStore, MPG.residual, MPG.sol, true, residterm, anrm)
     return MPG
 end
-
 
 
 """
@@ -155,11 +154,11 @@ julia> xp=Float64.(A)\\b; norm(xp-mout3.sol,Inf)
 
 """
 function mpblu(
-    A::AbstractArray{TW,2};
-    residterm = residtermdefault,
-    TF = Float32,
-    TR = nothing,
-) where {TW<:Real}
+        A::AbstractArray{TW, 2};
+        residterm = residtermdefault,
+        TF = Float32,
+        TR = nothing,
+    ) where {TW <: Real}
     (TW == Float32) ? TF = Float16 : TF = TF
     MPBA = MPBArray(A; TF = TF, TR = TR)
     MPBF = mpblu!(MPBA; residterm = residterm)

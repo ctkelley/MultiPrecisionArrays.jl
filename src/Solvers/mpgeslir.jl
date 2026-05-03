@@ -91,12 +91,12 @@ julia> [mout.TW mout.TF]
 
 """
 function mpgeslir(
-    MPA::MPArray,
-    b;
-    reporting = false,
-    verbose = false,
-    term_parms = term_parms_default,
-)
+        MPA::MPArray,
+        b;
+        reporting = false,
+        verbose = false,
+        term_parms = term_parms_default,
+    )
     # Factor MPA and return Factorization object
     MPF = mplu!(MPA)
     # Call mpgeslir for the solve
@@ -143,12 +143,12 @@ The triangular solver will dispatch on the various types depending on
 how the interprecision transfers get done.
 """
 function mpgeslir(
-    AF::MPFact,
-    b;
-    reporting = false,
-    verbose = false,
-    term_parms = term_parms_default,
-)
+        AF::MPFact,
+        b;
+        reporting = false,
+        verbose = false,
+        term_parms = term_parms_default,
+    )
     #
     # What kind of problem are we dealing with?
     #
@@ -158,27 +158,27 @@ function mpgeslir(
     (TW, TF, TR, TFact) = Types_IR_Init(AF, b)
     #
     # Initialize the iteration. I initialize to zero. That makes the
-    # iteration count the same as the high precision matvec and the 
+    # iteration count the same as the high precision matvec and the
     # triangular solves
     #
     (x, xres, r, rs, bnrm, rhist, dhist) = Solver_IR_Init(AF, b, normtype)
     rnrm = bnrm
-    rnrmx = rnrm * 1.e6
+    rnrmx = rnrm * 1.0e6
     (tolf, Rmax, litmax, tol) = Term_Init(AF, term_parms, bnrm)
     #
-    # Tell 'em more than they need to know. 
-    #   
+    # Tell 'em more than they need to know.
+    #
     ir_vmsg(TW, TF, TFact, TR, verbose)
     #
     # Set up the iteration and go.
     #
     itc = 0
-    dnormold=1.0
-    etest=true
+    dnormold = 1.0
+    etest = true
     #
     # Solve loop
     #
-    while (rnrm > tol) && (rnrm <= Rmax*rnrmx) && (itc < litmax) || etest
+    while (rnrm > tol) && (rnrm <= Rmax * rnrmx) && (itc < litmax) || etest
         #
         # Use the low-precision factorization
         # The residual is overwritten with the correction here.
@@ -192,10 +192,10 @@ function mpgeslir(
         #
         dnorm = norm(r, normtype)
         push!(dhist, dnorm)
-        drat=dnorm/dnormold
-        dnormold=dnorm
+        drat = dnorm / dnormold
+        dnormold = dnorm
         # High precision residual? Use ||d|| in termination.
-        etest = ((eps(TR) < eps(TW)) && (drat < Rmax)) || (itc==0)
+        etest = ((eps(TR) < eps(TW)) && (drat < Rmax)) || (itc == 0)
         # Correction = TW.(r)
         x .+= TW.(r)
         xnrm = norm(x, normtype)

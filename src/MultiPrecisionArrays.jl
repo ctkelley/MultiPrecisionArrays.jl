@@ -35,19 +35,19 @@ is_heavy(x::MPLFact) = false
 is_heavy(x::MPBFact) = false
 is_heavy(x::MPGEFact) = false
 
-MPSFact = Union{MPLFact,MPHFact,MPGEFact,MPGHFact}
-MPFact = Union{MPLFact,MPHFact}
-MPGFact = Union{MPGEFact,MPGHFact}
+MPSFact = Union{MPLFact, MPHFact, MPGEFact, MPGHFact}
+MPFact = Union{MPLFact, MPHFact}
+MPGFact = Union{MPGEFact, MPGHFact}
 MPLFacts = Union{MPLFact}
-MPKFact = Union{MPGFact,MPBFact}
-MPHHFact = Union{MPGHFact,MPHFact}
+MPKFact = Union{MPGFact, MPBFact}
+MPHHFact = Union{MPGHFact, MPHFact}
 #is_heavy(x::MPHHFact) = true
 #
 # Termination criteria defaults
 #
 const residtermdefault = true
 #
-# The termparms live in the module and termparms 
+# The termparms live in the module and termparms
 # is therefore global. Don't change this outside
 # of the main thread.
 #
@@ -61,7 +61,7 @@ const Rmax_default = 0.5
 const Cr_default = 1.0
 const Ce_default = 1.0
 const litmax_default = 10
-term_parms_default=TERM(Cr_default, Ce_default, Rmax_default, litmax_default)
+term_parms_default = TERM(Cr_default, Ce_default, Rmax_default, litmax_default)
 
 
 export termdata, term_parms_default, term_parms, update_parms
@@ -75,31 +75,31 @@ kmeth(x::MPBFact) = "BiCGSTAB"
 
 import Base.eltype
 
-function eltype(MP::Union{MPArray,MPHArray,MPGArray,MPBArray})
+function eltype(MP::Union{MPArray, MPHArray, MPGArray, MPBArray})
     TP = eltype(MP.AH)
     return TP
 end
 
 import Base.\
 function \(
-    AF::MPFact,
-    b;
-    verbose = false,
-    reporting = false,
-    term_parms = term_parms_default,
-)
+        AF::MPFact,
+        b;
+        verbose = false,
+        reporting = false,
+        term_parms = term_parms_default,
+    )
     xi = mpgeslir(AF, b; verbose = verbose, reporting = reporting, term_parms = term_parms)
     return xi
 end
 
 function \(
-    AF::MPGFact,
-    b;
-    verbose = false,
-    reporting = false,
-    mpdebug = false,
-    term_parms = term_parms_default,
-)
+        AF::MPGFact,
+        b;
+        verbose = false,
+        reporting = false,
+        mpdebug = false,
+        term_parms = term_parms_default,
+    )
     xi = mpkrir(
         AF,
         b;
@@ -112,23 +112,23 @@ function \(
 end
 
 function \(
-    MPA::Union{MPArray},
-    b;
-    verbose = false,
-    reporting = false,
-    term_parms = term_parms_default,
-)
+        MPA::Union{MPArray},
+        b;
+        verbose = false,
+        reporting = false,
+        term_parms = term_parms_default,
+    )
     xi = mpgeslir(MPA, b; verbose = verbose, reporting = reporting, term_parms = term_parms)
     return xi
 end
 
 function \(
-    AF::MPBFact,
-    b;
-    verbose = false,
-    reporting = false,
-    term_parms = term_parms_default,
-)
+        AF::MPBFact,
+        b;
+        verbose = false,
+        reporting = false,
+        term_parms = term_parms_default,
+    )
     xi = mpkrir(AF, b; verbose = verbose, reporting = reporting, term_parms = term_parms)
     return xi
 end
@@ -173,21 +173,21 @@ export Types_IR_Init
 #
 # Each MPArray data structure comes with a structure to store a factorization.
 # The differences are whether one does on-the-fly interprecision transfers
-# of not. Our latest testing says that on-the-fly is generally the 
+# of not. Our latest testing says that on-the-fly is generally the
 # way to go and it is now the default.
 #
 # If TW=Float64 and TF=Float32, onthefly = false may work best sometimes.
 #
-# The factorization structures should be invisible to most people 
-# and I may stop exporting them. 
+# The factorization structures should be invisible to most people
+# and I may stop exporting them.
 #
 # For IR-GMRES, it's more subtle.  The cost of Heavy IR with MPHArray
 # and MPGHFact is an extra high precision matrix. I only use this for CI
-# and am thinking about removing this stuff. 
+# and am thinking about removing this stuff.
 #
-# The data structures for statistics are almost surely not 
+# The data structures for statistics are almost surely not
 # interesting to anyone but me. Look at "Harvesting Iteration Statistics"
-# in the docs for details. 
+# in the docs for details.
 #
 
 include("Solvers/mpkrir.jl")
@@ -207,14 +207,14 @@ include("Factorizations/mpblu!.jl")
 include("CI_Only/mpghlu!.jl")
 
 module Examples
-using MultiPrecisionArrays
-using LinearAlgebra: LinearAlgebra
-using Reexport;
-@reexport import LinearAlgebra.I
+    using MultiPrecisionArrays
+    using LinearAlgebra: LinearAlgebra
+    using Reexport;
+    @reexport import LinearAlgebra.I
 
-export Gmat
+    export Gmat
 
-include("Examples/Gmat.jl")
+    include("Examples/Gmat.jl")
 
 end
 

@@ -33,11 +33,11 @@ you use the optional argument term_parms.
 
 """
 function update_parms(;
-    Cr = Cr_default,
-    Ce = Ce_default,
-    Rmax = Rmax_default,
-    litmax = litmax_default,
-)
-    term_parms=TERM(Cr, Ce, Rmax, litmax)
+        Cr = Cr_default,
+        Ce = Ce_default,
+        Rmax = Rmax_default,
+        litmax = litmax_default,
+    )
+    term_parms = TERM(Cr, Ce, Rmax, litmax)
     return term_parms
 end

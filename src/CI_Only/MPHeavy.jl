@@ -38,20 +38,20 @@ struct MPGHFact
     anrm::AbstractFloat
 end
 
-function MPHArray(AH::AbstractArray{Float64,2}; TF = Float32)
+function MPHArray(AH::AbstractArray{Float64, 2}; TF = Float32)
     AStore = copy(AH)
     AL = TF.(AH)
     (m, n) = size(AH)
     res = ones(eltype(AH), n)
     sol = ones(eltype(AH), n)
-    MPH = MPHArray(AH, AStore, AL, res, sol, true)
+    return MPH = MPHArray(AH, AStore, AL, res, sol, true)
 end
 
-function MPHArray(AH::AbstractArray{Float32,2}; TF = Float16)
+function MPHArray(AH::AbstractArray{Float32, 2}; TF = Float16)
     AStore = copy(AH)
     AL = TF.(AH)
     (m, n) = size(AH)
     res = ones(eltype(AH), n)
     sol = ones(eltype(AH), n)
-    MPH = MPHArray(AH, AStore, AL, res, sol, true)
+    return MPH = MPHArray(AH, AStore, AL, res, sol, true)
 end

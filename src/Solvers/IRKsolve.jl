@@ -1,14 +1,14 @@
 function IRKsolve!(
-    AF::Union{MPKFact,MPGHFact},
-    r,
-    rs,
-    rnrm;
-    itc = 0,
-    verbose = false,
-    MP_Data = [],
-)
+        AF::Union{MPKFact, MPGHFact},
+        r,
+        rs,
+        rnrm;
+        itc = 0,
+        verbose = false,
+        MP_Data = [],
+    )
     #
-    # Scale the residual 
+    # Scale the residual
     #
     r ./= rnrm
     #
@@ -16,7 +16,7 @@ function IRKsolve!(
     #
     TR = eltype(r)
     TW = eltype(AF.sol)
-    (TR == TW) ? zs=r : (rs .= r; zs = rs)
+    (TR == TW) ? zs = r : (rs .= r; zs = rs)
     #
     ktype = MP_Data.ktype
     eta = MP_Data.eta
@@ -73,7 +73,7 @@ function MPhptv(x, pdata)
     # ldiv! is not doing well for one case, so I hide from it.
     #
     if (TF == Float16) && (TW == Float32)
-        x .= pdata.MPF.AF\x;
+        x .= pdata.MPF.AF \ x
     else
         ldiv!(pdata.MPF.AF, x)
     end
@@ -82,12 +82,14 @@ end
 
 function irk_msg(itc, kout, ktype, verbose)
     winner = kout.idid ? " $ktype converged" : " $ktype failed"
-    itcp1 = itc+1
-    verbose && (println(
-        "Krylov stats: Iteration $itcp1 :",
-        length(kout.reshist),
-        " iterations",
-        "  ",
-        winner,
-    ))
+    itcp1 = itc + 1
+    return verbose && (
+        println(
+            "Krylov stats: Iteration $itcp1 :",
+            length(kout.reshist),
+            " iterations",
+            "  ",
+            winner,
+        )
+    )
 end

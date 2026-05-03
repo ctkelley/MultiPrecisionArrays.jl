@@ -100,13 +100,13 @@ BiCGSTAB works the same way.
 
 """
 function mpkrir(
-    AF::MPKFact,
-    b;
-    reporting = false,
-    verbose = false,
-    mpdebug = false,
-    term_parms = term_parms_default,
-)
+        AF::MPKFact,
+        b;
+        reporting = false,
+        verbose = false,
+        mpdebug = false,
+        term_parms = term_parms_default,
+    )
     #
     # Which Krylov method are we talking about?
     ktype = kmeth(AF)
@@ -116,21 +116,21 @@ function mpkrir(
     normtype = Inf
     # Harvest the types of everyhting
     (TW, TF, TR, TFact) = Types_IR_Init(AF, b)
-    # 
+    #
     # Initialize the iteration. I initialize to zero. That makes the
     # iteration count the same as the high precision matvec and the
     # solves for the defect
     #
     (x, xres, r, rs, bnrm, rhist, dhist) = Solver_IR_Init(AF, b, normtype)
     rnrm = bnrm
-    rnrmx = rnrm * 1.e6
+    rnrmx = rnrm * 1.0e6
     #
     #  get the termination data
     #
     (tolf, Rmax, litmax, tol) = Term_Init(AF, term_parms, bnrm)
-    #   
-    # Tell 'em more than they need to know. 
-    #  
+    #
+    # Tell 'em more than they need to know.
+    #
     ir_vmsg(TW, TF, TFact, TR, verbose)
     # Copy x to the residual precision if TR is not TW
     #    (TR == TW) ? xres=x : xres = copy(r)
@@ -141,9 +141,9 @@ function mpkrir(
     atvd = copy(x)
     x0 = zeros(TW, size(b))
     MP_Data = (MPF = AF, atv = atvd, x0 = x0, ktype = ktype, eta = tolf)
-    # 
-    dnormold=1.0
-    etest=true
+    #
+    dnormold = 1.0
+    etest = true
     itc = 0
     #
     # Krylov-IR loop
@@ -154,24 +154,24 @@ function mpkrir(
         # for the working precision solve.
         #
         kout = IRKsolve!(AF, r, rs, rnrm; itc = itc, verbose = verbose, MP_Data = MP_Data)
-        r .= TR.(kout.sol)*rnrm
+        r .= TR.(kout.sol) * rnrm
         #
         # Manage the results and keep the books
         push!(khist, length(kout.reshist))
-        dnorm=norm(r, normtype)
-        drat=dnorm/dnormold
-        dnormold=dnorm
+        dnorm = norm(r, normtype)
+        drat = dnorm / dnormold
+        dnormold = dnorm
         push!(dhist, dnorm)
         #
         # High precision residual? Use ||d|| in termination.
         #
-        etest = (eps(TR) < eps(TW)) && (drat < Rmax) || (itc==0)
+        etest = (eps(TR) < eps(TW)) && (drat < Rmax) || (itc == 0)
         #
         # Update the solution and residual
         # xres is in the residual precision to get a
         # high precision residual.
         #
-        d=kout.sol
+        d = kout.sol
         d .*= rnrm
         x .+= d
         xnrm = norm(x, normtype)
@@ -187,7 +187,7 @@ function mpkrir(
         ir_debug_msg(mpdebug, itc, tol, rnrm, rnrmx, dnorm, drat)
         #
     end
-    outdat=closeout(AF, rhist, dhist, khist, x, TW, TF, verbose)
+    outdat = closeout(AF, rhist, dhist, khist, x, TW, TF, verbose)
     if reporting
         return outdat
     else

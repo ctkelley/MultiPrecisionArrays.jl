@@ -38,12 +38,12 @@ function hlu!(A::AbstractMatrix{T}) where {T}
     BlasInt = LinearAlgebra.BLAS.BlasInt
     ipiv = Vector{BlasInt}(undef, minmn)
     @inbounds begin
-        for k = 1:minmn
+        for k in 1:minmn
             # find index max
             kp = k
             if k < m
                 amax = abs(A[k, k])
-                for i = (k+1):m
+                for i in (k + 1):m
                     absi = abs(A[i, k])
                     if absi > amax
                         kp = i
@@ -55,7 +55,7 @@ function hlu!(A::AbstractMatrix{T}) where {T}
             if !iszero(A[kp, k])
                 if k != kp
                     # Interchange
-                    for i = 1:n
+                    for i in 1:n
                         tmp = A[k, i]
                         A[k, i] = A[kp, i]
                         A[kp, i] = tmp
@@ -63,7 +63,7 @@ function hlu!(A::AbstractMatrix{T}) where {T}
                 end
                 # Scale first column
                 Akkinv = inv(A[k, k])
-                for i = (k+1):m
+                for i in (k + 1):m
                     A[i, k] *= Akkinv
                 end
             elseif info == 0
@@ -71,23 +71,23 @@ function hlu!(A::AbstractMatrix{T}) where {T}
             end
             # Update the rest
             ntasks = task_num(n, k)
-            tforeach((k+1):n; scheduler=:static, ntasks = ntasks) do j
-#
-# Polyester works great on 1.11 and 1.12 and is flaky and performs poorly
-# on 1.13
-#                @batch minbatch=128 for j=(k+1):n 
-#                @batch for j=(k+1):n 
-             @inbounds begin
-                Akj = -A[k, j]
-                @simd ivdep for i = (k+1):m
-                    A[i, j] += A[i, k] * Akj
-                end # i loop
-             end # inner @inbounds
+            tforeach((k + 1):n; scheduler = :static, ntasks = ntasks) do j
+                #
+                # Polyester works great on 1.11 and 1.12 and is flaky and performs poorly
+                # on 1.13
+                #                @batch minbatch=128 for j=(k+1):n
+                #                @batch for j=(k+1):n
+                @inbounds begin
+                    Akj = -A[k, j]
+                    @simd ivdep for i in (k + 1):m
+                        A[i, j] += A[i, k] * Akj
+                    end # i loop
+                end # inner @inbounds
             end #j loop
         end #k loop
     end #outer @inbounds
     checknonsingular(info, pivot)
-    return LU{T,typeof(A),typeof(ipiv)}(A, ipiv, convert(BlasInt, info))
+    return LU{T, typeof(A), typeof(ipiv)}(A, ipiv, convert(BlasInt, info))
 end
 
 function hlu(A)
@@ -97,11 +97,11 @@ function hlu(A)
 end
 
 function task_num(n, k)
-    ndiv=512
-#    ndiv=128
-#    ndiv=16
+    ndiv = 512
+    #    ndiv=128
+    #    ndiv=16
     tnum = min(nthreads(), 1 + floor(Int, (n - k) / ndiv))
-#    ((n-k) < 512) && (tnum = 1)
+    #    ((n-k) < 512) && (tnum = 1)
     return tnum
 end
 

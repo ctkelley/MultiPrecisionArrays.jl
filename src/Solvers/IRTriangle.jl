@@ -11,7 +11,7 @@ precision.
 
 The solve overwrites the residual with the defect if TR=TW.
 """
-function IRTriangle!(AF::Union{MPLFact,MPHFact}, r, rs, rnrm)
+function IRTriangle!(AF::Union{MPLFact, MPHFact}, r, rs, rnrm)
 
     #
     # Scale the residual
@@ -27,9 +27,9 @@ function IRTriangle!(AF::Union{MPLFact,MPHFact}, r, rs, rnrm)
     #
     AFS = AF.AF
     on_the_fly = AF.onthefly
-    TR=eltype(r)
-    TS=eltype(rs)
-    TW=eltype(AF.AH)
+    TR = eltype(r)
+    TS = eltype(rs)
+    TW = eltype(AF.AH)
     if on_the_fly && (TR == TW)
         ldiv!(AFS, r)
     else

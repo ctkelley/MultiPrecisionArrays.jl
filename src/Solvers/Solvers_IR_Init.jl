@@ -1,9 +1,9 @@
 function Types_IR_Init(AF, b)
-    TB=eltype(b)
-    TF=eltype(AF.AF)
-    TW=eltype(AF.AH)
+    TB = eltype(b)
+    TF = eltype(AF.AF)
+    TW = eltype(AF.AH)
     r = AF.residual
-    TR=eltype(r)
+    TR = eltype(r)
     #
     # Are the precisions consistent? If not, I have a bug somewhere.
     # Otherwise, set the tolerance on the iteration to 10*eps.
@@ -15,9 +15,9 @@ function Types_IR_Init(AF, b)
 end
 
 function Term_Init(AF, term_parms, bnrm)
-    #   
+    #
     #  get the termination data
-    #   
+    #
     TR = eltype(AF.residual)
     TW = eltype(bnrm)
     tolf = termination_settings(AF, term_parms)
@@ -31,14 +31,14 @@ end
 
 function Solver_IR_Init(AF, b, normtype)
     r = AF.residual
-    TR=eltype(r)
-    TW=eltype(b)
+    TR = eltype(r)
+    TW = eltype(b)
     r .= TR.(b)
     x = AF.sol
     x .*= TW(0.0)
     xnrm = norm(x, normtype)
     bnrm = norm(b, normtype)
-    TF=eltype(AF.AF)
+    TF = eltype(AF.AF)
     onthefly = AF.onthefly
     HiRes = (eps(TR) < eps(TW))
     HiRes && (onthefly = true)
@@ -46,7 +46,7 @@ function Solver_IR_Init(AF, b, normtype)
     # rs goes into the triangular solve to compute the correction
     # So if TW==TR and onthefly=true, you can use rs = r
     # If TW==TR and onthefly=false, then rs = TF.(r)
-    # If TR > TW then rs = TW.(r) 
+    # If TR > TW then rs = TW.(r)
     #
     rs = r
     (TR == TW) || (rs = TW.(r))
@@ -56,10 +56,9 @@ function Solver_IR_Init(AF, b, normtype)
     push!(rhist, bnrm)
     # Copy x to xres in the residual precision if TR is not TW
     # No need to allocate room for the copy if TR = TW
-    (TR == TW) ? xres=[] : xres = copy(r)
+    (TR == TW) ? xres = [] : xres = copy(r)
     return (x, xres, r, rs, bnrm, rhist, dhist)
 end
-
 
 
 function consistency(AF, TF, TW, TB)
