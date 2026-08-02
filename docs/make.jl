@@ -36,7 +36,6 @@ makedocs(
     sitename = "MultiPrecisionArrays.jl",
     authors = "C. T. Kelley",
     format = Documenter.HTML(prettyurls = get(ENV, "CI", nothing) == "true"),
-    plugins = [CodeBlocks()],
     pages = Any[
         "Home"=>"index.md",
         "Half Precision and Krylov-IR" => Any["Half_1.md",], 
@@ -58,6 +57,7 @@ makedocs(
              Any["functions/update_parms.md"],
         "References" => ["References.md",],
 ],
-; plugins=[bib]
+; plugins = [bib, CodeBlocks()],
+#plugins=[bib]
 )
 deploydocs(repo = "github.com/ctkelley/MultiPrecisionArrays.jl.git")
