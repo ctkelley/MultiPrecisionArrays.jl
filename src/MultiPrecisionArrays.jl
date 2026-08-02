@@ -135,9 +135,11 @@ end
 
 
 #
-# hlu and hlu! are hacks of the Julia generic_lu source. I've used
-# Polyester.jl to thread them and done some tweaking. On
-# my Mac M2 Pro with 8 performance cores I'm seeing a 10x speedup
+# hlu and hlu! are hacks of the Julia generic_lu source. I'd been using
+# Polyester.jl to thread them and done some tweaking. Polyester.jl is
+# not reliable for Julia v1.13 and later so I've switched to OhMyThreads.jl.
+#
+# On my Mac M2 Pro with 8 performance cores I'm seeing a 10x speedup
 # over where I was before and seem to be using the hardware support
 # for half precision as well as I can. I am still 5x slower than
 # the LAPACK double precision LU, so there's a factor of 20 out there
