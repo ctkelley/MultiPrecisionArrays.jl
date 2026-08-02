@@ -1,5 +1,6 @@
 push!(LOAD_PATH, "../src/")
 using Documenter, MultiPrecisionArrays, DocumenterTools, DocumenterCitations
+using DocumenterCodeBlocks
 import MultiPrecisionArrays.MPArray
 import MultiPrecisionArrays.MPHArray
 import MultiPrecisionArrays.MPGArray
@@ -35,6 +36,7 @@ makedocs(
     sitename = "MultiPrecisionArrays.jl",
     authors = "C. T. Kelley",
     format = Documenter.HTML(prettyurls = get(ENV, "CI", nothing) == "true"),
+    plugins = [CodeBlocks()]
     pages = Any[
         "Home"=>"index.md",
         "Half Precision and Krylov-IR" => Any["Half_1.md",], 
