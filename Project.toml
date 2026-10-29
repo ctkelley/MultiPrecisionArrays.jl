@@ -15,7 +15,7 @@ LinearAlgebra = "1"
 OhMyThreads = "0.6, 0.7, 0.8"
 Reexport = "1.2.2"
 SIAMFANLEquations = "1"
-SparseArrays = "1"
+SparseArrays = "<0.0.1, 1"
 Test = "1"
 julia = "1"
 
