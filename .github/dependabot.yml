@@ -4,3 +4,5 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    ignore:
+      - package-name: "crate-ci/typos
