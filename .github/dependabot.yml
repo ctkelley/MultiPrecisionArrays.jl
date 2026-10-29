@@ -5,4 +5,4 @@ updates:
     schedule:
       interval: "weekly"
     ignore:
-      - package-name: "create-ci/typos
+      - package-name: "create-ci/typos"
