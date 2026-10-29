@@ -4,5 +4,3 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-    ignore:
-      - package-name: "create-ci/typos"
