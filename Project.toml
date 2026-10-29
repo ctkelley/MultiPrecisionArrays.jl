@@ -11,7 +11,7 @@ SIAMFANLEquations = "084e46ad-d928-497d-ad5e-07fa361a48c4"
 SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
 [compat]
-LinearAlgebra = "1"
+LinearAlgebra = "<0.0.1, 1"
 OhMyThreads = "0.6, 0.7, 0.8"
 Reexport = "1.2.2"
 SIAMFANLEquations = "1"
